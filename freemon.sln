@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Library", "library\Library.csproj", "{408EFC7E-C6B0-4160-8628-2679E34385CE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pokedex", "pokedex\Pokedex.csproj", "{483C628E-5A5A-4BD6-97CB-9A9FB1F82CF2}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{408EFC7E-C6B0-4160-8628-2679E34385CE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{408EFC7E-C6B0-4160-8628-2679E34385CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{408EFC7E-C6B0-4160-8628-2679E34385CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{408EFC7E-C6B0-4160-8628-2679E34385CE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{483C628E-5A5A-4BD6-97CB-9A9FB1F82CF2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{483C628E-5A5A-4BD6-97CB-9A9FB1F82CF2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{483C628E-5A5A-4BD6-97CB-9A9FB1F82CF2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{483C628E-5A5A-4BD6-97CB-9A9FB1F82CF2}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
