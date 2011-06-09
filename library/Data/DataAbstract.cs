@@ -6,11 +6,11 @@ using System.Data;
 
 namespace Freemon.Data
 {
-    class DataAbstract
+    abstract class DataAbstract
     {
-        public virtual void AbilitiesFromVeekun(DataTable abilities);
-        public virtual void ItemsFromVeekun(DataTable items, DataTable berries, DataTable machines);
-        public virtual void MovesFromVeekun(DataTable moves);
-        public virtual void PokemonFromVeekun(DataTable pokemon);
+        public abstract void AbilitiesFromVeekun(DataTable abilities);
+        public abstract void ItemsFromVeekun(DataTable items, DataTable berries, DataTable machines);
+        public abstract void MovesFromVeekun(DataTable moves);
+        public abstract void PokemonFromVeekun(DataTable pokemon);
     }
 }
