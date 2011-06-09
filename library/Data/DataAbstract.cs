@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Data;
 
-namespace Freemon.Data
+namespace PokeFoundations.Data
 {
     abstract class DataAbstract
     {
