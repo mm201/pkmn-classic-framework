@@ -1,0 +1,68 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+namespace PokeFoundations.Structures
+{
+    public enum Generations
+    {
+        Generation1 = 1,
+        Generation2 = 2,
+        Generation3 = 3,
+        Generation4 = 4,
+        Generation5 = 5
+    }
+
+    [FlagsAttribute]
+    public enum GenerationFlags
+    {
+        Generation1 = 1,
+        Generation2 = 2,
+        Generation3 = 4,
+        Generation4 = 8,
+        Generation5 = 16
+    }
+
+    public enum EvolutionMethods
+    {
+        Level = 1,
+        Item = 2,
+        Trade = 3,
+        Shed = 4
+    }
+
+    public enum TimeOfDay
+    {
+        Morning = 1,
+        Day = 2,
+        Night = 3
+    }
+
+    public enum Stats
+    {
+        Hp = 1,
+        Attack = 2,
+        Defense = 3,
+        Speed = 4,
+        SpecialAttack = 5,
+        SpecialDefense = 6
+    }
+
+    public enum StatLines
+    {
+        Physical = 1,
+        Special = 2,
+        Support = 3
+    }
+
+    public enum GrowthRates
+    {
+        Slow = 1,
+        Medium = 2,
+        Fast = 3,
+        MediumSlow = 4,
+        Erratic = 5,
+        Fluctuating = 6
+    }
+}
