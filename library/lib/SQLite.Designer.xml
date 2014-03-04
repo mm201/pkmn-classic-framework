@@ -1,0 +1,338 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>SQLite.Designer</name>
+    </assembly>
+    <members>
+        <member name="F:SQLite.Designer.ChangePasswordDialog.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:SQLite.Designer.ChangePasswordDialog.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:SQLite.Designer.ChangePasswordDialog.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="F:SQLite.Designer.ChangeScriptDialog.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:SQLite.Designer.ChangeScriptDialog.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:SQLite.Designer.ChangeScriptDialog.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="F:SQLite.Designer.Editors.TableDesignerDoc.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:SQLite.Designer.Editors.TableDesignerDoc.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:SQLite.Designer.Editors.TableDesignerDoc.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="F:SQLite.Designer.Editors.ViewDesignerDoc.components">
+            <summary> 
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:SQLite.Designer.Editors.ViewDesignerDoc.Dispose(System.Boolean)">
+            <summary> 
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:SQLite.Designer.Editors.ViewDesignerDoc.InitializeComponent">
+            <summary> 
+            Required method for Designer support - do not modify 
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:SQLite.Designer.SQLiteAdapterDesigner">
+            <summary>
+            The purpose of this class is to provide context menus and event support when designing a 
+            SQLite DataSet.  Most of the functionality is implemented by MS's VSDesigner object which we
+            instantiate through reflection since I don't really have a design-time reference to the object
+            and many of the objects in VSDesigner are internal.
+            </summary>
+        </member>
+        <member name="M:SQLite.Designer.SQLiteAdapterDesigner.#ctor">
+            <summary>
+            Empty constructor
+            </summary>
+        </member>
+        <member name="M:SQLite.Designer.SQLiteAdapterDesigner.Initialize(System.ComponentModel.IComponent)">
+            <summary>
+            Initialize the designer by creating a SqlDataAdapterDesigner and delegating most of our
+            functionality to it.
+            </summary>
+            <param name="component"></param>
+        </member>
+        <member name="M:SQLite.Designer.SQLiteAdapterDesigner.CanExtend(System.Object)">
+            <summary>
+            We extend support for DbDataAdapter-derived objects
+            </summary>
+            <param name="extendee">The object wanting to be extended</param>
+            <returns>Whether or not we extend that object</returns>
+        </member>
+        <member name="P:SQLite.Designer.SQLiteAdapterDesigner.Verbs">
+            <summary>
+            Forwards to the SqlDataAdapterDesigner object
+            </summary>
+        </member>
+        <member name="P:SQLite.Designer.SQLiteAdapterDesigner.AssociatedComponents">
+            <summary>
+            Forwards to the SqlDataAdapterDesigner object
+            </summary>
+        </member>
+        <member name="T:SQLite.Designer.SQLiteCommandDesigner">
+            <summary>
+            This object provides a designer for a SQLiteCommand.  The reason we provide an additional
+            CommandDesignTimeVisible property is because certain MS designer components will look for it and
+            fail if its not there.
+            </summary>
+        </member>
+        <member name="M:SQLite.Designer.SQLiteCommandDesigner.Initialize(System.ComponentModel.IComponent)">
+            <summary>
+            Initialize the instance with the given SQLiteCommand component
+            </summary>
+            <param name="component"></param>
+        </member>
+        <member name="M:SQLite.Designer.SQLiteCommandDesigner.PreFilterAttributes(System.Collections.IDictionary)">
+            <summary>
+            Add our designtimevisible attribute to the attributes for the item
+            </summary>
+            <param name="attributes"></param>
+        </member>
+        <member name="M:SQLite.Designer.SQLiteCommandDesigner.GetCommandDesignTimeVisible(System.Data.IDbCommand)">
+            <summary>
+            Provide a get method for the CommandDesignTimeVisible provided property
+            </summary>
+            <param name="command">The SQLiteCommand we're designing for</param>
+            <returns>True or false if the object is visible in design mode</returns>
+        </member>
+        <member name="M:SQLite.Designer.SQLiteCommandDesigner.SetCommandDesignTimeVisible(System.Data.IDbCommand,System.Boolean)">
+            <summary>
+            Provide a set method for our supplied CommandDesignTimeVisible property
+            </summary>
+            <param name="command">The SQLiteCommand to set</param>
+            <param name="visible">The new designtime visible property to assign to the command</param>
+        </member>
+        <member name="M:SQLite.Designer.SQLiteCommandDesigner.CanExtend(System.Object)">
+            <summary>
+            We extend any DbCommand
+            </summary>
+            <param name="extendee">The object being tested</param>
+            <returns>True if the object derives from DbCommand</returns>
+        </member>
+        <member name="M:SQLite.Designer.SQLiteCommandHandler.ExecuteCommand(System.Int32,Microsoft.VisualStudio.Data.OleCommand,Microsoft.VisualStudio.Data.OleCommandExecutionOption,System.Object)">
+            <summary>
+            This method executes a specified command, potentially based
+            on parameters passed in from the data view support XML.
+            </summary>
+        </member>
+        <member name="T:SQLite.Designer.SQLiteConnectionProperties">
+            <summary>
+            Provides rudimentary connectionproperties support
+            </summary>
+        </member>
+        <member name="T:SQLite.Designer.SQLiteConnectionStringEditor">
+            <summary>
+            This class provides connectionstring editing support in the properties window when
+            using a SQLiteConnection as a toolbox component on a form (for example).
+            
+            In order to provide the dropdown list, unless someone knows a better way, I have to use
+            the internal VsConnectionManager class since it utilizes some interfaces in the designer
+            that are internal to the VSDesigner object.  We instantiate it and utilize it through reflection.
+            </summary>
+        </member>
+        <member name="T:SQLite.Designer.SQLiteConnectionUIControl">
+            <summary>
+            Provides a UI to edit/create SQLite database connections
+            </summary>
+        </member>
+        <member name="F:SQLite.Designer.SQLiteConnectionUIControl.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:SQLite.Designer.SQLiteConnectionUIControl.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:SQLite.Designer.SQLiteConnectionUIControl.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:SQLite.Designer.SQLiteDataAdapterToolboxItem">
+            <summary>
+            Provides a toolboxitem for a SQLiteDataAdapter.  This is required in order for us to 
+            pop up the connection wizard when you drop the tool on a form, and to create the hidden commands
+            that are assigned to the data adapter and keep them hidden.  The hiding at runtime of the controls
+            is accomplished both here during the creation of the components and in the SQLiteCommandDesigner
+            which provides properties to hide the objects when they're supposed to be hidden.
+            
+            The connection wizard is instantiated in the VSDesigner through reflection.
+            </summary>
+        </member>
+        <member name="M:SQLite.Designer.SQLiteDataAdapterToolboxItem.CreateComponentsCore(System.ComponentModel.Design.IDesignerHost)">
+            <summary>
+            Creates the necessary components associated with this data adapter instance
+            </summary>
+            <param name="host">The designer host</param>
+            <returns>The components created by this toolbox item</returns>
+        </member>
+        <member name="M:SQLite.Designer.SQLiteDataAdapterToolboxItem.GenerateName(System.ComponentModel.IContainer,System.String)">
+            <summary>
+            Generates a unique name for the given object
+            </summary>
+            <param name="container">The container where we're being instantiated</param>
+            <param name="baseName">The core name of the object to create a unique instance of</param>
+            <returns>A unique name within the given container</returns>
+        </member>
+        <member name="T:SQLite.Designer.SQLiteDataConnectionSupport">
+            <summary>
+            This class creates many of the DDEX components when asked for by the server explorer.
+            </summary>
+        </member>
+        <member name="T:SQLite.Designer.SQLiteDataObjectIdentifierResolver">
+            <summary>
+            This class is used to build identifier arrays and contract them.  Typically they are 
+            passed to SQLiteConnection.GetSchema() or are contracted for display on the screen or in the
+            properties window.
+            </summary>
+        </member>
+        <member name="M:SQLite.Designer.SQLiteDataObjectIdentifierResolver.QuickContractIdentifier(System.String,System.Object[])">
+            <summary>
+            Strips out the schema, which we don't really support but has to be there for certain operations internal
+            to MS's designer implementation.
+            </summary>
+            <param name="typeName">The type of identifier to contract</param>
+            <param name="fullIdentifier">The full identifier array</param>
+            <returns>A contracted identifier array</returns>
+        </member>
+        <member name="M:SQLite.Designer.SQLiteDataObjectIdentifierResolver.Microsoft#VisualStudio#OLE#Interop#IObjectWithSite#GetSite(System.Guid@,System.IntPtr@)">
+            <summary>
+            GetSite does not need to be implemented since
+            DDEX only calls SetSite to site the object.
+            </summary>
+        </member>
+        <member name="T:SQLite.Designer.SQLiteDataObjectSupport">
+            <summary>
+            Doesn't do much other than provide the DataObjectSupport base object with a location
+            where the XML resource can be found.
+            </summary>
+        </member>
+        <member name="T:SQLite.Designer.SQLiteDataSourceInformation">
+            <summary>
+            Provides basic DataSourceInformation about the underlying connection
+            </summary>
+        </member>
+        <member name="T:SQLite.Designer.SQLiteDataViewSupport">
+            <summary>
+            Provides DataViewSupport with a location where the XML file is for the Server Explorer's view.
+            </summary>
+        </member>
+        <member name="T:SQLite.Designer.SQLitePackage">
+            <summary>
+            Ideally we'd be a package provider, but the VS Express Editions don't support us, so this class
+            exists so that in the future we can perhaps work with the Express Editions.
+            </summary>
+        </member>
+        <member name="T:SQLite.Designer.SQLiteProviderObjectFactory">
+            <summary>
+            For a package-based provider, this factory creates instances of the main objects we support
+            </summary>
+        </member>
+        <member name="F:SQLite.Designer.TableNameDialog.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:SQLite.Designer.TableNameDialog.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:SQLite.Designer.TableNameDialog.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:SQLite.Designer.VSPackage">
+            <summary>
+              A strongly-typed resource class, for looking up localized strings, etc.
+            </summary>
+        </member>
+        <member name="P:SQLite.Designer.VSPackage.ResourceManager">
+            <summary>
+              Returns the cached ResourceManager instance used by this class.
+            </summary>
+        </member>
+        <member name="P:SQLite.Designer.VSPackage.Culture">
+            <summary>
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
+            </summary>
+        </member>
+        <member name="P:SQLite.Designer.VSPackage._400">
+            <summary>
+              Looks up a localized string similar to RZE1PAAIMRZRE2CKM3CIRRIREIJQR1PTAEHTRHKTCPP1KKRRJQK9CTM9ZHMRETI9E9J8REKEA1MER9PDKQDIH8HMRRH2DIACHIP1KHK2IAZKM8R0EZRTKDHADII9ICCH.
+            </summary>
+        </member>
+        <member name="P:SQLite.Designer.VSPackage.Decrypt">
+            <summary>
+              Looks up a localized string similar to The database and its metadata will be un-encrypted.  No password will be required to open the database and view its contents..
+            </summary>
+        </member>
+        <member name="P:SQLite.Designer.VSPackage.Encrypt">
+            <summary>
+              Looks up a localized string similar to The database and its metadata will be encrypted using the supplied password as a hash..
+            </summary>
+        </member>
+        <member name="P:SQLite.Designer.VSPackage.ReEncrypt">
+            <summary>
+              Looks up a localized string similar to The database and its metadata will be re-encrypted using the supplied password as a hash..
+            </summary>
+        </member>
+        <member name="P:SQLite.Designer.VSPackage.ToolboxItems">
+             <summary>
+               Looks up a localized string similar to [SQLite]
+            System.Data.SQLite.SQLiteConnection, System.Data.SQLite
+            System.Data.SQLite.SQLiteDataAdapter, System.Data.SQLite
+            System.Data.SQLite.SQLiteCommand, System.Data.SQLite
+            .
+             </summary>
+        </member>
+    </members>
+</doc>
