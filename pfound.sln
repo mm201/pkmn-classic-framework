@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pokedex", "pokedex\Pokedex.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VeekunImport", "VeekunImport\VeekunImport.csproj", "{024BA6DC-E146-405E-B028-2B50B7DD4581}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "gts", "gts\gts.csproj", "{2EEAF2A8-68B7-4DB5-8818-36285D5CF9B3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -47,6 +49,16 @@ Global
 		{024BA6DC-E146-405E-B028-2B50B7DD4581}.Release|Mixed Platforms.Build.0 = Release|x86
 		{024BA6DC-E146-405E-B028-2B50B7DD4581}.Release|x86.ActiveCfg = Release|x86
 		{024BA6DC-E146-405E-B028-2B50B7DD4581}.Release|x86.Build.0 = Release|x86
+		{2EEAF2A8-68B7-4DB5-8818-36285D5CF9B3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2EEAF2A8-68B7-4DB5-8818-36285D5CF9B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2EEAF2A8-68B7-4DB5-8818-36285D5CF9B3}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{2EEAF2A8-68B7-4DB5-8818-36285D5CF9B3}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{2EEAF2A8-68B7-4DB5-8818-36285D5CF9B3}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{2EEAF2A8-68B7-4DB5-8818-36285D5CF9B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2EEAF2A8-68B7-4DB5-8818-36285D5CF9B3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2EEAF2A8-68B7-4DB5-8818-36285D5CF9B3}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{2EEAF2A8-68B7-4DB5-8818-36285D5CF9B3}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{2EEAF2A8-68B7-4DB5-8818-36285D5CF9B3}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
