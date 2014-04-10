@@ -7,7 +7,7 @@ using MySql.Data.MySqlClient;
 
 namespace PokeFoundations.Data
 {
-    class DataMysql : DataAbstract
+    public class DataMysql : DataAbstract
     {
         private MySqlConnection CreateConnection()
         {

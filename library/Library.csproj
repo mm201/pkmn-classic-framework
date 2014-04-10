@@ -48,6 +48,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Data\DataAbstract.cs" />
+    <Compile Include="Data\DatabaseExtender.cs" />
     <Compile Include="Data\DataMysql.cs" />
     <Compile Include="Data\DataSqlite.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

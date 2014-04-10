@@ -7,7 +7,7 @@ using System.Data.SQLite;
 
 namespace PokeFoundations.Data
 {
-    class DataSqlite : DataAbstract
+    public class DataSqlite : DataAbstract
     {
         public SQLiteConnection CreateConnection()
         {
@@ -20,6 +20,6 @@ namespace PokeFoundations.Data
             return new SQLiteConnection("Data Source=" + filename + ";Version=3;");
         }
 
-        public String DefaultFilename;
+        public String DefaultFilename = "pokedex.sqlite";
     }
 }
