@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<publishData>
+  <publishProfile publishUrl="C:\inetpub\gts" deleteExistingFiles="False" ftpAnonymousLogin="False" ftpPassiveMode="True" msdeploySite="" msdeploySiteID="" msdeployRemoteSitePhysicalPath="" msdeployAllowUntrustedCertificate="False" msdeploySkipExtraFilesOnServer="True" msdeployMarkAsApp="False" profileName="Profile1" publishMethod="FileSystem" replaceMatchingFiles="True" userName="" savePWD="False" userPWD="" SelectedForPublish="True">
+    <file relUrl="bin/gts.dll" publishTime="04/12/2014 15:20:52" />
+    <file relUrl="Global.asax" publishTime="04/10/2014 09:11:46" />
+    <file relUrl="Web.config" publishTime="04/12/2014 15:20:53" />
+    <file relUrl="bin/gts.pdb" publishTime="04/12/2014 15:20:52" />
+    <file relUrl="Default.aspx" publishTime="04/10/2014 19:55:07" />
+    <file relUrl="MasterPage.master" publishTime="04/10/2014 19:50:46" />
+  </publishProfile>
+</publishData>

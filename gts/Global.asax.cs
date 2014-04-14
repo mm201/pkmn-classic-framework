@@ -9,7 +9,6 @@ namespace gts
 {
     public class Global : System.Web.HttpApplication
     {
-
         void Application_Start(object sender, EventArgs e)
         {
             // Code that runs on application startup
@@ -45,7 +44,12 @@ namespace gts
 
         void Application_BeginRequest(object sender, EventArgs e)
         {
+            // todo: handle /pokemondpds/worldexchange/ requests here
         }
 
+        void Application_EndRequest(object sender, EventArgs e)
+        {
+            // todo: clear expired session tickets
+        }
     }
 }
