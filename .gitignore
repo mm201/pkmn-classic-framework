@@ -5,3 +5,4 @@
 [Dd]ebug/
 [Rr]elease/
 [Bb]in/
+*.Publish.xml
