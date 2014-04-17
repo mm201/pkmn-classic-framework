@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using PokeFoundations.GTS;
+using System.Text;
 
 namespace gts
 {
@@ -12,24 +13,48 @@ namespace gts
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            Response.Write("<pre>");
-            WriteHash("bTII8cU1Kx86cTZPhEqXqLivqpRUUVpU");
-            WriteHash("7BEqRQlKsqRh8wTdL3rfgFxu053pgPzO");
-            WriteHash("081PAAfk5SQhC7LTu1Iq7mwGtQ77xPOR");
-            for (int x = 0; x < 4; x++)
+            Dictionary<String, GtsSession4> sessions = Context.AllSessions4();
+
+            StringBuilder builder = new StringBuilder();
+            builder.Append("Active sessions (");
+            builder.Append(sessions.Count);
+            builder.Append("):<br />");
+            foreach (KeyValuePair<String, GtsSession4> session in sessions)
             {
-                GtsSession4 ses = new GtsSession4(0, "default.aspx");
-                WriteHash(ses.Token);
+                builder.Append("PID: ");
+                builder.Append(session.Value.PID);
+                builder.Append("<br />Token: ");
+                builder.Append(session.Value.Token);
+                builder.Append("<br />Hash: ");
+                builder.Append(session.Value.Hash);
+                builder.Append("<br />URL: ");
+                builder.Append(session.Value.URL);
+                builder.Append("<br />Expires: ");
+                builder.Append(session.Value.ExpiryDate);
+                builder.Append("<br /><br />");
             }
-            Response.Write("</pre>");
+
+            if (Request.QueryString["data"] != null)
+            {
+                byte[] data = GtsSession4.DecryptData(Request.QueryString["data"]);
+                builder.Append("Data:<br />");
+                builder.Append(RenderHex(data.ToHexStringLower()));
+                builder.Append("<br />");
+            }
+
+            litDebug.Text = builder.ToString();
         }
 
-        private void WriteHash(String token)
+        private String RenderHex(String hex)
         {
-            Response.Write(token);
-            Response.Write(" ");
-            Response.Write(GtsSession4.ComputeHash(token));
-            Response.Write(" <br />\n");
+            StringBuilder builder = new StringBuilder();
+            for (int x = 0; x < hex.Length; x += 16)
+            {
+                builder.Append(hex.Substring(x, Math.Min(16, hex.Length - x)));
+                builder.Append("<br />");
+            }
+            return builder.ToString();
         }
     }
+
 }

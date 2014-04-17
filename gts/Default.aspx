@@ -4,5 +4,6 @@
 </asp:Content>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="cpMain" runat="server">
-customGTS
+customGTS<br />
+<asp:Literal ID="litDebug" runat="server" />
 </asp:Content>

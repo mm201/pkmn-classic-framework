@@ -104,6 +104,7 @@ namespace PokeFoundations.GTS
 
             for (int x = 0; x < token.Length; x++)
             {
+                // tokens have 62 chars: 0-9, A-Z, and a-z
                 m_rng.GetBytes(data);
                 uint rand = BitConverter.ToUInt32(data, 0) % 62u;
 
@@ -115,6 +116,16 @@ namespace PokeFoundations.GTS
                     token[x] = (char)('=' + rand); // 'a' + rand - 36
             }
             return new String(token);
+        }
+
+        public static byte[] FromUrlSafeBase64String(String data)
+        {
+            return Convert.FromBase64String(data.Replace('-', '+').Replace('_', '/'));
+        }
+
+        public static String ToUrlSafeBase64String(byte[] data)
+        {
+            return Convert.ToBase64String(data).Replace('+', '-').Replace('/', '_');
         }
     }
 }

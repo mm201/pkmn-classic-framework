@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Security.Cryptography;
 using System.IO;
+using System.Net;
 
 namespace PokeFoundations.GTS
 {
@@ -33,6 +34,37 @@ namespace PokeFoundations.GTS
             writer.Flush();
 
             return m_sha1.ComputeHash(data).ToHexStringLower();
+        }
+
+        /// <summary>
+        /// Decrypts the NDS &data= querystring into readable binary data.
+        /// The PID (little endian) is left at the start of the output
+        /// but the (unencrypted) checksum is removed.
+        /// </summary>
+        public static byte[] DecryptData(String data)
+        {
+            byte[] data2 = FromUrlSafeBase64String(data);
+            if (data2.Length < 4) throw new FormatException("Data must contain at least 4 bytes.");
+
+            byte[] data3 = new byte[data2.Length - 4];
+            int checksum = BitConverter.ToInt32(data2, 0);
+            checksum = IPAddress.NetworkToHostOrder(checksum); // endian flip
+            checksum ^= 0x4a3b2c1d;
+            int rand = checksum | (checksum << 16);
+
+            for (int pos = 0; pos < data3.Length; pos++)
+            {
+                rand = DecryptRNG(rand);
+                data3[pos] = (byte)(data2[pos + 4] ^ (byte)(rand >> 16));
+            }
+
+            return data3;
+        }
+
+        // todo: migrate this RNG code to Foundations library with proper base classes, etc
+        public static int DecryptRNG(int prev)
+        {
+            return (prev * 0x45 + 0x1111) & 0x7fffffff;
         }
     }
 }

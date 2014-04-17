@@ -62,7 +62,11 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="pokemondpds.ashx.cs">
+      <DependentUpon>pokemondpds.ashx</DependentUpon>
+    </Compile>
     <Compile Include="src\Common.cs" />
+    <Compile Include="src\GtsContextExtender.cs" />
     <Compile Include="src\GtsSession4.cs" />
     <Compile Include="src\GtsSessionBase.cs" />
     <Compile Include="Default.aspx.cs">
@@ -92,6 +96,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="MasterPage.master" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="pokemondpds.ashx" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />

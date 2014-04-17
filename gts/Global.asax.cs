@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Security;
 using System.Web.SessionState;
+using PokeFoundations.GTS;
 
 namespace gts
 {
@@ -44,12 +45,48 @@ namespace gts
 
         void Application_BeginRequest(object sender, EventArgs e)
         {
-            // todo: handle /pokemondpds/worldexchange/ requests here
+            String pathInfo, query;
+            String targetUrl = RewriteUrl(Request.Url.PathAndQuery, out pathInfo, out query);
+
+            if (targetUrl != null)
+            {
+                Context.RewritePath(targetUrl, pathInfo, query, false);
+            }
         }
 
         void Application_EndRequest(object sender, EventArgs e)
         {
-            // todo: clear expired session tickets
+            // todo: run this less often. Should be a background task like GC
+            Context.PruneSessions4();
+        }
+
+        public static String RewriteUrl(String url, out String pathInfo, out String query)
+        {
+            int q = url.IndexOf('?');
+            String path;
+            pathInfo = "";
+
+            if (q < 0)
+            {
+                path = url;
+                query = "";
+            }
+            else
+            {
+                path = url.Substring(0, q);
+                query = url.Substring(q + 1);
+            }
+
+            // todo: optimize and extend url pattern matching
+            String[] split = path.Split('/');
+            if (split[0].Length > 0) return null;
+
+            if (split.Length > 1 && split[1] == "pokemondpds")
+            {
+                pathInfo = "/" + String.Join("/", split, 2, split.Length - 2);
+                return VirtualPathUtility.ToAbsolute("~/pokemondpds.ashx");
+            }
+            else return null;
         }
     }
 }
