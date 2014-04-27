@@ -3,22 +3,40 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Data;
+using PokeFoundations.Structures;
 
 namespace PokeFoundations.Data
 {
     public abstract class DataAbstract
     {
-        public static String SqlSanitize(String s)
-        {
-            return SqlSanitize(s, "");
-        }
+        #region Initialization
+        private static DataAbstract m_instance;
 
-        public static String SqlSanitize(String s, String newChar)
+        public static DataAbstract Instance
         {
-            String result = s.Replace("\'", newChar).Replace("[", newChar).Replace("]", newChar).Replace("`", newChar);
-            int x = result.IndexOf("--");
-            if (x != -1) result = result.Substring(0, x);
-            return result;
+            get
+            {
+                if (m_instance == null)
+                {
+                    m_instance = new DataMysql();
+                }
+                return m_instance;
+            }
         }
+        #endregion
+
+        #region Utility
+        #endregion
+
+        #region GTS
+        public abstract GtsDatagram4 GtsDataForUser4(int pid);
+
+        public abstract void GtsDepositPokemon4(GtsDatagram4 datagram);
+
+        public abstract void GtsDeletePokemon4(int pid);
+
+        public abstract void GtsTradePokemon4(int pidSrc, int pidDest);
+
+        #endregion
     }
 }

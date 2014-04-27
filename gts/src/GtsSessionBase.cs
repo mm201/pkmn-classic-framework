@@ -104,7 +104,7 @@ namespace PokeFoundations.GTS
 
             for (int x = 0; x < token.Length; x++)
             {
-                // tokens have 62 chars: 0-9, A-Z, and a-z
+                // tokens have 62 possible chars: 0-9, A-Z, and a-z
                 m_rng.GetBytes(data);
                 uint rand = BitConverter.ToUInt32(data, 0) % 62u;
 

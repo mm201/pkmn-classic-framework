@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.SessionState;
+using PokeFoundations.Data;
 
 namespace PokeFoundations.GTS
 {
@@ -41,8 +42,9 @@ namespace PokeFoundations.GTS
                     context.Request.QueryString["data"].Length < 12)
                 {
                     // arguments missing, partial check for data length.
-                    // (require data to hold at least 7 bytes.
-                    // In reality, it must hold at least 8.)
+                    // (Here, we require data to hold at least 7 bytes.
+                    // In reality, it must hold at least 8, which is checked 
+                    // for below after decoding)
                     Error400(context);
                     return;
                 }
@@ -63,6 +65,8 @@ namespace PokeFoundations.GTS
                     if (data.Length < 4)
                     {
                         // data too short to contain a pid
+                        // We check for 4 bytes, not 8, since the decrypt seed
+                        // isn't included in DecryptData's result.
                         Error400(context);
                         return;
                     }
@@ -87,12 +91,33 @@ namespace PokeFoundations.GTS
                 {
                     default:
                         // unrecognized page url
+                        // should be error 404 once we're done debugging
                         context.Response.Write("Almost there. Your path is:\n");
                         context.Response.Write(session.URL);
                         return;
+
+
                     case "/worldexchange/info.asp":
-                        context.Response.Write("It worked");
+                        context.Response.OutputStream.Write(new byte[] { 0x01, 0x00 }, 0, 2);
                         break;
+
+
+                    case "/common/setProfile.asp":
+                        // todo: Figure out what fun stuff is contained in this blob!
+
+                        context.Response.OutputStream.Write(new byte[] 
+                            { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }, 
+                            0, 8);
+                        break;
+
+
+                    case "/worldexchange/result.asp":
+                        {
+                            
+
+                        }
+                        break;
+
 
                 }
             }

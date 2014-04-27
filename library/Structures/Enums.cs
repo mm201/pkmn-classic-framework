@@ -11,7 +11,8 @@ namespace PokeFoundations.Structures
         Generation2 = 2,
         Generation3 = 3,
         Generation4 = 4,
-        Generation5 = 5
+        Generation5 = 5,
+        Generation6 = 6
     }
 
     [FlagsAttribute]
@@ -21,10 +22,11 @@ namespace PokeFoundations.Structures
         Generation2 = 2,
         Generation3 = 4,
         Generation4 = 8,
-        Generation5 = 16
+        Generation5 = 16,
+        Generation6 = 32
     }
 
-    public enum EvolutionMethods
+    public enum EvolutionTriggers
     {
         Level = 1,
         Item = 2,
@@ -64,5 +66,19 @@ namespace PokeFoundations.Structures
         MediumSlow = 4,
         Erratic = 5,
         Fluctuating = 6
+    }
+
+    public enum Genders : byte
+    {
+        Male = 1,
+        Female = 2,
+        None = 3,
+        Either = 3
+    }
+
+    public enum GtsTrainerGenders : byte
+    {
+        Male = 0,
+        Female = 1
     }
 }

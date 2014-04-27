@@ -30,10 +30,19 @@ namespace PokeFoundations.GTS
             Dictionary<String, GtsSession4> sessions = context.AllSessions4();
             DateTime now = DateTime.UtcNow;
 
-            foreach (KeyValuePair<String, GtsSession4> session in sessions)
+            lock (sessions)
             {
-                if (session.Value.ExpiryDate < now) sessions.Remove(session.Key);
+                Queue<String> toRemove = new Queue<String>();
+                foreach (KeyValuePair<String, GtsSession4> session in sessions)
+                {
+                    if (session.Value.ExpiryDate < now) toRemove.Enqueue(session.Key);
+                }
+                while (toRemove.Count > 0)
+                {
+                    sessions.Remove(toRemove.Dequeue());
+                }
             }
         }
+
     }
 }
