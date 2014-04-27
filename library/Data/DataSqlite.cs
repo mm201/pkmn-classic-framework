@@ -7,7 +7,7 @@ using System.Data.SQLite;
 
 namespace PokeFoundations.Data
 {
-    public class DataSqlite : DataAbstract
+    public class DataSqlite// : DataAbstract
     {
         public SQLiteConnection CreateConnection()
         {

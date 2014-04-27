@@ -13,7 +13,7 @@ namespace PokeFoundations.Structures
     /// and request.
     /// </summary>
     [Serializable()]
-    public class GtsDatagram4 : ISerializable
+    public class GtsDatagram4
     {
         /// <summary>
         /// Obfuscated Pokémon (pkm) data. 236 bytes

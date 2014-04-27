@@ -55,6 +55,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="BoxUploadDecode.aspx" />
+    <Content Include="DatabaseTest.aspx" />
     <Content Include="Default.aspx" />
     <Content Include="Global.asax" />
     <Content Include="Web.config" />
@@ -72,6 +73,13 @@
     </Compile>
     <Compile Include="BoxUploadDecode.aspx.designer.cs">
       <DependentUpon>BoxUploadDecode.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="DatabaseTest.aspx.cs">
+      <DependentUpon>DatabaseTest.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="DatabaseTest.aspx.designer.cs">
+      <DependentUpon>DatabaseTest.aspx</DependentUpon>
     </Compile>
     <Compile Include="pokemondpds.ashx.cs">
       <DependentUpon>pokemondpds.ashx</DependentUpon>

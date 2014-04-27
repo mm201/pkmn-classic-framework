@@ -31,11 +31,11 @@ namespace PokeFoundations.Data
         #region GTS
         public abstract GtsDatagram4 GtsDataForUser4(int pid);
 
-        public abstract void GtsDepositPokemon4(GtsDatagram4 datagram);
+        public abstract bool GtsDepositPokemon4(GtsDatagram4 datagram);
 
-        public abstract void GtsDeletePokemon4(int pid);
+        public abstract bool GtsDeletePokemon4(int pid);
 
-        public abstract void GtsTradePokemon4(int pidSrc, int pidDest);
+        public abstract bool GtsTradePokemon4(int pidSrc, int pidDest);
 
         #endregion
     }

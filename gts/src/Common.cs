@@ -35,5 +35,43 @@ namespace PokeFoundations.GTS
             }
             return new string(c);
         }
+
+        public static byte[] FromHexString(String hex)
+        {
+            // very suboptimal but error tolerant
+            byte output = 0;
+            List<byte> result = new List<byte>(hex.Length / 2);
+            bool havePrev = false;
+            foreach (char c in hex.ToCharArray())
+            {
+                if (c >= '0' && c <= '9')
+                {
+                    output |= (byte)(c - '0');
+                }
+                if (c >= 'A' && c <= 'F')
+                {
+                    output |= (byte)(c - '7');
+                }
+                if (c >= 'a' && c <= 'f')
+                {
+                    output |= (byte)(c - 'W');
+                }
+                if (havePrev)
+                {
+                    havePrev = false;
+                    result.Add(output);
+                    output = 0;
+                }
+                else
+                {
+                    havePrev = true;
+                    output <<= 4;
+                }
+            }
+
+            return result.ToArray();
+        }
+
+
     }
 }

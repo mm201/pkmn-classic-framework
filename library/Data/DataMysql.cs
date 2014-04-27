@@ -112,7 +112,7 @@ namespace PokeFoundations.Data
 
                 MySqlTransaction tran = db.BeginTransaction();
 
-                int count = (int)tran.ExecuteScalar("SELECT Count(*) FROM GtsPokemon4 WHERE pid = @pid",
+                long count = (long)tran.ExecuteScalar("SELECT Count(*) FROM GtsPokemon4 WHERE pid = @pid",
                     new MySqlParameter("@pid", datagram.PID));
 
                 if (count > 0)
@@ -158,17 +158,42 @@ namespace PokeFoundations.Data
                     new MySqlParameter("@TrainerLanguage", datagram.TrainerLanguage));
 
                 tran.Commit();
-
                 return true;
             }
         }
 
-        public override void GtsDeletePokemon4(int pid)
+        public int GtsGetDepositId(int pid, MySqlTransaction tran)
         {
+            object o = tran.ExecuteScalar("SELECT Top(1) id FROM GtsPokemon4 WHERE pid = @pid " +
+                "ORDER BY IsExchanged DESC, TimeWithdrawn, TimeDeposited",
+                new MySqlParameter("@pid", pid));
+            if (o == null || o == DBNull.Value) return 0;
+            return (int)o;
         }
 
-        public override void GtsTradePokemon4(int pidSrc, int pidDest)
+        public override bool GtsDeletePokemon4(int pid)
         {
+            using (MySqlConnection db = CreateConnection())
+            {
+                MySqlTransaction tran = db.BeginTransaction();
+                int pkmnId = GtsGetDepositId(pid, tran);
+                if (pkmnId == 0)
+                {
+                    tran.Rollback();
+                    return false;
+                }
+
+                tran.ExecuteNonQuery("DELETE FROM GtsPokemon4 WHERE id = @id",
+                    new MySqlParameter("@id", pkmnId));
+
+                tran.Commit();
+                return true;
+            }
+        }
+
+        public override bool GtsTradePokemon4(int pidSrc, int pidDest)
+        {
+            return false;
         }
 
         #endregion
