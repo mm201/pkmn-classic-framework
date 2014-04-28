@@ -349,6 +349,13 @@ namespace PokeFoundations.GTS
                         int targetPid = BitConverter.ToInt32(data, 296);
                         GtsDatagram4 result = DataAbstract.Instance.GtsDataForUser4(targetPid);
 
+                        // enforce request requirements server side
+                        if (!upload.CanTrade(result))
+                        {
+                            Error400(context);
+                            return;
+                        }
+
                         // todo: maybe strong type this
                         object[] tag = new object[2];
                         tag[0] = upload;

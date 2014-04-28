@@ -150,6 +150,19 @@ namespace PokeFoundations.Structures
             return new GtsDatagram4(Save());
         }
 
+        public bool CanTrade(GtsDatagram4 other)
+        {
+            if (Species != other.RequestedSpecies) return false;
+            if (other.RequestedGender != Genders.Either && Gender != other.RequestedGender) return false;
+            if (CheckLevels(other.RequestedMinLevel, other.RequestedMaxLevel, Level)) return false;
+            
+            if (RequestedSpecies != other.Species) return false;
+            if (RequestedGender != Genders.Either && other.Gender != RequestedGender) return false;
+            if (CheckLevels(RequestedMinLevel, RequestedMaxLevel, other.Level)) return false;
+
+            return true;
+        }
+
         public void FlagTraded(GtsDatagram4 other)
         {
             Species = other.Species;
@@ -163,6 +176,12 @@ namespace PokeFoundations.Structures
             TimeWithdrawn = DateTime.Now; // figure out where this really comes from. It seems to psychically know the player's timezone
             PID = other.PID;
             IsExchanged = 0x01;
+        }
+
+        public static bool CheckLevels(byte min, byte max, byte other)
+        {
+            if (max == 0) max = 255;
+            return other >= min && other <= max;
         }
 
         public static DateTime ? TimestampToDate(ulong timestamp)
