@@ -127,11 +127,11 @@ namespace PokeFoundations.Data
 
         public int GtsGetDepositId(int pid, MySqlTransaction tran)
         {
-            object o = tran.ExecuteScalar("SELECT Top(1) id FROM GtsPokemon4 WHERE pid = @pid " +
-                "ORDER BY IsExchanged DESC, TimeWithdrawn, TimeDeposited",
+            object o = tran.ExecuteScalar("SELECT id FROM GtsPokemon4 WHERE pid = @pid " +
+                "ORDER BY IsExchanged DESC, TimeWithdrawn, TimeDeposited LIMIT 1",
                 new MySqlParameter("@pid", pid));
             if (o == null || o == DBNull.Value) return 0;
-            return (int)o;
+            return (int)((uint)o);
         }
 
         public bool GtsDeletePokemon4(MySqlTransaction tran, int pid)
@@ -282,8 +282,10 @@ namespace PokeFoundations.Data
             result.Unknown1 = reader.GetByte(8);
             result.TrainerGender = (GtsTrainerGenders)reader.GetByte(9);
             result.Unknown2 = reader.GetByte(10);
-            result.TimeDeposited = reader.GetDateTime(11);
-            result.TimeWithdrawn = reader.GetDateTime(12);
+            if (reader.IsDBNull(11)) result.TimeDeposited = null;
+            else result.TimeDeposited = reader.GetDateTime(11);
+            if (reader.IsDBNull(12)) result.TimeWithdrawn = null;
+            else result.TimeWithdrawn = reader.GetDateTime(12);
             result.PID = reader.GetInt32(13);
 
             data = new byte[16];

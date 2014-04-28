@@ -253,14 +253,27 @@ namespace PokeFoundations.GTS
                             return;
                         }
 
+                        if (DataAbstract.Instance.GtsDataForUser4(pid) != null)
+                        {
+                            // there's already a pokemon inside
+                            sessions.Remove(session.Hash);
+                            context.Response.OutputStream.Write(new byte[] { 0x00, 0x00 }, 0, 2);
+                            break;
+                        }
+
                         // keep the datagram in memory while we wait for post_finish.asp request
                         byte[] datagramBinary = new byte[292];
                         Array.Copy(data, 4, datagramBinary, 0, 292);
-                        session.Tag = new GtsDatagram4(datagramBinary);
+                        GtsDatagram4 datagram = new GtsDatagram4(datagramBinary);
+                        // the following two fields are blank in the uploaded datagram.
+                        // The server must provide them instead.
+                        datagram.TimeDeposited = DateTime.Now;
+                        datagram.PID = pid;
+
+                        session.Tag = datagram;
                         // todo: delete any other post.asp sessions registered under this PID
 
                         context.Response.OutputStream.Write(new byte[] { 0x01, 0x00 }, 0, 2);
-
 
                     } break;
 
