@@ -36,6 +36,9 @@ namespace PokeFoundations.Data
         public abstract bool GtsDeletePokemon4(int pid);
 
         public abstract bool GtsTradePokemon4(int pidSrc, int pidDest);
+        public abstract bool GtsTradePokemon4(GtsDatagram4 upload, GtsDatagram4 result);
+
+        public abstract GtsDatagram4[] GtsSearch4(ushort species, Genders gender, byte minLevel, byte maxLevel, byte country, int count);
 
         #endregion
     }

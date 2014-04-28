@@ -15,6 +15,15 @@ namespace PokeFoundations.Structures
     [Serializable()]
     public class GtsDatagram4
     {
+        public GtsDatagram4()
+        {
+        }
+
+        public GtsDatagram4(byte[] data)
+        {
+            Load(data);
+        }
+
         /// <summary>
         /// Obfuscated Pokémon (pkm) data. 236 bytes
         /// </summary>
@@ -48,8 +57,8 @@ namespace PokeFoundations.Structures
         public GtsTrainerGenders TrainerGender;
         public byte Unknown2;
 
-        public DateTime TimeDeposited;
-        public DateTime TimeWithdrawn;
+        public DateTime ? TimeDeposited;
+        public DateTime ? TimeWithdrawn;
 
         /// <summary>
         /// User ID of the player (not Personality Value)
@@ -90,8 +99,8 @@ namespace PokeFoundations.Structures
             s.WriteByte(Unknown1);
             s.WriteByte((byte)TrainerGender);
             s.WriteByte(Unknown2);
-            s.Write(BitConverter.GetBytes(TimeDeposited.ToBinary()), 0, 8);
-            s.Write(BitConverter.GetBytes(TimeWithdrawn.ToBinary()), 0, 8);
+            s.Write(BitConverter.GetBytes(DateToTimestamp(TimeDeposited)), 0, 8);
+            s.Write(BitConverter.GetBytes(DateToTimestamp(TimeWithdrawn)), 0, 8);
             s.Write(BitConverter.GetBytes(PID), 0, 4);
             s.Write(TrainerName, 0, 0x10);
             s.Write(BitConverter.GetBytes(TrainerOT), 0, 2);
@@ -121,10 +130,8 @@ namespace PokeFoundations.Structures
             Unknown1 = data[0xF5];
             TrainerGender = (GtsTrainerGenders)data[0xF6];
             Unknown2 = data[0xF7];
-            // todo: Figure out what the correct binary storage format is for
-            // official GTS timestamps
-            TimeDeposited = DateTime.FromBinary(BitConverter.ToInt64(data, 0xF8));
-            TimeWithdrawn = DateTime.FromBinary(BitConverter.ToInt64(data, 0x100));
+            TimeDeposited = TimestampToDate(BitConverter.ToUInt64(data, 0xF8));
+            TimeWithdrawn = TimestampToDate(BitConverter.ToUInt64(data, 0x100));
             PID = BitConverter.ToInt32(data, 0x108);
             TrainerName = new byte[0x10];
             Array.Copy(data, 0x10C, TrainerName, 0, 0x10);
@@ -135,6 +142,69 @@ namespace PokeFoundations.Structures
             IsExchanged = data[0x121];
             TrainerVersion = data[0x122];
             TrainerLanguage = data[0x123];
+        }
+
+        public GtsDatagram4 Clone()
+        {
+            // todo: I am not very efficient
+            return new GtsDatagram4(Save());
+        }
+
+        public void FlagTraded(GtsDatagram4 other)
+        {
+            Species = other.Species;
+            Gender = other.Gender;
+            Level = other.Level;
+            RequestedSpecies = other.RequestedSpecies;
+            RequestedGender = other.RequestedGender;
+            RequestedMinLevel = other.RequestedMinLevel;
+            RequestedMaxLevel = other.RequestedMaxLevel;
+            TimeDeposited = other.TimeDeposited;
+            TimeWithdrawn = DateTime.Now; // figure out where this really comes from. It seems to psychically know the player's timezone
+            PID = other.PID;
+            IsExchanged = 0x01;
+        }
+
+        public static DateTime ? TimestampToDate(ulong timestamp)
+        {
+            if (timestamp == 0) return null;
+
+            ushort year = (ushort)((timestamp >> 0x30) & 0xffff);
+            byte month = (byte)((timestamp >> 0x28) & 0xff);
+            byte day = (byte)((timestamp >> 0x20) & 0xff);
+            byte hour = (byte)((timestamp >> 0x18) & 0xff);
+            byte minute = (byte)((timestamp >> 0x10) & 0xff);
+            byte second = (byte)((timestamp >> 0x08) & 0xff);
+            //byte fractional = (byte)(timestamp & 0xff);
+
+            // allow ArgumentOutOfRangeExceptions to escape
+            return new DateTime(year, month, day, hour, minute, second);
+        }
+
+        public static ulong DateToTimestamp(DateTime ? date)
+        {
+            if (date == null) return 0;
+            DateTime date2 = (DateTime)date;
+
+            return (ulong)(date2.Year & 0xffff) << 0x30
+                | (ulong)(date2.Month & 0xff) << 0x28
+                | (ulong)(date2.Day & 0xff) << 0x20
+                | (ulong)(date2.Hour & 0xff) << 0x18
+                | (ulong)(date2.Minute & 0xff) << 0x10
+                | (ulong)(date2.Second & 0xff) << 0x08;
+        }
+
+        public static bool operator ==(GtsDatagram4 a, GtsDatagram4 b)
+        {
+            if ((object)a == null && (object)b == null) return true;
+            if ((object)a == null || (object)b == null) return false;
+            // todo: optimize me
+            return a.Save().SequenceEqual(b.Save());
+        }
+
+        public static bool operator !=(GtsDatagram4 a, GtsDatagram4 b)
+        {
+            return !(a == b);
         }
     }
 }

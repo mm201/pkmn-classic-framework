@@ -95,6 +95,12 @@ namespace PokeFoundations.GTS
             }
         }
 
+        public object Tag
+        {
+            get;
+            set;
+        }
+
         public static String CreateToken()
         {
             if (m_rng == null) m_rng = new RNGCryptoServiceProvider();
