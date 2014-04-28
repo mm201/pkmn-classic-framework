@@ -325,7 +325,7 @@ namespace PokeFoundations.GTS
                         if (data.Length > 11) country = data[11];
 
                         if (resultsCount > 7) resultsCount = 7; // stop DDOS
-                        GtsDatagram4[] datagrams = DataAbstract.Instance.GtsSearch4(species, gender, minLevel, maxLevel, country, resultsCount);
+                        GtsDatagram4[] datagrams = DataAbstract.Instance.GtsSearch4(pid, species, gender, minLevel, maxLevel, country, resultsCount);
                         foreach (GtsDatagram4 datagram in datagrams)
                         {
                             context.Response.OutputStream.Write(datagram.Save(), 0, 292);

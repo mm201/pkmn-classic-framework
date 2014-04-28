@@ -203,12 +203,13 @@ namespace PokeFoundations.Data
             }
         }
 
-        public override GtsDatagram4[] GtsSearch4(ushort species, Genders gender, byte minLevel, byte maxLevel, byte country, int count)
+        public override GtsDatagram4[] GtsSearch4(int pid, ushort species, Genders gender, byte minLevel, byte maxLevel, byte country, int count)
         {
             using (MySqlConnection db = CreateConnection())
             {
                 List<MySqlParameter> _params = new List<MySqlParameter>();
-                String where = "WHERE Species = @species";
+                String where = "WHERE pid != @pid AND Species = @species";
+                _params.Add(new MySqlParameter("@pid", pid));
                 _params.Add(new MySqlParameter("@species", species));
 
                 if (gender != Genders.Either)
