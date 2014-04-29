@@ -267,7 +267,7 @@ namespace PkmnFoundations.GTS
                         GtsRecord4 record = new GtsRecord4(recordBinary);
                         // the following two fields are blank in the uploaded record.
                         // The server must provide them instead.
-                        record.TimeDeposited = DateTime.Now;
+                        record.TimeDeposited = DateTime.UtcNow;
                         record.PID = pid;
 
                         session.Tag = record;

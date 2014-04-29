@@ -173,7 +173,7 @@ namespace PkmnFoundations.Structures
             RequestedMinLevel = other.RequestedMinLevel;
             RequestedMaxLevel = other.RequestedMaxLevel;
             TimeDeposited = other.TimeDeposited;
-            TimeWithdrawn = DateTime.Now; // figure out where this really comes from. It seems to psychically know the player's timezone
+            TimeWithdrawn = DateTime.UtcNow;
             PID = other.PID;
             IsExchanged = 0x01;
         }
