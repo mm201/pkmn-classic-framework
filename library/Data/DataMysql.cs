@@ -35,7 +35,7 @@ namespace PokeFoundations.Data
         #endregion
 
         #region GTS
-        public GtsDatagram4 GtsDataForUser4(MySqlTransaction tran, int pid)
+        public GtsRecord4 GtsDataForUser4(MySqlTransaction tran, int pid)
         {
             MySqlDataReader reader = (MySqlDataReader)tran.ExecuteReader("SELECT Data, Species, Gender, Level, " +
                 "RequestedSpecies, RequestedGender, RequestedMinLevel, RequestedMaxLevel, " +
@@ -49,7 +49,7 @@ namespace PokeFoundations.Data
                 reader.Close();
                 return null;
             }
-            GtsDatagram4 result = Datagram4FromReader(reader);
+            GtsRecord4 result = Record4FromReader(reader);
 #if DEBUG
             AssertHelper.Equals(result.PID, pid);
 #endif
@@ -57,27 +57,27 @@ namespace PokeFoundations.Data
             return result;
         }
 
-        public override GtsDatagram4 GtsDataForUser4(int pid)
+        public override GtsRecord4 GtsDataForUser4(int pid)
         {
             using (MySqlConnection db = CreateConnection())
             {
                 db.Open();
                 MySqlTransaction tran = db.BeginTransaction();
-                GtsDatagram4 result = GtsDataForUser4(tran, pid);
+                GtsRecord4 result = GtsDataForUser4(tran, pid);
                 tran.Commit();
                 return result;
             }
         }
 
-        public bool GtsDepositPokemon4(MySqlTransaction tran, GtsDatagram4 datagram)
+        public bool GtsDepositPokemon4(MySqlTransaction tran, GtsRecord4 record)
         {
-            if (datagram.Data.Length != 236) throw new FormatException("pkm data must be 236 bytes.");
-            if (datagram.TrainerName.Length != 16) throw new FormatException("Trainer name must be 16 bytes.");
-            // note that IsTraded being true in the datagram is not an error condition
+            if (record.Data.Length != 236) throw new FormatException("pkm data must be 236 bytes.");
+            if (record.TrainerName.Length != 16) throw new FormatException("Trainer name must be 16 bytes.");
+            // note that IsTraded being true in the record is not an error condition
             // since it might have use later on. You should check for this in the upload handler.
 
             long count = (long)tran.ExecuteScalar("SELECT Count(*) FROM GtsPokemon4 WHERE pid = @pid",
-                new MySqlParameter("@pid", datagram.PID));
+                new MySqlParameter("@pid", record.PID));
 
             if (count > 0)
             {
@@ -97,16 +97,16 @@ namespace PokeFoundations.Data
                 "@TrainerGender, @Unknown2, @TimeDeposited, @TimeWithdrawn, @pid, " +
                 "@TrainerName, @TrainerOT, @TrainerCountry, @TrainerRegion, @TrainerClass, " +
                 "@IsExchanged, @TrainerVersion, @TrainerLanguage)",
-                ParamsFromDatagram4(datagram));
+                ParamsFromRecord4(record));
 
             return true;
         }
 
-        public override bool GtsDepositPokemon4(GtsDatagram4 datagram)
+        public override bool GtsDepositPokemon4(GtsRecord4 record)
         {
-            if (datagram.Data.Length != 236) throw new FormatException("pkm data must be 236 bytes.");
-            if (datagram.TrainerName.Length != 16) throw new FormatException("Trainer name must be 16 bytes.");
-            // note that IsTraded being true in the datagram is not an error condition
+            if (record.Data.Length != 236) throw new FormatException("pkm data must be 236 bytes.");
+            if (record.TrainerName.Length != 16) throw new FormatException("Trainer name must be 16 bytes.");
+            // note that IsTraded being true in the record is not an error condition
             // since it might have use later on. You should check for this in the upload handler.
 
             using (MySqlConnection db = CreateConnection())
@@ -114,7 +114,7 @@ namespace PokeFoundations.Data
                 db.Open();
                 MySqlTransaction tran = db.BeginTransaction();
 
-                if (!GtsDepositPokemon4(tran, datagram))
+                if (!GtsDepositPokemon4(tran, record))
                 {
                     tran.Rollback();
                     return false;
@@ -168,9 +168,9 @@ namespace PokeFoundations.Data
             return false;
         }
 
-        public override bool GtsTradePokemon4(GtsDatagram4 upload, GtsDatagram4 result)
+        public override bool GtsTradePokemon4(GtsRecord4 upload, GtsRecord4 result)
         {
-            GtsDatagram4 traded = upload.Clone();
+            GtsRecord4 traded = upload.Clone();
             traded.FlagTraded(result);
 
             using (MySqlConnection db = CreateConnection())
@@ -178,7 +178,7 @@ namespace PokeFoundations.Data
                 db.Open();
                 MySqlTransaction tran = db.BeginTransaction();
 
-                GtsDatagram4 resultOrig = GtsDataForUser4(tran, result.PID);
+                GtsRecord4 resultOrig = GtsDataForUser4(tran, result.PID);
                 if (resultOrig == null || resultOrig != result)
                 {
                     // looks like the pokemon was ninja'd between the Exchange and Exchange_finish
@@ -203,7 +203,7 @@ namespace PokeFoundations.Data
             }
         }
 
-        public override GtsDatagram4[] GtsSearch4(int pid, ushort species, Genders gender, byte minLevel, byte maxLevel, byte country, int count)
+        public override GtsRecord4[] GtsSearch4(int pid, ushort species, Genders gender, byte minLevel, byte maxLevel, byte country, int count)
         {
             using (MySqlConnection db = CreateConnection())
             {
@@ -253,20 +253,20 @@ namespace PokeFoundations.Data
                     " ORDER BY TimeDeposited DESC LIMIT @count",
                     _params.ToArray());
 
-                List<GtsDatagram4> datagrams = new List<GtsDatagram4>(count);
+                List<GtsRecord4> records = new List<GtsRecord4>(count);
 
                 while (reader.Read())
                 {
-                    datagrams.Add(Datagram4FromReader(reader));
+                    records.Add(Record4FromReader(reader));
                 }
 
-                return datagrams.ToArray();
+                return records.ToArray();
             }
         }
 
-        private static GtsDatagram4 Datagram4FromReader(MySqlDataReader reader)
+        private static GtsRecord4 Record4FromReader(MySqlDataReader reader)
         {
-            GtsDatagram4 result = new GtsDatagram4();
+            GtsRecord4 result = new GtsRecord4();
 
             byte[] data = new byte[236];
             reader.GetBytes(0, 0, data, 0, 236);
@@ -305,32 +305,32 @@ namespace PokeFoundations.Data
             return result;
         }
 
-        private static MySqlParameter[] ParamsFromDatagram4(GtsDatagram4 datagram)
+        private static MySqlParameter[] ParamsFromRecord4(GtsRecord4 record)
         {
             MySqlParameter[] result = new MySqlParameter[22];
 
-            result[0] = new MySqlParameter("@Data", datagram.Data);
-            result[1] = new MySqlParameter("@Species", datagram.Species);
-            result[2] = new MySqlParameter("@Gender", (byte)datagram.Gender);
-            result[3] = new MySqlParameter("@Level", datagram.Level);
-            result[4] = new MySqlParameter("@RequestedSpecies", datagram.RequestedSpecies);
-            result[5] = new MySqlParameter("@RequestedGender", (byte)datagram.RequestedGender);
-            result[6] = new MySqlParameter("@RequestedMinLevel", datagram.RequestedMinLevel);
-            result[7] = new MySqlParameter("@RequestedMaxLevel", datagram.RequestedMaxLevel);
-            result[8] = new MySqlParameter("@Unknown1", datagram.Unknown1);
-            result[9] = new MySqlParameter("@TrainerGender", (byte)datagram.TrainerGender);
-            result[10] = new MySqlParameter("@Unknown2", datagram.Unknown2);
-            result[11] = new MySqlParameter("@TimeDeposited", datagram.TimeDeposited);
-            result[12] = new MySqlParameter("@TimeWithdrawn", datagram.TimeWithdrawn);
-            result[13] = new MySqlParameter("@pid", datagram.PID);
-            result[14] = new MySqlParameter("@TrainerName", datagram.TrainerName);
-            result[15] = new MySqlParameter("@TrainerOT", datagram.TrainerOT);
-            result[16] = new MySqlParameter("@TrainerCountry", datagram.TrainerCountry);
-            result[17] = new MySqlParameter("@TrainerRegion", datagram.TrainerRegion);
-            result[18] = new MySqlParameter("@TrainerClass", datagram.TrainerClass);
-            result[19] = new MySqlParameter("@IsExchanged", datagram.IsExchanged);
-            result[20] = new MySqlParameter("@TrainerVersion", datagram.TrainerVersion);
-            result[21] = new MySqlParameter("@TrainerLanguage", datagram.TrainerLanguage);
+            result[0] = new MySqlParameter("@Data", record.Data);
+            result[1] = new MySqlParameter("@Species", record.Species);
+            result[2] = new MySqlParameter("@Gender", (byte)record.Gender);
+            result[3] = new MySqlParameter("@Level", record.Level);
+            result[4] = new MySqlParameter("@RequestedSpecies", record.RequestedSpecies);
+            result[5] = new MySqlParameter("@RequestedGender", (byte)record.RequestedGender);
+            result[6] = new MySqlParameter("@RequestedMinLevel", record.RequestedMinLevel);
+            result[7] = new MySqlParameter("@RequestedMaxLevel", record.RequestedMaxLevel);
+            result[8] = new MySqlParameter("@Unknown1", record.Unknown1);
+            result[9] = new MySqlParameter("@TrainerGender", (byte)record.TrainerGender);
+            result[10] = new MySqlParameter("@Unknown2", record.Unknown2);
+            result[11] = new MySqlParameter("@TimeDeposited", record.TimeDeposited);
+            result[12] = new MySqlParameter("@TimeWithdrawn", record.TimeWithdrawn);
+            result[13] = new MySqlParameter("@pid", record.PID);
+            result[14] = new MySqlParameter("@TrainerName", record.TrainerName);
+            result[15] = new MySqlParameter("@TrainerOT", record.TrainerOT);
+            result[16] = new MySqlParameter("@TrainerCountry", record.TrainerCountry);
+            result[17] = new MySqlParameter("@TrainerRegion", record.TrainerRegion);
+            result[18] = new MySqlParameter("@TrainerClass", record.TrainerClass);
+            result[19] = new MySqlParameter("@IsExchanged", record.IsExchanged);
+            result[20] = new MySqlParameter("@TrainerVersion", record.TrainerVersion);
+            result[21] = new MySqlParameter("@TrainerLanguage", record.TrainerLanguage);
 
             return result;
         }

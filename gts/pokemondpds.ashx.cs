@@ -134,18 +134,18 @@ namespace PokeFoundations.GTS
                             * in the GTS, it responds with 0x0004; if not, it responds 
                             * with 0x0005. */
 
-                        GtsDatagram4 datagram = DataAbstract.Instance.GtsDataForUser4(pid);
+                        GtsRecord4 record = DataAbstract.Instance.GtsDataForUser4(pid);
 
-                        if (datagram == null)
+                        if (record == null)
                         {
                             // No pokemon in the system
                             context.Response.OutputStream.Write(new byte[]
                                 { 0x05, 0x00 }, 0, 2);
                         }
-                        else if (datagram.IsExchanged > 0)
+                        else if (record.IsExchanged > 0)
                         {
                             // traded pokemon arriving!!!
-                            context.Response.OutputStream.Write(datagram.Save(), 0, 292);
+                            context.Response.OutputStream.Write(record.Save(), 0, 292);
                         }
                         else
                         {
@@ -164,32 +164,32 @@ namespace PokeFoundations.GTS
                         // this is only called if result.asp returned 4.
                         // todo: what does this do if the contained pokemon is traded??
 
-                        GtsDatagram4 datagram = DataAbstract.Instance.GtsDataForUser4(pid);
+                        GtsRecord4 record = DataAbstract.Instance.GtsDataForUser4(pid);
 
-                        if (datagram == null)
+                        if (record == null)
                         {
                             // No pokemon in the system
                             // what do here?
                         }
                         else
                         {
-                            // just write the datagram whether traded or not...
-                            context.Response.OutputStream.Write(datagram.Save(), 0, 292);
+                            // just write the record whether traded or not...
+                            context.Response.OutputStream.Write(record.Save(), 0, 292);
                         }
                     } break;
 
-                    // Called after result.asp returns an inbound pokemon datagram to delete it
+                    // Called after result.asp returns an inbound pokemon record to delete it
                     case "/worldexchange/delete.asp":
                     {
                         sessions.Remove(session.Hash);
 
-                        GtsDatagram4 datagram = DataAbstract.Instance.GtsDataForUser4(pid);
-                        if (datagram == null)
+                        GtsRecord4 record = DataAbstract.Instance.GtsDataForUser4(pid);
+                        if (record == null)
                         {
                             context.Response.OutputStream.Write(new byte[] 
                                 { 0x00, 0x00 }, 0, 2);
                         }
-                        else if (datagram.IsExchanged > 0)
+                        else if (record.IsExchanged > 0)
                         {
                             // delete the arrived pokemon from the system
                             // todo: add transactions
@@ -217,13 +217,13 @@ namespace PokeFoundations.GTS
                     {
                         sessions.Remove(session.Hash);
 
-                        GtsDatagram4 datagram = DataAbstract.Instance.GtsDataForUser4(pid);
-                        if (datagram == null)
+                        GtsRecord4 record = DataAbstract.Instance.GtsDataForUser4(pid);
+                        if (record == null)
                         {
                             context.Response.OutputStream.Write(new byte[] 
                                 { 0x00, 0x00 }, 0, 2);
                         }
-                        else if (datagram.IsExchanged > 0)
+                        else if (record.IsExchanged > 0)
                         {
                             // a traded pokemon is there, fail. Use delete.asp instead.
                             context.Response.OutputStream.Write(new byte[] { 0x00, 0x00 }, 0, 2);
@@ -261,16 +261,16 @@ namespace PokeFoundations.GTS
                             break;
                         }
 
-                        // keep the datagram in memory while we wait for post_finish.asp request
-                        byte[] datagramBinary = new byte[292];
-                        Array.Copy(data, 4, datagramBinary, 0, 292);
-                        GtsDatagram4 datagram = new GtsDatagram4(datagramBinary);
-                        // the following two fields are blank in the uploaded datagram.
+                        // keep the record in memory while we wait for post_finish.asp request
+                        byte[] recordBinary = new byte[292];
+                        Array.Copy(data, 4, recordBinary, 0, 292);
+                        GtsRecord4 record = new GtsRecord4(recordBinary);
+                        // the following two fields are blank in the uploaded record.
                         // The server must provide them instead.
-                        datagram.TimeDeposited = DateTime.Now;
-                        datagram.PID = pid;
+                        record.TimeDeposited = DateTime.Now;
+                        record.PID = pid;
 
-                        session.Tag = datagram;
+                        session.Tag = record;
                         // todo: delete any other post.asp sessions registered under this PID
 
                         context.Response.OutputStream.Write(new byte[] { 0x01, 0x00 }, 0, 2);
@@ -287,14 +287,14 @@ namespace PokeFoundations.GTS
                             return;
                         }
 
-                        // find a matching session which contains our datagram
+                        // find a matching session which contains our record
                         GtsSession4 prevSession = FindSession(sessions, pid, "/worldexchange/post.asp");
 
                         sessions.Remove(prevSession.Hash);
-                        AssertHelper.Assert(prevSession.Tag is GtsDatagram4);
-                        GtsDatagram4 datagram = (GtsDatagram4)prevSession.Tag;
+                        AssertHelper.Assert(prevSession.Tag is GtsRecord4);
+                        GtsRecord4 record = (GtsRecord4)prevSession.Tag;
 
-                        if (DataAbstract.Instance.GtsDepositPokemon4(datagram))
+                        if (DataAbstract.Instance.GtsDepositPokemon4(record))
                             context.Response.OutputStream.Write(new byte[] { 0x01, 0x00 }, 0, 2);
                         else
                             context.Response.OutputStream.Write(new byte[] { 0x00, 0x00 }, 0, 2);
@@ -302,7 +302,7 @@ namespace PokeFoundations.GTS
                     } break;
 
                     // the search request has a funny bit string request of search terms
-                    // and just returns a chunk of datagrams end to end.
+                    // and just returns a chunk of records end to end.
                     case "/worldexchange/search.asp":
                     {
                         sessions.Remove(session.Hash);
@@ -325,15 +325,15 @@ namespace PokeFoundations.GTS
                         if (data.Length > 11) country = data[11];
 
                         if (resultsCount > 7) resultsCount = 7; // stop DDOS
-                        GtsDatagram4[] datagrams = DataAbstract.Instance.GtsSearch4(pid, species, gender, minLevel, maxLevel, country, resultsCount);
-                        foreach (GtsDatagram4 datagram in datagrams)
+                        GtsRecord4[] records = DataAbstract.Instance.GtsSearch4(pid, species, gender, minLevel, maxLevel, country, resultsCount);
+                        foreach (GtsRecord4 record in records)
                         {
-                            context.Response.OutputStream.Write(datagram.Save(), 0, 292);
+                            context.Response.OutputStream.Write(record.Save(), 0, 292);
                         }
 
                     } break;
 
-                    // the exchange request uploads a datagram of the exchangee pokemon
+                    // the exchange request uploads a record of the exchangee pokemon
                     // plus the desired PID to trade for at the very end.
                     case "/worldexchange/exchange.asp":
                     {
@@ -345,9 +345,9 @@ namespace PokeFoundations.GTS
 
                         byte[] uploadData = new byte[292];
                         Array.Copy(data, 4, uploadData, 0, 292);
-                        GtsDatagram4 upload = new GtsDatagram4(uploadData);
+                        GtsRecord4 upload = new GtsRecord4(uploadData);
                         int targetPid = BitConverter.ToInt32(data, 296);
-                        GtsDatagram4 result = DataAbstract.Instance.GtsDataForUser4(targetPid);
+                        GtsRecord4 result = DataAbstract.Instance.GtsDataForUser4(targetPid);
 
                         // enforce request requirements server side
                         if (!upload.CanTrade(result))
@@ -362,7 +362,7 @@ namespace PokeFoundations.GTS
                         tag[1] = result;
                         session.Tag = tag;
 
-                        GtsDatagram4 tradedResult = result.Clone();
+                        GtsRecord4 tradedResult = result.Clone();
                         tradedResult.FlagTraded(upload); // only real purpose is to generate a proper response
 
                         context.Response.OutputStream.Write(result.Save(), 0, 292);
@@ -379,18 +379,18 @@ namespace PokeFoundations.GTS
                             return;
                         }
 
-                        // find a matching session which contains our datagram
+                        // find a matching session which contains our record
                         GtsSession4 prevSession = FindSession(sessions, pid, "/worldexchange/exchange.asp");
 
                         sessions.Remove(prevSession.Hash);
                         AssertHelper.Assert(prevSession.Tag is object[]);
                         object[] tag = (object[])prevSession.Tag;
                         AssertHelper.Assert(tag.Length == 2);
-                        AssertHelper.Assert(tag[0] is GtsDatagram4);
-                        AssertHelper.Assert(tag[0] is GtsDatagram4);
+                        AssertHelper.Assert(tag[0] is GtsRecord4);
+                        AssertHelper.Assert(tag[0] is GtsRecord4);
 
-                        GtsDatagram4 upload = (GtsDatagram4)tag[0];
-                        GtsDatagram4 result = (GtsDatagram4)tag[1];
+                        GtsRecord4 upload = (GtsRecord4)tag[0];
+                        GtsRecord4 result = (GtsRecord4)tag[1];
 
                         if (DataAbstract.Instance.GtsTradePokemon4(upload, result))
                             context.Response.OutputStream.Write(new byte[] { 0x01, 0x00 }, 0, 2);

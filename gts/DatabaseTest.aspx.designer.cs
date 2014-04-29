@@ -22,13 +22,13 @@ namespace PokeFoundations.GTS {
         protected global::System.Web.UI.HtmlControls.HtmlForm form1;
         
         /// <summary>
-        /// txtDatagram control.
+        /// txtRecord control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtDatagram;
+        protected global::System.Web.UI.WebControls.TextBox txtRecord;
         
         /// <summary>
         /// btnSend control.
@@ -58,12 +58,12 @@ namespace PokeFoundations.GTS {
         protected global::System.Web.UI.WebControls.Button btnReceive;
         
         /// <summary>
-        /// litDatagram control.
+        /// litRecord control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Literal litDatagram;
+        protected global::System.Web.UI.WebControls.Literal litRecord;
     }
 }

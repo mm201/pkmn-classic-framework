@@ -19,25 +19,25 @@ namespace PokeFoundations.GTS
 
         protected void btnSend_Click(object sender, EventArgs e)
         {
-            byte[] data = Common.FromHexString(txtDatagram.Text.Replace("\n", "").Replace("\r", "").Replace(" ", ""));
-            GtsDatagram4 datagram = new GtsDatagram4();
-            datagram.Load(data);
-            DataAbstract.Instance.GtsDepositPokemon4(datagram);
+            byte[] data = Common.FromHexString(txtRecord.Text.Replace("\n", "").Replace("\r", "").Replace(" ", ""));
+            GtsRecord4 record = new GtsRecord4();
+            record.Load(data);
+            DataAbstract.Instance.GtsDepositPokemon4(record);
         }
 
         protected void btnReceive_Click(object sender, EventArgs e)
         {
             int pid;
             Int32.TryParse(txtPid.Text, out pid);
-            GtsDatagram4 datagram = DataAbstract.Instance.GtsDataForUser4(pid);
-            if (datagram == null)
+            GtsRecord4 record = DataAbstract.Instance.GtsDataForUser4(pid);
+            if (record == null)
             {
-                litDatagram.Text = "No data for this PID";
+                litRecord.Text = "No data for this PID";
                 return;
             }
 
-            byte[] data = datagram.Save();
-            litDatagram.Text = RenderHex(data.ToHexStringLower());
+            byte[] data = record.Save();
+            litRecord.Text = RenderHex(data.ToHexStringLower());
         }
 
 

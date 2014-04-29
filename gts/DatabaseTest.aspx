@@ -10,16 +10,16 @@
     <form id="form1" runat="server">
     <div>
     
-    <asp:Label AssociatedControlID="txtDatagram" Text="Paste datagram data here (hex):" runat="server" />
-    <asp:TextBox ID="txtDatagram" TextMode="MultiLine" runat="server" />
+    <asp:Label AssociatedControlID="txtRecord" Text="Paste record data here (hex):" runat="server" />
+    <asp:TextBox ID="txtRecord" TextMode="MultiLine" runat="server" />
     <asp:Button ID="btnSend" OnClick="btnSend_Click" Text="Send" runat="server" />
 
     <br />
 
-    <asp:Label AssociatedControlID="txtPid" Text="Enter your PID to retrieve raw datagram:" runat="server" />
+    <asp:Label AssociatedControlID="txtPid" Text="Enter your PID to retrieve raw record:" runat="server" />
     <asp:TextBox ID="txtPid" runat="server" />
     <asp:Button ID="btnReceive" OnClick="btnReceive_Click" Text="Receive" runat="server" />
-    <asp:Literal ID="litDatagram" runat="server" />
+    <asp:Literal ID="litRecord" runat="server" />
 
     </div>
     </form>

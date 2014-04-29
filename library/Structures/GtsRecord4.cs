@@ -13,13 +13,13 @@ namespace PokeFoundations.Structures
     /// and request.
     /// </summary>
     [Serializable()]
-    public class GtsDatagram4
+    public class GtsRecord4
     {
-        public GtsDatagram4()
+        public GtsRecord4()
         {
         }
 
-        public GtsDatagram4(byte[] data)
+        public GtsRecord4(byte[] data)
         {
             Load(data);
         }
@@ -116,7 +116,7 @@ namespace PokeFoundations.Structures
 
         public void Load(byte[] data)
         {
-            if (data.Length != 292) throw new FormatException("GTS datagram length is incorrect.");
+            if (data.Length != 292) throw new FormatException("GTS record length is incorrect.");
 
             Data = new byte[0xEC];
             Array.Copy(data, 0, Data, 0, 0xEC);
@@ -144,13 +144,13 @@ namespace PokeFoundations.Structures
             TrainerLanguage = data[0x123];
         }
 
-        public GtsDatagram4 Clone()
+        public GtsRecord4 Clone()
         {
             // todo: I am not very efficient
-            return new GtsDatagram4(Save());
+            return new GtsRecord4(Save());
         }
 
-        public bool CanTrade(GtsDatagram4 other)
+        public bool CanTrade(GtsRecord4 other)
         {
             if (Species != other.RequestedSpecies) return false;
             if (other.RequestedGender != Genders.Either && Gender != other.RequestedGender) return false;
@@ -163,7 +163,7 @@ namespace PokeFoundations.Structures
             return true;
         }
 
-        public void FlagTraded(GtsDatagram4 other)
+        public void FlagTraded(GtsRecord4 other)
         {
             Species = other.Species;
             Gender = other.Gender;
@@ -213,7 +213,7 @@ namespace PokeFoundations.Structures
                 | (ulong)(date2.Second & 0xff) << 0x08;
         }
 
-        public static bool operator ==(GtsDatagram4 a, GtsDatagram4 b)
+        public static bool operator ==(GtsRecord4 a, GtsRecord4 b)
         {
             if ((object)a == null && (object)b == null) return true;
             if ((object)a == null || (object)b == null) return false;
@@ -221,7 +221,7 @@ namespace PokeFoundations.Structures
             return a.Save().SequenceEqual(b.Save());
         }
 
-        public static bool operator !=(GtsDatagram4 a, GtsDatagram4 b)
+        public static bool operator !=(GtsRecord4 a, GtsRecord4 b)
         {
             return !(a == b);
         }
