@@ -4,7 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Security.Cryptography;
 
-namespace PokeFoundations.GTS
+namespace PkmnFoundations.GTS
 {
     public class GtsSessionBase
     {

@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace gts {
+namespace PkmnFoundations.GTS {
     
     
     public partial class MasterPage {

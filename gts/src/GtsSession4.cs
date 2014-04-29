@@ -6,7 +6,7 @@ using System.Security.Cryptography;
 using System.IO;
 using System.Net;
 
-namespace PokeFoundations.GTS
+namespace PkmnFoundations.GTS
 {
     public class GtsSession4 : GtsSessionBase
     {

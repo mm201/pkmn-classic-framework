@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace PokeFoundations.VeekunImport
+namespace PkmnFoundations.VeekunImport
 {
     public partial class Form1 : Form
     {

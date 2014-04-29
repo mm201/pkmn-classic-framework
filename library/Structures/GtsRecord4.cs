@@ -5,7 +5,7 @@ using System.Text;
 using System.Runtime.Serialization;
 using System.IO;
 
-namespace PokeFoundations.Structures
+namespace PkmnFoundations.Structures
 {
     /// <summary>
     /// Structure used to represent Pokémon on the GTS in Generation IV.

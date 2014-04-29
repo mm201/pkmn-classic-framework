@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.SessionState;
-using PokeFoundations.Data;
-using PokeFoundations.Structures;
-using PokeFoundations.Support;
+using PkmnFoundations.Data;
+using PkmnFoundations.Structures;
+using PkmnFoundations.Support;
 
-namespace PokeFoundations.GTS
+namespace PkmnFoundations.GTS
 {
     /// <summary>
     /// Summary description for pokemondpds

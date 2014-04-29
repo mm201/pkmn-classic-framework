@@ -5,7 +5,7 @@ using System.Web;
 using System.Web.Security;
 using System.Web.SessionState;
 
-namespace PokeFoundations.Pokedex
+namespace PkmnFoundations.Pokedex
 {
     public class Global : System.Web.HttpApplication
     {

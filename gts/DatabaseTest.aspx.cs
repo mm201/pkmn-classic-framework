@@ -5,10 +5,10 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Text;
-using PokeFoundations.Structures;
-using PokeFoundations.Data;
+using PkmnFoundations.Structures;
+using PkmnFoundations.Data;
 
-namespace PokeFoundations.GTS
+namespace PkmnFoundations.GTS
 {
     public partial class DatabaseTest : System.Web.UI.Page
     {

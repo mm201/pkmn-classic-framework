@@ -8,7 +8,7 @@
     <ProjectGuid>{024BA6DC-E146-405E-B028-2B50B7DD4581}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>PokeFoundations.VeekunImport</RootNamespace>
+    <RootNamespace>PkmnFoundations.VeekunImport</RootNamespace>
     <AssemblyName>VeekunImport</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <TargetFrameworkProfile>Client</TargetFrameworkProfile>

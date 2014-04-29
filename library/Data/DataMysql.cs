@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Data;
 using MySql.Data.MySqlClient;
-using PokeFoundations.Structures;
-using PokeFoundations.Support;
+using PkmnFoundations.Structures;
+using PkmnFoundations.Support;
 
-namespace PokeFoundations.Data
+namespace PkmnFoundations.Data
 {
     public class DataMysql : DataAbstract
     {

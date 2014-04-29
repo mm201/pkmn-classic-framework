@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace PokeFoundations.Structures
+namespace PkmnFoundations.Structures
 {
     public enum Generations
     {

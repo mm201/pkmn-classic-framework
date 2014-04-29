@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace PokeFoundations.GTS {
+namespace PkmnFoundations.GTS {
     
     
     public partial class BoxUploadDecode {

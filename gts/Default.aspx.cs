@@ -4,10 +4,10 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-using PokeFoundations.GTS;
+using PkmnFoundations.GTS;
 using System.Text;
 
-namespace gts
+namespace PkmnFoundations.GTS
 {
     public partial class Default : System.Web.UI.Page
     {

@@ -4,9 +4,9 @@ using System.Linq;
 using System.Web;
 using System.Web.Security;
 using System.Web.SessionState;
-using PokeFoundations.GTS;
+using PkmnFoundations.GTS;
 
-namespace gts
+namespace PkmnFoundations.GTS
 {
     public class Global : System.Web.HttpApplication
     {

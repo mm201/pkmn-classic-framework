@@ -1,4 +1,4 @@
-﻿namespace PokeFoundations.VeekunImport
+﻿namespace PkmnFoundations.VeekunImport
 {
     partial class Form1
     {

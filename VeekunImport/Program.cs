@@ -4,7 +4,7 @@ using System.Linq;
 using System.Windows.Forms;
 using System.Diagnostics;
 
-namespace PokeFoundations.VeekunImport
+namespace PkmnFoundations.VeekunImport
 {
     static class Program
     {

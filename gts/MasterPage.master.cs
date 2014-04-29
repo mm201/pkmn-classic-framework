@@ -5,7 +5,7 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
-namespace gts
+namespace PkmnFoundations.GTS
 {
     public partial class MasterPage : System.Web.UI.MasterPage
     {

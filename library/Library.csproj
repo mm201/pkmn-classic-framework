@@ -8,8 +8,8 @@
     <ProjectGuid>{408EFC7E-C6B0-4160-8628-2679E34385CE}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>PokeFoundations</RootNamespace>
-    <AssemblyName>Library</AssemblyName>
+    <RootNamespace>PkmnFoundations</RootNamespace>
+    <AssemblyName>PkmnFoundations.Library</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />

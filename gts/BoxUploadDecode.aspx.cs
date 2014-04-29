@@ -6,7 +6,7 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Text;
 
-namespace PokeFoundations.GTS
+namespace PkmnFoundations.GTS
 {
     public partial class BoxUploadDecode : System.Web.UI.Page
     {

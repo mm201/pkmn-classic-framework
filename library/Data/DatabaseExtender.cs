@@ -7,7 +7,7 @@ using System.Data.Common;
 using System.Data.SqlClient;
 using MySql.Data.MySqlClient;
 
-namespace PokeFoundations.Data
+namespace PkmnFoundations.Data
 {
     /// <summary>
     /// Provides extension and convenience methods for working with ADO.NET databases.

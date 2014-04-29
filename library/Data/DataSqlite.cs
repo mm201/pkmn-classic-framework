@@ -5,7 +5,7 @@ using System.Text;
 using System.Data;
 using System.Data.SQLite;
 
-namespace PokeFoundations.Data
+namespace PkmnFoundations.Data
 {
     public class DataSqlite// : DataAbstract
     {

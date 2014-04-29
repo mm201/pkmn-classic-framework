@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Data;
-using PokeFoundations.Structures;
+using PkmnFoundations.Structures;
 
-namespace PokeFoundations.Data
+namespace PkmnFoundations.Data
 {
     public abstract class DataAbstract
     {

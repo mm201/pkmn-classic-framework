@@ -4,7 +4,7 @@ using System.Text;
 using System.Diagnostics;
 using System.IO;
 
-namespace PokeFoundations.Support
+namespace PkmnFoundations.Support
 {
     public class AssertHelper
     {
