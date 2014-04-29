@@ -150,6 +150,12 @@ namespace PkmnFoundations.Structures
             return new GtsRecord4(Save());
         }
 
+        public bool Validate()
+        {
+            // todo: a. legitimacy check, and b. check that pkm data matches metadata
+            return true;
+        }
+
         public bool CanTrade(GtsRecord4 other)
         {
             if (Species != other.RequestedSpecies) return false;
@@ -194,7 +200,7 @@ namespace PkmnFoundations.Structures
             byte hour = (byte)((timestamp >> 0x18) & 0xff);
             byte minute = (byte)((timestamp >> 0x10) & 0xff);
             byte second = (byte)((timestamp >> 0x08) & 0xff);
-            //byte fractional = (byte)(timestamp & 0xff);
+            //byte fractional = (byte)(timestamp & 0xff); // always 0
 
             // allow ArgumentOutOfRangeExceptions to escape
             return new DateTime(year, month, day, hour, minute, second);

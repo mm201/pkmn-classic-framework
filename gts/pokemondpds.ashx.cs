@@ -253,6 +253,7 @@ namespace PkmnFoundations.GTS
                             return;
                         }
 
+                        // todo: add transaction
                         if (DataAbstract.Instance.GtsDataForUser4(pid) != null)
                         {
                             // there's already a pokemon inside
@@ -265,6 +266,14 @@ namespace PkmnFoundations.GTS
                         byte[] recordBinary = new byte[292];
                         Array.Copy(data, 4, recordBinary, 0, 292);
                         GtsRecord4 record = new GtsRecord4(recordBinary);
+                        if (!record.Validate())
+                        {
+                            // hack check failed
+                            sessions.Remove(session.Hash);
+                            context.Response.OutputStream.Write(new byte[] { 0x00, 0x00 }, 0, 2);
+                            break;
+                        }
+
                         // the following two fields are blank in the uploaded record.
                         // The server must provide them instead.
                         record.TimeDeposited = DateTime.UtcNow;
@@ -350,20 +359,30 @@ namespace PkmnFoundations.GTS
                         GtsRecord4 result = DataAbstract.Instance.GtsDataForUser4(targetPid);
 
                         // enforce request requirements server side
-                        if (!upload.CanTrade(result))
+                        if (!upload.Validate() || !upload.CanTrade(result))
                         {
                             Error400(context);
                             return;
                         }
 
-                        // todo: maybe strong type this
-                        object[] tag = new object[2];
+                        object[] tag = new GtsRecord4[2];
                         tag[0] = upload;
                         tag[1] = result;
                         session.Tag = tag;
 
                         GtsRecord4 tradedResult = result.Clone();
                         tradedResult.FlagTraded(upload); // only real purpose is to generate a proper response
+
+                        // todo: we need a mechanism to "reserve" a pokemon being traded at this
+                        // point in the process, but be able to relinquish it if exchange_finish
+                        // never happens.
+                        // Currently, if two people try to take the same pokemon, it will appear
+                        // to work for both but then fail for the second after they've saved
+                        // their game. This causes a hard crash and a "save file is corrupt, 
+                        // "previous will be loaded" error when restarting.
+                        // the reservation can be done in application state and has no reason
+                        // to touch the database. (exchange_finish won't work anyway if application
+                        // state is lost.)
 
                         context.Response.OutputStream.Write(result.Save(), 0, 292);
 
@@ -383,8 +402,8 @@ namespace PkmnFoundations.GTS
                         GtsSession4 prevSession = FindSession(sessions, pid, "/worldexchange/exchange.asp");
 
                         sessions.Remove(prevSession.Hash);
-                        AssertHelper.Assert(prevSession.Tag is object[]);
-                        object[] tag = (object[])prevSession.Tag;
+                        AssertHelper.Assert(prevSession.Tag is GtsRecord4[]);
+                        GtsRecord4[] tag = (GtsRecord4[])prevSession.Tag;
                         AssertHelper.Assert(tag.Length == 2);
                         AssertHelper.Assert(tag[0] is GtsRecord4);
                         AssertHelper.Assert(tag[0] is GtsRecord4);
