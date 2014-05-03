@@ -13,13 +13,13 @@ namespace PkmnFoundations.GTS
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            Dictionary<String, GtsSession4> sessions = Context.AllSessions4();
+            GtsSessionManager manager = GtsSessionManager.FromContext(Context);
 
             StringBuilder builder = new StringBuilder();
             builder.Append("Active sessions (");
-            builder.Append(sessions.Count);
+            builder.Append(manager.Sessions4.Count);
             builder.Append("):<br />");
-            foreach (KeyValuePair<String, GtsSession4> session in sessions)
+            foreach (KeyValuePair<String, GtsSession4> session in manager.Sessions4)
             {
                 builder.Append("PID: ");
                 builder.Append(session.Value.PID);

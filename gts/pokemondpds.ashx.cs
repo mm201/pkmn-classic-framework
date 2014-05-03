@@ -30,8 +30,8 @@ namespace PkmnFoundations.GTS
             {
                 // this is a new session request
                 GtsSession4 session = new GtsSession4(pid, context.Request.PathInfo);
-                Dictionary<String, GtsSession4> sessions = context.AllSessions4();
-                sessions.Add(session.Hash, session);
+                GtsSessionManager manager = GtsSessionManager.FromContext(context);
+                manager.Add(session);
 
                 context.Response.Write(session.Token);
                 return;
@@ -51,15 +51,15 @@ namespace PkmnFoundations.GTS
                     return;
                 }
 
-                Dictionary<String, GtsSession4> sessions = context.AllSessions4();
-                if (!sessions.ContainsKey(context.Request.QueryString["hash"]))
+                GtsSessionManager manager = GtsSessionManager.FromContext(context);
+                if (!manager.Sessions4.ContainsKey(context.Request.QueryString["hash"]))
                 {
                     // session hash not matched
                     Error400(context);
                     return;
                 }
 
-                GtsSession4 session = sessions[context.Request.QueryString["hash"]];
+                GtsSession4 session = manager.Sessions4[context.Request.QueryString["hash"]];
                 byte[] data;
                 try
                 {
@@ -92,7 +92,7 @@ namespace PkmnFoundations.GTS
                 switch (session.URL)
                 {
                     default:
-                        sessions.Remove(session.Hash);
+                        manager.Remove(session);
 
                         // unrecognized page url
                         // should be error 404 once we're done debugging
@@ -102,7 +102,7 @@ namespace PkmnFoundations.GTS
 
                     // Called during startup. Unknown purpose.
                     case "/worldexchange/info.asp":
-                        sessions.Remove(session.Hash);
+                        manager.Remove(session);
 
                         // todo: find out the meaning of this request.
                         // is it simply done to check whether the GTS is online?
@@ -111,7 +111,7 @@ namespace PkmnFoundations.GTS
 
                     // Called during startup. Seems to contain trainer profile stats.
                     case "/common/setProfile.asp":
-                        sessions.Remove(session.Hash);
+                        manager.Remove(session);
 
                         // todo: Figure out what fun stuff is contained in this blob!
 
@@ -123,7 +123,7 @@ namespace PkmnFoundations.GTS
                     // Called during startup and when you check your pokemon's status.
                     case "/worldexchange/result.asp":
                     {
-                        sessions.Remove(session.Hash);
+                        manager.Remove(session);
 
                         /* After the above step(s) or performing any of 
                             * the tasks below other than searching, the game 
@@ -159,7 +159,7 @@ namespace PkmnFoundations.GTS
                     // Called after result.asp returns 4 when you check your pokemon's status
                     case "/worldexchange/get.asp":
                     {
-                        sessions.Remove(session.Hash);
+                        manager.Remove(session);
 
                         // this is only called if result.asp returned 4.
                         // todo: what does this do if the contained pokemon is traded??
@@ -181,7 +181,7 @@ namespace PkmnFoundations.GTS
                     // Called after result.asp returns an inbound pokemon record to delete it
                     case "/worldexchange/delete.asp":
                     {
-                        sessions.Remove(session.Hash);
+                        manager.Remove(session);
 
                         GtsRecord4 record = DataAbstract.Instance.GtsDataForUser4(pid);
                         if (record == null)
@@ -215,7 +215,7 @@ namespace PkmnFoundations.GTS
                     // called to delete your own pokemon after taking it back
                     case "/worldexchange/return.asp":
                     {
-                        sessions.Remove(session.Hash);
+                        manager.Remove(session);
 
                         GtsRecord4 record = DataAbstract.Instance.GtsDataForUser4(pid);
                         if (record == null)
@@ -249,6 +249,7 @@ namespace PkmnFoundations.GTS
                     {
                         if (data.Length != 296)
                         {
+                            manager.Remove(session);
                             Error400(context);
                             return;
                         }
@@ -257,7 +258,7 @@ namespace PkmnFoundations.GTS
                         if (DataAbstract.Instance.GtsDataForUser4(pid) != null)
                         {
                             // there's already a pokemon inside
-                            sessions.Remove(session.Hash);
+                            manager.Remove(session);
                             context.Response.OutputStream.Write(new byte[] { 0x00, 0x00 }, 0, 2);
                             break;
                         }
@@ -269,7 +270,7 @@ namespace PkmnFoundations.GTS
                         if (!record.Validate())
                         {
                             // hack check failed
-                            sessions.Remove(session.Hash);
+                            manager.Remove(session);
                             context.Response.OutputStream.Write(new byte[] { 0x00, 0x00 }, 0, 2);
                             break;
                         }
@@ -288,7 +289,7 @@ namespace PkmnFoundations.GTS
 
                     case "/worldexchange/post_finish.asp":
                     {
-                        sessions.Remove(session.Hash);
+                        manager.Remove(session);
 
                         if (data.Length != 12)
                         {
@@ -297,9 +298,9 @@ namespace PkmnFoundations.GTS
                         }
 
                         // find a matching session which contains our record
-                        GtsSession4 prevSession = FindSession(sessions, pid, "/worldexchange/post.asp");
+                        GtsSession4 prevSession = manager.FindSession4(pid, "/worldexchange/post.asp");
 
-                        sessions.Remove(prevSession.Hash);
+                        manager.Remove(prevSession);
                         AssertHelper.Assert(prevSession.Tag is GtsRecord4);
                         GtsRecord4 record = (GtsRecord4)prevSession.Tag;
 
@@ -314,7 +315,7 @@ namespace PkmnFoundations.GTS
                     // and just returns a chunk of records end to end.
                     case "/worldexchange/search.asp":
                     {
-                        sessions.Remove(session.Hash);
+                        manager.Remove(session);
 
                         if (data.Length < 11 || data.Length > 12)
                         {
@@ -348,6 +349,7 @@ namespace PkmnFoundations.GTS
                     {
                         if (data.Length != 300)
                         {
+                            manager.Remove(session);
                             Error400(context);
                             return;
                         }
@@ -361,6 +363,7 @@ namespace PkmnFoundations.GTS
                         // enforce request requirements server side
                         if (!upload.Validate() || !upload.CanTrade(result))
                         {
+                            manager.Remove(session);
                             Error400(context);
                             return;
                         }
@@ -390,7 +393,7 @@ namespace PkmnFoundations.GTS
 
                     case "/worldexchange/exchange_finish.asp":
                     {
-                        sessions.Remove(session.Hash);
+                        manager.Remove(session);
 
                         if (data.Length != 12)
                         {
@@ -399,9 +402,9 @@ namespace PkmnFoundations.GTS
                         }
 
                         // find a matching session which contains our record
-                        GtsSession4 prevSession = FindSession(sessions, pid, "/worldexchange/exchange.asp");
+                        GtsSession4 prevSession = manager.FindSession4(pid, "/worldexchange/exchange.asp");
 
-                        sessions.Remove(prevSession.Hash);
+                        manager.Remove(prevSession);
                         AssertHelper.Assert(prevSession.Tag is GtsRecord4[]);
                         GtsRecord4[] tag = (GtsRecord4[])prevSession.Tag;
                         AssertHelper.Assert(tag.Length == 2);
@@ -436,25 +439,6 @@ namespace PkmnFoundations.GTS
             {
                 return false;
             }
-        }
-
-        private GtsSession4 FindSession(Dictionary<String, GtsSession4> sessions, int pid, String url)
-        {
-            GtsSession4 result = null;
-
-            foreach (GtsSession4 sess in sessions.Values)
-            {
-                if (sess.PID == pid && sess.URL == url)
-                {
-                    if (result != null)
-                    {
-                        // todo: there's more than one matching session... delete them all.
-                    }
-                    return sess; // temp until I get it to cleanup old sessions
-                    result = sess;
-                }
-            }
-            return result;
         }
     }
 }
