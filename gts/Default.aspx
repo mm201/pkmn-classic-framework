@@ -15,6 +15,14 @@ project.</p>
 shutdown of Nintendo Wi-fi Connection services</a> scheduled for May 20. To allow players to
 continue trading, someone would need to make a replacement server, so I decided to help out.</p>
 
+<p><strong style="color: #cc0000;">This is a WORK IN PROGRESS. I make no promises that your
+Pokémon will be safe or that you will get them back. If you find any problems, please
+report them in the
+<asp:HyperLink ID="hlIssueTracker" NavigateUrl="https://github.com/mm201/pkmnFoundations/issues" runat="server">
+issue tracker</asp:HyperLink> with complete replication steps, and Wireshark captures if possible.
+Thanks.
+</strong></p>
+
 <h1>What is Pokémon Foundations?</h1>
 <p>Pokémon Foundations is going to be a collection of utilities dealing with the logic, math,
 and data related to the main series of Pokémon RPG videogames. Planned is a Pokédex, stat calculator,
