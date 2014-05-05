@@ -6,6 +6,7 @@ using System.Web.SessionState;
 using PkmnFoundations.Data;
 using PkmnFoundations.Structures;
 using PkmnFoundations.Support;
+using System.IO;
 
 namespace PkmnFoundations.GTS
 {
@@ -89,6 +90,8 @@ namespace PkmnFoundations.GTS
                     return;
                 }
 
+                Stream response = context.Response.OutputStream;
+
                 switch (session.URL)
                 {
                     default:
@@ -106,7 +109,7 @@ namespace PkmnFoundations.GTS
 
                         // todo: find out the meaning of this request.
                         // is it simply done to check whether the GTS is online?
-                        context.Response.OutputStream.Write(new byte[] { 0x01, 0x00 }, 0, 2);
+                        response.Write(new byte[] { 0x01, 0x00 }, 0, 2);
                         break;
 
                     // Called during startup. Seems to contain trainer profile stats.
@@ -115,7 +118,7 @@ namespace PkmnFoundations.GTS
 
                         // todo: Figure out what fun stuff is contained in this blob!
 
-                        context.Response.OutputStream.Write(new byte[] 
+                        response.Write(new byte[] 
                             { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }, 
                             0, 8);
                         break;
@@ -139,18 +142,18 @@ namespace PkmnFoundations.GTS
                         if (record == null)
                         {
                             // No pokemon in the system
-                            context.Response.OutputStream.Write(new byte[]
+                            response.Write(new byte[]
                                 { 0x05, 0x00 }, 0, 2);
                         }
                         else if (record.IsExchanged > 0)
                         {
                             // traded pokemon arriving!!!
-                            context.Response.OutputStream.Write(record.Save(), 0, 292);
+                            response.Write(record.Save(), 0, 292);
                         }
                         else
                         {
                             // my existing pokemon is in the system, untraded
-                            context.Response.OutputStream.Write(new byte[]
+                            response.Write(new byte[]
                                 { 0x04, 0x00 }, 0, 2);
                         }
 
@@ -174,7 +177,7 @@ namespace PkmnFoundations.GTS
                         else
                         {
                             // just write the record whether traded or not...
-                            context.Response.OutputStream.Write(record.Save(), 0, 292);
+                            response.Write(record.Save(), 0, 292);
                         }
                     } break;
 
@@ -186,7 +189,7 @@ namespace PkmnFoundations.GTS
                         GtsRecord4 record = DataAbstract.Instance.GtsDataForUser4(pid);
                         if (record == null)
                         {
-                            context.Response.OutputStream.Write(new byte[] 
+                            response.Write(new byte[] 
                                 { 0x00, 0x00 }, 0, 2);
                         }
                         else if (record.IsExchanged > 0)
@@ -198,17 +201,17 @@ namespace PkmnFoundations.GTS
                             bool success = DataAbstract.Instance.GtsDeletePokemon4(pid);
                             if (success)
                             {
-                                context.Response.OutputStream.Write(new byte[] { 0x01, 0x00 }, 0, 2);
+                                response.Write(new byte[] { 0x01, 0x00 }, 0, 2);
                             }
                             else
                             {
-                                context.Response.OutputStream.Write(new byte[] { 0x00, 0x00 }, 0, 2);
+                                response.Write(new byte[] { 0x00, 0x00 }, 0, 2);
                             }
                         }
                         else
                         {
                             // own pokemon is there, fail. Use return.asp instead.
-                            context.Response.OutputStream.Write(new byte[] { 0x00, 0x00 }, 0, 2);
+                            response.Write(new byte[] { 0x00, 0x00 }, 0, 2);
                         }
                     } break;
 
@@ -220,13 +223,13 @@ namespace PkmnFoundations.GTS
                         GtsRecord4 record = DataAbstract.Instance.GtsDataForUser4(pid);
                         if (record == null)
                         {
-                            context.Response.OutputStream.Write(new byte[] 
+                            response.Write(new byte[] 
                                 { 0x00, 0x00 }, 0, 2);
                         }
                         else if (record.IsExchanged > 0)
                         {
                             // a traded pokemon is there, fail. Use delete.asp instead.
-                            context.Response.OutputStream.Write(new byte[] { 0x00, 0x00 }, 0, 2);
+                            response.Write(new byte[] { 0x00, 0x00 }, 0, 2);
                         }
                         else
                         {
@@ -235,11 +238,11 @@ namespace PkmnFoundations.GTS
                             bool success = DataAbstract.Instance.GtsDeletePokemon4(pid);
                             if (success)
                             {
-                                context.Response.OutputStream.Write(new byte[] { 0x01, 0x00 }, 0, 2);
+                                response.Write(new byte[] { 0x01, 0x00 }, 0, 2);
                             }
                             else
                             {
-                                context.Response.OutputStream.Write(new byte[] { 0x00, 0x00 }, 0, 2);
+                                response.Write(new byte[] { 0x00, 0x00 }, 0, 2);
                             }
                         }
                     } break;
@@ -259,7 +262,7 @@ namespace PkmnFoundations.GTS
                         {
                             // there's already a pokemon inside
                             manager.Remove(session);
-                            context.Response.OutputStream.Write(new byte[] { 0x00, 0x00 }, 0, 2);
+                            response.Write(new byte[] { 0x00, 0x00 }, 0, 2);
                             break;
                         }
 
@@ -271,7 +274,7 @@ namespace PkmnFoundations.GTS
                         {
                             // hack check failed
                             manager.Remove(session);
-                            context.Response.OutputStream.Write(new byte[] { 0x00, 0x00 }, 0, 2);
+                            response.Write(new byte[] { 0x00, 0x00 }, 0, 2);
                             break;
                         }
 
@@ -283,7 +286,7 @@ namespace PkmnFoundations.GTS
                         session.Tag = record;
                         // todo: delete any other post.asp sessions registered under this PID
 
-                        context.Response.OutputStream.Write(new byte[] { 0x01, 0x00 }, 0, 2);
+                        response.Write(new byte[] { 0x01, 0x00 }, 0, 2);
 
                     } break;
 
@@ -297,6 +300,9 @@ namespace PkmnFoundations.GTS
                             return;
                         }
 
+                        // todo: these _finish requests seem to come with a magic number of 4 bytes
+                        // at offset 0. Find out what this is supposed to do and how to validate it.
+
                         // find a matching session which contains our record
                         GtsSession4 prevSession = manager.FindSession4(pid, "/worldexchange/post.asp");
 
@@ -305,9 +311,9 @@ namespace PkmnFoundations.GTS
                         GtsRecord4 record = (GtsRecord4)prevSession.Tag;
 
                         if (DataAbstract.Instance.GtsDepositPokemon4(record))
-                            context.Response.OutputStream.Write(new byte[] { 0x01, 0x00 }, 0, 2);
+                            response.Write(new byte[] { 0x01, 0x00 }, 0, 2);
                         else
-                            context.Response.OutputStream.Write(new byte[] { 0x00, 0x00 }, 0, 2);
+                            response.Write(new byte[] { 0x00, 0x00 }, 0, 2);
 
                     } break;
 
@@ -338,7 +344,7 @@ namespace PkmnFoundations.GTS
                         GtsRecord4[] records = DataAbstract.Instance.GtsSearch4(pid, species, gender, minLevel, maxLevel, country, resultsCount);
                         foreach (GtsRecord4 record in records)
                         {
-                            context.Response.OutputStream.Write(record.Save(), 0, 292);
+                            response.Write(record.Save(), 0, 292);
                         }
 
                     } break;
@@ -361,7 +367,7 @@ namespace PkmnFoundations.GTS
                         GtsRecord4 result = DataAbstract.Instance.GtsDataForUser4(targetPid);
 
                         // enforce request requirements server side
-                        if (!upload.Validate() || !upload.CanTrade(result))
+                        if (result == null || !upload.Validate() || !upload.CanTrade(result))
                         {
                             manager.Remove(session);
                             Error400(context);
@@ -387,7 +393,11 @@ namespace PkmnFoundations.GTS
                         // to touch the database. (exchange_finish won't work anyway if application
                         // state is lost.)
 
-                        context.Response.OutputStream.Write(result.Save(), 0, 292);
+                        // I also have a hunch that failure to send the exchange_finish request
+                        // is what causes the notorious GTS glitch where a pokemon is listed
+                        // under the wrong species and you can't trade it
+
+                        response.Write(result.Save(), 0, 292);
 
                     } break;
 
@@ -415,9 +425,9 @@ namespace PkmnFoundations.GTS
                         GtsRecord4 result = (GtsRecord4)tag[1];
 
                         if (DataAbstract.Instance.GtsTradePokemon4(upload, result))
-                            context.Response.OutputStream.Write(new byte[] { 0x01, 0x00 }, 0, 2);
+                            response.Write(new byte[] { 0x01, 0x00 }, 0, 2);
                         else
-                            context.Response.OutputStream.Write(new byte[] { 0x00, 0x00 }, 0, 2);
+                            response.Write(new byte[] { 0x00, 0x00 }, 0, 2);
 
                     } break;
                 }

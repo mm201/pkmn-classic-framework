@@ -160,11 +160,11 @@ namespace PkmnFoundations.Structures
         {
             if (Species != other.RequestedSpecies) return false;
             if (other.RequestedGender != Genders.Either && Gender != other.RequestedGender) return false;
-            if (CheckLevels(other.RequestedMinLevel, other.RequestedMaxLevel, Level)) return false;
+            if (!CheckLevels(other.RequestedMinLevel, other.RequestedMaxLevel, Level)) return false;
             
             if (RequestedSpecies != other.Species) return false;
             if (RequestedGender != Genders.Either && other.Gender != RequestedGender) return false;
-            if (CheckLevels(RequestedMinLevel, RequestedMaxLevel, other.Level)) return false;
+            if (!CheckLevels(RequestedMinLevel, RequestedMaxLevel, other.Level)) return false;
 
             return true;
         }

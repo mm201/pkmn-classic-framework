@@ -52,11 +52,13 @@ namespace PkmnFoundations.GTS
             checksum ^= 0x4a3b2c1d;
             int rand = checksum | (checksum << 16);
 
+            // todo: prune first 8 bytes, pass pid to this function to validate
             for (int pos = 0; pos < data3.Length; pos++)
             {
                 rand = DecryptRNG(rand);
                 data3[pos] = (byte)(data2[pos + 4] ^ (byte)(rand >> 16));
             }
+            // todo: validate checksum
 
             return data3;
         }

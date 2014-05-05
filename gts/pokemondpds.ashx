@@ -1,1 +1,1 @@
-﻿<%@ WebHandler Language="C#" CodeBehind="pokemondpds.ashx.cs" Class="PokeFoundations.GTS.pokemondpds" %>
+﻿<%@ WebHandler Language="C#" CodeBehind="pokemondpds.ashx.cs" Class="PkmnFoundations.GTS.pokemondpds" %>
