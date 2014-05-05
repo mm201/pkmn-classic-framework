@@ -75,6 +75,9 @@
     <Compile Include="BoxUploadDecode.aspx.designer.cs">
       <DependentUpon>BoxUploadDecode.aspx</DependentUpon>
     </Compile>
+    <Compile Include="syachi2ds.ashx.cs">
+      <DependentUpon>syachi2ds.ashx</DependentUpon>
+    </Compile>
     <Compile Include="DatabaseTest.aspx.cs">
       <DependentUpon>DatabaseTest.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -126,6 +129,9 @@
       <Project>{408EFC7E-C6B0-4160-8628-2679E34385CE}</Project>
       <Name>Library</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="syachi2ds.ashx" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />

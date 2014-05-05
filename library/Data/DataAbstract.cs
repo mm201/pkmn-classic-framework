@@ -40,6 +40,17 @@ namespace PkmnFoundations.Data
 
         public abstract GtsRecord4[] GtsSearch4(int pid, ushort species, Genders gender, byte minLevel, byte maxLevel, byte country, int count);
 
+        public abstract GtsRecord5 GtsDataForUser5(int pid);
+
+        public abstract bool GtsDepositPokemon5(GtsRecord5 record);
+
+        public abstract bool GtsDeletePokemon5(int pid);
+
+        public abstract bool GtsTradePokemon5(int pidSrc, int pidDest);
+        public abstract bool GtsTradePokemon5(GtsRecord5 upload, GtsRecord5 result);
+
+        public abstract GtsRecord5[] GtsSearch5(int pid, ushort species, Genders gender, byte minLevel, byte maxLevel, byte country, int count);
+
         #endregion
     }
 }

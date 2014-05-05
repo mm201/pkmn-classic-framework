@@ -4,7 +4,6 @@ using System.Linq;
 using System.Web;
 using System.Web.Security;
 using System.Web.SessionState;
-using PkmnFoundations.GTS;
 
 namespace PkmnFoundations.GTS
 {
@@ -85,6 +84,11 @@ namespace PkmnFoundations.GTS
             {
                 pathInfo = "/" + String.Join("/", split, 2, split.Length - 2);
                 return VirtualPathUtility.ToAbsolute("~/pokemondpds.ashx");
+            }
+            else if (split.Length > 2 && split[1] == "syachi2ds" && split[2] == "web")
+            {
+                pathInfo = "/" + String.Join("/", split, 3, split.Length - 3);
+                return VirtualPathUtility.ToAbsolute("~/syachi2ds.ashx");
             }
             else return null;
         }

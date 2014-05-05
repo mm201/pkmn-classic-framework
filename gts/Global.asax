@@ -1,1 +1,1 @@
-﻿<%@ Application Codebehind="Global.asax.cs" Inherits="gts.Global" Language="C#" %>
+﻿<%@ Application Codebehind="Global.asax.cs" Inherits="PkmnFoundations.GTS.Global" Language="C#" %>

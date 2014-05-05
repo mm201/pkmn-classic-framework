@@ -52,6 +52,7 @@
     <Compile Include="Data\DataMysql.cs" />
     <Compile Include="Data\DataSqlite.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Structures\GtsRecord5.cs" />
     <Compile Include="Structures\Enums.cs" />
     <Compile Include="Structures\GtsRecord4.cs" />
     <Compile Include="Support\AssertHelper.cs" />
