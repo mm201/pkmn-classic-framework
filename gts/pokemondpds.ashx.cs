@@ -201,6 +201,7 @@ namespace PkmnFoundations.GTS
                             bool success = DataAbstract.Instance.GtsDeletePokemon4(pid);
                             if (success)
                             {
+                                manager.RefreshStats();
                                 response.Write(new byte[] { 0x01, 0x00 }, 0, 2);
                             }
                             else
@@ -238,6 +239,7 @@ namespace PkmnFoundations.GTS
                             bool success = DataAbstract.Instance.GtsDeletePokemon4(pid);
                             if (success)
                             {
+                                manager.RefreshStats();
                                 response.Write(new byte[] { 0x01, 0x00 }, 0, 2);
                             }
                             else
@@ -311,7 +313,10 @@ namespace PkmnFoundations.GTS
                         GtsRecord4 record = (GtsRecord4)prevSession.Tag;
 
                         if (DataAbstract.Instance.GtsDepositPokemon4(record))
+                        {
+                            manager.RefreshStats();
                             response.Write(new byte[] { 0x01, 0x00 }, 0, 2);
+                        }
                         else
                             response.Write(new byte[] { 0x00, 0x00 }, 0, 2);
 
@@ -431,7 +436,10 @@ namespace PkmnFoundations.GTS
                         GtsRecord4 result = (GtsRecord4)tag[1];
 
                         if (DataAbstract.Instance.GtsTradePokemon4(upload, result))
+                        {
+                            manager.RefreshStats();
                             response.Write(new byte[] { 0x01, 0x00 }, 0, 2);
+                        }
                         else
                             response.Write(new byte[] { 0x00, 0x00 }, 0, 2);
 

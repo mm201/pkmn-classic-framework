@@ -204,6 +204,7 @@ namespace PkmnFoundations.GTS
                                 if (success)
                                 {
                                     response.Write(new byte[] { 0x01, 0x00 }, 0, 2);
+                                    manager.RefreshStats();
                                 }
                                 else
                                 {
@@ -240,6 +241,7 @@ namespace PkmnFoundations.GTS
                                 if (success)
                                 {
                                     response.Write(new byte[] { 0x01, 0x00 }, 0, 2);
+                                    manager.RefreshStats();
                                 }
                                 else
                                 {
@@ -316,7 +318,10 @@ namespace PkmnFoundations.GTS
                             GtsRecord5 record = (GtsRecord5)prevSession.Tag;
 
                             if (DataAbstract.Instance.GtsDepositPokemon5(record))
+                            {
+                                manager.RefreshStats();
                                 response.Write(new byte[] { 0x01, 0x00 }, 0, 2);
+                            }
                             else
                                 response.Write(new byte[] { 0x00, 0x00 }, 0, 2);
 
@@ -433,7 +438,10 @@ namespace PkmnFoundations.GTS
                             GtsRecord5 result = (GtsRecord5)tag[1];
 
                             if (DataAbstract.Instance.GtsTradePokemon5(upload, result))
+                            {
+                                manager.RefreshStats();
                                 response.Write(new byte[] { 0x01, 0x00 }, 0, 2);
+                            }
                             else
                                 response.Write(new byte[] { 0x00, 0x00 }, 0, 2);
 
