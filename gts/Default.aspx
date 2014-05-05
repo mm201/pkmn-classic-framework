@@ -4,5 +4,5 @@
 </asp:Content>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="cpMain" runat="server">
-<asp:Literal ID="litDebug" runat="server" />
+
 </asp:Content>
