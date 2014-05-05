@@ -55,8 +55,7 @@
     <Reference Include="System.Web.ApplicationServices" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="BoxUploadDecode.aspx" />
-    <Content Include="DatabaseTest.aspx" />
+    <Content Include="css\main.css" />
     <Content Include="Default.aspx" />
     <Content Include="Global.asax" />
     <Content Include="Web.config" />
@@ -68,22 +67,8 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BoxUploadDecode.aspx.cs">
-      <DependentUpon>BoxUploadDecode.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="BoxUploadDecode.aspx.designer.cs">
-      <DependentUpon>BoxUploadDecode.aspx</DependentUpon>
-    </Compile>
     <Compile Include="syachi2ds.ashx.cs">
       <DependentUpon>syachi2ds.ashx</DependentUpon>
-    </Compile>
-    <Compile Include="DatabaseTest.aspx.cs">
-      <DependentUpon>DatabaseTest.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="DatabaseTest.aspx.designer.cs">
-      <DependentUpon>DatabaseTest.aspx</DependentUpon>
     </Compile>
     <Compile Include="pokemondpds.ashx.cs">
       <DependentUpon>pokemondpds.ashx</DependentUpon>
@@ -114,7 +99,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="css\" />
     <Folder Include="images\sm-s\" />
     <Folder Include="images\sm\" />
   </ItemGroup>

@@ -6,8 +6,27 @@
 <head runat="server">
     <title></title>
     <asp:ContentPlaceHolder ID="cpHead" runat="server" />
+    <link rel="stylesheet" href="~/css/main.css" type="text/css" />
 </head>
 <body>
+    <div id="gtsHeader">
+        <div class="setWidth">
+            <h1>Foundations GTS</h1>
+            <p>Fan-operated GTS for Pokémon generations IV and V, by mm201</p>
+            <div class="stats">
+                <asp:Literal ID="litPokemon" runat="server" />
+                Pokémon available for offer.<br />
+                <asp:HyperLink ID="hlAllPokemon" NavigateUrl="~/AllPokemon.aspx" runat="server">Details</asp:HyperLink>
+            </div>
+        </div>
+        <div class="github-contain">
+        <a class="github" href="https://github.com/mm201/pkmnFoundations" target="_blank">Fork me on GitHub!</a>
+        </div>
+    </div>
+    <div id="gtsMain">
+    <div class="setWidth">
     <asp:ContentPlaceHolder ID="cpMain" runat="server" />
+    </div>
+    </div>
 </body>
 </html>

@@ -334,6 +334,15 @@ namespace PkmnFoundations.Data
 
             return result;
         }
+
+        public override int GtsAvailablePokemon4()
+        {
+            using (MySqlConnection db = CreateConnection())
+            {
+                db.Open();
+                return (int)(long)db.ExecuteScalar("SELECT Count(*) FROM GtsPokemon4 WHERE IsExchanged = 0");
+            }
+        }
         #endregion
 
         #region GTS 5
@@ -654,6 +663,14 @@ namespace PkmnFoundations.Data
             return result;
         }
 
+        public override int GtsAvailablePokemon5()
+        {
+            using (MySqlConnection db = CreateConnection())
+            {
+                db.Open();
+                return (int)(long)db.ExecuteScalar("SELECT Count(*) FROM GtsPokemon5 WHERE IsExchanged = 0");
+            }
+        }
         #endregion
     }
 }

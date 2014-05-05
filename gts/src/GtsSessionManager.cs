@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using PkmnFoundations.Data;
 
 namespace PkmnFoundations.GTS
 {
@@ -18,6 +19,7 @@ namespace PkmnFoundations.GTS
         {
             Sessions4 = new Dictionary<String, GtsSession4>();
             Sessions5 = new Dictionary<String, GtsSession5>();
+            RefreshStats();
         }
 
         public void PruneSessions()
@@ -139,6 +141,24 @@ namespace PkmnFoundations.GTS
                 }
             }
             return result;
+        }
+
+        public void RefreshStats()
+        {
+            AvailablePokemon4 = DataAbstract.Instance.GtsAvailablePokemon4();
+            AvailablePokemon5 = DataAbstract.Instance.GtsAvailablePokemon5();
+        }
+
+        public int AvailablePokemon4
+        {
+            get;
+            private set;
+        }
+
+        public int AvailablePokemon5
+        {
+            get;
+            private set;
         }
 
     }

@@ -1,0 +1,72 @@
+﻿body
+{
+    font-family: Arial,sans-serif;
+    margin: 0; padding: 0;
+}
+
+#gtsHeader
+{
+    background-color: #ff8063;
+    color: white;
+    font-family: Arial,sans-serif;
+    padding: 4px 0;
+    height: 120px;
+}
+
+#gtsHeader .stats
+{
+    background-color: #ffac9f;
+    border-radius: 9px;
+    padding: 4px;
+    position: absolute;
+    top: 8px;
+    right: 160px;
+    width: 200px;
+    font-size: 12px;
+}
+
+#gtsHeader a
+{
+    color: white;
+}
+
+#gtsMain
+{
+    padding: 4px 0;
+}
+
+.setWidth
+{
+    width: 720px;
+    margin: 0 auto;
+}
+
+.github-contain
+{
+    position: absolute;
+    overflow: hidden;
+    top: 0; right: 0;
+    width: 160px; height: 160px;
+}
+
+.github
+{
+    width: 300px;
+    height: 20px;
+    color: white;
+    background-color: black;
+    position: absolute;
+    top: 60px;
+    right: -80px;
+    text-align: center;
+    display: block;
+    margin: 0; padding: 0;
+    text-decoration: none;
+    transform: rotate(45deg);
+}
+
+.code
+{
+    font-family: Consolas,'Andale Mono',monospace
+}
+

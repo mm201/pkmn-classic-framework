@@ -11,7 +11,9 @@ namespace PkmnFoundations.GTS
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-
+            GtsSessionManager manager = GtsSessionManager.FromContext(Context);
+            int availTotal = manager.AvailablePokemon4 + manager.AvailablePokemon5;
+            litPokemon.Text = availTotal.ToString();
         }
     }
 }
