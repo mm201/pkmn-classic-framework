@@ -11,12 +11,20 @@
 <body>
     <div id="gtsHeader">
         <div class="setWidth">
-            <h1>Foundations GTS</h1>
-            <p>Fan-operated GTS for Pokémon generations IV and V, by mm201</p>
+            <h1>
+            <asp:HyperLink ID="hlHome" NavigateUrl="~/" runat="server">Foundations GTS</asp:HyperLink>
+            </h1>
+            <p>Fan-operated GTS for Pokémon Generations IV and V, by mm201</p>
+            <div class="right">
+                <div class="dns">
+                <div class="dnsHeading">DNS server:</div>
+                <div class="dnsIp">191.236.98.208</div>
+                </div>
             <div class="stats">
                 <asp:Literal ID="litPokemon" runat="server" />
                 Pokémon available for offer.<br />
                 <asp:HyperLink ID="hlAllPokemon" NavigateUrl="~/AllPokemon.aspx" runat="server">Details</asp:HyperLink>
+            </div>
             </div>
         </div>
         <div class="github-contain">

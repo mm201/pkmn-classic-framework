@@ -208,9 +208,14 @@ namespace PkmnFoundations.Data
             using (MySqlConnection db = CreateConnection())
             {
                 List<MySqlParameter> _params = new List<MySqlParameter>();
-                String where = "WHERE pid != @pid AND Species = @species";
+                String where = "WHERE pid != @pid";
                 _params.Add(new MySqlParameter("@pid", pid));
-                _params.Add(new MySqlParameter("@species", species));
+
+                if (species > 0)
+                {
+                    where += " AND Species = @species";
+                    _params.Add(new MySqlParameter("@species", species));
+                }
 
                 if (gender != Genders.Either)
                 {
@@ -241,7 +246,12 @@ namespace PkmnFoundations.Data
                     _params.Add(new MySqlParameter("@country", country));
                 }
 
-                _params.Add(new MySqlParameter("@count", count));
+                String limit = "";
+                if (count > 0)
+                {
+                    _params.Add(new MySqlParameter("@count", count));
+                    limit = " LIMIT @count";
+                }
 
                 db.Open();
                 // todo: sort me in creative ways
@@ -250,10 +260,12 @@ namespace PkmnFoundations.Data
                     "Unknown1, TrainerGender, Unknown2, TimeDeposited, TimeWithdrawn, pid, " +
                     "TrainerName, TrainerOT, TrainerCountry, TrainerRegion, TrainerClass, " +
                     "IsExchanged, TrainerVersion, TrainerLanguage FROM GtsPokemon4 " + where +
-                    " ORDER BY TimeDeposited DESC LIMIT @count",
+                    " ORDER BY TimeDeposited DESC" + limit,
                     _params.ToArray());
 
-                List<GtsRecord4> records = new List<GtsRecord4>(count);
+                List<GtsRecord4> records;
+                if (count > 0) records = new List<GtsRecord4>(count);
+                else records = new List<GtsRecord4>();
 
                 while (reader.Read())
                 {
@@ -524,9 +536,14 @@ namespace PkmnFoundations.Data
             using (MySqlConnection db = CreateConnection())
             {
                 List<MySqlParameter> _params = new List<MySqlParameter>();
-                String where = "WHERE pid != @pid AND Species = @species";
+                String where = "WHERE pid != @pid";
                 _params.Add(new MySqlParameter("@pid", pid));
-                _params.Add(new MySqlParameter("@species", species));
+
+                if (species > 0)
+                {
+                    where += " AND Species = @species";
+                    _params.Add(new MySqlParameter("@species", species));
+                }
 
                 if (gender != Genders.Either)
                 {
@@ -557,7 +574,12 @@ namespace PkmnFoundations.Data
                     _params.Add(new MySqlParameter("@country", country));
                 }
 
-                _params.Add(new MySqlParameter("@count", count));
+                String limit = "";
+                if (count > 0)
+                {
+                    _params.Add(new MySqlParameter("@count", count));
+                    limit = " LIMIT @count";
+                }
 
                 db.Open();
                 // todo: sort me in creative ways
@@ -568,10 +590,12 @@ namespace PkmnFoundations.Data
                     "TrainerOT, TrainerName, TrainerCountry, TrainerRegion, TrainerClass, " +
                     "IsExchanged, TrainerVersion, TrainerLanguage, TrainerBadges, TrainerUnityTower " +
                     "FROM GtsPokemon5 " + where +
-                    " ORDER BY TimeDeposited DESC LIMIT @count",
+                    " ORDER BY TimeDeposited DESC" + limit,
                     _params.ToArray());
 
-                List<GtsRecord5> records = new List<GtsRecord5>(count);
+                List<GtsRecord5> records;
+                if (count > 0) records = new List<GtsRecord5>(count);
+                else records = new List<GtsRecord5>();
 
                 while (reader.Read())
                 {

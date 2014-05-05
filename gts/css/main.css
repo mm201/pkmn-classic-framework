@@ -2,6 +2,7 @@
 {
     font-family: Arial,sans-serif;
     margin: 0; padding: 0;
+    min-width: 720px;
 }
 
 #gtsHeader
@@ -9,8 +10,42 @@
     background-color: #ff8063;
     color: white;
     font-family: Arial,sans-serif;
-    padding: 4px 0;
-    height: 120px;
+    padding: 20px 0 4px;
+    height: 108px;
+}
+
+#gtsHeader h1
+{
+    margin: 0;
+}
+
+#gtsHeader h1 a
+{
+    text-decoration: none;
+}
+
+#gtsHeader .dns
+{
+    margin-bottom: 8px;
+}
+
+#gtsHeader .dnsHeading
+{
+    font-size: 9px;
+}
+
+#gtsHeader .dnsIp
+{
+    font-family: Consolas,'Andale Mono',monospace;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+#gtsHeader .right
+{
+    position: absolute;
+    top: 0;
+    right: 0;
 }
 
 #gtsHeader .stats
@@ -18,9 +53,6 @@
     background-color: #ffac9f;
     border-radius: 9px;
     padding: 4px;
-    position: absolute;
-    top: 8px;
-    right: 160px;
     width: 200px;
     font-size: 12px;
 }
@@ -39,6 +71,7 @@
 {
     width: 720px;
     margin: 0 auto;
+    position: relative;
 }
 
 .github-contain
@@ -70,3 +103,17 @@
     font-family: Consolas,'Andale Mono',monospace
 }
 
+table
+{
+    width: 100%;
+}
+
+thead
+{
+    background-color: #dddddd;
+}
+
+table tr:nth-child(2n)
+{
+    background-color: #eeeeee;
+}

@@ -22,6 +22,15 @@ namespace PkmnFoundations.GTS {
         protected global::System.Web.UI.WebControls.ContentPlaceHolder cpHead;
         
         /// <summary>
+        /// hlHome control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HyperLink hlHome;
+        
+        /// <summary>
         /// litPokemon control.
         /// </summary>
         /// <remarks>

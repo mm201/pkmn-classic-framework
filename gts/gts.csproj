@@ -55,6 +55,7 @@
     <Reference Include="System.Web.ApplicationServices" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="AllPokemon.aspx" />
     <Content Include="css\main.css" />
     <Content Include="Default.aspx" />
     <Content Include="Global.asax" />
@@ -67,6 +68,13 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AllPokemon.aspx.cs">
+      <DependentUpon>AllPokemon.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="AllPokemon.aspx.designer.cs">
+      <DependentUpon>AllPokemon.aspx</DependentUpon>
+    </Compile>
     <Compile Include="syachi2ds.ashx.cs">
       <DependentUpon>syachi2ds.ashx</DependentUpon>
     </Compile>

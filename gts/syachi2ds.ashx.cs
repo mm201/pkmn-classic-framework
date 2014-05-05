@@ -336,11 +336,17 @@ namespace PkmnFoundations.GTS
 
                             int resultsCount = (int)data[14];
 
+                            ushort species = BitConverter.ToUInt16(data, 8);
+                            if (species < 1)
+                            {
+                                Error400(context);
+                                return;
+                            }
+
                             response.Write(new byte[] { 0x01, 0x00 }, 0, 2);
 
                             if (resultsCount < 1) break; // optimize away requests for no rows
 
-                            ushort species = BitConverter.ToUInt16(data, 8);
                             Genders gender = (Genders)data[10];
                             byte minLevel = data[11];
                             byte maxLevel = data[12];
