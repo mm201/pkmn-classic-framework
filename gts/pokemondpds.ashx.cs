@@ -377,8 +377,18 @@ namespace PkmnFoundations.GTS
                         int targetPid = BitConverter.ToInt32(data, 296);
                         GtsRecord4 result = DataAbstract.Instance.GtsDataForUser4(targetPid);
 
+                        if (result == null)
+                        {
+                            // Pokémon is traded (or was never here to begin with)
+                            // todo: I only checked this on GenV. Check that this
+                            // is the correct response on GenIV.
+                            manager.Remove(session);
+                            response.Write(new byte[] { 0x02, 0x00 }, 0, 2);
+                            break;
+                        }
+
                         // enforce request requirements server side
-                        if (result == null || !upload.Validate() || !upload.CanTrade(result))
+                        if (!upload.Validate() || !upload.CanTrade(result))
                         {
                             manager.Remove(session);
                             Error400(context);
