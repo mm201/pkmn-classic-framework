@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Data;
 using PkmnFoundations.Structures;
+using System.Configuration;
 
 namespace PkmnFoundations.Data
 {
@@ -18,10 +19,26 @@ namespace PkmnFoundations.Data
             {
                 if (m_instance == null)
                 {
-                    m_instance = new DataMysql();
+                    m_instance = CreateInstance();
                 }
                 return m_instance;
             }
+        }
+
+        private static DataAbstract CreateInstance()
+        {
+            ConnectionStringSettings connStr = ConfigurationManager.ConnectionStrings["pkmnFoundationsConnectionString"];
+            if (connStr != null)
+            {
+                switch (connStr.ProviderName)
+                {
+                    case "MySql.Data.MySqlClient":
+                        return new DataMysql(connStr.ConnectionString);
+                    default:
+                        throw new NotSupportedException("Database provider not supported.");
+                }
+            }
+            else throw new NotSupportedException("No database connection string provided. Please add one in web.config or app.config.");
         }
         #endregion
 

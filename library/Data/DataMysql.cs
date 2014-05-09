@@ -12,10 +12,16 @@ namespace PkmnFoundations.Data
     public class DataMysql : DataAbstract
     {
         #region Initialization
+        public DataMysql(String connString)
+        {
+            ConnectionString = connString;
+        }
+
+        public String ConnectionString { get; set; }
+
         private MySqlConnection CreateConnection()
         {
-            // hard-coded for now, will need to add configuration later
-            return new MySqlConnection("Server=10.211.55.2;Database=gts;User ID=gts;Password=gts;Pooling=true;");
+            return new MySqlConnection(ConnectionString);
         }
         #endregion
 
