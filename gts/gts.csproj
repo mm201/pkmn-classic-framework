@@ -57,6 +57,7 @@
   <ItemGroup>
     <Content Include="AllPokemon.aspx" />
     <Content Include="css\main.css" />
+    <Content Include="test\Decode.aspx" />
     <Content Include="Default.aspx" />
     <Content Include="Global.asax" />
     <Content Include="Web.config" />
@@ -74,6 +75,13 @@
     </Compile>
     <Compile Include="AllPokemon.aspx.designer.cs">
       <DependentUpon>AllPokemon.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="test\Decode.aspx.cs">
+      <DependentUpon>Decode.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="test\Decode.aspx.designer.cs">
+      <DependentUpon>Decode.aspx</DependentUpon>
     </Compile>
     <Compile Include="syachi2ds.ashx.cs">
       <DependentUpon>syachi2ds.ashx</DependentUpon>
@@ -124,6 +132,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="syachi2ds.ashx" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="test\Web.config" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />
