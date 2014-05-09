@@ -29,6 +29,8 @@ namespace PkmnFoundations.GTS.debug
             {
                 data = GtsSession4.DecryptData(txtData.Text);
                 litGeneration.Text = "4";
+                // todo: genIV is always valid so genV never gets detected
+                // need to validate checksum and error there
             }
             catch (FormatException)
             {
@@ -56,16 +58,16 @@ namespace PkmnFoundations.GTS.debug
         private String RenderHex(String hex)
         {
             StringBuilder builder = new StringBuilder();
-            for (int x = 0; x < hex.Length; x += 8)
+            for (int x = 0; x < hex.Length; x += 16)
             {
-                if (x % 16 == 0)
+                if (x % 32 == 0)
                 {
-                    builder.Append(x.ToString("x4"));
+                    builder.Append((x >> 1).ToString("x4"));
                     builder.Append(": ");
                 }
 
-                builder.Append(hex.Substring(x, Math.Min(8, hex.Length - x)));
-                builder.Append((x % 16 == 0) ? " " : "<br />");
+                builder.Append(hex.Substring(x, Math.Min(16, hex.Length - x)));
+                builder.Append((x % 32 == 0) ? " " : "<br />");
             }
             return builder.ToString();
         }
