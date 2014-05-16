@@ -157,20 +157,25 @@ namespace bvCrawler4
             PutLength(data);
 
             byte[] response = Conversation(data);
-            Encrypt(response, 6, 0x99);
-            AssertHelper.Assert(response[6] == 0x00);
-            AssertHelper.Assert(response[7] == 0x00); // saaaaanity
             QueueSearchResults(response);
         }
 
         public static void QueueSearchResults(byte[] data)
         {
-            if (data.Length != 7212) throw new NotSupportedException("Search results blob must be 7212 bytes. (30 results)");
+            if (data.Length % 240 != 12) throw new ArgumentException("Search results blob should be 12 bytes + 240 per result.");
+            int padOffset = (Array.IndexOf(PAD, data[6]) + 250) % 256; // todo: this search belongs in a Decrypt method.
+            Encrypt(data, 6, padOffset);
+            AssertHelper.Assert(data[6] == 0x00);
+            AssertHelper.Assert(data[7] == 0x00); // saaaaanity
+
+            int count = data.Length / 240;
+            Console.WriteLine("{0} results found.", count);
+
             // 12 bytes of header plus 240 bytes per search result.
             using (MySqlConnection db = CreateConnection())
             {
                 db.Open();
-                for (int x = 0; x < 30; x++)
+                for (int x = 0; x < count; x++)
                 {
                     ulong videoId = BitConverter.ToUInt64(data, 16 + x * 240);
                     QueueVideoId(db, videoId);
