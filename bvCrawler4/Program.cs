@@ -133,7 +133,7 @@ namespace bvCrawler4
             request.Write(BitConverter.GetBytes(videoId), 0, 8);
             request.Write(new byte[] { 0x40, 0x01, 0x00, 0x00 }, 0, 4);
             request.Flush();
-            Encrypt(data, 6, 0xba);
+            Encrypt(data, 0xba);
             PutLength(data);
 
             byte[] response = Conversation(data);
@@ -161,7 +161,7 @@ namespace bvCrawler4
                 0x0c, 0x03, 0x00, 0x00
             }, 0, 28);
             request.Flush();
-            Encrypt(data, 6, 0xc9);
+            Encrypt(data, 0xc9);
             PutLength(data);
 
             byte[] response = Conversation(data);
@@ -171,8 +171,7 @@ namespace bvCrawler4
         public static void QueueSearchResults(byte[] data)
         {
             if (data.Length % 240 != 12) throw new ArgumentException("Search results blob should be 12 bytes + 240 per result.");
-            int padOffset = (Array.IndexOf(PAD, data[6]) + 250) % 256; // todo: this search belongs in a Decrypt method.
-            Encrypt(data, 6, padOffset);
+            Decrypt(data);
             AssertHelper.Assert(data[6] == 0x00);
             AssertHelper.Assert(data[7] == 0x00); // saaaaanity
 
@@ -262,13 +261,19 @@ namespace bvCrawler4
             return dataResponse;
         }
 
-        public static void Encrypt(byte[] data, int startOffset, int padOffset)
+        public static void Encrypt(byte[] data, int padOffset)
         {
             // encrypt and decrypt are the same operation...
-            for (int x = startOffset; x < data.Length; x++)
+            for (int x = 6; x < data.Length; x++)
             {
                 data[x] ^= PAD[(x + padOffset) % 256];
             }
+        }
+
+        public static void Decrypt(byte[] data)
+        {
+            int padOffset = (Array.IndexOf(PAD, data[6]) + 250) % 256;
+            Encrypt(data, padOffset);
         }
 
         public static MySqlConnection CreateConnection()
