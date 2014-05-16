@@ -70,13 +70,21 @@ namespace bvCrawler4
                     continue;
                 }
 
-                byte[] data;
                 String formatted = FormatVideoId(videoId);
+                String filename = String.Format("videos\\{0}.bin", formatted);
+
+                if (File.Exists(filename))
+                {
+                    Console.WriteLine("Skipped video {0}. Already present on disk.", formatted);
+                    Thread.Sleep(1000 * 1);
+                    continue;
+                }
+
+                byte[] data;
                 try
                 {
                     data = GetBattleVideo(pid, videoId);
 
-                    String filename = String.Format("videos\\{0}.bin", formatted);
                     using (FileStream file = File.Create(filename))
                     {
                         file.Write(data, 0, data.Length);
@@ -187,13 +195,21 @@ namespace bvCrawler4
         public static void QueueVideoId(MySqlConnection db, ulong id)
         {
             String formatted = FormatVideoId(id);
+            String filename = String.Format("videos\\{0}.bin", formatted);
+
+            if (File.Exists(filename))
+            {
+                Console.WriteLine("Skipped video {0}. Already present on disk.", formatted);
+                return;
+            }
+
             using (MySqlTransaction tran = db.BeginTransaction())
             {
                 long count = (long)tran.ExecuteScalar("SELECT Count(*) FROM BattleVideoCrawlQueue WHERE SerialNumber = @serial_number", new MySqlParameter("@serial_number", id));
                 if (count > 0)
                 {
                     tran.Rollback();
-                    Console.WriteLine("Skipped video {0}. Already present.", formatted);
+                    Console.WriteLine("Skipped video {0}. Already present in database.", formatted);
                     return;
                 }
                 tran.ExecuteNonQuery("INSERT INTO BattleVideoCrawlQueue (SerialNumber, `Timestamp`) VALUES (@serial_number, NOW())", new MySqlParameter("@serial_number", id));
