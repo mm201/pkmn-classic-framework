@@ -43,7 +43,7 @@ namespace PkmnFoundations.Support
 
         public static void Equals<T>(T first, T second) where T : IEquatable<T>
         {
-            Assert((IEquatable<T>)first == (IEquatable<T>)second, "Values are not equal.");
+            Assert(((IEquatable<T>)first).Equals((IEquatable<T>)second), "Values are not equal.");
         }
     }
 }
