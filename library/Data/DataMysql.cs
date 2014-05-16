@@ -68,10 +68,12 @@ namespace PkmnFoundations.Data
             using (MySqlConnection db = CreateConnection())
             {
                 db.Open();
-                MySqlTransaction tran = db.BeginTransaction();
-                GtsRecord4 result = GtsDataForUser4(tran, pid);
-                tran.Commit();
-                return result;
+                using (MySqlTransaction tran = db.BeginTransaction())
+                {
+                    GtsRecord4 result = GtsDataForUser4(tran, pid);
+                    tran.Commit();
+                    return result;
+                }
             }
         }
 
@@ -118,16 +120,17 @@ namespace PkmnFoundations.Data
             using (MySqlConnection db = CreateConnection())
             {
                 db.Open();
-                MySqlTransaction tran = db.BeginTransaction();
-
-                if (!GtsDepositPokemon4(tran, record))
+                using (MySqlTransaction tran = db.BeginTransaction())
                 {
-                    tran.Rollback();
-                    return false;
-                }
+                    if (!GtsDepositPokemon4(tran, record))
+                    {
+                        tran.Rollback();
+                        return false;
+                    }
 
-                tran.Commit();
-                return true;
+                    tran.Commit();
+                    return true;
+                }
             }
         }
 
@@ -155,16 +158,17 @@ namespace PkmnFoundations.Data
             using (MySqlConnection db = CreateConnection())
             {
                 db.Open();
-                MySqlTransaction tran = db.BeginTransaction();
-
-                if (!GtsDeletePokemon4(tran, pid))
+                using (MySqlTransaction tran = db.BeginTransaction())
                 {
-                    tran.Rollback();
-                    return false;
-                }
+                    if (!GtsDeletePokemon4(tran, pid))
+                    {
+                        tran.Rollback();
+                        return false;
+                    }
 
-                tran.Commit();
-                return true;
+                    tran.Commit();
+                    return true;
+                }
             }
         }
 
@@ -182,30 +186,31 @@ namespace PkmnFoundations.Data
             using (MySqlConnection db = CreateConnection())
             {
                 db.Open();
-                MySqlTransaction tran = db.BeginTransaction();
-
-                GtsRecord4 resultOrig = GtsDataForUser4(tran, result.PID);
-                if (resultOrig == null || resultOrig != result)
+                using (MySqlTransaction tran = db.BeginTransaction())
                 {
-                    // looks like the pokemon was ninja'd between the Exchange and Exchange_finish
-                    tran.Rollback();
-                    return false;
-                }
+                    GtsRecord4 resultOrig = GtsDataForUser4(tran, result.PID);
+                    if (resultOrig == null || resultOrig != result)
+                    {
+                        // looks like the pokemon was ninja'd between the Exchange and Exchange_finish
+                        tran.Rollback();
+                        return false;
+                    }
 
-                if (!GtsDeletePokemon4(tran, result.PID))
-                {
-                    tran.Rollback();
-                    return false;
-                }
+                    if (!GtsDeletePokemon4(tran, result.PID))
+                    {
+                        tran.Rollback();
+                        return false;
+                    }
 
-                if (!GtsDepositPokemon4(tran, traded))
-                {
-                    tran.Rollback();
-                    return false;
-                }
+                    if (!GtsDepositPokemon4(tran, traded))
+                    {
+                        tran.Rollback();
+                        return false;
+                    }
 
-                tran.Commit();
-                return true;
+                    tran.Commit();
+                    return true;
+                }
             }
         }
 
@@ -394,10 +399,12 @@ namespace PkmnFoundations.Data
             using (MySqlConnection db = CreateConnection())
             {
                 db.Open();
-                MySqlTransaction tran = db.BeginTransaction();
-                GtsRecord5 result = GtsDataForUser5(tran, pid);
-                tran.Commit();
-                return result;
+                using (MySqlTransaction tran = db.BeginTransaction())
+                {
+                    GtsRecord5 result = GtsDataForUser5(tran, pid);
+                    tran.Commit();
+                    return result;
+                }
             }
         }
 
@@ -446,16 +453,17 @@ namespace PkmnFoundations.Data
             using (MySqlConnection db = CreateConnection())
             {
                 db.Open();
-                MySqlTransaction tran = db.BeginTransaction();
-
-                if (!GtsDepositPokemon5(tran, record))
+                using (MySqlTransaction tran = db.BeginTransaction())
                 {
-                    tran.Rollback();
-                    return false;
-                }
+                    if (!GtsDepositPokemon5(tran, record))
+                    {
+                        tran.Rollback();
+                        return false;
+                    }
 
-                tran.Commit();
-                return true;
+                    tran.Commit();
+                    return true;
+                }
             }
         }
 
@@ -483,16 +491,17 @@ namespace PkmnFoundations.Data
             using (MySqlConnection db = CreateConnection())
             {
                 db.Open();
-                MySqlTransaction tran = db.BeginTransaction();
-
-                if (!GtsDeletePokemon5(tran, pid))
+                using (MySqlTransaction tran = db.BeginTransaction())
                 {
-                    tran.Rollback();
-                    return false;
-                }
+                    if (!GtsDeletePokemon5(tran, pid))
+                    {
+                        tran.Rollback();
+                        return false;
+                    }
 
-                tran.Commit();
-                return true;
+                    tran.Commit();
+                    return true;
+                }
             }
         }
 
@@ -510,30 +519,31 @@ namespace PkmnFoundations.Data
             using (MySqlConnection db = CreateConnection())
             {
                 db.Open();
-                MySqlTransaction tran = db.BeginTransaction();
-
-                GtsRecord5 resultOrig = GtsDataForUser5(tran, result.PID);
-                if (resultOrig == null || resultOrig != result)
+                using (MySqlTransaction tran = db.BeginTransaction())
                 {
-                    // looks like the pokemon was ninja'd between the Exchange and Exchange_finish
-                    tran.Rollback();
-                    return false;
-                }
+                    GtsRecord5 resultOrig = GtsDataForUser5(tran, result.PID);
+                    if (resultOrig == null || resultOrig != result)
+                    {
+                        // looks like the pokemon was ninja'd between the Exchange and Exchange_finish
+                        tran.Rollback();
+                        return false;
+                    }
 
-                if (!GtsDeletePokemon5(tran, result.PID))
-                {
-                    tran.Rollback();
-                    return false;
-                }
+                    if (!GtsDeletePokemon5(tran, result.PID))
+                    {
+                        tran.Rollback();
+                        return false;
+                    }
 
-                if (!GtsDepositPokemon5(tran, traded))
-                {
-                    tran.Rollback();
-                    return false;
-                }
+                    if (!GtsDepositPokemon5(tran, traded))
+                    {
+                        tran.Rollback();
+                        return false;
+                    }
 
-                tran.Commit();
-                return true;
+                    tran.Commit();
+                    return true;
+                }
             }
         }
 
