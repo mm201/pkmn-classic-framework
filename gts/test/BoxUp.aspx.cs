@@ -31,7 +31,7 @@ namespace PkmnFoundations.GTS.debug
             s.Close();
             int padOffset = Convert.ToInt32(txtOffset.Text);
 
-            for (int x = 4; x < data.Length; x++)
+            for (int x = 6; x < data.Length; x++)
             {
                 data[x] ^= pad[(x + padOffset) % 256];
             }

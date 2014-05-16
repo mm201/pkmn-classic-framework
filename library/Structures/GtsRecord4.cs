@@ -69,6 +69,7 @@ namespace PkmnFoundations.Structures
         /// 16 bytes
         /// </summary>
         public byte[] TrainerName; // todo: decode/encode to unicode and provide a String wrapper.
+        // https://github.com/veekun/pokedex/blob/master/pokedex/struct/_pokemon_struct.py
 
         public ushort TrainerOT;
 

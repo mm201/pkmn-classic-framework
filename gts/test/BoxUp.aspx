@@ -6,7 +6,7 @@
 <asp:Content ID="Content2" ContentPlaceHolderID="cpMain" runat="server">
 <form id="theForm" runat="server">
     <div>
-    <p>Uplaod your Generation IV box upload, battle video, and dressup capture:</p>
+    <p>Uplaod your Generation IV box upload, battle video, or dressup capture:</p>
     <asp:FileUpload ID="fuBox" runat="server" />
     &nbsp;Pad offset:
     <asp:TextBox ID="txtOffset" runat="server" />
