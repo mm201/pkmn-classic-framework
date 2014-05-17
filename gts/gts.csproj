@@ -56,13 +56,16 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="AllPokemon.aspx" />
+    <Content Include="BattleVideo.aspx" />
     <Content Include="css\main.css" />
     <Content Include="test\BoxUp.aspx" />
     <Content Include="test\Decode.aspx" />
     <Content Include="Default.aspx" />
     <Content Include="Global.asax" />
     <Content Include="test\RngTest.aspx" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
@@ -77,6 +80,13 @@
     </Compile>
     <Compile Include="AllPokemon.aspx.designer.cs">
       <DependentUpon>AllPokemon.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="BattleVideo.aspx.cs">
+      <DependentUpon>BattleVideo.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="BattleVideo.aspx.designer.cs">
+      <DependentUpon>BattleVideo.aspx</DependentUpon>
     </Compile>
     <Compile Include="test\BoxUp.aspx.cs">
       <DependentUpon>BoxUp.aspx</DependentUpon>
