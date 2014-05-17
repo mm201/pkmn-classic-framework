@@ -12,4 +12,11 @@ onto Foundations GTS. <strong>Only Generation IV is supported for now!</strong>:
 <asp:Button ID="btnSend" Text="Send" OnClick="btnSend_Click" runat="server" /></div>
 <asp:Literal ID="litMessage" runat="server" />
 </form>
+<div class="stats">
+<br />
+<asp:Literal ID="litQueued" runat="server" />
+videos queued,
+<asp:Literal ID="litTotal" runat="server" />
+videos saved in total.
+</div>
 </asp:Content>

@@ -19,6 +19,15 @@ namespace PkmnFoundations.GTS
 
         protected void Page_Load(object sender, EventArgs e)
         {
+            using (MySqlConnection db = CreateConnection())
+            {
+                db.Open();
+
+                litQueued.Text = HttpUtility.HtmlEncode(db.ExecuteScalar("SELECT Count(*) FROM BattleVideoCrawlQueue WHERE Complete = 0"));
+                litTotal.Text = HttpUtility.HtmlEncode(db.ExecuteScalar("SELECT Count(*) FROM BattleVideoCrawlQueue WHERE Complete = 1"));
+
+                db.Close();
+            }
         }
 
         protected void btnSend_Click(object sender, EventArgs e)
