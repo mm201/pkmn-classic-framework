@@ -196,12 +196,6 @@ namespace bvCrawler4
             String formatted = FormatVideoId(id);
             String filename = String.Format("videos\\{0}.bin", formatted);
 
-            if (File.Exists(filename))
-            {
-                Console.WriteLine("Skipped video {0}. Already present on disk.", formatted);
-                return;
-            }
-
             using (MySqlTransaction tran = db.BeginTransaction())
             {
                 long count = (long)tran.ExecuteScalar("SELECT Count(*) FROM BattleVideoCrawlQueue WHERE SerialNumber = @serial_number", new MySqlParameter("@serial_number", id));
