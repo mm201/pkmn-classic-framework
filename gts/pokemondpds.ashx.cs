@@ -276,7 +276,7 @@ namespace PkmnFoundations.GTS
                         {
                             // hack check failed
                             manager.Remove(session);
-                            response.Write(new byte[] { 0x00, 0x00 }, 0, 2);
+                            response.Write(new byte[] { 0x0c, 0x00 }, 0, 2);
                             break;
                         }
 
@@ -390,8 +390,9 @@ namespace PkmnFoundations.GTS
                         // enforce request requirements server side
                         if (!upload.Validate() || !upload.CanTrade(result))
                         {
+                            // todo: find the correct codes for these
                             manager.Remove(session);
-                            Error400(context);
+                            response.Write(new byte[] { 0x0c, 0x00 }, 0, 2);
                             return;
                         }
 
