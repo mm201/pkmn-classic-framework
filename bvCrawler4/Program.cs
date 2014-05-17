@@ -9,6 +9,7 @@ using MySql.Data.MySqlClient;
 using System.Configuration;
 using PkmnFoundations.Data;
 using PkmnFoundations.Support;
+using System.Data;
 
 namespace bvCrawler4
 {
@@ -59,6 +60,10 @@ namespace bvCrawler4
                         {
                             last_top30 = DateTime.Now;
                             QueueTop30(pid);
+                            continue;
+                        }
+                        else if (RunSearch(pid))
+                        {
                             continue;
                         }
                     }
@@ -146,9 +151,120 @@ namespace bvCrawler4
             return response;
         }
 
+        public static bool RunSearch(int pid)
+        {
+            Random rand = new Random();
+
+            SearchMetagames[] metagames = (SearchMetagames[])Enum.GetValues(typeof(SearchMetagames));
+            int metaCount = metagames.Length - 1; // exclude Top30 which is at the end
+            int metaIndex = rand.Next(0, metaCount);
+            SearchMetagames metagame = metagames[metaIndex];
+
+            ushort species = (ushort)rand.Next(0, 493);
+            byte country = 0xff;
+            byte region = 0xff;
+
+            using (MySqlConnection db = CreateConnection())
+            {
+                db.Open();
+                if ((long)db.ExecuteScalar(
+                        "SELECT Count(*) FROM BattleVideoSearchHistory WHERE Metagame = @metagame " +
+                        "AND Species = @species AND Country = @country AND Region = @region",
+                        new MySqlParameter("@metagame", (int)metagame),
+                        new MySqlParameter("@species", (int)species),
+                        new MySqlParameter("@country", (int)country),
+                        new MySqlParameter("@region", (int)region))
+                    == 0)
+                {
+                    // exact match
+                    QueueSearch(pid, species, metagame, country, region);
+                    return true;
+                }
+
+                DataTable dt;
+                dt = db.ExecuteDataTable("SELECT DISTINCT Metagame, Species, Country, Region " +
+                    "FROM BattleVideoSearchHistory WHERE Metagame = @metagame ORDER BY Species",
+                    new MySqlParameter("@metagame", (int)metagame));
+                if (dt.Rows.Count < 493)
+                {
+                    int prevSpecies = 1;
+                    foreach (DataRow row in dt.Rows)
+                    {
+                        if ((int)row["Species"] != prevSpecies)
+                        {
+                            QueueSearch(pid, (ushort)(prevSpecies), metagame, country, region);
+                            return true;
+                        }
+                        prevSpecies++;
+                    }
+                }
+
+                dt = db.ExecuteDataTable("SELECT DISTINCT Metagame, Species, Country, Region " +
+                    "FROM BattleVideoSearchHistory WHERE Species = @species ORDER BY Metagame",
+                    new MySqlParameter("@species", (int)species));
+                if (dt.Rows.Count < metaCount)
+                {
+                    int prevMeta = 0;
+                    foreach (DataRow row in dt.Rows)
+                    {
+                        if ((int)row["Metagame"] != (int)metagames[prevMeta])
+                        {
+                            QueueSearch(pid, species, metagames[prevMeta], country, region);
+                            return true;
+                        }
+                        prevMeta++;
+                    }
+                }
+
+                dt = db.ExecuteDataTable("SELECT DISTINCT Metagame, Species, Country, Region " +
+                    "FROM BattleVideoSearchHistory ORDER BY Metagame, Species");
+                if (dt.Rows.Count < 493 * metaCount)
+                {
+                    int prevSpecies = 1;
+                    int prevMeta = 0;
+                    foreach (DataRow row in dt.Rows)
+                    {
+                        if ((int)row["Species"] != prevSpecies || (int)row["Metagame"] != (int)metagames[prevMeta])
+                        {
+                            QueueSearch(pid, (ushort)(prevSpecies), metagames[prevMeta], country, region);
+                            return true;
+                        }
+                        prevSpecies++;
+                        if (prevSpecies > 493)
+                        {
+                            prevSpecies = 1;
+                            prevMeta++;
+                        }
+                    }
+                }
+            }
+
+            return false;
+        }
+
         public static void QueueTop30(int pid)
         {
-            Console.WriteLine("Searching for latest 30 videos.");
+            QueueSearch(pid, 0xffff, SearchMetagames.Latest30, 0xff, 0xff);
+        }
+
+        public static void QueueSearch(int pid, ushort species, SearchMetagames meta, byte country, byte region)
+        {
+            bool hasSearch = species == 0xffff && meta == SearchMetagames.Latest30 && country == 0xff
+                && region == 0xff;
+            if (hasSearch)
+                Console.WriteLine("Searching for latest 30 videos.");
+            else
+            {
+                Console.Write("Searching for ");
+                if (species != 0xffff)
+                    Console.Write("species {0}, ", species);
+                if (meta != SearchMetagames.Latest30)
+                    Console.Write("{0}, ", meta);
+                if (country != 0xff)
+                    Console.Write("country {0}, ", region);
+                if (region != 0xff)
+                    Console.Write("region {0}", region);
+            }
 
             byte[] data = new byte[0x15c];
             MemoryStream request = new MemoryStream(data);
@@ -160,14 +276,37 @@ namespace bvCrawler4
             // related, I don't know...
             request.Write(new byte[0x132], 0, 0x132);
             request.Write(new byte[] {
-                0x00, 0x00, 0x00, 0x00, 0xff, 0xff, 0xff, 0xff, 
-                0xff, 0x00, 0x00, 0x00, 0x40, 0x01, 0x00, 0x00,
+                0x00, 0x00, 0x00, 0x00
+            }, 0, 4);
+
+            request.Write(BitConverter.GetBytes(species), 0, 2);
+            request.WriteByte((byte)meta);
+            request.WriteByte(country);
+            request.WriteByte(region);
+
+            request.Write(new byte[] {
+                      0x00, 0x00, 0x00, 0x40, 0x01, 0x00, 0x00,
                 0x00, 0x00, 0x00, 0x00, 0xdc, 0xf6, 0x1b, 0x02,
                 0x0c, 0x03, 0x00, 0x00
-            }, 0, 28);
+            }, 0, 19);
             request.Flush();
             Encrypt(data, 0xc9);
             PutLength(data);
+
+            if (hasSearch)
+            {
+                using (MySqlConnection db = CreateConnection())
+                {
+                    db.Open();
+                    db.ExecuteNonQuery("INSERT INTO BattleVideoSearchHistory (Metagame, Species, " +
+                        "Country, Region) VALUES (@metagame, @species, @country, @region)",
+                        new MySqlParameter("@metagame", (int)meta),
+                        new MySqlParameter("@species", (int)species),
+                        new MySqlParameter("@country", (int)country),
+                        new MySqlParameter("@region", (int)region));
+                    db.Close();
+                }
+            }
 
             byte[] response = Conversation(data);
             QueueSearchResults(response);
@@ -199,7 +338,6 @@ namespace bvCrawler4
         public static void QueueVideoId(MySqlConnection db, ulong id)
         {
             String formatted = FormatVideoId(id);
-            String filename = String.Format("{0}\\{1}.bin", m_upload_dir, formatted);
 
             using (MySqlTransaction tran = db.BeginTransaction())
             {
@@ -284,6 +422,41 @@ namespace bvCrawler4
         {
             Console.WriteLine(ex.Message);
             Console.WriteLine(ex.StackTrace);
+        }
+
+        public enum SearchMetagames : byte
+        {
+            Latest30 = 0xff,
+
+            ColosseumSingleNoRestrictions = 0xfa,
+            ColosseumSingleCupMatch = 0xfb,
+            ColosseumDoubleNoRestrictions = 0xfc,
+            ColosseumDoubleCupMatch = 0xfd,
+            ColosseumMulti = 0x0e,
+
+            BattleTowerSingle = 0x0f,
+            BattleTowerDouble = 0x10,
+            BattleTowerMulti = 0x11,
+
+            BattleFactoryLv50Single = 0x12,
+            BattleFactoryLv50Double = 0x13,
+            BattleFactoryLv50Multi = 0x14,
+
+            BattleFactoryOpenSingle = 0x15,
+            BattleFactoryOpenDouble = 0x16,
+            BattleFactoryOpenMulti = 0x17,
+
+            BattleHallSingle = 0x18,
+            BattleHallDouble = 0x19,
+            BattleHallMulti = 0x1a,
+
+            BattleCastleSingle = 0x1b,
+            BattleCastleDouble = 0x1c,
+            BattleCastleMulti = 0x1d,
+
+            BattleArcadeSingle = 0x1e,
+            BattleArcadeDouble = 0x1f,
+            BattleArcadeMulti = 0x20,
         }
     }
 }
