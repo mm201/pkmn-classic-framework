@@ -21,19 +21,24 @@ namespace PkmnFoundations.GTS.debug
 
         }
 
+        private static byte[] PAD = new byte[256];
+
         protected void btnSend_Click(object sender, EventArgs e)
         {
             phDecoded.Visible = false;
             byte[] data = fuBox.FileBytes;
             FileStream s = File.Open(Server.MapPath("~/Box Upload Xor Pad.bin"), FileMode.Open);
-            byte[] pad = new byte[s.Length];
-            s.Read(pad, 0, pad.Length);
+            s.Read(PAD, 0, PAD.Length);
             s.Close();
-            int padOffset = Convert.ToInt32(txtOffset.Text);
 
-            for (int x = 6; x < data.Length; x++)
+            if (txtOffset.Text.Length > 0)
             {
-                data[x] ^= pad[(x + padOffset) % 256];
+                int padOffset = Convert.ToInt32(txtOffset.Text);
+                Encrypt(data, padOffset);
+            }
+            else
+            {
+                Decrypt(data);
             }
 
             litDecoded.Text = RenderHex(data.ToHexStringLower());
@@ -55,6 +60,21 @@ namespace PkmnFoundations.GTS.debug
                 builder.Append((x % 32 == 0) ? " " : "<br />");
             }
             return builder.ToString();
+        }
+
+        public static void Encrypt(byte[] data, int padOffset)
+        {
+            // encrypt and decrypt are the same operation...
+            for (int x = 6; x < data.Length; x++)
+            {
+                data[x] ^= PAD[(x + padOffset) % 256];
+            }
+        }
+
+        public static void Decrypt(byte[] data)
+        {
+            int padOffset = (Array.IndexOf(PAD, data[6]) + 250) % 256;
+            Encrypt(data, padOffset);
         }
     }
 }
