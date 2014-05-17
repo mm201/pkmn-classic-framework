@@ -293,7 +293,7 @@ namespace bvCrawler4
             Encrypt(data, 0xc9);
             PutLength(data);
 
-            if (hasSearch)
+            if (!hasSearch)
             {
                 using (MySqlConnection db = CreateConnection())
                 {
