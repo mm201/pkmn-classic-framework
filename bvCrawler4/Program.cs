@@ -56,7 +56,7 @@ namespace bvCrawler4
                 {
                     try
                     {
-                        if (last_top30 < DateTime.Now.AddMinutes(-30))
+                        if (last_top30 < DateTime.Now.AddMinutes(-60))
                         {
                             last_top30 = DateTime.Now;
                             QueueTop30(pid);
@@ -321,6 +321,13 @@ namespace bvCrawler4
 
             int count = data.Length / 240;
             Console.WriteLine("{0} results found.", count);
+
+            if (count == 0)
+            {
+                // Nothing found. Sleep as to not spam the server with lots of empty searches
+                Thread.Sleep(1000 * 30);
+                return;
+            }
 
             // 12 bytes of header plus 240 bytes per search result.
             using (MySqlConnection db = CreateConnection())
