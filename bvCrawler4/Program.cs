@@ -55,7 +55,7 @@ namespace bvCrawler4
                 {
                     try
                     {
-                        if (last_top30 < DateTime.Now.AddHours(-1))
+                        if (last_top30 < DateTime.Now.AddMinutes(-30))
                         {
                             last_top30 = DateTime.Now;
                             QueueTop30(pid);
