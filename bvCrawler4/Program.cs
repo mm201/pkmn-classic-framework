@@ -16,15 +16,19 @@ namespace bvCrawler4
     {
         public static void Main(string[] args)
         {
+            m_pad = new byte[256];
+
             using (FileStream s = File.Open("Box Upload Xor Pad.bin", FileMode.Open))
             {
-                s.Read(PAD, 0, PAD.Length);
+                s.Read(m_pad, 0, m_pad.Length);
                 s.Close();
             }
 
+            m_upload_dir = ConfigurationManager.AppSettings["pkmnFoundationsBoxUpload4Dir"];
+
             Console.WriteLine("Pokémon Plat/HG/SS Battle Video Crawler by mm201");
             int pid = 207823279; // Platinum Hikari
-            Directory.CreateDirectory("videos");
+            Directory.CreateDirectory(String.Format("{0}", m_upload_dir));
             DateTime last_top30 = DateTime.MinValue;
 
             while (true)
@@ -71,7 +75,7 @@ namespace bvCrawler4
                 }
 
                 String formatted = FormatVideoId(videoId);
-                String filename = String.Format("videos\\{0}.bin", formatted);
+                String filename = String.Format("{0}\\{1}.bin", m_upload_dir, formatted);
 
                 if (File.Exists(filename))
                 {
@@ -103,7 +107,8 @@ namespace bvCrawler4
             }
         }
 
-        private static byte[] PAD = new byte[256];
+        private static byte[] m_pad;
+        private static String m_upload_dir;
 
         public static String FormatVideoId(ulong videoId)
         {
@@ -194,7 +199,7 @@ namespace bvCrawler4
         public static void QueueVideoId(MySqlConnection db, ulong id)
         {
             String formatted = FormatVideoId(id);
-            String filename = String.Format("videos\\{0}.bin", formatted);
+            String filename = String.Format("{0}\\{1}.bin", m_upload_dir, formatted);
 
             using (MySqlTransaction tran = db.BeginTransaction())
             {
@@ -260,13 +265,13 @@ namespace bvCrawler4
             // encrypt and decrypt are the same operation...
             for (int x = 6; x < data.Length; x++)
             {
-                data[x] ^= PAD[(x + padOffset) % 256];
+                data[x] ^= m_pad[(x + padOffset) % 256];
             }
         }
 
         public static void Decrypt(byte[] data)
         {
-            int padOffset = (Array.IndexOf(PAD, data[6]) + 250) % 256;
+            int padOffset = (Array.IndexOf(m_pad, data[6]) + 250) % 256;
             Encrypt(data, padOffset);
         }
 

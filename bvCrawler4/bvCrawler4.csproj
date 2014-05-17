@@ -51,7 +51,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Box Upload Xor Pad.bin">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
