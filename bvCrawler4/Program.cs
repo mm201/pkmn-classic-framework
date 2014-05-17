@@ -325,7 +325,7 @@ namespace bvCrawler4
             if (count == 0)
             {
                 // Nothing found. Sleep as to not spam the server with lots of empty searches
-                Thread.Sleep(1000 * 30);
+                Thread.Sleep(1000 * 15);
                 return;
             }
 
