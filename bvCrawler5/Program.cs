@@ -10,27 +10,23 @@ using System.Configuration;
 using PkmnFoundations.Data;
 using PkmnFoundations.Support;
 using System.Data;
+using System.Net.Security;
+using System.Security.Cryptography.X509Certificates;
 
 namespace PkmnFoundations
 {
-    public class BvCrawler4
+    public class BvCrawler5
     {
         public static void Main(string[] args)
         {
-            m_pad = new byte[256];
+            m_upload_dir = ConfigurationManager.AppSettings["pkmnFoundationsBoxUpload5Dir"];
 
-            using (FileStream s = File.Open("Box Upload Xor Pad.bin", FileMode.Open))
-            {
-                s.Read(m_pad, 0, m_pad.Length);
-                s.Close();
-            }
-
-            m_upload_dir = ConfigurationManager.AppSettings["pkmnFoundationsBoxUpload4Dir"];
-
-            Console.WriteLine("Pokémon Plat/HG/SS Battle Video Crawler by mm201");
-            int pid = 207823279; // Platinum Hikari
+            Console.WriteLine("Pokémon BW/BW2 Battle Video Crawler by mm201");
+            int pid = 330241763; // White 1 Jenny (?)
             Directory.CreateDirectory(String.Format("{0}", m_upload_dir));
             DateTime last_top30 = DateTime.MinValue;
+            DateTime last_top_link = DateTime.MinValue;
+            DateTime last_top_subway = DateTime.MinValue;
 
             while (true)
             {
@@ -59,7 +55,19 @@ namespace PkmnFoundations
                         if (last_top30 < DateTime.Now.AddMinutes(-60))
                         {
                             last_top30 = DateTime.Now;
-                            QueueTop30(pid);
+                            QueueSpecial(pid, SearchSpecial.Latest30);
+                            continue;
+                        }
+                        if (last_top_link < DateTime.Now.AddMinutes(-120))
+                        {
+                            last_top_link = DateTime.Now;
+                            QueueSpecial(pid, SearchSpecial.TopLinkBattles);
+                            continue;
+                        }
+                        if (last_top_subway < DateTime.Now.AddMinutes(-120))
+                        {
+                            last_top_subway = DateTime.Now;
+                            QueueSpecial(pid, SearchSpecial.TopSubwayBattles);
                             continue;
                         }
                         else if (RunSearch(pid))
@@ -112,7 +120,6 @@ namespace PkmnFoundations
             }
         }
 
-        private static byte[] m_pad;
         private static String m_upload_dir;
 
         public static String FormatVideoId(ulong videoId)
@@ -133,17 +140,32 @@ namespace PkmnFoundations
             byte[] data = new byte[0x14c];
             MemoryStream request = new MemoryStream(data);
             request.Write(new byte[4], 0, 4); // length goes here, see end
-            request.Write(new byte[] { 0xda, 0xae, 0x00, 0x00 }, 0, 4); // request type, sanity 0000
+            request.Write(new byte[] { 0xf2, 0x55, 0x00, 0x00 }, 0, 4); // request type, sanity 0000
             request.Write(BitConverter.GetBytes(pid), 0, 4); // pid, hopefully this doesn't ban me
-            request.Write(new byte[] { 0x07, 0x02 }, 0, 2);
+            request.Write(new byte[] { 0x17, 0x02 }, 0, 2);
             // there is some random bytes contained in this sometimes. Could be trainer profile
             // related, I don't know...
-            request.Write(new byte[0x132], 0, 0x132);
+            // in Genv it's base64 encoded??
+            request.Write(new byte[] {
+                                                    0x5a, 0x6f,
+                0x66, 0x78, 0x74, 0x5a, 0x5a, 0x48, 0x54, 0x66,
+                0x73, 0x4f, 0x43, 0x78, 0x6d, 0x39, 0x76, 0x57,
+                0x6c, 0x65, 0x63, 0x51, 0x4d, 0x35, 0x37, 0x62,
+                0x49, 0x34, 0x70, 0x39, 0x56, 0x61, 0x47, 0x59,
+                0x41, 0x4a, 0x31, 0x4b, 0x70, 0x2f, 0x72, 0x74, 
+                0x4f, 0x68, 0x6c, 0x42, 0x6c, 0x74, 0x72, 0x48,
+                0x79, 0x71, 0x53, 0x33, 0x57, 0x70, 0x41, 0x34, 
+                0x34, 0x50, 0x38, 0x73, 0x63, 0x65, 0x5a, 0x4f,
+                0x59, 0x63, 0x51, 0x4d, 0x2b, 0x67, 0x4e, 0x41, 
+                0x46, 0x34, 0x2b, 0x37, 0x6d, 0x32, 0x74, 0x79,
+                0x78, 0x4b, 0x59, 0x77, 0x3d, 0x3d
+            }, 0, 0x58);
+
+            request.Write(new byte[0xda], 0, 0xda);
 
             request.Write(BitConverter.GetBytes(videoId), 0, 8);
-            request.Write(new byte[] { 0x40, 0x01, 0x00, 0x00 }, 0, 4);
+            request.Write(new byte[] { 0x64, 0x00, 0x00, 0x00 }, 0, 4);
             request.Flush();
-            Encrypt(data, 0xba);
             PutLength(data);
 
             byte[] response = Conversation(data);
@@ -156,20 +178,21 @@ namespace PkmnFoundations
             Random rand = new Random();
 
             SearchMetagames[] metagames = (SearchMetagames[])Enum.GetValues(typeof(SearchMetagames));
-            int metaCount = metagames.Length - 1; // exclude Top30 which is at the end
-            int metaIndex = rand.Next(0, metaCount);
+            int metaCount = metagames.Length - 1; // remove None from the list
+            int metaIndex = rand.Next(1, metaCount + 1);
             SearchMetagames metagame = metagames[metaIndex];
 
-            ushort species = (ushort)rand.Next(0, 493);
+            ushort species = (ushort)rand.Next(0, 649);
             byte country = 0xff;
             byte region = 0xff;
 
             using (MySqlConnection db = CreateConnection())
             {
                 db.Open();
+
                 if ((long)db.ExecuteScalar(
-                        "SELECT Count(*) FROM BattleVideoSearchHistory WHERE Metagame = @metagame " +
-                        "AND Species = @species AND Country = @country AND Region = @region",
+                        "SELECT Count(*) FROM BattleVideoSearchHistory5 WHERE Metagame = @metagame " +
+                        "AND Species = @species AND Country = @country AND Region = @region AND Special = 0",
                         new MySqlParameter("@metagame", (int)metagame),
                         new MySqlParameter("@species", (int)species),
                         new MySqlParameter("@country", (int)country),
@@ -177,22 +200,22 @@ namespace PkmnFoundations
                     == 0)
                 {
                     // exact match
-                    QueueSearch(pid, species, metagame, country, region);
+                    QueueSearch(pid, SearchSpecial.None, species, metagame, country, region);
                     return true;
                 }
 
                 DataTable dt;
                 dt = db.ExecuteDataTable("SELECT DISTINCT Metagame, Species, Country, Region " +
-                    "FROM BattleVideoSearchHistory WHERE Metagame = @metagame ORDER BY Species",
+                    "FROM BattleVideoSearchHistory5 WHERE Metagame = @metagame AND Special = 0 ORDER BY Species",
                     new MySqlParameter("@metagame", (int)metagame));
-                if (dt.Rows.Count < 493)
+                if (dt.Rows.Count < 649)
                 {
                     int prevSpecies = 1;
                     foreach (DataRow row in dt.Rows)
                     {
                         if ((int)row["Species"] != prevSpecies)
                         {
-                            QueueSearch(pid, (ushort)(prevSpecies), metagame, country, region);
+                            QueueSearch(pid, SearchSpecial.None, (ushort)(prevSpecies), metagame, country, region);
                             return true;
                         }
                         prevSpecies++;
@@ -200,16 +223,16 @@ namespace PkmnFoundations
                 }
 
                 dt = db.ExecuteDataTable("SELECT DISTINCT Metagame, Species, Country, Region " +
-                    "FROM BattleVideoSearchHistory WHERE Species = @species ORDER BY Metagame",
+                    "FROM BattleVideoSearchHistory5 WHERE Species = @species AND Special = 0 ORDER BY Metagame",
                     new MySqlParameter("@species", (int)species));
                 if (dt.Rows.Count < metaCount)
                 {
-                    int prevMeta = 0;
+                    int prevMeta = 1;
                     foreach (DataRow row in dt.Rows)
                     {
                         if ((int)row["Metagame"] != (int)metagames[prevMeta])
                         {
-                            QueueSearch(pid, species, metagames[prevMeta], country, region);
+                            QueueSearch(pid, SearchSpecial.None, species, metagames[prevMeta], country, region);
                             return true;
                         }
                         prevMeta++;
@@ -217,20 +240,20 @@ namespace PkmnFoundations
                 }
 
                 dt = db.ExecuteDataTable("SELECT DISTINCT Metagame, Species, Country, Region " +
-                    "FROM BattleVideoSearchHistory ORDER BY Metagame, Species");
-                if (dt.Rows.Count < 493 * metaCount)
+                    "FROM BattleVideoSearchHistory5 WHERE Special = 0 ORDER BY Metagame, Species");
+                if (dt.Rows.Count < 649 * metaCount)
                 {
                     int prevSpecies = 1;
-                    int prevMeta = 0;
+                    int prevMeta = 1;
                     foreach (DataRow row in dt.Rows)
                     {
                         if ((int)row["Species"] != prevSpecies || (int)row["Metagame"] != (int)metagames[prevMeta])
                         {
-                            QueueSearch(pid, (ushort)(prevSpecies), metagames[prevMeta], country, region);
+                            QueueSearch(pid, SearchSpecial.None, (ushort)(prevSpecies), metagames[prevMeta], country, region);
                             return true;
                         }
                         prevSpecies++;
-                        if (prevSpecies > 493)
+                        if (prevSpecies > 649)
                         {
                             prevSpecies = 1;
                             prevMeta++;
@@ -242,68 +265,89 @@ namespace PkmnFoundations
             return false;
         }
 
-        public static void QueueTop30(int pid)
+        public static void QueueSpecial(int pid, SearchSpecial special)
         {
-            QueueSearch(pid, 0xffff, SearchMetagames.Latest30, 0xff, 0xff);
+            QueueSearch(pid, special, 0x0000, SearchMetagames.None, 0x00, 0x00);
         }
 
-        public static void QueueSearch(int pid, ushort species, SearchMetagames meta, byte country, byte region)
+        public static void QueueSearch(int pid, SearchSpecial special, ushort species, SearchMetagames meta, byte country, byte region)
         {
-            bool hasSearch = species == 0xffff && meta == SearchMetagames.Latest30 && country == 0xff
-                && region == 0xff;
-            if (hasSearch)
-                Console.WriteLine("Searching for latest 30 videos.");
-            else
+            switch (special)
             {
-                Console.Write("Searching for ");
-                if (species != 0xffff)
-                    Console.Write("species {0}, ", species);
-                if (meta != SearchMetagames.Latest30)
-                    Console.Write("{0}, ", meta);
-                if (country != 0xff)
-                    Console.Write("country {0}, ", region);
-                if (region != 0xff)
-                    Console.Write("region {0}", region);
+                case SearchSpecial.Latest30:
+                    Console.WriteLine("Searching for latest 30 videos.");
+                    break;
+                case SearchSpecial.TopLinkBattles:
+                    Console.WriteLine("Searching for top link battles.");
+                    break;
+                case SearchSpecial.TopSubwayBattles:
+                    Console.WriteLine("Searching for top Subway battles.");
+                    break;
+                default:
+                    {
+                        Console.Write("Searching for ");
+                        if (species != 0xffff)
+                            Console.Write("species {0}, ", species);
+                        if (meta != SearchMetagames.None)
+                            Console.Write("{0}, ", meta);
+                        if (country != 0xff)
+                            Console.Write("country {0}, ", region);
+                        if (region != 0xff)
+                            Console.Write("region {0}", region);
+                    } break;
             }
 
             byte[] data = new byte[0x15c];
             MemoryStream request = new MemoryStream(data);
             request.Write(new byte[4], 0, 4); // length goes here, see end
-            request.Write(new byte[] { 0xd9, 0xc4, 0x00, 0x00 }, 0, 4); // request type, sanity 0000
+            request.Write(new byte[] { 0xf1, 0x55, 0x00, 0x00 }, 0, 4); // request type, sanity 0000
             request.Write(BitConverter.GetBytes(pid), 0, 4); // pid, hopefully this doesn't ban me
-            request.Write(new byte[] { 0x0c, 0x02 }, 0, 2);
+            request.Write(new byte[] { 0x14, 0x02 }, 0, 2);
             // there is some random bytes contained in this sometimes. Could be trainer profile
             // related, I don't know...
-            request.Write(new byte[0x132], 0, 0x132);
             request.Write(new byte[] {
-                0x00, 0x00, 0x00, 0x00
-            }, 0, 4);
+                                                    0x5a, 0x6f,
+                0x66, 0x78, 0x74, 0x5a, 0x5a, 0x48, 0x54, 0x66,
+                0x73, 0x4f, 0x43, 0x78, 0x6d, 0x39, 0x76, 0x57,
+                0x6c, 0x65, 0x63, 0x51, 0x4d, 0x35, 0x37, 0x62,
+                0x49, 0x34, 0x70, 0x39, 0x56, 0x61, 0x47, 0x59,
+                0x41, 0x4a, 0x31, 0x4b, 0x70, 0x2f, 0x72, 0x74, 
+                0x4f, 0x68, 0x6c, 0x42, 0x6c, 0x74, 0x72, 0x48,
+                0x79, 0x71, 0x53, 0x33, 0x57, 0x70, 0x41, 0x34, 
+                0x34, 0x50, 0x38, 0x73, 0x63, 0x65, 0x5a, 0x4f,
+                0x59, 0x63, 0x51, 0x4d, 0x2b, 0x67, 0x4e, 0x41, 
+                0x46, 0x34, 0x2b, 0x37, 0x6d, 0x32, 0x74, 0x79,
+                0x78, 0x4b, 0x59, 0x77, 0x3d, 0x3d
+            }, 0, 0x58);
 
+            request.Write(new byte[0xda], 0, 0xda);
+
+            request.Write(BitConverter.GetBytes((uint)special), 0, 4);
             request.Write(BitConverter.GetBytes(species), 0, 2);
-            request.WriteByte((byte)meta);
+            request.Write(BitConverter.GetBytes((uint)meta), 0, 4);
             request.WriteByte(country);
             request.WriteByte(region);
 
             request.Write(new byte[] {
-                      0x00, 0x00, 0x00, 0x40, 0x01, 0x00, 0x00,
-                0x00, 0x00, 0x00, 0x00, 0xdc, 0xf6, 0x1b, 0x02,
-                0x0c, 0x03, 0x00, 0x00
-            }, 0, 19);
+                                        0x64, 0x00, 0x00, 0x00,
+                0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                0x00, 0x00, 0x00, 0x00
+            }, 0, 16);
             request.Flush();
-            Encrypt(data, 0xc9);
             PutLength(data);
 
-            if (!hasSearch)
+            if (special != SearchSpecial.Latest30)
             {
                 using (MySqlConnection db = CreateConnection())
                 {
                     db.Open();
-                    db.ExecuteNonQuery("INSERT INTO BattleVideoSearchHistory (Metagame, Species, " +
-                        "Country, Region) VALUES (@metagame, @species, @country, @region)",
+                    db.ExecuteNonQuery("INSERT INTO BattleVideoSearchHistory5 (Metagame, Species, " +
+                        "Country, Region, Special) VALUES (@metagame, @species, @country, @region, @special)",
                         new MySqlParameter("@metagame", (int)meta),
                         new MySqlParameter("@species", (int)species),
                         new MySqlParameter("@country", (int)country),
-                        new MySqlParameter("@region", (int)region));
+                        new MySqlParameter("@region", (int)region),
+                        new MySqlParameter("@special", (int)special));
                     db.Close();
                 }
             }
@@ -314,12 +358,9 @@ namespace PkmnFoundations
 
         public static void QueueSearchResults(byte[] data)
         {
-            if (data.Length % 240 != 12) throw new ArgumentException("Search results blob should be 12 bytes + 240 per result.");
-            Decrypt(data);
-            AssertHelper.Assert(data[6] == 0x00);
-            AssertHelper.Assert(data[7] == 0x00); // saaaaanity
+            if (data.Length % 208 != 12) throw new ArgumentException("Search results blob should be 12 bytes + 208 per result.");
 
-            int count = data.Length / 240;
+            int count = data.Length / 208;
             Console.WriteLine("{0} results found.", count);
 
             if (count == 0)
@@ -329,13 +370,13 @@ namespace PkmnFoundations
                 return;
             }
 
-            // 12 bytes of header plus 240 bytes per search result.
+            // 12 bytes of header plus 208 bytes per search result.
             using (MySqlConnection db = CreateConnection())
             {
                 db.Open();
                 for (int x = 0; x < count; x++)
                 {
-                    ulong videoId = BitConverter.ToUInt64(data, 16 + x * 240);
+                    ulong videoId = BitConverter.ToUInt64(data, 208 + x * 208);
                     QueueVideoId(db, videoId);
                 }
                 db.Close();
@@ -348,14 +389,14 @@ namespace PkmnFoundations
 
             using (MySqlTransaction tran = db.BeginTransaction())
             {
-                long count = (long)tran.ExecuteScalar("SELECT Count(*) FROM BattleVideoCrawlQueue WHERE SerialNumber = @serial_number", new MySqlParameter("@serial_number", id));
+                long count = (long)tran.ExecuteScalar("SELECT Count(*) FROM BattleVideoCrawlQueue5 WHERE SerialNumber = @serial_number", new MySqlParameter("@serial_number", id));
                 if (count > 0)
                 {
                     tran.Rollback();
                     Console.WriteLine("Skipped video {0}. Already present in database.", formatted);
                     return;
                 }
-                tran.ExecuteNonQuery("INSERT INTO BattleVideoCrawlQueue (SerialNumber, `Timestamp`) VALUES (@serial_number, NOW())", new MySqlParameter("@serial_number", id));
+                tran.ExecuteNonQuery("INSERT INTO BattleVideoCrawlQueue5 (SerialNumber, `Timestamp`) VALUES (@serial_number, NOW())", new MySqlParameter("@serial_number", id));
                 tran.Commit();
                 Console.WriteLine("Queued video {0}.", formatted);
             }
@@ -365,14 +406,14 @@ namespace PkmnFoundations
         {
             using (MySqlTransaction tran = db.BeginTransaction())
             {
-                object o = tran.ExecuteScalar("SELECT SerialNumber FROM BattleVideoCrawlQueue WHERE Complete = 0 ORDER BY `Timestamp` LIMIT 1");
+                object o = tran.ExecuteScalar("SELECT SerialNumber FROM BattleVideoCrawlQueue5 WHERE Complete = 0 ORDER BY `Timestamp` LIMIT 1");
                 if (o == null || o == DBNull.Value)
                 {
                     tran.Rollback();
                     return 0;
                 }
                 ulong id = (ulong)o;
-                tran.ExecuteNonQuery("UPDATE BattleVideoCrawlQueue SET Complete = 1 WHERE SerialNumber = @serial_number", new MySqlParameter("@serial_number", id));
+                tran.ExecuteNonQuery("UPDATE BattleVideoCrawlQueue5 SET Complete = 1 WHERE SerialNumber = @serial_number", new MySqlParameter("@serial_number", id));
                 tran.Commit();
                 return id;
             }
@@ -389,12 +430,14 @@ namespace PkmnFoundations
         {
             MemoryStream response = new MemoryStream();
 
-            using (TcpClient client = new TcpClient("pkgdsprod.nintendo.co.jp", 12400))
+            using (TcpClient client = new TcpClient("pkgdsprod.nintendo.co.jp", 12401))
             {
-                NetworkStream s = client.GetStream();
-                s.Write(request, 0, request.Length);
-                s.CopyTo(response);
-                s.Close();
+                SslStream sslClient = new SslStream(client.GetStream(), false, delegate(object s, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors) { return true; });
+                sslClient.AuthenticateAsClient("pkgdsprod.nintendo.co.jp");
+
+                sslClient.Write(request, 0, request.Length);
+                sslClient.CopyTo(response);
+                sslClient.Close();
             }
             response.Flush();
             byte[] dataResponse = response.ToArray();
@@ -403,21 +446,6 @@ namespace PkmnFoundations
             AssertHelper.Equals(length, dataResponse.Length);
 
             return dataResponse;
-        }
-
-        public static void Encrypt(byte[] data, int padOffset)
-        {
-            // encrypt and decrypt are the same operation...
-            for (int x = 6; x < data.Length; x++)
-            {
-                data[x] ^= m_pad[(x + padOffset) % 256];
-            }
-        }
-
-        public static void Decrypt(byte[] data)
-        {
-            int padOffset = (Array.IndexOf(m_pad, data[6]) + 250) % 256;
-            Encrypt(data, padOffset);
         }
 
         public static MySqlConnection CreateConnection()
@@ -431,39 +459,43 @@ namespace PkmnFoundations
             Console.WriteLine(ex.StackTrace);
         }
 
-        public enum SearchMetagames : byte
+        public enum SearchSpecial : uint
         {
-            Latest30 = 0xff,
+            None = 0x00000000,
 
-            ColosseumSingleNoRestrictions = 0xfa,
-            ColosseumSingleCupMatch = 0xfb,
-            ColosseumDoubleNoRestrictions = 0xfc,
-            ColosseumDoubleCupMatch = 0xfd,
-            ColosseumMulti = 0x0e,
+            // if special, all other fields are 0
+            Latest30 = 0x00000001,            // 01 00 00 00 00 00 00 00 00 00 00 00
+            TopLinkBattles = 0x00000003,      // 03 00 00 00 00 00 00 00 00 00 00 00
+            TopSubwayBattles = 0x00000002,    // 02 00 00 00 00 00 00 00 00 00 00 00
+        }
 
-            BattleTowerSingle = 0x0f,
-            BattleTowerDouble = 0x10,
-            BattleTowerMulti = 0x11,
+        public enum SearchMetagames : uint
+        {
+            None = 0x00000000,
 
-            BattleFactoryLv50Single = 0x12,
-            BattleFactoryLv50Double = 0x13,
-            BattleFactoryLv50Multi = 0x14,
+            // Spcial (4), Species (2), Meta (4), Country (1), Region (1)
+            ColosseumSingleNoLauncher = 0x00bf0018,     // 00 00 00 00 ff ff 18 00 bf 00 ff ff
+            ColosseumSingleLauncher = 0x00bf0098,       // 00 00 00 00 ff ff 98 00 bf 00 ff ff
+            ColosseumDoubleNoLauncher = 0x00bf0019,     // 00 00 00 00 ff ff 19 00 bf 00 ff ff
+            ColosseumDoubleLauncher = 0x00bf0099,       // 00 00 00 00 ff ff 99 00 bf 00 ff ff
+            ColosseumTripleNoLauncher = 0x00bf001a,     // 00 00 00 00 ff ff 1a 00 bf 00 ff ff
+            ColosseumTripleLauncher = 0x00bf009a,       // 00 00 00 00 ff ff 9a 00 bf 00 ff ff
+            ColosseumRotationNoLauncher = 0x00bf001b,   // 00 00 00 00 ff ff 1b 00 bf 00 ff ff
+            ColosseumRotationLauncher = 0x00bf009b,     // 00 00 00 00 ff ff 9b 00 bf 00 ff ff
+            ColosseumMultiNoLauncher = 0x00bf001c,      // 00 00 00 00 ff ff 1c 00 bf 00 ff ff
+            ColosseumMultiLauncher = 0x00bf009c,        // 00 00 00 00 ff ff 9c 00 bf 00 ff ff
 
-            BattleFactoryOpenSingle = 0x15,
-            BattleFactoryOpenDouble = 0x16,
-            BattleFactoryOpenMulti = 0x17,
+            BattleSubwaySingle = 0x003f0000,            // 00 00 00 00 ff ff 00 00 3f 00 ff ff
+            BattleSubwayDouble = 0x003f0001,            // 00 00 00 00 ff ff 01 00 3f 00 ff ff
+            BattleSubwayMulti = 0x003f0004,             // 00 00 00 00 ff ff 04 00 3f 00 ff ff
 
-            BattleHallSingle = 0x18,
-            BattleHallDouble = 0x19,
-            BattleHallMulti = 0x1a,
+            RandomMatchupSingle = 0x003f0028,           // 00 00 00 00 ff ff 28 00 3f 00 ff ff
+            RandomMatchupDouble = 0x003f0029,           // 00 00 00 00 ff ff 29 00 3f 00 ff ff
+            RandomMatchupTriple = 0x003f002a,           // 00 00 00 00 ff ff 2a 00 3f 00 ff ff
+            RandomMatchupRotation = 0x003f002b,         // 00 00 00 00 ff ff 2b 00 3f 00 ff ff
+            RandomMatchupLauncher = 0x00bf00aa,         // 00 00 00 00 ff ff aa 00 bf 00 ff ff
 
-            BattleCastleSingle = 0x1b,
-            BattleCastleDouble = 0x1c,
-            BattleCastleMulti = 0x1d,
-
-            BattleArcadeSingle = 0x1e,
-            BattleArcadeDouble = 0x1f,
-            BattleArcadeMulti = 0x20,
+            BattleCompetition = 0x00380038,             // 00 00 00 00 ff ff 38 00 38 00 ff ff
         }
     }
 }
