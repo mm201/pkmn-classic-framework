@@ -11,18 +11,22 @@
 <HeaderTemplate>
 <table>
 <thead>
+<tr>
 <td>Offer</td>
 <td>Wanted</td>
 <td>Trainer</td>
+</tr>
 </thead>
 </HeaderTemplate>
 
 
 
 <ItemTemplate>
+<tr>
 <td><%# CreateOffer4(Container.DataItem) %></td>
 <td><%# CreateWanted4(Container.DataItem) %></td>
 <td><%# CreateTrainer4(Container.DataItem) %></td>
+</tr>
 </ItemTemplate>
 
 
@@ -38,18 +42,22 @@
 <HeaderTemplate>
 <table>
 <thead>
+<tr>
 <td>Offer</td>
 <td>Wanted</td>
 <td>Trainer</td>
+</tr>
 </thead>
 </HeaderTemplate>
 
 
 
 <ItemTemplate>
+<tr>
 <td><%# CreateOffer5(Container.DataItem) %></td>
 <td><%# CreateWanted5(Container.DataItem) %></td>
 <td><%# CreateTrainer5(Container.DataItem) %></td>
+</tr>
 </ItemTemplate>
 
 
