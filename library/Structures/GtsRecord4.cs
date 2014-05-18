@@ -159,6 +159,8 @@ namespace PkmnFoundations.Structures
 
         public bool CanTrade(GtsRecord4 other)
         {
+            if (IsExchanged != 0 || other.IsExchanged != 0) return false;
+
             if (Species != other.RequestedSpecies) return false;
             if (other.RequestedGender != Genders.Either && Gender != other.RequestedGender) return false;
             if (!CheckLevels(other.RequestedMinLevel, other.RequestedMaxLevel, Level)) return false;

@@ -386,7 +386,7 @@ namespace PkmnFoundations.GTS
                             int targetPid = BitConverter.ToInt32(data, 304);
                             GtsRecord5 result = DataAbstract.Instance.GtsDataForUser5(targetPid);
 
-                            if (result == null)
+                            if (result == null || result.IsExchanged != 0)
                             {
                                 // Pokémon is traded (or was never here to begin with)
                                 manager.Remove(session);
