@@ -219,7 +219,7 @@ namespace PkmnFoundations.Data
             using (MySqlConnection db = CreateConnection())
             {
                 List<MySqlParameter> _params = new List<MySqlParameter>();
-                String where = "WHERE pid != @pid";
+                String where = "WHERE pid != @pid AND IsExchanged = 0";
                 _params.Add(new MySqlParameter("@pid", pid));
 
                 if (species > 0)
@@ -552,7 +552,7 @@ namespace PkmnFoundations.Data
             using (MySqlConnection db = CreateConnection())
             {
                 List<MySqlParameter> _params = new List<MySqlParameter>();
-                String where = "WHERE pid != @pid";
+                String where = "WHERE pid != @pid AND IsExchanged = 0";
                 _params.Add(new MySqlParameter("@pid", pid));
 
                 if (species > 0)
