@@ -12,13 +12,10 @@ namespace PkmnFoundations.GTS
 {
     public partial class BattleVideo : System.Web.UI.Page
     {
-        protected void Page_Init(object sender, EventArgs e)
-        {
-            litMessage.Text = "";
-        }
-
         protected void Page_Load(object sender, EventArgs e)
         {
+            litMessage.Text = "";
+
             using (MySqlConnection db = CreateConnection())
             {
                 db.Open();

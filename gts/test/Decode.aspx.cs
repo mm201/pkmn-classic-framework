@@ -10,14 +10,9 @@ namespace PkmnFoundations.GTS.debug
 {
     public partial class Decode : System.Web.UI.Page
     {
-        protected void Page_Init(object sender, EventArgs e)
-        {
-            litMessage.Text = "";
-        }
-
         protected void Page_Load(object sender, EventArgs e)
         {
-
+            litMessage.Text = "";
         }
 
         protected void btnDecode_Click(object sender, EventArgs e)
@@ -29,8 +24,6 @@ namespace PkmnFoundations.GTS.debug
             {
                 data = GtsSession4.DecryptData(txtData.Text);
                 litGeneration.Text = "4";
-                // todo: genIV is always valid so genV never gets detected
-                // need to validate checksum and error there
             }
             catch (FormatException)
             {

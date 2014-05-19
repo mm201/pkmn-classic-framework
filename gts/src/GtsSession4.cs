@@ -58,7 +58,12 @@ namespace PkmnFoundations.GTS
                 rand = DecryptRNG(rand);
                 data3[pos] = (byte)(data2[pos + 4] ^ (byte)(rand >> 16));
             }
-            // todo: validate checksum
+
+            int checkedsum = 0;
+            foreach (byte b in data3)
+                checkedsum += b;
+
+            if (checkedsum != checksum) throw new FormatException("Data checksum is incorrect.");
 
             return data3;
         }

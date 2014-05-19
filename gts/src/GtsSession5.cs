@@ -54,7 +54,13 @@ namespace PkmnFoundations.GTS
             // the ashx to check for pids to match.
             // todo: prune first 12 bytes, pass pid to this function to validate
             Array.Copy(data2, 4, data3, 0, data2.Length - 4);
-            // todo: validate checksum and length
+
+            if (length + 8 != data3.Length) throw new FormatException("Data length is incorrect.");
+            int checkedsum = 0;
+            foreach (byte b in data3)
+                checkedsum += b;
+
+            if (checkedsum != checksum) throw new FormatException("Data checksum is incorrect.");
 
             return data3;
         }
