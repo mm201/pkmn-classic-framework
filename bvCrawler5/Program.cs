@@ -22,11 +22,24 @@ namespace PkmnFoundations
             m_upload_dir = ConfigurationManager.AppSettings["pkmnFoundationsBoxUpload5Dir"];
 
             Console.WriteLine("Pokémon BW/BW2 Battle Video Crawler by mm201");
-            int pid = 330241763; // White 1 Jenny (?)
+            int pid = 330241374; // White 1 Jenny (?)
             Directory.CreateDirectory(String.Format("{0}", m_upload_dir));
             DateTime last_top30 = DateTime.MinValue;
             DateTime last_top_link = DateTime.MinValue;
             DateTime last_top_subway = DateTime.MinValue;
+
+            m_session_key = new byte[]{
+                0x66, 0x87, 0xF1, 0xB5, 0x96, 0x47, 0x4D, 0xFB, 
+                0x0E, 0x0B, 0x19, 0xBD, 0xBD, 0x69, 0x5E, 0x71,
+                0x03, 0x39, 0xED, 0xB2, 0x38, 0xA7, 0xD5, 0x5A,
+                0x19, 0x80, 0x09, 0xD4, 0xAA, 0x7F, 0xAE, 0xD3,
+                0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
+                0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
+                0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
+                0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+            };
+
+            m_session_time = DateTime.MinValue;
 
             while (true)
             {
@@ -121,6 +134,9 @@ namespace PkmnFoundations
         }
 
         private static String m_upload_dir;
+        private static byte[] m_session_key;
+        private static String m_session_str;
+        private static DateTime m_session_time;
 
         public static String FormatVideoId(ulong videoId)
         {
@@ -130,6 +146,44 @@ namespace PkmnFoundations
             split[1] = number.Substring(number.Length - 10, 5);
             split[2] = number.Substring(number.Length - 5, 5);
             return String.Join("-", split);
+        }
+
+        public static void WriteBase64shit(Stream s)
+        {
+            // First 32 bytes shared by all:
+            // 6687F1B596474DFB0E0B19BDBD695E710339EDB238A7D55A198009D4AA7FAED3
+            //
+            // The last 32 bytes seem to be random but verifiable:
+            // White 1: A194196DAC7CAA4B75A9038E0FF2C71E64E61C40CFA0340178FBB9B6B72C4A63
+            // White 1: F8A9E7EA602F169A146429A49AB7BF2D26BBB178AA2BCF1DA259310A263D41ED
+            // Black 2: C307898C422687861BCA69B25C9FC007B6516A098A05E027BB49764EF2E8B5B1
+            // Black 2: BFAA5408C6474EDDE340CF57D3405379E61A78B331191637AA6CE2818ECCE42B
+            //
+            // I'm guessing it's Hash(Secret + Random)
+            // The bytes don't vary with a session but are changed when you reset your DS.
+
+            if (m_session_str == null || m_session_time.AddMinutes(60) < DateTime.Now)
+            {
+                m_session_time = DateTime.Now;
+                Random rnd = new Random();
+                byte[] data = new byte[32];
+
+                rnd.NextBytes(data);
+
+                data = new byte[]{
+                    0xF8, 0xA9, 0xE7, 0xEA, 0x60, 0x2F, 0x16, 0x9A,
+                    0x14, 0x64, 0x29, 0xA4, 0x9A, 0xB7, 0xBF, 0x2D,
+                    0x26, 0xBB, 0xB1, 0x78, 0xAA, 0x2B, 0xCF, 0x1D,
+                    0xA2, 0x59, 0x31, 0x0A, 0x26, 0x3D, 0x41, 0xED
+                };
+
+                Array.Copy(data, 0, m_session_key, 32, 32);
+                m_session_str = Convert.ToBase64String(m_session_key);
+            }
+
+            StreamWriter w = new StreamWriter(s);
+            w.Write(m_session_str);
+            w.Flush();
         }
 
         public static byte[] GetBattleVideo(int pid, ulong videoId)
@@ -143,23 +197,8 @@ namespace PkmnFoundations
             request.Write(new byte[] { 0xf2, 0x55, 0x00, 0x00 }, 0, 4); // request type, sanity 0000
             request.Write(BitConverter.GetBytes(pid), 0, 4); // pid, hopefully this doesn't ban me
             request.Write(new byte[] { 0x17, 0x02 }, 0, 2);
-            // there is some random bytes contained in this sometimes. Could be trainer profile
-            // related, I don't know...
-            // in Genv it's base64 encoded??
-            request.Write(new byte[] {
-                                                    0x5a, 0x6f,
-                0x66, 0x78, 0x74, 0x5a, 0x5a, 0x48, 0x54, 0x66,
-                0x73, 0x4f, 0x43, 0x78, 0x6d, 0x39, 0x76, 0x57,
-                0x6c, 0x65, 0x63, 0x51, 0x4d, 0x35, 0x37, 0x62,
-                0x49, 0x34, 0x70, 0x39, 0x56, 0x61, 0x47, 0x59,
-                0x41, 0x4a, 0x31, 0x4b, 0x70, 0x2f, 0x72, 0x74, 
-                0x4f, 0x68, 0x6c, 0x42, 0x6c, 0x74, 0x72, 0x48,
-                0x79, 0x71, 0x53, 0x33, 0x57, 0x70, 0x41, 0x34, 
-                0x34, 0x50, 0x38, 0x73, 0x63, 0x65, 0x5a, 0x4f,
-                0x59, 0x63, 0x51, 0x4d, 0x2b, 0x67, 0x4e, 0x41, 
-                0x46, 0x34, 0x2b, 0x37, 0x6d, 0x32, 0x74, 0x79,
-                0x78, 0x4b, 0x59, 0x77, 0x3d, 0x3d
-            }, 0, 0x58);
+
+            WriteBase64shit(request);
 
             request.Write(new byte[0xda], 0, 0xda);
 
@@ -169,6 +208,9 @@ namespace PkmnFoundations
             PutLength(data);
 
             byte[] response = Conversation(data);
+
+            if (response.Length < 9) throw new InvalidDataException("Battle video was not retrieved.");
+
             Console.WriteLine("Successfully retrieved {0} byte response for battle video {1}.", response.Length, formatted);
             return response;
         }
@@ -303,22 +345,8 @@ namespace PkmnFoundations
             request.Write(new byte[] { 0xf1, 0x55, 0x00, 0x00 }, 0, 4); // request type, sanity 0000
             request.Write(BitConverter.GetBytes(pid), 0, 4); // pid, hopefully this doesn't ban me
             request.Write(new byte[] { 0x14, 0x02 }, 0, 2);
-            // there is some random bytes contained in this sometimes. Could be trainer profile
-            // related, I don't know...
-            request.Write(new byte[] {
-                                                    0x5a, 0x6f,
-                0x66, 0x78, 0x74, 0x5a, 0x5a, 0x48, 0x54, 0x66,
-                0x73, 0x4f, 0x43, 0x78, 0x6d, 0x39, 0x76, 0x57,
-                0x6c, 0x65, 0x63, 0x51, 0x4d, 0x35, 0x37, 0x62,
-                0x49, 0x34, 0x70, 0x39, 0x56, 0x61, 0x47, 0x59,
-                0x41, 0x4a, 0x31, 0x4b, 0x70, 0x2f, 0x72, 0x74, 
-                0x4f, 0x68, 0x6c, 0x42, 0x6c, 0x74, 0x72, 0x48,
-                0x79, 0x71, 0x53, 0x33, 0x57, 0x70, 0x41, 0x34, 
-                0x34, 0x50, 0x38, 0x73, 0x63, 0x65, 0x5a, 0x4f,
-                0x59, 0x63, 0x51, 0x4d, 0x2b, 0x67, 0x4e, 0x41, 
-                0x46, 0x34, 0x2b, 0x37, 0x6d, 0x32, 0x74, 0x79,
-                0x78, 0x4b, 0x59, 0x77, 0x3d, 0x3d
-            }, 0, 0x58);
+
+            WriteBase64shit(request);
 
             request.Write(new byte[0xda], 0, 0xda);
 
@@ -336,6 +364,8 @@ namespace PkmnFoundations
             request.Flush();
             PutLength(data);
 
+            byte[] response = Conversation(data);
+
             if (special != SearchSpecial.Latest30)
             {
                 using (MySqlConnection db = CreateConnection())
@@ -352,13 +382,12 @@ namespace PkmnFoundations
                 }
             }
 
-            byte[] response = Conversation(data);
             QueueSearchResults(response);
         }
 
         public static void QueueSearchResults(byte[] data)
         {
-            if (data.Length % 208 != 12) throw new ArgumentException("Search results blob should be 12 bytes + 208 per result.");
+            if (data.Length % 208 != 12) throw new InvalidDataException("Search results blob should be 12 bytes + 208 per result.");
 
             int count = data.Length / 208;
             Console.WriteLine("{0} results found.", count);

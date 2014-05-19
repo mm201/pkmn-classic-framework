@@ -147,6 +147,9 @@ namespace PkmnFoundations
             PutLength(data);
 
             byte[] response = Conversation(data);
+
+            if (response.Length < 9) throw new InvalidDataException("Battle video was not retrieved.");
+
             Console.WriteLine("Successfully retrieved {0} byte response for battle video {1}.", response.Length, formatted);
             return response;
         }
@@ -293,6 +296,8 @@ namespace PkmnFoundations
             Encrypt(data, 0xc9);
             PutLength(data);
 
+            byte[] response = Conversation(data);
+
             if (!hasSearch)
             {
                 using (MySqlConnection db = CreateConnection())
@@ -308,13 +313,12 @@ namespace PkmnFoundations
                 }
             }
 
-            byte[] response = Conversation(data);
             QueueSearchResults(response);
         }
 
         public static void QueueSearchResults(byte[] data)
         {
-            if (data.Length % 240 != 12) throw new ArgumentException("Search results blob should be 12 bytes + 240 per result.");
+            if (data.Length % 240 != 12) throw new InvalidDataException("Search results blob should be 12 bytes + 240 per result.");
             Decrypt(data);
             AssertHelper.Assert(data[6] == 0x00);
             AssertHelper.Assert(data[7] == 0x00); // saaaaanity
