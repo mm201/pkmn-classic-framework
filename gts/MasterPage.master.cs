@@ -15,5 +15,19 @@ namespace PkmnFoundations.GTS
             int availTotal = manager.AvailablePokemon4 + manager.AvailablePokemon5;
             litPokemon.Text = availTotal.ToString();
         }
+
+        public String HeaderCssClass
+        {
+            get
+            {
+                return litHeaderCssClassKeep.Text;
+            }
+            set
+            {
+                litHeaderCssClassKeep.Text = value;
+            }
+        }
+
+
     }
 }

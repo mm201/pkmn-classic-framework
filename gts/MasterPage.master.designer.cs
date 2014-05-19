@@ -13,6 +13,15 @@ namespace PkmnFoundations.GTS {
     public partial class MasterPage {
         
         /// <summary>
+        /// HeaderColour1 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::PkmnFoundations.GTS.HeaderColour HeaderColour1;
+        
+        /// <summary>
         /// cpHead control.
         /// </summary>
         /// <remarks>
@@ -20,6 +29,15 @@ namespace PkmnFoundations.GTS {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.ContentPlaceHolder cpHead;
+        
+        /// <summary>
+        /// litHeaderCssClassKeep control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal litHeaderCssClassKeep;
         
         /// <summary>
         /// hlHome control.
@@ -47,6 +65,24 @@ namespace PkmnFoundations.GTS {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.HyperLink hlAllPokemon;
+        
+        /// <summary>
+        /// hlGts control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HyperLink hlGts;
+        
+        /// <summary>
+        /// hlBattleVideos control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HyperLink hlBattleVideos;
         
         /// <summary>
         /// cpMain control.

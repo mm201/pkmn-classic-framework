@@ -1,15 +1,18 @@
 ﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="MasterPage.master.cs" Inherits="PkmnFoundations.GTS.MasterPage" %>
+<%@ Register TagPrefix="pf" Namespace="PkmnFoundations.GTS" Assembly="PkmnFoundations.GTS" %>
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
     <title></title>
+    <pf:HeaderColour ID="HeaderColour1" CssClass="gts" runat="server" />
     <asp:ContentPlaceHolder ID="cpHead" runat="server" />
     <link rel="stylesheet" href="~/css/main.css" type="text/css" />
 </head>
-<body>
+<body class="<%= HeaderCssClass %>">
     <div id="gtsHeader">
+    <asp:Literal ID="litHeaderCssClassKeep" Visible="false" runat="server" />
         <div class="setWidth">
             <h1>
             <asp:HyperLink ID="hlHome" NavigateUrl="~/" runat="server">Foundations GTS</asp:HyperLink>
@@ -30,7 +33,17 @@
         <div class="github-contain">
         <a class="github" href="https://github.com/mm201/pkmnFoundations" target="_blank">Fork me on GitHub!</a>
         </div>
+        <div class="hideShadow"></div>
     </div>
+    <nav id="gtsTabsBar">
+        <div class="setWidth">
+        <ul>
+            <li><asp:HyperLink ID="hlGts" CssClass="gts" NavigateUrl="~/" Text="GTS" runat="server" /></li>
+            <li><asp:HyperLink ID="hlBattleVideos" CssClass="bv" NavigateUrl="~/BattleVideo.aspx" Text="Battle Videos" runat="server" /></li>
+        </ul>
+        <div class="clear"></div>
+        </div>
+    </nav>
     <div id="gtsMain">
     <div class="setWidth">
     <asp:ContentPlaceHolder ID="cpMain" runat="server" />

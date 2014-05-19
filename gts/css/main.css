@@ -7,12 +7,21 @@
 
 #gtsHeader
 {
-    background-color: #ff8063;
     color: white;
     font-family: Arial,sans-serif;
     padding: 20px 0 4px;
     height: 108px;
+    border-bottom: 2px solid;
+    box-shadow: 0 1px 3px 0 rgba(0,0,0,0.3);
+    z-index: 1;
+    position: relative;
 }
+
+.gts #gtsHeader { background-color: #ff8063; border-color: #9b4b39; }
+.bv #gtsHeader { background-color: #64ceff; border-color: #3a7d9b; }
+
+.gts #gtsHeader .hideShadow { background-color: #ff8063; }
+.bv #gtsHeader .hideShadow { background-color: #64ceff; }
 
 #gtsHeader h1
 {
@@ -50,17 +59,61 @@
 
 #gtsHeader .stats
 {
-    background-color: #ffac9f;
     border-radius: 9px;
     padding: 4px;
     width: 200px;
     font-size: 12px;
 }
 
+.gts #gtsHeader .stats { background-color: #ffac9f; }
+.bv #gtsHeader .stats { background-color: #9fdcff; }
+
 #gtsHeader a
 {
     color: white;
 }
+
+#gtsTabsBar
+{
+    font-size: 18px;
+}
+
+#gtsTabsBar ul
+{
+    position: relative;
+    margin: 0 auto;
+    padding: 0;
+}
+
+#gtsTabsBar li
+{
+    display: block;
+    margin: 0; padding: 0;
+    padding-right: 3px;
+    float: left;
+}
+
+#gtsTabsBar li a
+{
+    display: block;
+    height: 24px;
+    min-width: 72px;
+    text-align: center;
+    margin: 0; padding: 5px 5px;
+    border: 2px solid;
+    border-top: none;
+    color: #ffffff;
+    text-decoration: none;
+    border-radius: 0 0 12px 12px;
+    position: relative;
+    box-shadow: 0 2px 2px 0 rgba(0,0,0,0.3);
+}
+
+#gtsTabsBar li a.gts { background-color: #ff8063; border-color: #9b4b39; }
+#gtsTabsBar li a.bv { background-color: #64ceff; border-color: #3a7d9b; }
+
+.gts #gtsTabsBar li a.gts { z-index: 2; padding-top: 7px; top: -2px; }
+.bv #gtsTabsBar li a.bv { z-index: 2; padding-top: 7px; top: -2px; }
 
 #gtsMain
 {
@@ -72,6 +125,13 @@
     width: 720px;
     margin: 0 auto;
     position: relative;
+}
+
+.clear
+{
+    clear: both;
+    height: 0;
+    overflow: hidden;
 }
 
 .github-contain

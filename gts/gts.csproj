@@ -89,6 +89,7 @@
     <Compile Include="BattleVideo.aspx.designer.cs">
       <DependentUpon>BattleVideo.aspx</DependentUpon>
     </Compile>
+    <Compile Include="src\HeaderColour.cs" />
     <Compile Include="test\BoxUp.aspx.cs">
       <DependentUpon>BoxUp.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
