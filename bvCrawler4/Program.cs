@@ -31,6 +31,7 @@ namespace PkmnFoundations
             int pid = 207823279; // Platinum Hikari
             Directory.CreateDirectory(String.Format("{0}", m_upload_dir));
             DateTime last_top30 = DateTime.MinValue;
+            DateTime last_retry_all = DateTime.MinValue;
 
             while (true)
             {
@@ -56,6 +57,12 @@ namespace PkmnFoundations
                 {
                     try
                     {
+                        if (last_retry_all < DateTime.Now.AddHours(-6))
+                        {
+                            last_retry_all = DateTime.Now;
+                            RetryAll();
+                            continue;
+                        }
                         if (last_top30 < DateTime.Now.AddMinutes(-60))
                         {
                             last_top30 = DateTime.Now;
@@ -422,6 +429,58 @@ namespace PkmnFoundations
         {
             int padOffset = (Array.IndexOf(m_pad, data[6]) + 250) % 256;
             Encrypt(data, padOffset);
+        }
+
+        public static void RetryAll()
+        {
+            String path = String.Format("{0}", m_upload_dir);
+
+            using (MySqlConnection db = CreateConnection())
+            {
+                db.Open();
+
+                DataTable SerialNumbers = db.ExecuteDataTable("SELECT SerialNumber FROM BattleVideoCrawlQueue WHERE Complete = 1");
+                SerialNumbers.PrimaryKey = new DataColumn[] { SerialNumbers.Columns["SerialNumber"] };
+                IEnumerable<String> filenames = Directory.EnumerateFiles(path);
+
+                foreach (String s in filenames)
+                {
+                    int slash = s.LastIndexOf(Path.DirectorySeparatorChar) + 1;
+                    int dot = s.LastIndexOf(".");
+                    if (dot < 0) dot = s.Length;
+                    if (dot < slash) dot = s.Length;
+
+                    ulong SerialNumber;
+                    UInt64.TryParse(s.Substring(slash, dot - slash).Replace("-", ""),
+                        out SerialNumber);
+
+                    if (SerialNumber == 0) continue;
+                    DataRow row = SerialNumbers.Rows.Find(SerialNumber);
+                    if (row == null) continue; // video in the folder but not database. todo: insert.
+
+                    SerialNumbers.Rows.Remove(row);
+                }
+
+                StringBuilder toRecheck = new StringBuilder();
+                bool hasRows = false;
+
+                foreach (DataRow row in SerialNumbers.Rows)
+                {
+                    ulong SerialNumber = (ulong)row["SerialNumber"];
+                    if (hasRows) toRecheck.Append(',');
+                    toRecheck.Append(SerialNumber.ToString());
+                    hasRows = true;
+
+                    Console.WriteLine("Battle video {0} in database but not in directory. Requeueing.", FormatVideoId(SerialNumber));
+                }
+                if (hasRows)
+                {
+                    db.ExecuteNonQuery("UPDATE BattleVideoCrawlQueue SET Complete = 0 " +
+                        "WHERE SerialNumber IN (" + toRecheck.ToString() + ")");
+                }
+
+                db.Clone();
+            }
         }
 
         public static MySqlConnection CreateConnection()
