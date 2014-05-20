@@ -14,16 +14,14 @@ namespace PkmnFoundations.GTS
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            litMessage.Text = "";
+            litMessage4.Text = "";
+            litMessage5.Text = "";
 
             using (MySqlConnection db = CreateConnection())
             {
                 db.Open();
 
-                litQueued4.Text = HttpUtility.HtmlEncode(db.ExecuteScalar("SELECT Count(*) FROM BattleVideoCrawlQueue WHERE Complete = 0"));
                 litTotal4.Text = HttpUtility.HtmlEncode(db.ExecuteScalar("SELECT Count(*) FROM BattleVideoCrawlQueue WHERE Complete = 1"));
-
-                litQueued5.Text = HttpUtility.HtmlEncode(db.ExecuteScalar("SELECT Count(*) FROM BattleVideoCrawlQueue5 WHERE Complete = 0"));
                 litTotal5.Text = HttpUtility.HtmlEncode(db.ExecuteScalar("SELECT Count(*) FROM BattleVideoCrawlQueue5 WHERE Complete = 1"));
 
                 db.Close();
@@ -36,7 +34,7 @@ namespace PkmnFoundations.GTS
             UInt64.TryParse(txtBattleVideo4.Text.Replace('-', ' ').Replace(" ", ""), out id);
             if (id == 0)
             {
-                litMessage.Text = "The battle video ID could not be read. Please enter a battle video ID in the format, xx-xxxxx-xxxxx, and try again.";
+                litMessage4.Text = "The battle video ID could not be read. Please enter a battle video ID in the format, xx-xxxxx-xxxxx, and try again.";
                 return;
             }
 
@@ -50,19 +48,15 @@ namespace PkmnFoundations.GTS
 
         private void QueueVideoId4(MySqlConnection db, ulong id)
         {
-            using (MySqlTransaction tran = db.BeginTransaction())
+            long count = (long)db.ExecuteScalar("SELECT Count(*) FROM BattleVideoCrawlQueue " +
+                "WHERE SerialNumber = @serial_number AND Complete = 1", 
+                new MySqlParameter("@serial_number", id));
+            if (count > 0)
             {
-                long count = (long)tran.ExecuteScalar("SELECT Count(*) FROM BattleVideoCrawlQueue WHERE SerialNumber = @serial_number", new MySqlParameter("@serial_number", id));
-                if (count > 0)
-                {
-                    tran.Rollback();
-                    litMessage.Text = "The battle video is already queued for retrieval.";
-                    return;
-                }
-                tran.ExecuteNonQuery("INSERT INTO BattleVideoCrawlQueue (SerialNumber, `Timestamp`) VALUES (@serial_number, NOW())", new MySqlParameter("@serial_number", id));
-                tran.Commit();
-                litMessage.Text = "The battle video has been queued for retrieval.";
+                litMessage4.Text = "This battle video has been saved.";
+                return;
             }
+            litMessage4.Text = "This battle video is lost.";
         }
 
         protected void btnSend5_Click(object sender, EventArgs e)
@@ -71,7 +65,7 @@ namespace PkmnFoundations.GTS
             UInt64.TryParse(txtBattleVideo5.Text.Replace('-', ' ').Replace(" ", ""), out id);
             if (id == 0)
             {
-                litMessage.Text = "The battle video ID could not be read. Please enter a battle video ID in the format, xx-xxxxx-xxxxx, and try again.";
+                litMessage5.Text = "The battle video ID could not be read. Please enter a battle video ID in the format, xx-xxxxx-xxxxx, and try again.";
                 return;
             }
 
@@ -85,19 +79,15 @@ namespace PkmnFoundations.GTS
 
         private void QueueVideoId5(MySqlConnection db, ulong id)
         {
-            using (MySqlTransaction tran = db.BeginTransaction())
+            long count = (long)db.ExecuteScalar("SELECT Count(*) FROM BattleVideoCrawlQueue5 " +
+                "WHERE SerialNumber = @serial_number AND Complete = 1",
+                new MySqlParameter("@serial_number", id));
+            if (count > 0)
             {
-                long count = (long)tran.ExecuteScalar("SELECT Count(*) FROM BattleVideoCrawlQueue5 WHERE SerialNumber = @serial_number", new MySqlParameter("@serial_number", id));
-                if (count > 0)
-                {
-                    tran.Rollback();
-                    litMessage.Text = "The battle video is already queued for retrieval.";
-                    return;
-                }
-                tran.ExecuteNonQuery("INSERT INTO BattleVideoCrawlQueue5 (SerialNumber, `Timestamp`) VALUES (@serial_number, NOW())", new MySqlParameter("@serial_number", id));
-                tran.Commit();
-                litMessage.Text = "The battle video has been queued for retrieval.";
+                litMessage5.Text = "This battle video has been saved.";
+                return;
             }
+            litMessage5.Text = "This battle video is lost.";
         }
 
         public static MySqlConnection CreateConnection()

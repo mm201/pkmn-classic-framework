@@ -13,6 +13,15 @@ namespace PkmnFoundations.GTS {
     public partial class BattleVideo {
         
         /// <summary>
+        /// HeaderColour1 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::PkmnFoundations.GTS.HeaderColour HeaderColour1;
+        
+        /// <summary>
         /// theForm control.
         /// </summary>
         /// <remarks>
@@ -40,13 +49,13 @@ namespace PkmnFoundations.GTS {
         protected global::System.Web.UI.WebControls.Button btnSend4;
         
         /// <summary>
-        /// litQueued4 control.
+        /// litMessage4 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Literal litQueued4;
+        protected global::System.Web.UI.WebControls.Literal litMessage4;
         
         /// <summary>
         /// litTotal4 control.
@@ -76,13 +85,13 @@ namespace PkmnFoundations.GTS {
         protected global::System.Web.UI.WebControls.Button btnSend5;
         
         /// <summary>
-        /// litQueued5 control.
+        /// litMessage5 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Literal litQueued5;
+        protected global::System.Web.UI.WebControls.Literal litMessage5;
         
         /// <summary>
         /// litTotal5 control.
@@ -92,14 +101,5 @@ namespace PkmnFoundations.GTS {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Literal litTotal5;
-        
-        /// <summary>
-        /// litMessage control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Literal litMessage;
     }
 }
