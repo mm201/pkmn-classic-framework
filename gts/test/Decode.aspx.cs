@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Text;
+using System.Net;
 
 namespace PkmnFoundations.GTS.debug
 {
@@ -13,12 +14,14 @@ namespace PkmnFoundations.GTS.debug
         protected void Page_Load(object sender, EventArgs e)
         {
             litMessage.Text = "";
+            litChecksum.Text = "";
         }
 
         protected void btnDecode_Click(object sender, EventArgs e)
         {
             byte[] data = null;
             phDecoded.Visible = false;
+            phChecksum.Visible = false;
 
             try
             {
@@ -38,14 +41,47 @@ namespace PkmnFoundations.GTS.debug
             {
             }
 
+            if (data == null) try
+            {
+                data = GamestatsSessionPlat.DecryptData(txtData.Text);
+                litGeneration.Text = "Platinum";
+            }
+            catch (FormatException)
+            {
+            }
+
+            if (data == null)
+            {
+                data = DecryptData(txtData.Text);
+
+                int checkedsum = 0;
+                foreach (byte b in data)
+                    checkedsum += b;
+
+                litGeneration.Text = "";
+                litChecksum.Text = checkedsum.ToString();
+                phChecksum.Visible = true;
+            }
+
             if (data == null)
             {
                 litMessage.Text = "<p class=\"errorMessage\">Data is not formatted correctly.</p>";
-                return;
             }
 
             litDecoded.Text = RenderHex(data.ToHexStringLower());
             phDecoded.Visible = true;
+        }
+
+        public static byte[] DecryptData(String data)
+        {
+            byte[] data2 = GtsSessionBase.FromUrlSafeBase64String(data);
+            if (data2.Length < 12) throw new FormatException("Data must contain at least 12 bytes.");
+
+            int checksum = BitConverter.ToInt32(data2, 0);
+            checksum = IPAddress.NetworkToHostOrder(checksum); // endian flip
+            //checksum ^= 0x2db842b2;
+
+            return data2;
         }
 
         private String RenderHex(String hex)

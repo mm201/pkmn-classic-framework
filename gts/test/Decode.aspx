@@ -17,6 +17,11 @@
     <div class="code">
     <asp:Literal ID="litDecoded" runat="server" />
     </div>
+    <asp:PlaceHolder ID="phChecksum" Visible="false" runat="server">
+    <p>
+    Checksum: <asp:Literal ID="litChecksum" runat="server" />
+    </p>
+    </asp:PlaceHolder>
     </div>
     </asp:PlaceHolder>
 </form>
