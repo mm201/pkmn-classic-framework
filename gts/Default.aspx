@@ -29,13 +29,12 @@ and data related to the main series of Pokémon RPG videogames. Planned is a Pok
 damage calculator, and possibly more! (For now, it’s just a GTS.)</p>
 
 <h1>How do I use this GTS?</h1>
-<h2>Now until May 20th:</h2>
-<p>Under Nintendo Wi-fi Connection Settings in your DS, change your primary DNS server to:</p>
+<p>Connections are made through <a href="https://github.com/polaris-/nintendo_dwc_emulator/wiki">
+Nintendo DWC Emulator</a>. Complete instructions on how to patch your game are found at the
+above link.</p>
+<p>Once your game has been patched, configure your DNS in the usual way.
+Under Nintendo Wi-fi Connection Settings in your DS, change your primary DNS server to:</p>
 <p class="code">191.236.98.208</p>
 <p>If you use the Nintendo Wi-fi USB Connector, change the primary DNS on the computer you 
 plug it into.</p>
-
-<h2>May 20th and onward:</h2>
-<p>Stay tuned.</p>
-
 </asp:Content>
