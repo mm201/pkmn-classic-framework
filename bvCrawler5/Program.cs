@@ -98,7 +98,7 @@ namespace PkmnFoundations
                     catch (Exception ex)
                     {
                         LogError(ex);
-                        Thread.Sleep(1000 * 60);
+                        Thread.Sleep(1000 * 30);
                         continue;
                     }
 
@@ -131,12 +131,12 @@ namespace PkmnFoundations
                 catch (Exception ex)
                 {
                     LogError(ex);
-                    Thread.Sleep(1000 * 60);
+                    Thread.Sleep(1000 * 30);
                     continue;
                 }
 
                 Console.WriteLine("Successfully saved battle video {0}.", formatted);
-                Thread.Sleep(1000 * 60);
+                Thread.Sleep(1000 * 30);
             }
         }
 
@@ -163,6 +163,7 @@ namespace PkmnFoundations
             // The last 32 bytes seem to be random but verifiable:
             // White 1: A194196DAC7CAA4B75A9038E0FF2C71E64E61C40CFA0340178FBB9B6B72C4A63
             // White 1: F8A9E7EA602F169A146429A49AB7BF2D26BBB178AA2BCF1DA259310A263D41ED
+            // White 1: BEAB158B25170200BEEBD9C456CD5BE00A19A3C4F69F4749DED6427AD173834E
             // Black 2: C307898C422687861BCA69B25C9FC007B6516A098A05E027BB49764EF2E8B5B1
             // Black 2: BFAA5408C6474EDDE340CF57D3405379E61A78B331191637AA6CE2818ECCE42B
             //
@@ -177,11 +178,12 @@ namespace PkmnFoundations
 
                 rnd.NextBytes(data);
 
+                // hack in 
                 data = new byte[]{
-                    0xF8, 0xA9, 0xE7, 0xEA, 0x60, 0x2F, 0x16, 0x9A,
-                    0x14, 0x64, 0x29, 0xA4, 0x9A, 0xB7, 0xBF, 0x2D,
-                    0x26, 0xBB, 0xB1, 0x78, 0xAA, 0x2B, 0xCF, 0x1D,
-                    0xA2, 0x59, 0x31, 0x0A, 0x26, 0x3D, 0x41, 0xED
+                    0xBE, 0xAB, 0x15, 0x8B, 0x25, 0x17, 0x02, 0x00,
+                    0xBE, 0xEB, 0xD9, 0xC4, 0x56, 0xCD, 0x5B, 0xE0,
+                    0x0A, 0x19, 0xA3, 0xC4, 0xF6, 0x9F, 0x47, 0x49,
+                    0xDE, 0xD6, 0x42, 0x7A, 0xD1, 0x73, 0x83, 0x4E
                 };
 
                 Array.Copy(data, 0, m_session_key, 32, 32);

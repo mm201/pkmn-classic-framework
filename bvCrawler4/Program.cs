@@ -77,7 +77,7 @@ namespace PkmnFoundations
                     catch (Exception ex)
                     {
                         LogError(ex);
-                        Thread.Sleep(1000 * 60);
+                        Thread.Sleep(1000 * 30);
                         continue;
                     }
 
@@ -110,12 +110,12 @@ namespace PkmnFoundations
                 catch (Exception ex)
                 {
                     LogError(ex);
-                    Thread.Sleep(1000 * 60);
+                    Thread.Sleep(1000 * 30);
                     continue;
                 }
 
                 Console.WriteLine("Successfully saved battle video {0}.", formatted);
-                Thread.Sleep(1000 * 60);
+                Thread.Sleep(1000 * 30);
             }
         }
 
