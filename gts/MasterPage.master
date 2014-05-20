@@ -49,5 +49,13 @@
     <asp:ContentPlaceHolder ID="cpMain" runat="server" />
     </div>
     </div>
+    <div id="gtsCopyright">
+    <div class="setWidth">
+    Pokémon is © 1995-<%= DateTime.Now.Year.ToString() %> Nintendo / Creatures / GAME FREAK.
+    This service is not affiliated with Nintendo or GAME FREAK in any way.<br />
+    This service is provided ‘as is’ without warranty of any kind. Use at your own risk.<br />
+    <a href="https://github.com/mm201/pkmnFoundations/issues?state=open">Report an issue</a>
+    </div>
+    </div>
 </body>
 </html>

@@ -120,6 +120,13 @@
     padding: 4px 0;
 }
 
+#gtsCopyright
+{
+    font-size: 10px;
+    text-align: center;
+    margin-top: 20px;
+}
+
 .setWidth
 {
     width: 720px;
