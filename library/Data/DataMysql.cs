@@ -80,7 +80,7 @@ namespace PkmnFoundations.Data
         public bool GtsDepositPokemon4(MySqlTransaction tran, GtsRecord4 record)
         {
             if (record.Data.Length != 236) throw new FormatException("pkm data must be 236 bytes.");
-            if (record.TrainerName.Length != 16) throw new FormatException("Trainer name must be 16 bytes.");
+            if (record.TrainerName.RawData.Length != 16) throw new FormatException("Trainer name must be 16 bytes.");
             // note that IsTraded being true in the record is not an error condition
             // since it might have use later on. You should check for this in the upload handler.
 
@@ -113,7 +113,7 @@ namespace PkmnFoundations.Data
         public override bool GtsDepositPokemon4(GtsRecord4 record)
         {
             if (record.Data.Length != 236) throw new FormatException("pkm data must be 236 bytes.");
-            if (record.TrainerName.Length != 16) throw new FormatException("Trainer name must be 16 bytes.");
+            if (record.TrainerName.RawData.Length != 16) throw new FormatException("Trainer name must be 16 bytes.");
             // note that IsTraded being true in the record is not an error condition
             // since it might have use later on. You should check for this in the upload handler.
 
@@ -314,7 +314,7 @@ namespace PkmnFoundations.Data
 
             data = new byte[16];
             reader.GetBytes(14, 0, data, 0, 16);
-            result.TrainerName = data;
+            result.TrainerName = new String4(data);
             data = null;
 
             result.TrainerOT = reader.GetUInt16(15);
@@ -346,7 +346,7 @@ namespace PkmnFoundations.Data
             result[11] = new MySqlParameter("@TimeDeposited", record.TimeDeposited);
             result[12] = new MySqlParameter("@TimeWithdrawn", record.TimeWithdrawn);
             result[13] = new MySqlParameter("@pid", record.PID);
-            result[14] = new MySqlParameter("@TrainerName", record.TrainerName);
+            result[14] = new MySqlParameter("@TrainerName", record.TrainerName.RawData);
             result[15] = new MySqlParameter("@TrainerOT", record.TrainerOT);
             result[16] = new MySqlParameter("@TrainerCountry", record.TrainerCountry);
             result[17] = new MySqlParameter("@TrainerRegion", record.TrainerRegion);

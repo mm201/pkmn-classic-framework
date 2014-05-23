@@ -57,6 +57,7 @@
     <Compile Include="Structures\Enums.cs" />
     <Compile Include="Structures\GtsRecord4.cs" />
     <Compile Include="Support\AssertHelper.cs" />
+    <Compile Include="Support\String4.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
