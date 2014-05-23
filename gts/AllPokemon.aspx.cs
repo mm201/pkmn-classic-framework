@@ -56,7 +56,8 @@ namespace PkmnFoundations.GTS
 
         protected String CreateTrainer4(object DataItem)
         {
-            return "Trainer";
+            GtsRecord4 record = (GtsRecord4)DataItem;
+            return record.TrainerName.Text;
         }
 
         protected String CreateOffer5(object DataItem)
