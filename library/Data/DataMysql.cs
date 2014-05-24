@@ -412,7 +412,7 @@ namespace PkmnFoundations.Data
         {
             if (record.Data.Length != 220) throw new FormatException("pkm data must be 220 bytes.");
             if (record.Unknown0.Length != 16) throw new FormatException("pkm padding must be 16 bytes.");
-            if (record.TrainerName.Length != 16) throw new FormatException("Trainer name must be 16 bytes.");
+            if (record.TrainerName.RawData.Length != 16) throw new FormatException("Trainer name must be 16 bytes.");
             // note that IsTraded being true in the record is not an error condition
             // since it might have use later on. You should check for this in the upload handler.
 
@@ -446,7 +446,7 @@ namespace PkmnFoundations.Data
         {
             if (record.Data.Length != 220) throw new FormatException("pkm data must be 220 bytes.");
             if (record.Unknown0.Length != 16) throw new FormatException("pkm padding must be 16 bytes.");
-            if (record.TrainerName.Length != 16) throw new FormatException("Trainer name must be 16 bytes.");
+            if (record.TrainerName.RawData.Length != 16) throw new FormatException("Trainer name must be 16 bytes.");
             // note that IsTraded being true in the record is not an error condition
             // since it might have use later on. You should check for this in the upload handler.
 
@@ -655,7 +655,7 @@ namespace PkmnFoundations.Data
 
             data = new byte[16];
             reader.GetBytes(16, 0, data, 0, 16);
-            result.TrainerName = data;
+            result.TrainerName = new EncodedString5(data);
             data = null;
 
             result.TrainerCountry = reader.GetByte(17);
