@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.IO;
 
 namespace PkmnFoundations.Support
 {
 	public class EncodedString4
     {
+        // todo: Use pointers for both of these
 		public static string DecodeString(byte[] data, int location, int maxCount)
 		{
 			StringBuilder sb = new StringBuilder();
@@ -22,36 +24,98 @@ namespace PkmnFoundations.Support
 			return sb.ToString();
 		}
 
+        public static byte[] EncodeString(string str)
+        {
+            MemoryStream m = new MemoryStream(str.Length * 2 + 2);
+            foreach (char c in str.ToCharArray())
+            {
+                m.Write(BitConverter.GetBytes(LookupReverse[c]), 0, 2);
+            }
+            m.WriteByte(0xff);
+            m.WriteByte(0xff);
+            return m.ToArray();
+        }
+
 		private byte[] m_raw_data;
 		private string m_text;
 
-		public string Text { get { return m_text; } } // Is a setter useful for this?
-		public byte[] RawData { get { return m_raw_data; } }
+		public string Text
+        {
+            get
+            {
+                if (m_text == null && m_raw_data == null) return null;
+                if (m_text == null) m_text = DecodeString(m_raw_data, 0, m_raw_data.Length);
+                return m_text;
+            }
+            set
+            {
+                AssignText(value);
+            }
+        }
+
+		public byte[] RawData
+        {
+            get
+            {
+                if (m_raw_data == null && m_text == null) return null;
+                if (m_raw_data == null) m_raw_data = EncodeString(m_text);
+                return m_raw_data.ToArray();
+            }
+            set
+            {
+                AssignData(value.ToArray());
+            }
+        }
+
+        // lazy evaluate these conversions since they're slow
+        private void AssignData(byte[] data)
+        {
+            m_raw_data = data;
+            m_text = null;
+        }
+
+        private void AssignText(String text)
+        {
+            m_text = text;
+            m_raw_data = null;
+        }
 		
 		public EncodedString4(byte[] data)
 		{
-			Initialize(data, 0, data.Length);
+            RawData = data;
 		}
 
 		public EncodedString4(byte[] data, int start, int count)
 		{
-			Initialize(data, start, count);
-		}
 
-		private void Initialize(byte[] data, int location, int length)
-		{
-			m_text = DecodeString(data, location, length);
-			m_raw_data = new byte[length];
-			Array.Copy(data, location, m_raw_data, 0, length);
+            Array.Copy(data, start, m_raw_data, 0, count);
 		}
 
 		public override string ToString()
 		{
-			return m_text;
+			return Text;
 		}
 
+        private static Dictionary<char, ushort> LookupReverse
+        {
+            get
+            {
+                if (m_lookup_reverse == null)
+                {
+                    lock (m_lookup_reverse)
+                    {
+                        Dictionary<char, ushort> reverse = new Dictionary<char, ushort>(Generation4TextLookupTable.Count);
+                        foreach (KeyValuePair<ushort, char> pair in Generation4TextLookupTable)
+                            reverse.Add(pair.Value, pair.Key);
 
-		public static Dictionary<ushort, char> Generation4TextLookupTable = new Dictionary<ushort, char>
+                        m_lookup_reverse = reverse;
+                    }
+                }
+                return m_lookup_reverse;
+            }
+        }
+
+		private static Dictionary<ushort, char> Generation4TextLookupTable = new Dictionary<ushort, char>
 		{
 			{0x0000,'\u0000'},{0x0001,'\u3000'},{0x0002,'\u3041'},{0x0003,'\u3042'},{0x0004,'\u3043'},{0x0005,'\u3044'},{0x0006,'\u3045'},{0x0007,'\u3046'},
 			{0x0008,'\u3047'},{0x0009,'\u3048'},{0x000A,'\u3049'},{0x000B,'\u304A'},{0x000C,'\u304B'},{0x000D,'\u304C'},{0x000E,'\u304D'},{0x000F,'\u304E'},
@@ -414,5 +478,7 @@ namespace PkmnFoundations.Support
 			{0x0D4F,'\u1172'},{0x0D50,'\u1173'},{0x0D51,'\u1175'},{0x0D61,'\uB894'},{0x0D62,'\uC330'},{0x0D63,'\uC3BC'},{0x0D64,'\uC4D4'},{0x0D65,'\uCB2C'},
 			{0xE000,'\u000A'},{0x25BC,'\u000D'},{0x25BD,'\u000C'}
 		};
+
+        private static Dictionary<char, ushort> m_lookup_reverse = null;
 	}
 }
