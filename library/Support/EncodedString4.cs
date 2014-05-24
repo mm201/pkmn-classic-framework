@@ -8,12 +8,33 @@ namespace PkmnFoundations.Support
 {
 	public class EncodedString4
     {
+        public EncodedString4(byte[] data)
+        {
+            RawData = data;
+        }
+
+        public EncodedString4(byte[] data, int start, int count)
+        {
+            if (data.Length < start + count) throw new ArgumentOutOfRangeException("count");
+
+            byte[] trim = new byte[count];
+            Array.Copy(data, start, trim, 0, count);
+            AssignData(trim);
+        }
+
+        public EncodedString4(String text)
+        {
+            Text = text;
+        }
+
         // todo: Use pointers for both of these
-		public static string DecodeString(byte[] data, int location, int maxCount)
+		public static string DecodeString(byte[] data, int start, int count)
 		{
+            if (data.Length < start + count) throw new ArgumentOutOfRangeException("count");
+
 			StringBuilder sb = new StringBuilder();
 
-			for (int i = location; i < location + maxCount * 2; i += 2)
+            for (int i = start; i < start + count * 2; i += 2)
 			{
 				ushort gamecode = BitConverter.ToUInt16(data, i);
 				if (gamecode == 0xFFFF) { break; }
@@ -23,6 +44,11 @@ namespace PkmnFoundations.Support
 
 			return sb.ToString();
 		}
+
+        public static String DecodeString(byte[] data)
+        {
+            return DecodeString(data, 0, data.Length);
+        }
 
         public static byte[] EncodeString(string str)
         {
@@ -44,7 +70,7 @@ namespace PkmnFoundations.Support
             get
             {
                 if (m_text == null && m_raw_data == null) return null;
-                if (m_text == null) m_text = DecodeString(m_raw_data, 0, m_raw_data.Length);
+                if (m_text == null) m_text = DecodeString(m_raw_data);
                 return m_text;
             }
             set
@@ -80,17 +106,6 @@ namespace PkmnFoundations.Support
             m_raw_data = null;
         }
 		
-		public EncodedString4(byte[] data)
-		{
-            RawData = data;
-		}
-
-		public EncodedString4(byte[] data, int start, int count)
-		{
-
-            Array.Copy(data, start, m_raw_data, 0, count);
-		}
-
 		public override string ToString()
 		{
 			return Text;
