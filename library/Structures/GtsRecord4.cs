@@ -69,7 +69,7 @@ namespace PkmnFoundations.Structures
         /// <summary>
         /// 16 bytes
         /// </summary>
-        public String4 TrainerName;
+        public EncodedString4 TrainerName;
 
         public ushort TrainerOT;
 
@@ -134,7 +134,7 @@ namespace PkmnFoundations.Structures
             TimeDeposited = TimestampToDate(BitConverter.ToUInt64(data, 0xF8));
             TimeWithdrawn = TimestampToDate(BitConverter.ToUInt64(data, 0x100));
             PID = BitConverter.ToInt32(data, 0x108);
-            TrainerName = new String4(data, 0x10C, 0x10);
+            TrainerName = new EncodedString4(data, 0x10C, 0x10);
             TrainerOT = BitConverter.ToUInt16(data, 0x11C);
             TrainerCountry = data[0x11E];
             TrainerRegion = data[0x11F];

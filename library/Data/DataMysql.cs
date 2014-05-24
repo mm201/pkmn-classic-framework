@@ -314,7 +314,7 @@ namespace PkmnFoundations.Data
 
             data = new byte[16];
             reader.GetBytes(14, 0, data, 0, 16);
-            result.TrainerName = new String4(data);
+            result.TrainerName = new EncodedString4(data);
             data = null;
 
             result.TrainerOT = reader.GetUInt16(15);

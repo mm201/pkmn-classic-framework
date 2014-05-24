@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace PkmnFoundations.Support {
-	public class String4 {
-		public static string GetStringGeneration4(byte[] data, int location, int maxCount)
+namespace PkmnFoundations.Support
+{
+	public class EncodedString4
+    {
+		public static string DecodeString(byte[] data, int location, int maxCount)
 		{
 			StringBuilder sb = new StringBuilder();
 
@@ -20,26 +22,27 @@ namespace PkmnFoundations.Support {
 			return sb.ToString();
 		}
 
-		private byte[] m_rawData;
+		private byte[] m_raw_data;
 		private string m_text;
 
 		public string Text { get { return m_text; } } // Is a setter useful for this?
-		public byte[] RawData { get { return m_rawData; } }
+		public byte[] RawData { get { return m_raw_data; } }
 		
-		public String4(byte[] data)
+		public EncodedString4(byte[] data)
 		{
 			Initialize(data, 0, data.Length);
 		}
-		public String4(byte[] data, int location, int length)
+
+		public EncodedString4(byte[] data, int start, int count)
 		{
-			Initialize(data, location, length);
+			Initialize(data, start, count);
 		}
 
 		private void Initialize(byte[] data, int location, int length)
 		{
-			m_text = GetStringGeneration4(data, location, length);
-			m_rawData = new byte[length];
-			Array.Copy(data, location, m_rawData, 0, length);
+			m_text = DecodeString(data, location, length);
+			m_raw_data = new byte[length];
+			Array.Copy(data, location, m_raw_data, 0, length);
 		}
 
 		public override string ToString()
