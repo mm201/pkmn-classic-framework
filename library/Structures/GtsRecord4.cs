@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Runtime.Serialization;
 using System.IO;
+using PkmnFoundations.Support;
 
 namespace PkmnFoundations.Structures
 {
@@ -68,8 +69,7 @@ namespace PkmnFoundations.Structures
         /// <summary>
         /// 16 bytes
         /// </summary>
-        public byte[] TrainerName; // todo: decode/encode to unicode and provide a String wrapper.
-        // https://github.com/veekun/pokedex/blob/master/pokedex/struct/_pokemon_struct.py
+        public String4 TrainerName;
 
         public ushort TrainerOT;
 
@@ -86,7 +86,7 @@ namespace PkmnFoundations.Structures
         {
             // todo: enclose in properties and validate these when assigning.
             if (Data.Length != 0xEC) throw new FormatException("PKM length is incorrect");
-            if (TrainerName.Length != 0x10) throw new FormatException("Trainer name length is incorrect");
+            if (TrainerName.RawData.Length != 0x10) throw new FormatException("Trainer name length is incorrect");
             byte[] data = new byte[292];
             MemoryStream s = new MemoryStream(data);
             s.Write(Data, 0, 0xEC);
@@ -103,7 +103,7 @@ namespace PkmnFoundations.Structures
             s.Write(BitConverter.GetBytes(DateToTimestamp(TimeDeposited)), 0, 8);
             s.Write(BitConverter.GetBytes(DateToTimestamp(TimeWithdrawn)), 0, 8);
             s.Write(BitConverter.GetBytes(PID), 0, 4);
-            s.Write(TrainerName, 0, 0x10);
+            s.Write(TrainerName.RawData, 0, 0x10);
             s.Write(BitConverter.GetBytes(TrainerOT), 0, 2);
             s.WriteByte(TrainerCountry);
             s.WriteByte(TrainerRegion);
@@ -134,8 +134,7 @@ namespace PkmnFoundations.Structures
             TimeDeposited = TimestampToDate(BitConverter.ToUInt64(data, 0xF8));
             TimeWithdrawn = TimestampToDate(BitConverter.ToUInt64(data, 0x100));
             PID = BitConverter.ToInt32(data, 0x108);
-            TrainerName = new byte[0x10];
-            Array.Copy(data, 0x10C, TrainerName, 0, 0x10);
+            TrainerName = new String4(data, 0x10C, 0x10);
             TrainerOT = BitConverter.ToUInt16(data, 0x11C);
             TrainerCountry = data[0x11E];
             TrainerRegion = data[0x11F];
