@@ -57,7 +57,7 @@ namespace PkmnFoundations.GTS
         protected String CreateTrainer4(object DataItem)
         {
             GtsRecord4 record = (GtsRecord4)DataItem;
-            return record.TrainerName.Text;
+            return Common.HtmlEncode(record.TrainerName.Text);
         }
 
         protected String CreateOffer5(object DataItem)
@@ -75,7 +75,7 @@ namespace PkmnFoundations.GTS
         protected String CreateTrainer5(object DataItem)
         {
             GtsRecord5 record = (GtsRecord5)DataItem;
-            return record.TrainerName.Text;
+            return Common.HtmlEncode(record.TrainerName.Text);
         }
 
 

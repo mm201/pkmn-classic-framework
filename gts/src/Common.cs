@@ -72,6 +72,9 @@ namespace PkmnFoundations.GTS
             return result.ToArray();
         }
 
-
+        public static string HtmlEncode(string s)
+        {
+            return HttpUtility.HtmlEncode(s);
+        }
     }
 }
