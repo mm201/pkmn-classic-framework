@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("bvServer4")]
+[assembly: AssemblyTitle("GlobalTerminalService")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("bvServer4")]
+[assembly: AssemblyProduct("GlobalTerminalService")]
 [assembly: AssemblyCopyright("Copyright ©  2014")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("5f8f1b1e-98ed-4063-acdc-0cdf30f1c421")]
+[assembly: Guid("47274bc4-d452-4eeb-acfb-6aedfe702a65")]
 
 // Version information for an assembly consists of the following four values:
 //

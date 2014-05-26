@@ -15,7 +15,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "sslProxy", "sslProxy\sslPro
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "bvCrawler5", "bvCrawler5\bvCrawler5.csproj", "{BEA49E66-2204-4C10-8ED6-17F58018C2BD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "bvServer4", "bvServer4\bvServer4.csproj", "{1DC69104-D141-4C5E-943D-80F037BD471B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GlobalTerminalService", "GlobalTerminalService\GlobalTerminalService.csproj", "{7AB1A65F-3AD1-4356-94E7-F1A669BF4CE0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -97,16 +97,16 @@ Global
 		{BEA49E66-2204-4C10-8ED6-17F58018C2BD}.Release|Mixed Platforms.Build.0 = Release|x86
 		{BEA49E66-2204-4C10-8ED6-17F58018C2BD}.Release|x86.ActiveCfg = Release|x86
 		{BEA49E66-2204-4C10-8ED6-17F58018C2BD}.Release|x86.Build.0 = Release|x86
-		{1DC69104-D141-4C5E-943D-80F037BD471B}.Debug|Any CPU.ActiveCfg = Debug|x86
-		{1DC69104-D141-4C5E-943D-80F037BD471B}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
-		{1DC69104-D141-4C5E-943D-80F037BD471B}.Debug|Mixed Platforms.Build.0 = Debug|x86
-		{1DC69104-D141-4C5E-943D-80F037BD471B}.Debug|x86.ActiveCfg = Debug|x86
-		{1DC69104-D141-4C5E-943D-80F037BD471B}.Debug|x86.Build.0 = Debug|x86
-		{1DC69104-D141-4C5E-943D-80F037BD471B}.Release|Any CPU.ActiveCfg = Release|x86
-		{1DC69104-D141-4C5E-943D-80F037BD471B}.Release|Mixed Platforms.ActiveCfg = Release|x86
-		{1DC69104-D141-4C5E-943D-80F037BD471B}.Release|Mixed Platforms.Build.0 = Release|x86
-		{1DC69104-D141-4C5E-943D-80F037BD471B}.Release|x86.ActiveCfg = Release|x86
-		{1DC69104-D141-4C5E-943D-80F037BD471B}.Release|x86.Build.0 = Release|x86
+		{7AB1A65F-3AD1-4356-94E7-F1A669BF4CE0}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{7AB1A65F-3AD1-4356-94E7-F1A669BF4CE0}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{7AB1A65F-3AD1-4356-94E7-F1A669BF4CE0}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{7AB1A65F-3AD1-4356-94E7-F1A669BF4CE0}.Debug|x86.ActiveCfg = Debug|x86
+		{7AB1A65F-3AD1-4356-94E7-F1A669BF4CE0}.Debug|x86.Build.0 = Debug|x86
+		{7AB1A65F-3AD1-4356-94E7-F1A669BF4CE0}.Release|Any CPU.ActiveCfg = Release|x86
+		{7AB1A65F-3AD1-4356-94E7-F1A669BF4CE0}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{7AB1A65F-3AD1-4356-94E7-F1A669BF4CE0}.Release|Mixed Platforms.Build.0 = Release|x86
+		{7AB1A65F-3AD1-4356-94E7-F1A669BF4CE0}.Release|x86.ActiveCfg = Release|x86
+		{7AB1A65F-3AD1-4356-94E7-F1A669BF4CE0}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
