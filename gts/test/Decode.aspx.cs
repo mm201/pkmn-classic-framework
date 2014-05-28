@@ -50,7 +50,7 @@ namespace PkmnFoundations.GTS.debug
             {
             }
 
-            if (data == null)
+            if (data == null) try
             {
                 data = DecryptData(txtData.Text);
 
@@ -58,9 +58,24 @@ namespace PkmnFoundations.GTS.debug
                 foreach (byte b in data)
                     checkedsum += b;
 
-                litGeneration.Text = "";
+                litGeneration.Text = "Platinum?";
                 litChecksum.Text = checkedsum.ToString();
                 phChecksum.Visible = true;
+            }
+            catch (FormatException)
+            {
+            }
+
+            if (data == null) try
+            {
+                data = GtsSessionBase.FromUrlSafeBase64String(txtData.Text);
+
+                litGeneration.Text = "Unknown (are you sure this is gamestats data?)";
+                litChecksum.Text = "";
+                phChecksum.Visible = false;
+            }
+            catch (FormatException)
+            {
             }
 
             if (data == null)
