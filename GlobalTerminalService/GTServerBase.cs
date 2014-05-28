@@ -122,6 +122,6 @@ namespace GlobalTerminalService
             else return c.GetStream();
         }
 
-        protected virtual void ProcessRequest(byte[] data, Stream response);
+        protected abstract void ProcessRequest(byte[] data, Stream response);
     }
 }
