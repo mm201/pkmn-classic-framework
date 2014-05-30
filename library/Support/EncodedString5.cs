@@ -37,6 +37,8 @@ namespace PkmnFoundations.Support
             for (int i = start; i < start + count * 2; i += 2)
 			{
 				ushort gamecode = BitConverter.ToUInt16(data, i);
+                // todo: convert some characters via lookup table
+                // http://projectpokemon.org/wiki/Pokemon_Black/White_NDS_Structure#Characters_that_can_be_replaced_in_Unicode
 				if (gamecode == 0xFFFF) { break; }
 				sb.Append((char)gamecode);
 			}
