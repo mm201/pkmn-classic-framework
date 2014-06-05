@@ -1,4 +1,4 @@
-﻿namespace GlobalTerminalService
+﻿namespace PkmnFoundations.GlobalTerminalService
 {
     partial class Service1
     {

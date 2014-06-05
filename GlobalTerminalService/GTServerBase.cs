@@ -8,7 +8,7 @@ using System.Net.Sockets;
 using System.Security.Cryptography.X509Certificates;
 using System.Net.Security;
 
-namespace GlobalTerminalService
+namespace PkmnFoundations.GlobalTerminalService
 {
     public abstract class GTServerBase
     {
@@ -30,7 +30,7 @@ namespace GlobalTerminalService
             m_listener = new TcpListener(port);
             if (UseSsl)
             {
-                m_cert = new X509Certificate2("cert.pfx", "letmein");
+                Certificate = new X509Certificate2("cert.pfx", "letmein");
             }
         }
 
@@ -46,11 +46,12 @@ namespace GlobalTerminalService
             set;
         }
 
+        protected X509Certificate Certificate { get; set; }
+
         private List<Thread> m_workers;
         private object m_lock = new object();
         private bool m_closing;
         private TcpListener m_listener;
-        private X509Certificate m_cert;
 
         public void BeginPolling()
         {
@@ -104,7 +105,8 @@ namespace GlobalTerminalService
                 BitConverter.GetBytes(length).CopyTo(data, 0);
                 s.Read(data, 4, length - 4); // todo: stop DoS by timing out blocking requests
 
-                ProcessRequest(data, s);
+                byte[] response = ProcessRequest(data);
+                s.Write(response, 0, response.Length);
             }
             m_workers.Remove(Thread.CurrentThread);
         }
@@ -116,12 +118,12 @@ namespace GlobalTerminalService
             if (UseSsl)
             {
                 SslStream sslClient = new SslStream(c.GetStream());
-                sslClient.AuthenticateAsServer(m_cert);
+                sslClient.AuthenticateAsServer(Certificate);
                 return sslClient;
             }
             else return c.GetStream();
         }
 
-        protected abstract void ProcessRequest(byte[] data, Stream response);
+        protected abstract byte[] ProcessRequest(byte[] data);
     }
 }

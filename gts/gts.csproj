@@ -64,6 +64,9 @@
     <Content Include="Default.aspx" />
     <Content Include="Global.asax" />
     <Content Include="test\RngTest.aspx" />
+    <None Include="pad.bin">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Web.config">
       <SubType>Designer</SubType>
     </None>
@@ -151,8 +154,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="images\sm-s\" />
-    <Folder Include="images\sm\" />
+    <Folder Include="images\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="MasterPage.master" />

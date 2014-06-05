@@ -7,7 +7,7 @@ using System.Linq;
 using System.ServiceProcess;
 using System.Text;
 
-namespace GlobalTerminalService
+namespace PkmnFoundations.GlobalTerminalService
 {
     public partial class Service1 : ServiceBase
     {

@@ -31,15 +31,6 @@ namespace PkmnFoundations.GTS.debug {
         protected global::System.Web.UI.WebControls.FileUpload fuBox;
         
         /// <summary>
-        /// txtOffset control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtOffset;
-        
-        /// <summary>
         /// btnSend control.
         /// </summary>
         /// <remarks>

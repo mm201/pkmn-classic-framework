@@ -8,8 +8,6 @@
     <div>
     <p>Uplaod your Generation IV box upload, battle video, or dressup capture:</p>
     <asp:FileUpload ID="fuBox" runat="server" />
-    &nbsp;Pad offset:
-    <asp:TextBox ID="txtOffset" runat="server" />
     <asp:Button ID="btnSend" Text="Send" OnClick="btnSend_Click" runat="server" />
     </div>
     <asp:Literal ID="litMessage" runat="server" />
