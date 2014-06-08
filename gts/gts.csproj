@@ -59,6 +59,7 @@
     <Content Include="BattleVideo.aspx" />
     <Content Include="css\main.css" />
     <Content Include="test\BoxUp.aspx" />
+    <Content Include="test\NameDecode.aspx" />
     <Content Include="test\PadMath.aspx" />
     <Content Include="test\Decode.aspx" />
     <Content Include="Default.aspx" />
@@ -100,6 +101,13 @@
     </Compile>
     <Compile Include="test\BoxUp.aspx.designer.cs">
       <DependentUpon>BoxUp.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="test\NameDecode.aspx.cs">
+      <DependentUpon>NameDecode.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="test\NameDecode.aspx.designer.cs">
+      <DependentUpon>NameDecode.aspx</DependentUpon>
     </Compile>
     <Compile Include="test\PadMath.aspx.cs">
       <DependentUpon>PadMath.aspx</DependentUpon>
