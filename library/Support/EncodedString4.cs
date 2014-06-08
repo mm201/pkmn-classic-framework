@@ -47,7 +47,7 @@ namespace PkmnFoundations.Support
 
         public static String DecodeString(byte[] data)
         {
-            return DecodeString(data, 0, data.Length);
+            return DecodeString(data, 0, data.Length >> 1);
         }
 
         public static byte[] EncodeString(string str)
