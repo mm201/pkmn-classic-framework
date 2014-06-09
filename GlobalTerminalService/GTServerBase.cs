@@ -67,6 +67,7 @@ namespace PkmnFoundations.GlobalTerminalService
                 for (int x = 0; x < Threads; x++)
                 {
                     Thread t = new Thread(MainLoop);
+                    m_workers.Add(t);
                     t.Start();
                 }
             }
