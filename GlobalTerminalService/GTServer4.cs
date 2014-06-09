@@ -91,6 +91,14 @@ namespace PkmnFoundations.GlobalTerminalService
             }
         }
 
+        public override string Title
+        {
+            get
+            {
+                return "Generation IV Global Terminal";
+            }
+        }
+
         private byte[] m_pad;
     }
 

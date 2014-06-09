@@ -7,6 +7,7 @@ using System.Threading;
 using System.Net.Sockets;
 using System.Security.Cryptography.X509Certificates;
 using System.Net.Security;
+using System.Net;
 
 namespace PkmnFoundations.GlobalTerminalService
 {
@@ -59,6 +60,8 @@ namespace PkmnFoundations.GlobalTerminalService
             {
                 if (m_workers.Count > 0) return;
 
+                Console.WriteLine("{0} server running on port {1} with {2} threads.", Title, ((IPEndPoint)m_listener.LocalEndpoint).Port, Threads);
+
                 m_closing = false;
                 m_listener.Start();
                 for (int x = 0; x < Threads; x++)
@@ -84,6 +87,9 @@ namespace PkmnFoundations.GlobalTerminalService
 
         private void MainLoop(object o)
         {
+            int threadIndex = m_workers.IndexOf(Thread.CurrentThread);
+            Console.WriteLine("Thread {0} begins.", threadIndex);
+
             while (!m_closing)
             {
                 if (!m_listener.Pending())
@@ -108,6 +114,8 @@ namespace PkmnFoundations.GlobalTerminalService
                 byte[] response = ProcessRequest(data);
                 s.Write(response, 0, response.Length);
             }
+
+            Console.WriteLine("Thread {0} ends.", threadIndex);
             m_workers.Remove(Thread.CurrentThread);
         }
 
@@ -125,5 +133,7 @@ namespace PkmnFoundations.GlobalTerminalService
         }
 
         protected abstract byte[] ProcessRequest(byte[] data);
+
+        public abstract String Title { get; }
     }
 }

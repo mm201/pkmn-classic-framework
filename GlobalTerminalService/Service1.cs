@@ -16,12 +16,22 @@ namespace PkmnFoundations.GlobalTerminalService
             InitializeComponent();
         }
 
+        private GTServer4 m_server;
+
         protected override void OnStart(string[] args)
         {
+            Start();
+        }
+
+        public void Start()
+        {
+            m_server = new GTServer4();
+            m_server.BeginPolling();
         }
 
         protected override void OnStop()
         {
+            if (m_server != null) m_server.EndPolling();
         }
     }
 }
