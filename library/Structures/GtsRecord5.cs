@@ -13,7 +13,6 @@ namespace PkmnFoundations.Structures
     /// Includes a Pokémon box structure and metadata related to the trainer
     /// and request.
     /// </summary>
-    [Serializable()]
     public class GtsRecord5
     {
         public GtsRecord5()
