@@ -369,7 +369,6 @@ namespace PkmnFoundations.Data
         #endregion
 
         #region GTS 5
-
         public GtsRecord5 GtsDataForUser5(MySqlTransaction tran, int pid)
         {
             MySqlDataReader reader = (MySqlDataReader)tran.ExecuteReader("SELECT Data, Unknown0, " +
@@ -711,6 +710,45 @@ namespace PkmnFoundations.Data
                 return (int)(long)db.ExecuteScalar("SELECT Count(*) FROM GtsPokemon5 WHERE IsExchanged = 0");
             }
         }
+        #endregion
+
+        #region Global Terminal 4
+        public override long DressupUpload4(int pid, byte[] data)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override DressupRecord4[] DressupSearch4(ushort species, int count)
+        {
+            using (MySqlConnection db = CreateConnection())
+            {
+                db.Open();
+
+                List<DressupRecord4> results = new List<DressupRecord4>(count);
+                MySqlDataReader reader = (MySqlDataReader)db.ExecuteReader("SELECT pid, " +
+                    "SerialNumber, Data FROM TerminalDressup4 WHERE Species = @species " +
+                    "ORDER BY TimeAdded DESC LIMIT @count", 
+                    new MySqlParameter("@species", species), 
+                    new MySqlParameter("@count", count));
+                while (reader.Read())
+                {
+                    results.Add(Dressup4FromReader(reader));
+                }
+
+                reader.Close();
+                db.Close();
+                return results.ToArray();
+            }
+        }
+
+        private DressupRecord4 Dressup4FromReader(MySqlDataReader reader)
+        {
+            byte[] data = new byte[224];
+            reader.GetBytes(2, 0, data, 0, 224);
+
+            return new DressupRecord4(reader.GetInt32(0), reader.GetInt64(1), data);
+        }
+
         #endregion
     }
 }

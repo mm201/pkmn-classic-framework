@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using PkmnFoundations.Support;
+using PkmnFoundations.Structures;
+using PkmnFoundations.Data;
 
 namespace PkmnFoundations.GlobalTerminalService
 {
@@ -38,15 +40,64 @@ namespace PkmnFoundations.GlobalTerminalService
             AssertHelper.Equals(length, data.Length);
 
             RequestTypes4 requestType = (RequestTypes4)data[4];
+            Console.WriteLine("Handling Generation IV {0} request.", requestType);
+
             MemoryStream response = new MemoryStream();
             response.Write(new byte[] { 0x00, 0x00, 0x00, 0x00 }, 0, 4); // placeholder for length
             response.WriteByte((byte)requestType);
             response.WriteByte(Byte6(requestType));
 
-            // todo: implement each of the request types here
-            switch (requestType)
+            try
             {
+                // todo: implement each of the request types here
+                switch (requestType)
+                {
+                    case RequestTypes4.BoxUpload:
+                    {
 
+                    } break;
+                    case RequestTypes4.BoxSearch:
+                    {
+
+                    } break;
+                    case RequestTypes4.DressupUpload:
+                    {
+
+                    } break;
+                    case RequestTypes4.DressupSearch:
+                    {
+                        // todo: validate or log some of this?
+                        ushort species = BitConverter.ToUInt16(data, 0x144);
+
+                        DressupRecord4[] results = DataAbstract.Instance.DressupSearch4(species, 10);
+                        response.Write(new byte[] { 0x00, 0x00 }, 0, 2); // result code (0 for OK)
+                        response.Write(BitConverter.GetBytes(results.Length), 0, 4);
+
+                        foreach (DressupRecord4 result in results)
+                        {
+                            response.Write(BitConverter.GetBytes(result.PID), 0, 4);
+                            response.Write(BitConverter.GetBytes(result.SerialNumber), 0, 8);
+                            response.Write(result.Data, 0, 224);
+                        }
+
+                    } break;
+                    case RequestTypes4.BattleVideoUpload:
+                    {
+
+                    } break;
+                    case RequestTypes4.BattleVideoSearch:
+                    {
+
+                    } break;
+                    case RequestTypes4.BattleVideoWatch:
+                    {
+
+                    } break;
+                }
+            }
+            catch
+            {
+                response.Write(new byte[] { 0x02, 0x00 }, 0, 2);
             }
 
             response.Flush();

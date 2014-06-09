@@ -17,6 +17,7 @@ namespace PkmnFoundations.Data
         {
             get
             {
+                // fixme: this is not thread safe
                 if (m_instance == null)
                 {
                     m_instance = CreateInstance();
@@ -45,7 +46,7 @@ namespace PkmnFoundations.Data
         #region Utility
         #endregion
 
-        #region GTS
+        #region GTS 4
         public abstract GtsRecord4 GtsDataForUser4(int pid);
 
         public abstract bool GtsDepositPokemon4(GtsRecord4 record);
@@ -57,7 +58,9 @@ namespace PkmnFoundations.Data
 
         public abstract GtsRecord4[] GtsSearch4(int pid, ushort species, Genders gender, byte minLevel, byte maxLevel, byte country, int count);
         public abstract int GtsAvailablePokemon4();
+        #endregion
 
+        #region GTS 5
         public abstract GtsRecord5 GtsDataForUser5(int pid);
 
         public abstract bool GtsDepositPokemon5(GtsRecord5 record);
@@ -69,6 +72,12 @@ namespace PkmnFoundations.Data
 
         public abstract GtsRecord5[] GtsSearch5(int pid, ushort species, Genders gender, byte minLevel, byte maxLevel, byte country, int count);
         public abstract int GtsAvailablePokemon5();
+        #endregion
+
+        #region Global Terminal 4
+        public abstract long DressupUpload4(int pid, byte[] data);
+        public abstract DressupRecord4[] DressupSearch4(ushort species, int count);
+
 
         #endregion
     }
