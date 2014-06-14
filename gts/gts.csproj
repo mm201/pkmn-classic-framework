@@ -60,11 +60,9 @@
     <Content Include="css\main.css" />
     <Content Include="test\BoxUp.aspx" />
     <Content Include="test\NameDecode.aspx" />
-    <Content Include="test\PadMath.aspx" />
     <Content Include="test\Decode.aspx" />
     <Content Include="Default.aspx" />
     <Content Include="Global.asax" />
-    <Content Include="test\RngTest.aspx" />
     <None Include="pad.bin">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -109,13 +107,6 @@
     <Compile Include="test\NameDecode.aspx.designer.cs">
       <DependentUpon>NameDecode.aspx</DependentUpon>
     </Compile>
-    <Compile Include="test\PadMath.aspx.cs">
-      <DependentUpon>PadMath.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="test\PadMath.aspx.designer.cs">
-      <DependentUpon>PadMath.aspx</DependentUpon>
-    </Compile>
     <Compile Include="test\Decode.aspx.cs">
       <DependentUpon>Decode.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -152,13 +143,6 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="src\GtsSessionManager.cs" />
-    <Compile Include="test\RngTest.aspx.cs">
-      <DependentUpon>RngTest.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="test\RngTest.aspx.designer.cs">
-      <DependentUpon>RngTest.aspx</DependentUpon>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
