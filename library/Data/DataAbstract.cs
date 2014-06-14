@@ -47,6 +47,8 @@ namespace PkmnFoundations.Data
         #endregion
 
         #region GTS 4
+        public readonly const int GTS_VERSION_4 = 0;
+
         public abstract GtsRecord4 GtsDataForUser4(int pid);
 
         public abstract bool GtsDepositPokemon4(GtsRecord4 record);
@@ -61,6 +63,8 @@ namespace PkmnFoundations.Data
         #endregion
 
         #region GTS 5
+        public readonly const int GTS_VERSION_5 = 0;
+
         public abstract GtsRecord5 GtsDataForUser5(int pid);
 
         public abstract bool GtsDepositPokemon5(GtsRecord5 record);
@@ -75,8 +79,12 @@ namespace PkmnFoundations.Data
         #endregion
 
         #region Global Terminal 4
-        public abstract long DressupUpload4(int pid, byte[] data);
+        public readonly const int DRESSUP_VERSION_4 = 1;
+
+        public abstract long DressupUpload4(DressupRecord4 record);
         public abstract DressupRecord4[] DressupSearch4(ushort species, int count);
+
+
 
 
         #endregion

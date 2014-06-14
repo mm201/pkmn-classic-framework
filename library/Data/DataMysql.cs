@@ -6,6 +6,7 @@ using System.Data;
 using MySql.Data.MySqlClient;
 using PkmnFoundations.Structures;
 using PkmnFoundations.Support;
+using System.Security.Cryptography;
 
 namespace PkmnFoundations.Data
 {
@@ -713,9 +714,27 @@ namespace PkmnFoundations.Data
         #endregion
 
         #region Global Terminal 4
-        public override long DressupUpload4(int pid, byte[] data)
+        public override long DressupUpload4(DressupRecord4 record)
         {
-            throw new NotImplementedException();
+            if (record.Data.Length != 224) throw new ArgumentException("Dressup data must be 224 bytes.");
+            using (MySqlConnection db = CreateConnection())
+            {
+                db.Open();
+                using (MySqlTransaction tran = db.BeginTransaction())
+                {
+                    byte exists = (byte)tran.ExecuteScalar("SELECT EXISTS(SELECT * FROM TerminalDressup4 WHERE Data = @data)", new MySqlParameter("@data", record.Data));
+                    if (exists != 0) return 0;
+
+                    long serial = (long)tran.ExecuteScalar("INSERT INTO TerminalDressup4 (pid, " +
+                        "Data, TimeAdded, ParseVersion, Species) VALUES (@pid, @data, " +
+                        "GETUTCDATE(), 1, @species); SELECT LAST_INSERT_ID()",
+                        new MySqlParameter("@pid", record.PID), 
+                        new MySqlParameter("@data", record.Data),
+                        new MySqlParameter("@species", record.Species));
+                    tran.Commit();
+                    return serial;
+                }
+            }
         }
 
         public override DressupRecord4[] DressupSearch4(ushort species, int count)

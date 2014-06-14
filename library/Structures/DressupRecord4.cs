@@ -13,7 +13,7 @@ namespace PkmnFoundations.Structures
 
         public DressupRecord4(int pid, long serial_number, byte[] data)
         {
-            if (data.Length != 224) throw new ArgumentException("data");
+            if (data.Length != 224) throw new ArgumentException("Dressup data must be 224 bytes.");
 
             PID = pid;
             SerialNumber = serial_number;

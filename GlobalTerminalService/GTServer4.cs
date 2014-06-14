@@ -62,10 +62,36 @@ namespace PkmnFoundations.GlobalTerminalService
                     } break;
                     case RequestTypes4.DressupUpload:
                     {
+                        if (data.Length != 0x220)
+                        {
+                            response.Write(new byte[] { 0x02, 0x00 }, 0, 2);
+                            break;
+                        }
+
+                        int pid = BitConverter.ToInt32(data, 8);
+                        byte[] dressupData = new byte[0xe0];
+                        Array.Copy(data, 0x140, dressupData, 0, 0xe0);
+                        DressupRecord4 record = new DressupRecord4(pid, 0, dressupData);
+                        long serial = DataAbstract.Instance.DressupUpload4(record);
+
+                        if (serial == 0)
+                        {
+                            response.Write(new byte[] { 0x02, 0x00 }, 0, 2);
+                            break;
+                        }
+
+                        response.Write(new byte[] { 0x00, 0x00 }, 0, 2); // result code (0 for OK)
+                        response.Write(BitConverter.GetBytes(serial), 0, 8);
 
                     } break;
                     case RequestTypes4.DressupSearch:
                     {
+                        if (data.Length != 0x14c)
+                        {
+                            response.Write(new byte[] { 0x02, 0x00 }, 0, 2);
+                            break;
+                        }
+
                         // todo: validate or log some of this?
                         ushort species = BitConverter.ToUInt16(data, 0x144);
 
@@ -77,7 +103,7 @@ namespace PkmnFoundations.GlobalTerminalService
                         {
                             response.Write(BitConverter.GetBytes(result.PID), 0, 4);
                             response.Write(BitConverter.GetBytes(result.SerialNumber), 0, 8);
-                            response.Write(result.Data, 0, 224);
+                            response.Write(result.Data, 0, 0xe0);
                         }
 
                     } break;

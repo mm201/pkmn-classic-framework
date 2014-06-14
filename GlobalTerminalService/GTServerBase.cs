@@ -111,6 +111,7 @@ namespace PkmnFoundations.GlobalTerminalService
                 data = new byte[length];
                 BitConverter.GetBytes(length).CopyTo(data, 0);
                 s.Read(data, 4, length - 4); // todo: stop DoS by timing out blocking requests
+                // todo after that: ban IPs that make lots of blocking requests
 
                 byte[] response = ProcessRequest(data);
                 s.Write(response, 0, response.Length);
