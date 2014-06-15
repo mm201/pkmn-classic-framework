@@ -722,17 +722,33 @@ namespace PkmnFoundations.Data
                 db.Open();
                 using (MySqlTransaction tran = db.BeginTransaction())
                 {
-                    byte exists = (byte)tran.ExecuteScalar("SELECT EXISTS(SELECT * FROM TerminalDressup4 WHERE Data = @data)", new MySqlParameter("@data", record.Data));
+                    long exists = (long)tran.ExecuteScalar("SELECT EXISTS(SELECT * FROM TerminalDressup4 WHERE Data = @data)", new MySqlParameter("@data", record.Data));
                     if (exists != 0) return 0;
 
-                    long serial = (long)tran.ExecuteScalar("INSERT INTO TerminalDressup4 (pid, " +
-                        "Data, TimeAdded, ParseVersion, Species) VALUES (@pid, @data, " +
-                        "GETUTCDATE(), 1, @species); SELECT LAST_INSERT_ID()",
-                        new MySqlParameter("@pid", record.PID), 
-                        new MySqlParameter("@data", record.Data),
-                        new MySqlParameter("@species", record.Species));
-                    tran.Commit();
-                    return serial;
+                    if (record.SerialNumber == 0)
+                    {
+                        long serial = (long)tran.ExecuteScalar("INSERT INTO TerminalDressup4 (pid, " +
+                            "Data, TimeAdded, ParseVersion, Species) VALUES (@pid, @data, " +
+                            "UTC_TIMESTAMP(), 1, @species); SELECT LAST_INSERT_ID()",
+                            new MySqlParameter("@pid", record.PID),
+                            new MySqlParameter("@data", record.Data),
+                            new MySqlParameter("@species", record.Species));
+                        tran.Commit();
+                        return serial;
+                    }
+                    else
+                    {
+                        int rows = tran.ExecuteNonQuery("INSERT INTO TerminalDressup4 (pid, SerialNumber, " +
+                            "Data, TimeAdded, ParseVersion, Species) VALUES (@pid, @serial, @data, " +
+                            "UTC_TIMESTAMP(), 1, @species); SELECT LAST_INSERT_ID()",
+                            new MySqlParameter("@pid", record.PID),
+                            new MySqlParameter("@serial", record.SerialNumber),
+                            new MySqlParameter("@data", record.Data),
+                            new MySqlParameter("@species", record.Species));
+                        tran.Commit();
+
+                        return rows > 0 ? record.SerialNumber : 0;
+                    }
                 }
             }
         }

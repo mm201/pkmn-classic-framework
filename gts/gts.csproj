@@ -58,6 +58,7 @@
     <Content Include="AllPokemon.aspx" />
     <Content Include="BattleVideo.aspx" />
     <Content Include="css\main.css" />
+    <Content Include="test\AddDressup.aspx" />
     <Content Include="test\BoxUp.aspx" />
     <Content Include="test\NameDecode.aspx" />
     <Content Include="test\Decode.aspx" />
@@ -93,6 +94,13 @@
     </Compile>
     <Compile Include="src\GamestatsSessionPlat.cs" />
     <Compile Include="src\HeaderColour.cs" />
+    <Compile Include="test\AddDressup.aspx.cs">
+      <DependentUpon>AddDressup.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="test\AddDressup.aspx.designer.cs">
+      <DependentUpon>AddDressup.aspx</DependentUpon>
+    </Compile>
     <Compile Include="test\BoxUp.aspx.cs">
       <DependentUpon>BoxUp.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
