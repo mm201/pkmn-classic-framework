@@ -42,6 +42,8 @@ namespace PkmnFoundations.GlobalTerminalService
             RequestTypes4 requestType = (RequestTypes4)data[4];
             Console.WriteLine("Handling Generation IV {0} request.", requestType);
 
+            CryptMessage(data);
+
             MemoryStream response = new MemoryStream();
             response.Write(new byte[] { 0x00, 0x00, 0x00, 0x00 }, 0, 4); // placeholder for length
             response.WriteByte((byte)requestType);
@@ -76,10 +78,12 @@ namespace PkmnFoundations.GlobalTerminalService
 
                         if (serial == 0)
                         {
+                            Console.WriteLine("Uploaded dressup already in server.");
                             response.Write(new byte[] { 0x02, 0x00 }, 0, 2);
                             break;
                         }
 
+                        Console.WriteLine("Dressup uploaded successfully.");
                         response.Write(new byte[] { 0x00, 0x00 }, 0, 2); // result code (0 for OK)
                         response.Write(BitConverter.GetBytes(serial), 0, 8);
 
@@ -105,6 +109,7 @@ namespace PkmnFoundations.GlobalTerminalService
                             response.Write(BitConverter.GetBytes(result.SerialNumber), 0, 8);
                             response.Write(result.Data, 0, 0xe0);
                         }
+                        Console.WriteLine("Retrieved {0} dressup results.", results.Length);
 
                     } break;
                     case RequestTypes4.BattleVideoUpload:
