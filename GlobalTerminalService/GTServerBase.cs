@@ -106,11 +106,11 @@ namespace PkmnFoundations.GlobalTerminalService
                 }
 
                 byte[] data = new byte[4];
-                s.Read(data, 0, 4);
+                ReadAll(s, data, 0, 4);
                 int length = BitConverter.ToInt32(data, 0);
                 data = new byte[length];
                 BitConverter.GetBytes(length).CopyTo(data, 0);
-                s.Read(data, 4, length - 4); // todo: stop DoS by timing out blocking requests
+                ReadAll(s, data, 4, length - 4); // todo: stop DoS by timing out blocking requests
                 // todo after that: ban IPs that make lots of blocking requests
 
                 byte[] response = ProcessRequest(data);
@@ -137,5 +137,21 @@ namespace PkmnFoundations.GlobalTerminalService
         protected abstract byte[] ProcessRequest(byte[] data);
 
         public abstract String Title { get; }
+
+        /// <summary>
+        /// Reads bytes from a stream and waits until it can read them all.
+        /// </summary>
+        /// <param name="s"></param>
+        /// <param name="buffer"></param>
+        /// <param name="offset"></param>
+        /// <param name="count"></param>
+        public static void ReadAll(Stream s, byte[] buffer, int offset, int count)
+        {
+            int readBytes = 0;
+            while (readBytes < count)
+            {
+                readBytes += s.Read(buffer, offset + readBytes, count - readBytes);
+            }
+        }
     }
 }
