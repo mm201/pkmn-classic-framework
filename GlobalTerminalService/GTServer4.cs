@@ -121,8 +121,9 @@ namespace PkmnFoundations.GlobalTerminalService
                     } break;
                 }
             }
-            catch
+            catch (Exception ex)
             {
+                Console.WriteLine(ex.ToString());
                 response.Write(new byte[] { 0x02, 0x00 }, 0, 2);
             }
 
