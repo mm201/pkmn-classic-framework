@@ -145,13 +145,16 @@ namespace PkmnFoundations.GlobalTerminalService
         /// <param name="buffer"></param>
         /// <param name="offset"></param>
         /// <param name="count"></param>
-        public static void ReadAll(Stream s, byte[] buffer, int offset, int count)
+        public static bool ReadAll(Stream s, byte[] buffer, int offset, int count)
         {
             int readBytes = 0;
             while (readBytes < count)
             {
-                readBytes += s.Read(buffer, offset + readBytes, count - readBytes);
+                int x = s.Read(buffer, offset + readBytes, count - readBytes);
+                if (x == 0) return false;
+                readBytes += x;
             }
+            return true;
         }
     }
 }
