@@ -56,10 +56,55 @@ namespace PkmnFoundations.GlobalTerminalService
                 {
                     case RequestTypes4.BoxUpload:
                     {
+                        if (data.Length != 0x360)
+                        {
+                            response.Write(new byte[] { 0x02, 0x00 }, 0, 2);
+                            break;
+                        }
+
+                        int pid = BitConverter.ToInt32(data, 8);
+                        BoxLabels4 label = (BoxLabels4)BitConverter.ToInt32(data, 0x140);
+                        byte[] boxData = new byte[0x21c];
+                        Array.Copy(data, 0x144, boxData, 0, 0x21c);
+                        BoxRecord4 record = new BoxRecord4(pid, label, 0, boxData);
+                        long serial = DataAbstract.Instance.BoxUpload4(record);
+
+                        if (serial == 0)
+                        {
+                            Console.WriteLine("Uploaded box already in server.");
+                            response.Write(new byte[] { 0x02, 0x00 }, 0, 2);
+                            break;
+                        }
+
+                        Console.WriteLine("Box uploaded successfully.");
+                        response.Write(new byte[] { 0x00, 0x00 }, 0, 2); // result code (0 for OK)
+                        response.Write(BitConverter.GetBytes(serial), 0, 8);
 
                     } break;
                     case RequestTypes4.BoxSearch:
                     {
+                        if (data.Length != 0x14c)
+                        {
+                            response.Write(new byte[] { 0x02, 0x00 }, 0, 2);
+                            break;
+                        }
+
+                        // todo: validate or log some of this?
+                        BoxLabels4 label = (BoxLabels4)BitConverter.ToInt32(data, 0x144);
+
+                        BoxRecord4[] results = DataAbstract.Instance.BoxSearch4(label, 20);
+                        response.Write(new byte[] { 0x00, 0x00 }, 0, 2); // result code (0 for OK)
+                        response.Write(BitConverter.GetBytes(results.Length), 0, 4);
+
+                        foreach (BoxRecord4 result in results)
+                        {
+                            response.Write(BitConverter.GetBytes(result.PID), 0, 4);
+                            response.Write(BitConverter.GetBytes((int)result.Label), 0, 4);
+                            response.Write(BitConverter.GetBytes(result.SerialNumber), 0, 8);
+                            response.Write(result.Data, 0, 0x21c);
+                        }
+                        Console.WriteLine("Retrieved {0} boxes.", results.Length);
+
 
                     } break;
                     case RequestTypes4.DressupUpload:

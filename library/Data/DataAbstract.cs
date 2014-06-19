@@ -84,7 +84,8 @@ namespace PkmnFoundations.Data
         public abstract long DressupUpload4(DressupRecord4 record);
         public abstract DressupRecord4[] DressupSearch4(ushort species, int count);
 
-
+        public abstract long BoxUpload4(BoxRecord4 record);
+        public abstract BoxRecord4[] BoxSearch4(BoxLabels4 label, int count);
 
 
         #endregion

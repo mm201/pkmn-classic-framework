@@ -784,6 +784,77 @@ namespace PkmnFoundations.Data
             return new DressupRecord4(reader.GetInt32(0), reader.GetInt64(1), data);
         }
 
+        public override long BoxUpload4(BoxRecord4 record)
+        {
+            if (record.Data.Length != 540) throw new ArgumentException("Box data must be 540 bytes.");
+            using (MySqlConnection db = CreateConnection())
+            {
+                db.Open();
+                using (MySqlTransaction tran = db.BeginTransaction())
+                {
+                    long exists = (long)tran.ExecuteScalar("SELECT EXISTS(SELECT * FROM TerminalBoxes4 WHERE Data = @data)", new MySqlParameter("@data", record.Data));
+                    if (exists != 0) return 0;
+
+                    if (record.SerialNumber == 0)
+                    {
+                        long serial = (long)tran.ExecuteScalar("INSERT INTO TerminalBoxes4 (pid, " +
+                            "Data, TimeAdded, ParseVersion, Label) VALUES (@pid, @data, " +
+                            "UTC_TIMESTAMP(), 1, @label); SELECT LAST_INSERT_ID()",
+                            new MySqlParameter("@pid", record.PID),
+                            new MySqlParameter("@data", record.Data),
+                            new MySqlParameter("@label", (int)record.Label));
+                        tran.Commit();
+                        return serial;
+                    }
+                    else
+                    {
+                        int rows = tran.ExecuteNonQuery("INSERT INTO TerminalBoxes4 (pid, SerialNumber, " +
+                            "Data, TimeAdded, ParseVersion, Label) VALUES (@pid, @serial, @data, " +
+                            "UTC_TIMESTAMP(), 1, @label); SELECT LAST_INSERT_ID()",
+                            new MySqlParameter("@pid", record.PID),
+                            new MySqlParameter("@serial", record.SerialNumber),
+                            new MySqlParameter("@data", record.Data),
+                            new MySqlParameter("@label", (int)record.Label));
+                        tran.Commit();
+
+                        return rows > 0 ? record.SerialNumber : 0;
+                    }
+                }
+            }
+        }
+
+        public override BoxRecord4[] BoxSearch4(BoxLabels4 label, int count)
+        {
+            using (MySqlConnection db = CreateConnection())
+            {
+                db.Open();
+
+                List<BoxRecord4> results = new List<BoxRecord4>(count);
+                MySqlDataReader reader = (MySqlDataReader)db.ExecuteReader("SELECT pid, " +
+                    "Label, SerialNumber, Data FROM TerminalBoxes4 WHERE Label = @label " +
+                    "ORDER BY TimeAdded DESC LIMIT @count",
+                    new MySqlParameter("@label", (int)label),
+                    new MySqlParameter("@count", count));
+                while (reader.Read())
+                {
+                    results.Add(Box4FromReader(reader));
+                }
+
+                reader.Close();
+                db.Close();
+                return results.ToArray();
+            }
+        }
+
+        private BoxRecord4 Box4FromReader(MySqlDataReader reader)
+        {
+            byte[] data = new byte[540];
+            reader.GetBytes(3, 0, data, 0, 540);
+
+            return new BoxRecord4(reader.GetInt32(0), (BoxLabels4)reader.GetInt32(1), reader.GetInt64(2), data);
+        }
+
+
         #endregion
     }
 }
