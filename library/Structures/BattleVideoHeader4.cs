@@ -172,7 +172,7 @@ namespace PkmnFoundations.Structures
                 throw new ArgumentOutOfRangeException();
 
             byte[] serialDigits = LongToDigits(serial);
-            byte[] templateDigits = m_templates[serialDigits[11]].ToArray();
+            byte[] templateDigits = m_templates[serialDigits[11]];
 
             serialDigits[0] = (byte)(10 + templateDigits[0] - serialDigits[0]);
             for (int x = 1; x < 11; x++)
