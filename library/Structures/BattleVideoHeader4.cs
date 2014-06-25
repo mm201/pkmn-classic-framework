@@ -67,19 +67,6 @@ namespace PkmnFoundations.Structures
             return new BattleVideoHeader4(PID, SerialNumber, Data.ToArray());
         }
 
-        private static byte[][] m_templates = new byte[][]{
-            new byte[]{6, 0, 4, 7, 2, 3, 8, 1, 3, 6, 5, 0},
-            new byte[]{9, 1, 8, 3, 7, 3, 5, 5, 2, 8, 5, 1},
-            new byte[]{2, 5, 0, 8, 4, 9, 6, 3, 7, 8, 8, 2},
-            new byte[]{1, 5, 2, 8, 7, 4, 0, 2, 3, 1, 6, 3},
-            new byte[]{5, 7, 5, 3, 0, 0, 8, 9, 5, 0, 2, 4},
-            new byte[]{1, 6, 2, 1, 0, 8, 9, 2, 7, 7, 6, 5},
-            new byte[]{9, 9, 8, 5, 5, 5, 4, 0, 7, 6, 0, 6},
-            new byte[]{7, 4, 8, 8, 6, 7, 8, 2, 2, 3, 6, 7},
-            new byte[]{3, 7, 8, 3, 4, 3, 5, 1, 9, 3, 8, 8},
-            new byte[]{3, 2, 0, 2, 8, 0, 0, 7, 7, 9, 7, 9}
-        };
-
         #region ID number calculation
         // Generating battle video IDs:
         //
@@ -92,8 +79,9 @@ namespace PkmnFoundations.Structures
         // hardcoded random-looking numbers. The rightmost digit of each 
         // template is undefined/unused. The leftmost digit is never 0.
         //
-        // The Key’s tens place is used as a constant to roll each of the 
-        // digits in the Template by. Here, rolling means adding in mod-10.
+        // The Key’s tens place and hundreds place are added together mod-10 to
+        // get a constant which is used to roll each of the digits in the
+        // Template by. Here, rolling means adding in mod-10.
         //
         // The Template’s leftmost digit is rolled in mod-9 instead of 10.
         // (While rolling, skip the number 0.) If the value in the 
@@ -122,6 +110,18 @@ namespace PkmnFoundations.Structures
         // For each remaining digit, roll the Template *backwards* a number of
         // times equal to the Key’s digit in that place.
 
+        private static byte[][] m_templates = new byte[][]{
+            new byte[]{6, 9, 3, 6, 1, 2, 7, 5, 2, 2, 4, 0},
+            new byte[]{8, 0, 7, 2, 6, 2, 4, 9, 1, 4, 4, 1},
+            new byte[]{1, 4, 9, 7, 3, 8, 5, 7, 6, 4, 7, 2},
+            new byte[]{9, 4, 1, 7, 6, 3, 9, 6, 2, 7, 5, 3},
+            new byte[]{4, 6, 4, 2, 9, 9, 7, 3, 4, 6, 1, 4},
+            new byte[]{9, 5, 1, 0, 9, 7, 8, 6, 6, 3, 5, 5},
+            new byte[]{8, 8, 7, 4, 4, 4, 3, 4, 6, 2, 9, 6},
+            new byte[]{6, 3, 7, 7, 5, 6, 7, 6, 1, 9, 5, 7},
+            new byte[]{2, 6, 7, 2, 3, 2, 4, 5, 8, 9, 7, 8},
+            new byte[]{2, 1, 9, 1, 7, 9, 9, 1, 6, 5, 6, 9}
+        };
 
         /// <summary>
         /// Converts a primary key (auto incrementing) into a Battle Video ID.
@@ -133,7 +133,10 @@ namespace PkmnFoundations.Structures
             byte[] keyDigits = LongToDigits(key);
             byte[] serialDigits = m_templates[keyDigits[11]].ToArray();
 
-            byte valueShift = keyDigits[10];
+            byte valueShift = 0;
+            valueShift += keyDigits[9];
+            valueShift += keyDigits[10];
+            valueShift %= 10;
 
             if (valueShift + serialDigits[1] > 9)
                 serialDigits[0]--;
@@ -193,7 +196,8 @@ namespace PkmnFoundations.Structures
             {
                 serialDigits[x] = serialDigits[x + 1];
             }
-            serialDigits[10] = (byte)((10 - valueShift) % 10);
+
+            serialDigits[10] = (byte)((20 - valueShift - serialDigits[9]) % 10);
 
             return DigitsToLong(serialDigits);
         }
