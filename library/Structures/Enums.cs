@@ -26,6 +26,15 @@ namespace PkmnFoundations.Structures
         Generation6 = 32
     }
 
+    public enum Versions
+    {
+        Diamond = 0x0a,
+        Pearl = 0x0b,
+        Platinum = 0x0c,
+        HeartGold = 0x07,
+        SoulSilver = 0x08
+    }
+
     public enum EvolutionTriggers
     {
         Level = 1,
