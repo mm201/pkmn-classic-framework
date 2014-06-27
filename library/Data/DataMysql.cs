@@ -722,14 +722,14 @@ namespace PkmnFoundations.Data
                 db.Open();
                 using (MySqlTransaction tran = db.BeginTransaction())
                 {
-                    long exists = (long)tran.ExecuteScalar("SELECT EXISTS(SELECT * FROM TerminalDressup4 WHERE Data = @data)", new MySqlParameter("@data", record.Data));
+                    long exists = (long)tran.ExecuteScalar("SELECT EXISTS(SELECT * FROM TerminalDressup4 WHERE md5 = unhex(md5(@data)) AND Data = @data)", new MySqlParameter("@data", record.Data));
                     if (exists != 0) return 0;
 
                     if (record.SerialNumber == 0)
                     {
                         long serial = (long)tran.ExecuteScalar("INSERT INTO TerminalDressup4 (pid, " +
-                            "Data, TimeAdded, ParseVersion, Species) VALUES (@pid, @data, " +
-                            "UTC_TIMESTAMP(), 1, @species); SELECT LAST_INSERT_ID()",
+                            "Data, md5, TimeAdded, ParseVersion, Species) VALUES (@pid, @data, " +
+                            "unhex(md5(@data)), UTC_TIMESTAMP(), 1, @species); SELECT LAST_INSERT_ID()",
                             new MySqlParameter("@pid", record.PID),
                             new MySqlParameter("@data", record.Data),
                             new MySqlParameter("@species", record.Species));
@@ -739,8 +739,8 @@ namespace PkmnFoundations.Data
                     else
                     {
                         int rows = tran.ExecuteNonQuery("INSERT INTO TerminalDressup4 (pid, SerialNumber, " +
-                            "Data, TimeAdded, ParseVersion, Species) VALUES (@pid, @serial, @data, " +
-                            "UTC_TIMESTAMP(), 1, @species); SELECT LAST_INSERT_ID()",
+                            "Data, md5, TimeAdded, ParseVersion, Species) VALUES (@pid, @serial, @data, " +
+                            "unhex(md5(@data)), UTC_TIMESTAMP(), 1, @species); SELECT LAST_INSERT_ID()",
                             new MySqlParameter("@pid", record.PID),
                             new MySqlParameter("@serial", record.SerialNumber),
                             new MySqlParameter("@data", record.Data),
@@ -792,14 +792,14 @@ namespace PkmnFoundations.Data
                 db.Open();
                 using (MySqlTransaction tran = db.BeginTransaction())
                 {
-                    long exists = (long)tran.ExecuteScalar("SELECT EXISTS(SELECT * FROM TerminalBoxes4 WHERE Data = @data)", new MySqlParameter("@data", record.Data));
+                    long exists = (long)tran.ExecuteScalar("SELECT EXISTS(SELECT * FROM TerminalBoxes4 WHERE md5 = unhex(md5(@data)) AND Data = @data)", new MySqlParameter("@data", record.Data));
                     if (exists != 0) return 0;
 
                     if (record.SerialNumber == 0)
                     {
                         long serial = (long)tran.ExecuteScalar("INSERT INTO TerminalBoxes4 (pid, " +
-                            "Data, TimeAdded, ParseVersion, Label) VALUES (@pid, @data, " +
-                            "UTC_TIMESTAMP(), 1, @label); SELECT LAST_INSERT_ID()",
+                            "Data, md5, TimeAdded, ParseVersion, Label) VALUES (@pid, @data, " +
+                            "unhex(md5(@data)), UTC_TIMESTAMP(), 1, @label); SELECT LAST_INSERT_ID()",
                             new MySqlParameter("@pid", record.PID),
                             new MySqlParameter("@data", record.Data),
                             new MySqlParameter("@label", (int)record.Label));
@@ -809,8 +809,8 @@ namespace PkmnFoundations.Data
                     else
                     {
                         int rows = tran.ExecuteNonQuery("INSERT INTO TerminalBoxes4 (pid, SerialNumber, " +
-                            "Data, TimeAdded, ParseVersion, Label) VALUES (@pid, @serial, @data, " +
-                            "UTC_TIMESTAMP(), 1, @label); SELECT LAST_INSERT_ID()",
+                            "Data, md5, TimeAdded, ParseVersion, Label) VALUES (@pid, @serial, @data, " +
+                            "unhex(md5(@data)), UTC_TIMESTAMP(), 1, @label); SELECT LAST_INSERT_ID()",
                             new MySqlParameter("@pid", record.PID),
                             new MySqlParameter("@serial", record.SerialNumber),
                             new MySqlParameter("@data", record.Data),
