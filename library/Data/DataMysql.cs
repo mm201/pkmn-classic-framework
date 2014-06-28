@@ -690,7 +690,7 @@ namespace PkmnFoundations.Data
             result[13] = new MySqlParameter("@TimeWithdrawn", record.TimeWithdrawn);
             result[14] = new MySqlParameter("@pid", record.PID);
             result[15] = new MySqlParameter("@TrainerOT", record.TrainerOT);
-            result[16] = new MySqlParameter("@TrainerName", record.TrainerName);
+            result[16] = new MySqlParameter("@TrainerName", record.TrainerName.RawData);
             result[17] = new MySqlParameter("@TrainerCountry", record.TrainerCountry);
             result[18] = new MySqlParameter("@TrainerRegion", record.TrainerRegion);
             result[19] = new MySqlParameter("@TrainerClass", record.TrainerClass);
