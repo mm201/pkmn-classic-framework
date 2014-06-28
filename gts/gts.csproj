@@ -67,6 +67,7 @@
     <None Include="pad.bin">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <Content Include="pkvldtprod.ashx" />
     <None Include="Web.config">
       <SubType>Designer</SubType>
     </None>
@@ -92,6 +93,9 @@
     </Compile>
     <Compile Include="BattleVideo.aspx.designer.cs">
       <DependentUpon>BattleVideo.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="pkvldtprod.ashx.cs">
+      <DependentUpon>pkvldtprod.ashx</DependentUpon>
     </Compile>
     <Compile Include="src\GamestatsSessionPlat.cs" />
     <Compile Include="src\HeaderColour.cs" />

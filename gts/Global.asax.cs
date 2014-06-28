@@ -90,6 +90,11 @@ namespace PkmnFoundations.GTS
                 pathInfo = "/" + String.Join("/", split, 3, split.Length - 3);
                 return VirtualPathUtility.ToAbsolute("~/syachi2ds.ashx");
             }
+            else if (split.Length > 1 && split[1] == "pokemon" && split[2] == "validate")
+            {
+                pathInfo = "/pokemon/validate";
+                return VirtualPathUtility.ToAbsolute("~/pkvldtprod.ashx");
+            }
             else return null;
         }
     }
