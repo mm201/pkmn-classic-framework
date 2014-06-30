@@ -63,6 +63,8 @@
     <Compile Include="Support\AssertHelper.cs" />
     <Compile Include="Support\EncodedString4.cs" />
     <Compile Include="Support\EncodedString5.cs" />
+    <Compile Include="Support\StreamExtender.cs" />
+    <Compile Include="Support\StringHelper.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
