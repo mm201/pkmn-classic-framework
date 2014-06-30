@@ -25,15 +25,25 @@ namespace PkmnFoundations.Structures
         public long SerialNumber;
         public byte[] Data;
 
-        public short[] Party
+        public ushort[] Party
         {
             get
             {
-                short[] result = new short[12];
+                ushort[] result = new ushort[12];
                 for (int x = 0; x < result.Length; x++)
                 {
-                    result[x] = BitConverter.ToInt16(Data, 0x7c + x * 2);
+                    result[x] = BitConverter.ToUInt16(Data, 0x7c + x * 2);
                 }
+                return result;
+            }
+        }
+
+        public byte[] TrainerName
+        {
+            get
+            {
+                byte[] result = new byte[16];
+                Array.Copy(Data, 0, result, 0, 16);
                 return result;
             }
         }
@@ -229,6 +239,16 @@ namespace PkmnFoundations.Structures
         }
 
         #endregion
+
+        public static String FormatSerial(long serial)
+        {
+            String number = serial.ToString("D12");
+            String[] split = new String[3];
+            split[0] = number.Substring(0, number.Length - 10);
+            split[1] = number.Substring(number.Length - 10, 5);
+            split[2] = number.Substring(number.Length - 5, 5);
+            return String.Join("-", split);
+        }
     }
 
     public enum BattleVideoMetagames4 : byte

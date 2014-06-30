@@ -8,6 +8,7 @@ using System.Net.Sockets;
 using System.Security.Cryptography.X509Certificates;
 using System.Net.Security;
 using System.Net;
+using PkmnFoundations.Support;
 
 namespace PkmnFoundations.GlobalTerminalService
 {
@@ -106,11 +107,11 @@ namespace PkmnFoundations.GlobalTerminalService
                 }
 
                 byte[] data = new byte[4];
-                ReadAll(s, data, 0, 4);
+                s.ReadBlock(data, 0, 4);
                 int length = BitConverter.ToInt32(data, 0);
                 data = new byte[length];
                 BitConverter.GetBytes(length).CopyTo(data, 0);
-                ReadAll(s, data, 4, length - 4); // todo: stop DoS by timing out blocking requests
+                s.ReadBlock(data, 4, length - 4); // todo: stop DoS by timing out blocking requests
                 // todo after that: ban IPs that make lots of blocking requests
 
                 byte[] response = ProcessRequest(data);
@@ -137,24 +138,5 @@ namespace PkmnFoundations.GlobalTerminalService
         protected abstract byte[] ProcessRequest(byte[] data);
 
         public abstract String Title { get; }
-
-        /// <summary>
-        /// Reads bytes from a stream and waits until it can read them all.
-        /// </summary>
-        /// <param name="s"></param>
-        /// <param name="buffer"></param>
-        /// <param name="offset"></param>
-        /// <param name="count"></param>
-        public static bool ReadAll(Stream s, byte[] buffer, int offset, int count)
-        {
-            int readBytes = 0;
-            while (readBytes < count)
-            {
-                int x = s.Read(buffer, offset + readBytes, count - readBytes);
-                if (x == 0) return false;
-                readBytes += x;
-            }
-            return true;
-        }
     }
 }

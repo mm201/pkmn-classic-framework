@@ -740,7 +740,7 @@ namespace PkmnFoundations.Data
                     {
                         int rows = tran.ExecuteNonQuery("INSERT INTO TerminalDressup4 (pid, SerialNumber, " +
                             "Data, md5, TimeAdded, ParseVersion, Species) VALUES (@pid, @serial, @data, " +
-                            "unhex(md5(@data)), UTC_TIMESTAMP(), 1, @species); SELECT LAST_INSERT_ID()",
+                            "unhex(md5(@data)), UTC_TIMESTAMP(), 1, @species)",
                             new MySqlParameter("@pid", record.PID),
                             new MySqlParameter("@serial", record.SerialNumber),
                             new MySqlParameter("@data", record.Data),
@@ -810,7 +810,7 @@ namespace PkmnFoundations.Data
                     {
                         int rows = tran.ExecuteNonQuery("INSERT INTO TerminalBoxes4 (pid, SerialNumber, " +
                             "Data, md5, TimeAdded, ParseVersion, Label) VALUES (@pid, @serial, @data, " +
-                            "unhex(md5(@data)), UTC_TIMESTAMP(), 1, @label); SELECT LAST_INSERT_ID()",
+                            "unhex(md5(@data)), UTC_TIMESTAMP(), 1, @label)",
                             new MySqlParameter("@pid", record.PID),
                             new MySqlParameter("@serial", record.SerialNumber),
                             new MySqlParameter("@data", record.Data),
@@ -854,6 +854,191 @@ namespace PkmnFoundations.Data
             return new BoxRecord4(reader.GetInt32(0), (BoxLabels4)reader.GetInt32(1), reader.GetInt64(2), data);
         }
 
+        public override long BattleVideoUpload4(BattleVideoRecord4 record)
+        {
+            if (record.Data.Length != 7272) throw new ArgumentException();
+            if (record.Header.Data.Length != 228) throw new ArgumentException();
+
+            using (MySqlConnection db = CreateConnection())
+            {
+                db.Open();
+                using (MySqlTransaction tran = db.BeginTransaction())
+                {
+                    long exists = (long)tran.ExecuteScalar("SELECT EXISTS(SELECT * " +
+                        "FROM TerminalBattleVideos4 WHERE md5 = unhex(md5(CONCAT(@header, @data))) " +
+                        "AND Data = @data AND Header = @header)", 
+                        new MySqlParameter("@header", record.Header.Data), 
+                        new MySqlParameter("@data", record.Data));
+                    if (exists != 0) return 0;
+
+                    if (record.SerialNumber == 0)
+                    {
+                        ulong key = (ulong)tran.ExecuteScalar("INSERT INTO TerminalBattleVideos4 " +
+                            "(pid, Header, Data, md5, TimeAdded, ParseVersion, TrainerName, " +
+                            "Metagame, Country, Region) " +
+                            "VALUES (@pid, @header, @data, unhex(md5(CONCAT(@header, @data))), " +
+                            "UTC_TIMESTAMP(), 1, @trainer, @metagame, @country, @region); " +
+                            "SELECT LAST_INSERT_ID()",
+                            new MySqlParameter("@pid", record.PID),
+                            new MySqlParameter("@header", record.Header.Data),
+                            new MySqlParameter("@data", record.Data),
+                            new MySqlParameter("@trainer", record.Header.TrainerName),
+                            new MySqlParameter("@metagame", (byte)record.Header.Metagame),
+                            new MySqlParameter("@country", (byte)record.Header.Country),
+                            new MySqlParameter("@region", (byte)record.Header.Region)
+                            );
+                        long serial = BattleVideoHeader4.KeyToSerial((long)key);
+
+                        tran.ExecuteNonQuery("UPDATE TerminalBattleVideos4 SET " +
+                            "SerialNumber = @serial WHERE id = @key", 
+                            new MySqlParameter("@serial", serial), 
+                            new MySqlParameter("@key", key));
+
+                        // todo: make a proc to insert both video and party.
+                        InsertBattleVideoParty(record.Header, key, tran);
+
+                        tran.Commit();
+                        return serial;
+                    }
+                    else
+                    {
+                        ulong key = (ulong)BattleVideoHeader4.SerialToKey(record.SerialNumber);
+
+                        int rows = tran.ExecuteNonQuery("INSERT INTO TerminalBattleVideoPokemon4 " +
+                            "(id, pid, SerialNumber, Header, Data, md5, TimeAdded, ParseVersion, TrainerName, " +
+                            "Metagame, Country, Region) " +
+                            "VALUES (@key, @pid, @serial, @header, @data, unhex(md5(CONCAT(@header, @data))), " +
+                            "UTC_TIMESTAMP(), 1, @trainer, @metagame, @country, @region)",
+                            new MySqlParameter("@key", key),
+                            new MySqlParameter("@pid", record.PID),
+                            new MySqlParameter("@serial", record.SerialNumber),
+                            new MySqlParameter("@header", record.Header.Data),
+                            new MySqlParameter("@data", record.Data),
+                            new MySqlParameter("@trainer", record.Header.TrainerName),
+                            new MySqlParameter("@metagame", (byte)record.Header.Metagame),
+                            new MySqlParameter("@country", (byte)record.Header.Country),
+                            new MySqlParameter("@region", (byte)record.Header.Region)
+                            );
+
+                        if (rows == 0) return 0;
+
+                        InsertBattleVideoParty(record.Header, key, tran);
+
+                        tran.Commit();
+                        return record.SerialNumber;
+                    }
+                }
+            }
+        }
+
+        private void InsertBattleVideoParty(BattleVideoHeader4 header, ulong key, MySqlTransaction tran)
+        {
+            MySqlCommand cmd = new MySqlCommand("INSERT INTO " +
+            "TermainalBattleVideoPokemon4 (video_id, Slot, Species) VALUES " +
+            "(@key, @slot, @species)", tran.Connection, tran);
+            cmd.Parameters.Add("@key", MySqlDbType.UInt64).Value = key;
+            cmd.Parameters.Add("@slot", MySqlDbType.UByte);
+            cmd.Parameters.Add("@species", MySqlDbType.UInt16);
+
+            ushort[] party = header.Party;
+            for (byte x = 0; x < 12; x++)
+            {
+                ushort species = party[x];
+                if (species == 0) continue;
+                cmd.Parameters["@slot"].Value = x;
+                cmd.Parameters["@species"].Value = species;
+                cmd.ExecuteNonQuery();
+            }
+        }
+
+        public override BattleVideoHeader4[] BattleVideoSearch4(ushort species, BattleVideoMetagames4 metagame, byte country, byte region, int count)
+        {
+            using (MySqlConnection db = CreateConnection())
+            {
+                List<MySqlParameter> _params = new List<MySqlParameter>();
+                String where = "";
+                bool hasSearch = false;
+
+                if (species != 0xffff)
+                {
+                    where += " WHERE EXISTS(SELECT * FROM TerminalBattleVideoPokemon4 " +
+                        "WHERE video_id = TerminalBattleVideos4.id AND Species = @species)";
+                    _params.Add(new MySqlParameter("@species", species));
+                    hasSearch = true;
+                }
+
+                if (metagame != BattleVideoMetagames4.Latest30)
+                {
+                    where += (hasSearch ? " AND " : " WHERE ") + "Metagame = @metagame";
+                    _params.Add(new MySqlParameter("@metagame", (byte)metagame));
+                    hasSearch = true;
+                }
+
+                if (country != 0xff)
+                {
+                    where += (hasSearch ? " AND " : " WHERE ") + "Country = @country";
+                    _params.Add(new MySqlParameter("@country", country));
+                    hasSearch = true;
+                }
+
+                if (region != 0xff)
+                {
+                    where += (hasSearch ? " AND " : " WHERE ") + "Region = @region";
+                    _params.Add(new MySqlParameter("@region", region));
+                }
+
+                _params.Add(new MySqlParameter("@count", count));
+
+                db.Open();
+
+                List<BattleVideoHeader4> results = new List<BattleVideoHeader4>(count);
+                MySqlDataReader reader = (MySqlDataReader)db.ExecuteReader("SELECT pid, " +
+                    "SerialNumber, Header FROM TerminalBattleVideos4" + where +
+                    " ORDER BY TimeAdded DESC LIMIT @count",
+                    _params.ToArray());
+                while (reader.Read())
+                {
+                    results.Add(BattleVideoHeader4FromReader(reader));
+                }
+
+                reader.Close();
+                db.Close();
+                return results.ToArray();
+            }
+        }
+
+        private BattleVideoHeader4 BattleVideoHeader4FromReader(MySqlDataReader reader)
+        {
+            byte[] data = new byte[228];
+            reader.GetBytes(2, 0, data, 0, 228);
+
+            return new BattleVideoHeader4(reader.GetInt32(0), reader.GetInt64(1), data);
+        }
+
+        public override BattleVideoRecord4 BattleVideoGet4(long serial)
+        {
+            using (MySqlConnection db = CreateConnection())
+            {
+                db.Open();
+                MySqlDataReader reader = (MySqlDataReader)db.ExecuteReader("SELECT pid, " +
+                    "SerialNumber, Header, Data FROM TerminalBattleVideos4 " +
+                    "WHERE SerialNumber = @serial", 
+                    new MySqlParameter("@serial", serial));
+
+                if (reader.HasRows)
+                    return BattleVideo4FromReader(reader);
+                else return null;
+            }
+        }
+
+        private BattleVideoRecord4 BattleVideo4FromReader(MySqlDataReader reader)
+        {
+            byte[] data = new byte[7272];
+            reader.GetBytes(3, 0, data, 0, 7272);
+            BattleVideoHeader4 header = BattleVideoHeader4FromReader(reader);
+
+            return new BattleVideoRecord4(header.PID, header.SerialNumber, header, data);
+        }
 
         #endregion
     }

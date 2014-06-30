@@ -80,6 +80,8 @@ namespace PkmnFoundations.Data
 
         #region Global Terminal 4
         public const int DRESSUP_VERSION_4 = 1;
+        public const int BOX_VERSION_4 = 1;
+        public const int BATTLEVIDEO_VERSION_4 = 1;
 
         public abstract long DressupUpload4(DressupRecord4 record);
         public abstract DressupRecord4[] DressupSearch4(ushort species, int count);
@@ -87,7 +89,9 @@ namespace PkmnFoundations.Data
         public abstract long BoxUpload4(BoxRecord4 record);
         public abstract BoxRecord4[] BoxSearch4(BoxLabels4 label, int count);
 
-
+        public abstract long BattleVideoUpload4(BattleVideoRecord4 record);
+        public abstract BattleVideoHeader4[] BattleVideoSearch4(ushort species, BattleVideoMetagames4 metagame, byte country, byte region, int count);
+        public abstract BattleVideoRecord4 BattleVideoGet4(long serial);
         #endregion
     }
 }

@@ -159,14 +159,89 @@ namespace PkmnFoundations.GlobalTerminalService
                     } break;
                     case RequestTypes4.BattleVideoUpload:
                     {
+                        if (data.Length != 0x1e8c)
+                        {
+                            response.Write(new byte[] { 0x02, 0x00 }, 0, 2);
+                            break;
+                        }
+
+                        int pid = BitConverter.ToInt32(data, 8);
+                        byte[] battlevidData = new byte[0x1d4c];
+                        Array.Copy(data, 0x140, battlevidData, 0, 0x1d4c);
+                        BattleVideoRecord4 record = new BattleVideoRecord4(pid, 0, battlevidData);
+                        long serial = DataAbstract.Instance.BattleVideoUpload4(record);
+
+                        if (serial == 0)
+                        {
+                            Console.WriteLine("Uploaded battle video already in server.");
+                            response.Write(new byte[] { 0x02, 0x00 }, 0, 2);
+                            break;
+                        }
+
+                        Console.WriteLine("Battle video uploaded successfully.");
+                        response.Write(new byte[] { 0x00, 0x00 }, 0, 2); // result code (0 for OK)
+                        response.Write(BitConverter.GetBytes(serial), 0, 8);
 
                     } break;
                     case RequestTypes4.BattleVideoSearch:
                     {
+                        if (data.Length != 0x15c)
+                        {
+                            response.Write(new byte[] { 0x02, 0x00 }, 0, 2);
+                            break;
+                        }
+
+                        // todo: validate or log some of this?
+                        ushort species = BitConverter.ToUInt16(data, 0x144);
+                        BattleVideoMetagames4 meta = (BattleVideoMetagames4)data[0x146];
+                        byte country = data[0x147];
+                        byte region = data[0x148];
+
+                        Console.Write("Searching for ");
+                        if (species != 0xffff)
+                            Console.Write("species {0}, ", species);
+                        if (meta != BattleVideoMetagames4.Latest30)
+                            Console.Write("{0}, ", meta);
+                        if (country != 0xff)
+                            Console.Write("country {0}, ", country);
+                        if (region != 0xff)
+                            Console.Write("region {0}", region);
+
+                        BattleVideoHeader4[] results = DataAbstract.Instance.BattleVideoSearch4(species, meta, country, region, 30);
+                        response.Write(new byte[] { 0x00, 0x00 }, 0, 2); // result code (0 for OK)
+                        response.Write(BitConverter.GetBytes(results.Length), 0, 4);
+
+                        foreach (BattleVideoHeader4 result in results)
+                        {
+                            response.Write(BitConverter.GetBytes(result.PID), 0, 4);
+                            response.Write(BitConverter.GetBytes(result.SerialNumber), 0, 8);
+                            response.Write(result.Data, 0, 0xe4);
+                        }
+                        Console.WriteLine("Retrieved {0} battle video results.", results.Length);
 
                     } break;
                     case RequestTypes4.BattleVideoWatch:
                     {
+                        if (data.Length != 0x14c)
+                        {
+                            response.Write(new byte[] { 0x02, 0x00 }, 0, 2);
+                            break;
+                        }
+
+                        long serial = BitConverter.ToInt64(data, 0x140);
+                        BattleVideoRecord4 record = DataAbstract.Instance.BattleVideoGet4(serial);
+                        if (record == null)
+                        {
+                            response.Write(new byte[] { 0x02, 0x00 }, 0, 2);
+                            Console.WriteLine("Requested battle video {0} was missing.", BattleVideoHeader4.FormatSerial(serial));
+                            break;
+                        }
+
+                        response.Write(BitConverter.GetBytes(record.PID), 0, 4);
+                        response.Write(BitConverter.GetBytes(record.SerialNumber), 0, 8);
+                        response.Write(record.Header.Data, 0, 0xe4);
+                        response.Write(record.Data, 0, 0x1c68);
+                        Console.WriteLine("Retrieved battle video {0}.", BattleVideoHeader4.FormatSerial(serial));
 
                     } break;
                 }
