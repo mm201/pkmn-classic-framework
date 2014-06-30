@@ -58,12 +58,13 @@
     <Content Include="AllPokemon.aspx" />
     <Content Include="BattleVideo.aspx" />
     <Content Include="css\main.css" />
-    <Content Include="test\AddDressup.aspx" />
+    <Content Include="admin\AddDressup.aspx" />
     <Content Include="test\BoxUp.aspx" />
     <Content Include="test\NameDecode.aspx" />
     <Content Include="test\Decode.aspx" />
     <Content Include="Default.aspx" />
     <Content Include="Global.asax" />
+    <Content Include="admin\Web.config" />
     <None Include="pad.bin">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -99,11 +100,11 @@
     </Compile>
     <Compile Include="src\GamestatsSessionPlat.cs" />
     <Compile Include="src\HeaderColour.cs" />
-    <Compile Include="test\AddDressup.aspx.cs">
+    <Compile Include="admin\AddDressup.aspx.cs">
       <DependentUpon>AddDressup.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="test\AddDressup.aspx.designer.cs">
+    <Compile Include="admin\AddDressup.aspx.designer.cs">
       <DependentUpon>AddDressup.aspx</DependentUpon>
     </Compile>
     <Compile Include="test\BoxUp.aspx.cs">
