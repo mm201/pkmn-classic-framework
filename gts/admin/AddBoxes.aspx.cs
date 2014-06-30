@@ -4,13 +4,12 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-using System.IO;
 using PkmnFoundations.Structures;
 using PkmnFoundations.Data;
 
-namespace PkmnFoundations.GTS.test
+namespace PkmnFoundations.GTS.admin
 {
-    public partial class AddDressup : System.Web.UI.Page
+    public partial class AddBoxes : System.Web.UI.Page
     {
         protected void Page_Init(object sender, EventArgs e)
         {
@@ -31,8 +30,8 @@ namespace PkmnFoundations.GTS.test
             }
 
             Common.CryptMessage(data);
-            if (data[0x04] != 0x21 || 
-                data[0x05] != 0x4e ||
+            if (data[0x04] != 0x21 ||
+                data[0x05] != 0x52 ||
                 data[0x06] != 0x00 ||
                 data[0x07] != 0x00)
             {
@@ -40,7 +39,7 @@ namespace PkmnFoundations.GTS.test
             }
 
             int results = BitConverter.ToInt32(data, 0x08);
-            if (data.Length != 12 + 236 * results)
+            if (data.Length != 12 + 556 * results)
             {
                 Fail(); return;
             }
@@ -49,18 +48,19 @@ namespace PkmnFoundations.GTS.test
 
             for (int x = 0; x < results; x++)
             {
-                int pid = BitConverter.ToInt32(data, 12 + 236 * x);
-                long serial = BitConverter.ToInt64(data, 16 + 236 * x);
+                int pid = BitConverter.ToInt32(data, 12 + 556 * x);
+                BoxLabels4 label = (BoxLabels4)BitConverter.ToInt32(data, 16 + 556 * x);
+                long serial = BitConverter.ToInt64(data, 20 + 556 * x);
                 if (serial == 0) continue;
 
-                byte[] result = new byte[224];
-                Array.Copy(data, 24 + 236 * x, result, 0, 224);
+                byte[] result = new byte[540];
+                Array.Copy(data, 28 + 556 * x, result, 0, 540);
 
-                DressupRecord4 record = new DressupRecord4(pid, serial, result);
-                if (DataAbstract.Instance.DressupUpload4(record) != 0) added++;
+                BoxRecord4 record = new BoxRecord4(pid, label, serial, result);
+                if (DataAbstract.Instance.BoxUpload4(record) != 0) added++;
             }
 
-            litMessage.Text = "Added " + added.ToString() + " dressup photos to the database.";
+            litMessage.Text = "Added " + added.ToString() + " boxes to the database.";
         }
 
         private void Fail()

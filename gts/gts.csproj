@@ -55,6 +55,7 @@
     <Reference Include="System.Web.ApplicationServices" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="admin\AddBoxes.aspx" />
     <Content Include="AllPokemon.aspx" />
     <Content Include="BattleVideo.aspx" />
     <Content Include="css\main.css" />
@@ -81,6 +82,13 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="admin\AddBoxes.aspx.cs">
+      <DependentUpon>AddBoxes.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\AddBoxes.aspx.designer.cs">
+      <DependentUpon>AddBoxes.aspx</DependentUpon>
+    </Compile>
     <Compile Include="AllPokemon.aspx.cs">
       <DependentUpon>AllPokemon.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>

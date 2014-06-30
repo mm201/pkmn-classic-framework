@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.IO;
 
 namespace PkmnFoundations.GTS
 {
@@ -75,6 +76,26 @@ namespace PkmnFoundations.GTS
         public static string HtmlEncode(string s)
         {
             return HttpUtility.HtmlEncode(s);
+        }
+
+        private static byte[] m_pad = null;
+
+        public static void CryptMessage(byte[] message)
+        {
+            if (m_pad == null)
+            {
+                m_pad = new byte[256];
+                FileStream s = File.Open(HttpContext.Current.Server.MapPath("~/pad.bin"), FileMode.Open);
+                s.Read(m_pad, 0, m_pad.Length);
+                s.Close();
+            }
+
+            if (message.Length < 5) return;
+            byte padOffset = (byte)(message[0] + message[4]);
+
+            // encrypt and decrypt are the same operation...
+            for (int x = 5; x < message.Length; x++)
+                message[x] ^= m_pad[(x + padOffset) & 0xff];
         }
     }
 }
