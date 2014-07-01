@@ -967,7 +967,22 @@ namespace PkmnFoundations.Data
                     hasSearch = true;
                 }
 
-                if (metagame != BattleVideoMetagames4.Latest30)
+                if (metagame == BattleVideoMetagames4.SearchColosseumSingleNoRestrictions)
+                    metagame = BattleVideoMetagames4.ColosseumSingleNoRestrictions;
+                if (metagame == BattleVideoMetagames4.SearchColosseumDoubleNoRestrictions)
+                    metagame = BattleVideoMetagames4.ColosseumDoubleNoRestrictions;
+
+                if (metagame == BattleVideoMetagames4.SearchColosseumSingleCupMatch)
+                {
+                    where += (hasSearch ? " AND " : " WHERE ") + "Metagame BETWEEN 1 AND 6";
+                    hasSearch = true;
+                }
+                else if (metagame == BattleVideoMetagames4.SearchColosseumDoubleCupMatch)
+                {
+                    where += (hasSearch ? " AND " : " WHERE ") + "Metagame BETWEEN 8 AND 13";
+                    hasSearch = true;
+                }
+                else if (metagame != BattleVideoMetagames4.SearchLatest30)
                 {
                     where += (hasSearch ? " AND " : " WHERE ") + "Metagame = @metagame";
                     _params.Add(new MySqlParameter("@metagame", (byte)metagame));

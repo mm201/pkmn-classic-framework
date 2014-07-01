@@ -253,12 +253,22 @@ namespace PkmnFoundations.Structures
 
     public enum BattleVideoMetagames4 : byte
     {
-        Latest30 = 0xff,
+        ColosseumSingleNoRestrictions = 0x00,
+        ColosseumSingleStandardCup = 0x01,
+        ColosseumSingleFancyCup = 0x02,
+        ColosseumSingleLittleCup = 0x03,
+        ColosseumSingleLightCup = 0x04,
+        ColosseumSingleDoubleCup = 0x05,
+        ColosseumSingleOtherCup = 0x06,
 
-        ColosseumSingleNoRestrictions = 0xfa,
-        ColosseumSingleCupMatch = 0xfb,
-        ColosseumDoubleNoRestrictions = 0xfc,
-        ColosseumDoubleCupMatch = 0xfd,
+        ColosseumDoubleNoRestrictions = 0x07,
+        ColosseumDoubleStandardCup = 0x08,
+        ColosseumDoubleFancyCup = 0x09,
+        ColosseumDoubleLittleCup = 0x0a,
+        ColosseumDoubleLightCup = 0x0b,
+        ColosseumDoubleDoubleCup = 0x0c,
+        ColosseumDoubleOtherCup = 0x0d,
+
         ColosseumMulti = 0x0e,
 
         BattleTowerSingle = 0x0f,
@@ -284,5 +294,11 @@ namespace PkmnFoundations.Structures
         BattleArcadeSingle = 0x1e,
         BattleArcadeDouble = 0x1f,
         BattleArcadeMulti = 0x20,
+
+        SearchColosseumSingleNoRestrictions = 0xfa,
+        SearchColosseumSingleCupMatch = 0xfb,
+        SearchColosseumDoubleNoRestrictions = 0xfc,
+        SearchColosseumDoubleCupMatch = 0xfd,
+        SearchLatest30 = 0xff,
     }
 }

@@ -200,12 +200,12 @@ namespace PkmnFoundations.GlobalTerminalService
                         Console.Write("Searching for ");
                         if (species != 0xffff)
                             Console.Write("species {0}, ", species);
-                        if (meta != BattleVideoMetagames4.Latest30)
-                            Console.Write("{0}, ", meta);
+                        Console.Write("{0}", meta);
                         if (country != 0xff)
-                            Console.Write("country {0}, ", country);
+                            Console.Write(", country {0}", country);
                         if (region != 0xff)
-                            Console.Write("region {0}", region);
+                            Console.Write(", region {0}", region);
+                        Console.WriteLine(".");
 
                         BattleVideoHeader4[] results = DataAbstract.Instance.BattleVideoSearch4(species, meta, country, region, 30);
                         response.Write(new byte[] { 0x00, 0x00 }, 0, 2); // result code (0 for OK)
