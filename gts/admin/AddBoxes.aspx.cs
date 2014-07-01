@@ -30,7 +30,7 @@ namespace PkmnFoundations.GTS.admin
             }
 
             Common.CryptMessage(data);
-            if (data[0x04] != 0x21 ||
+            if (data[0x04] != 0x09 ||
                 data[0x05] != 0x52 ||
                 data[0x06] != 0x00 ||
                 data[0x07] != 0x00)
