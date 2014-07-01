@@ -13,7 +13,6 @@ namespace PkmnFoundations.GTS
     /// </summary>
     public class pkvldtprod : IHttpHandler
     {
-
         public void ProcessRequest(HttpContext context)
         {
             byte[] requestData = new byte[(int)context.Request.InputStream.Length];
@@ -31,19 +30,31 @@ namespace PkmnFoundations.GTS
             RequestType type = (RequestType)BitConverter.ToInt16(requestData, offset);
             offset += 2;
 
-            int pkmCount;
+            PokemonValidationResult[] results;
+
             switch (type)
             {
                 case RequestType.RandomMatchup:
                 case RequestType.GTS:
                     {
-                        pkmCount = (requestData.Length - offset) / 220;
+                        int pkmCount = (requestData.Length - offset) / 220;
+                        results = new PokemonValidationResult[pkmCount];
+
+                        for (int x = 0; x < results.Length; x++)
+                        {
+                            byte[] data = new byte[220];
+                            Array.Copy(requestData, offset + x, data, 0, 220);
+                            Pokemon5 pkm = new Pokemon5(data);
+                            // todo: actual validation goes here
+                            results[x] = PokemonValidationResult.Valid;
+                        }
                     } break;
+                /*
                 case RequestType.BattleSubway:
                     {
-                        pkmCount = 6;
                         // todo: Need more info on this structure
                     } break;
+                */
                 default:
                     {
                         // Don't understand this request. Give it a response containing
@@ -52,15 +63,27 @@ namespace PkmnFoundations.GTS
                         // in the response beyond its expected length so this will work.
                         // fixme: Once we start generating real signatures, they will prevent
                         // this from returning the necessary number of 00s in all cases.
-                        pkmCount = 6;
+                        results = new PokemonValidationResult[]{
+                            PokemonValidationResult.Valid,
+                            PokemonValidationResult.Valid,
+                            PokemonValidationResult.Valid,
+                            PokemonValidationResult.Valid,
+                            PokemonValidationResult.Valid,
+                            PokemonValidationResult.Valid};
                     } break;
             }
 
-            context.Response.ContentType = "text/plain";
-            context.Response.OutputStream.WriteByte((byte)PartyValidationResult.Valid); // success
-            for (int x = 0; x < pkmCount; x++)
+            PartyValidationResult result = PartyValidationResult.Valid;
+            foreach (PokemonValidationResult pkr in results)
             {
-                context.Response.OutputStream.Write(BitConverter.GetBytes((int)PokemonValidationResult.Valid), 0, 4);
+                if (pkr != PokemonValidationResult.Valid) result = PartyValidationResult.Invalid;
+            }
+
+            context.Response.ContentType = "text/plain";
+            context.Response.OutputStream.WriteByte((byte)result); // success
+            foreach (PokemonValidationResult pkr in results)
+            {
+                context.Response.OutputStream.Write(BitConverter.GetBytes((int)pkr), 0, 4);
             }
             // placeholder for signature.
             // Should be 128 bytes of an unknown hashing/signing algorithm
@@ -99,6 +122,17 @@ namespace PkmnFoundations.GTS
             {
                 return true;
             }
+        }
+    }
+
+    internal class Pokemon5
+    {
+        // placeholder until I actually do this for real...
+        byte[] Data;
+        public Pokemon5(byte[] data)
+        {
+            if (data.Length != 220) throw new ArgumentException();
+            Data = data;
         }
     }
 }
