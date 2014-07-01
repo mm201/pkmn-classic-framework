@@ -96,13 +96,13 @@ namespace PkmnFoundations.GlobalTerminalService
             {
                 if (!m_listener.Pending())
                 {
-                    Thread.Sleep(5);
+                    Thread.Sleep(10);
                     continue;
                 }
                 Stream s = AcceptRequest();
                 if (s == null)
                 {
-                    Thread.Sleep(5);
+                    Thread.Sleep(10);
                     continue;
                 }
 

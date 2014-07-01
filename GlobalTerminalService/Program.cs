@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.ServiceProcess;
 using System.Text;
+using System.Threading;
 
 namespace PkmnFoundations.GlobalTerminalService
 {
@@ -16,7 +17,7 @@ namespace PkmnFoundations.GlobalTerminalService
 #if DEBUG
             Service1 myService = new Service1();
             myService.Start();
-            while (true) { }
+            while (true) { Thread.Sleep(1000); }
 #else
             ServiceBase[] ServicesToRun;
             ServicesToRun = new ServiceBase[] 
