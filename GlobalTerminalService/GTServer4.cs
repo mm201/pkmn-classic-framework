@@ -237,6 +237,7 @@ namespace PkmnFoundations.GlobalTerminalService
                             break;
                         }
 
+                        response.Write(new byte[] { 0x00, 0x00 }, 0, 2); // result code (0 for OK)
                         response.Write(BitConverter.GetBytes(record.PID), 0, 4);
                         response.Write(BitConverter.GetBytes(record.SerialNumber), 0, 8);
                         response.Write(record.Header.Data, 0, 0xe4);

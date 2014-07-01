@@ -32,7 +32,7 @@ namespace PkmnFoundations.Structures
                 ushort[] result = new ushort[12];
                 for (int x = 0; x < result.Length; x++)
                 {
-                    result[x] = BitConverter.ToUInt16(Data, 0x7c + x * 2);
+                    result[x] = BitConverter.ToUInt16(Data, 0x80 + x * 2);
                 }
                 return result;
             }

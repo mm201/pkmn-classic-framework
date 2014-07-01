@@ -904,7 +904,7 @@ namespace PkmnFoundations.Data
                     {
                         ulong key = (ulong)BattleVideoHeader4.SerialToKey(record.SerialNumber);
 
-                        int rows = tran.ExecuteNonQuery("INSERT INTO TerminalBattleVideoPokemon4 " +
+                        int rows = tran.ExecuteNonQuery("INSERT INTO TerminalBattleVideos4 " +
                             "(id, pid, SerialNumber, Header, Data, md5, TimeAdded, ParseVersion, TrainerName, " +
                             "Metagame, Country, Region) " +
                             "VALUES (@key, @pid, @serial, @header, @data, unhex(md5(CONCAT(@header, @data))), " +
@@ -934,7 +934,7 @@ namespace PkmnFoundations.Data
         private void InsertBattleVideoParty(BattleVideoHeader4 header, ulong key, MySqlTransaction tran)
         {
             MySqlCommand cmd = new MySqlCommand("INSERT INTO " +
-            "TermainalBattleVideoPokemon4 (video_id, Slot, Species) VALUES " +
+            "TerminalBattleVideoPokemon4 (video_id, Slot, Species) VALUES " +
             "(@key, @slot, @species)", tran.Connection, tran);
             cmd.Parameters.Add("@key", MySqlDbType.UInt64).Value = key;
             cmd.Parameters.Add("@slot", MySqlDbType.UByte);
@@ -1025,7 +1025,7 @@ namespace PkmnFoundations.Data
                     "WHERE SerialNumber = @serial", 
                     new MySqlParameter("@serial", serial));
 
-                if (reader.HasRows)
+                if (reader.Read())
                     return BattleVideo4FromReader(reader);
                 else return null;
             }
