@@ -51,7 +51,11 @@ namespace PkmnFoundations.GlobalTerminalService
 
             try
             {
-                // todo: implement each of the request types here
+                // todo: fact check this for GenIV.
+                //int pid = BitConverter.ToInt32(data, 8);
+                //byte version = data[0x0c];
+                //byte language = data[0x0d];
+
                 switch (requestType)
                 {
                     case RequestTypes4.BoxUpload:
@@ -104,7 +108,6 @@ namespace PkmnFoundations.GlobalTerminalService
                             response.Write(result.Data, 0, 0x21c);
                         }
                         Console.WriteLine("Retrieved {0} boxes.", results.Length);
-
 
                     } break;
                     case RequestTypes4.DressupUpload:
@@ -245,6 +248,9 @@ namespace PkmnFoundations.GlobalTerminalService
                         Console.WriteLine("Retrieved battle video {0}.", BattleVideoHeader4.FormatSerial(serial));
 
                     } break;
+                    default:
+                        response.Write(new byte[] { 0x02, 0x00 }, 0, 2);
+                        break;
                 }
             }
             catch (Exception ex)
@@ -258,12 +264,6 @@ namespace PkmnFoundations.GlobalTerminalService
             WriteLength(responseData);
             CryptMessage(responseData);
             return responseData;
-        }
-
-        private void WriteLength(byte[] message)
-        {
-            byte[] data = BitConverter.GetBytes(message.Length);
-            Array.Copy(data, 0, message, 0, 4);
         }
 
         private void CryptMessage(byte[] message)

@@ -28,8 +28,7 @@ namespace PkmnFoundations.GlobalTerminalService
             Threads = threads;
             UseSsl = useSsl;
             m_workers = new List<Thread>(threads);
-            // todo: enumerate nic bindings
-            m_listener = new TcpListener(port);
+            m_listener = new TcpListener(IPAddress.Any, port);
             if (UseSsl)
             {
                 Certificate = new X509Certificate2("cert.pfx", "letmein");
@@ -138,5 +137,11 @@ namespace PkmnFoundations.GlobalTerminalService
         protected abstract byte[] ProcessRequest(byte[] data);
 
         public abstract String Title { get; }
+
+        protected void WriteLength(byte[] message)
+        {
+            byte[] data = BitConverter.GetBytes(message.Length);
+            Array.Copy(data, 0, message, 0, 4);
+        }
     }
 }

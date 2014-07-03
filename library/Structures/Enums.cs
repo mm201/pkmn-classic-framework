@@ -32,7 +32,9 @@ namespace PkmnFoundations.Structures
         Pearl = 0x0b,
         Platinum = 0x0c,
         HeartGold = 0x07,
-        SoulSilver = 0x08
+        SoulSilver = 0x08,
+        White = 0x14,
+        Black = 0x15,
     }
 
     public enum EvolutionTriggers

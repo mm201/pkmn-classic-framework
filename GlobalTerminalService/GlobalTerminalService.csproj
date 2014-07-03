@@ -49,6 +49,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="GTServer4.cs" />
+    <Compile Include="GTServer5.cs" />
     <Compile Include="GTServerBase.cs" />
     <Compile Include="Service1.cs">
       <SubType>Component</SubType>
