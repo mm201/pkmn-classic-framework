@@ -6,3 +6,5 @@
 [Rr]elease/
 [Bb]in/
 *.Publish.xml
+.DS_Store
+._.DS_Store
