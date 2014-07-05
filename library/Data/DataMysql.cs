@@ -873,7 +873,7 @@ namespace PkmnFoundations.Data
 
                     if (record.SerialNumber == 0)
                     {
-                        ulong key = (ulong)tran.ExecuteScalar("INSERT INTO TerminalBattleVideos4 " +
+                        long key = (long)tran.ExecuteScalar("INSERT INTO TerminalBattleVideos4 " +
                             "(pid, Header, Data, md5, TimeAdded, ParseVersion, TrainerName, " +
                             "Metagame, Country, Region) " +
                             "VALUES (@pid, @header, @data, unhex(md5(CONCAT(@header, @data))), " +
@@ -895,7 +895,7 @@ namespace PkmnFoundations.Data
                             new MySqlParameter("@key", key));
 
                         // todo: make a proc to insert both video and party.
-                        InsertBattleVideoParty(record.Header, key, tran);
+                        InsertBattleVideoParty(record.Header, (ulong)key, tran);
 
                         tran.Commit();
                         return serial;
