@@ -1091,7 +1091,7 @@ namespace PkmnFoundations.Data
                     }
                     else
                     {
-                        int rows = tran.ExecuteNonQuery("INSERT INTO TerminalBattleVideos4 " +
+                        int rows = tran.ExecuteNonQuery("INSERT INTO TerminalMusicals5 " +
                             "(pid, SerialNumber, Data, md5, TimeAdded, ParseVersion) " +
                             "VALUES (@pid, @serial, @data, unhex(md5(@data)), " +
                             "UTC_TIMESTAMP(), 1)",
