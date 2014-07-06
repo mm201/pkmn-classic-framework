@@ -20,6 +20,10 @@
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
     <OldToolsVersion>4.0</OldToolsVersion>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -62,6 +66,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="admin\AddBoxes.aspx" />
+    <Content Include="admin\AddMusical.aspx" />
     <Content Include="AllPokemon.aspx" />
     <Content Include="BattleVideo.aspx" />
     <Content Include="css\main.css" />
@@ -94,6 +99,13 @@
     </Compile>
     <Compile Include="admin\AddBoxes.aspx.designer.cs">
       <DependentUpon>AddBoxes.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\AddMusical.aspx.cs">
+      <DependentUpon>AddMusical.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\AddMusical.aspx.designer.cs">
+      <DependentUpon>AddMusical.aspx</DependentUpon>
     </Compile>
     <Compile Include="AllPokemon.aspx.cs">
       <DependentUpon>AllPokemon.aspx</DependentUpon>
