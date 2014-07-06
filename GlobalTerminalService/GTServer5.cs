@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using PkmnFoundations.Support;
 using System.IO;
+using PkmnFoundations.Structures;
+using PkmnFoundations.Data;
 
 namespace PkmnFoundations.GlobalTerminalService
 {
@@ -49,6 +51,51 @@ namespace PkmnFoundations.GlobalTerminalService
                 {
                     case RequestTypes5.MusicalUpload:
                     {
+                        if (data.Length != 0x370)
+                        {
+                            response.Write(new byte[] { 0x02, 0x00 }, 0, 2);
+                            break;
+                        }
+
+                        byte[] musicalData = new byte[0x230];
+                        Array.Copy(data, 0x140, musicalData, 0, 0x230);
+                        MusicalRecord5 record = new MusicalRecord5(pid, 0, musicalData);
+                        long serial = DataAbstract.Instance.MusicalUpload5(record);
+
+                        if (serial == 0)
+                        {
+                            Console.WriteLine("Uploaded musical already in server.");
+                            response.Write(new byte[] { 0x02, 0x00 }, 0, 2);
+                            break;
+                        }
+
+                        Console.WriteLine("Musical uploaded successfully.");
+                        response.Write(new byte[] { 0x00, 0x00 }, 0, 2); // result code (0 for OK)
+                        response.Write(BitConverter.GetBytes(serial), 0, 8);
+
+                    } break;
+                    case RequestTypes5.MusicalSearch:
+                    {
+                        if (data.Length != 0x14c)
+                        {
+                            response.Write(new byte[] { 0x02, 0x00 }, 0, 2);
+                            break;
+                        }
+
+                        // todo: validate or log some of this?
+                        ushort species = BitConverter.ToUInt16(data, 0x144);
+
+                        MusicalRecord5[] results = DataAbstract.Instance.MusicalSearch5(species, 5);
+                        response.Write(new byte[] { 0x00, 0x00 }, 0, 2); // result code (0 for OK)
+                        response.Write(BitConverter.GetBytes(results.Length), 0, 4);
+
+                        foreach (MusicalRecord5 result in results)
+                        {
+                            response.Write(BitConverter.GetBytes(result.PID), 0, 4);
+                            response.Write(BitConverter.GetBytes(result.SerialNumber), 0, 8);
+                            response.Write(result.Data, 0, 0x230);
+                        }
+                        Console.WriteLine("Retrieved {0} dressup results.", results.Length);
 
                     } break;
                     default:

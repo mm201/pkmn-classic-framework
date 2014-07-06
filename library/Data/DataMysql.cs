@@ -1054,6 +1054,87 @@ namespace PkmnFoundations.Data
 
             return new BattleVideoRecord4(header.PID, header.SerialNumber, header, data);
         }
+        #endregion
+
+        #region Global Terminal 5
+        public override long MusicalUpload5(MusicalRecord5 record)
+        {
+            if (record.Data.Length != 560) throw new ArgumentException();
+
+            using (MySqlConnection db = CreateConnection())
+            {
+                db.Open();
+                using (MySqlTransaction tran = db.BeginTransaction())
+                {
+                    long exists = (long)tran.ExecuteScalar("SELECT EXISTS(SELECT * " +
+                        "FROM TerminalMusicals5 WHERE md5 = unhex(md5(@data)) " +
+                        "AND Data = @data)",
+                        new MySqlParameter("@data", record.Data));
+                    if (exists != 0) return 0;
+
+                    if (record.SerialNumber == 0)
+                    {
+                        long serial = (long)tran.ExecuteScalar("INSERT INTO TerminalMusicals5 " +
+                            "(pid, Data, md5, TimeAdded, ParseVersion) " +
+                            "VALUES (@pid, @data, unhex(md5(@data)), " +
+                            "UTC_TIMESTAMP(), 1); " +
+                            "SELECT LAST_INSERT_ID()",
+                            new MySqlParameter("@pid", record.PID),
+                            new MySqlParameter("@data", record.Data)
+                            );
+
+                        // todo: make a proc to insert both musical and party.
+                        InsertMusicalParticipants5(record, serial, tran);
+
+                        tran.Commit();
+                        return serial;
+                    }
+                    else
+                    {
+                        int rows = tran.ExecuteNonQuery("INSERT INTO TerminalBattleVideos4 " +
+                            "(pid, SerialNumber, Data, md5, TimeAdded, ParseVersion) " +
+                            "VALUES (@pid, @serial, @data, unhex(md5(@data)), " +
+                            "UTC_TIMESTAMP(), 1)",
+                            new MySqlParameter("@pid", record.PID),
+                            new MySqlParameter("@serial", record.SerialNumber),
+                            new MySqlParameter("@data", record.Data)
+                            );
+
+                        if (rows == 0) return 0;
+
+                        InsertMusicalParticipants5(record, record.SerialNumber, tran);
+
+                        tran.Commit();
+                        return record.SerialNumber;
+                    }
+                }
+            }
+        }
+
+        private void InsertMusicalParticipants5(MusicalRecord5 record, long SerialNumber, MySqlTransaction tran)
+        {
+            MySqlCommand cmd = new MySqlCommand("INSERT INTO " +
+            "TerminalMusicalPokemon5 (musical_id, Slot, Species) VALUES " +
+            "(@serial, @slot, @species)", tran.Connection, tran);
+            cmd.Parameters.Add("@serial", MySqlDbType.UInt64).Value = SerialNumber;
+            cmd.Parameters.Add("@slot", MySqlDbType.UByte);
+            cmd.Parameters.Add("@species", MySqlDbType.UInt16);
+
+            MusicalParticipant5[] participants = record.Participants;
+            for (byte x = 0; x < 4; x++)
+            {
+                ushort species = participants[x].Species;
+                if (species == 0) continue;
+                cmd.Parameters["@slot"].Value = x;
+                cmd.Parameters["@species"].Value = species;
+                cmd.ExecuteNonQuery();
+            }
+        }
+
+        public override MusicalRecord5[] MusicalSearch5(ushort species, int count)
+        {
+            throw new NotImplementedException();
+        }
 
         #endregion
     }
