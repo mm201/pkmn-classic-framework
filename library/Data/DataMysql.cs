@@ -1133,7 +1133,35 @@ namespace PkmnFoundations.Data
 
         public override MusicalRecord5[] MusicalSearch5(ushort species, int count)
         {
-            throw new NotImplementedException();
+            using (MySqlConnection db = CreateConnection())
+            {
+                db.Open();
+
+                List<MusicalRecord5> results = new List<MusicalRecord5>(count);
+                MySqlDataReader reader = (MySqlDataReader)db.ExecuteReader("SELECT pid, " +
+                    "SerialNumber, Data FROM TerminalMusicals5 " +
+                    "WHERE EXISTS(SELECT * FROM TerminalMusicalPokemon5 " +
+                    "WHERE musical_id = TerminalBattleVideos4.id AND Species = @species) " +
+                    "ORDER BY TimeAdded DESC LIMIT @count",
+                    new MySqlParameter("@species", species),
+                    new MySqlParameter("@count", count));
+                while (reader.Read())
+                {
+                    results.Add(Musical5FromReader(reader));
+                }
+
+                reader.Close();
+                db.Close();
+                return results.ToArray();
+            }
+        }
+
+        private MusicalRecord5 Musical5FromReader(MySqlDataReader reader)
+        {
+            byte[] data = new byte[560];
+            reader.GetBytes(2, 0, data, 0, 560);
+
+            return new MusicalRecord5(reader.GetInt32(0), reader.GetInt64(1), data);
         }
 
         #endregion
