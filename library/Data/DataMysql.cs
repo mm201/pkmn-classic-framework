@@ -305,7 +305,7 @@ namespace PkmnFoundations.Data
             result.RequestedMinLevel = reader.GetByte(6);
             result.RequestedMaxLevel = reader.GetByte(7);
             result.Unknown1 = reader.GetByte(8);
-            result.TrainerGender = (GtsTrainerGenders)reader.GetByte(9);
+            result.TrainerGender = (TrainerGenders)reader.GetByte(9);
             result.Unknown2 = reader.GetByte(10);
             if (reader.IsDBNull(11)) result.TimeDeposited = null;
             else result.TimeDeposited = reader.GetDateTime(11);
@@ -644,7 +644,7 @@ namespace PkmnFoundations.Data
             result.RequestedMinLevel = reader.GetByte(7);
             result.RequestedMaxLevel = reader.GetByte(8);
             result.Unknown1 = reader.GetByte(9);
-            result.TrainerGender = (GtsTrainerGenders)reader.GetByte(10);
+            result.TrainerGender = (TrainerGenders)reader.GetByte(10);
             result.Unknown2 = reader.GetByte(11);
             if (reader.IsDBNull(12)) result.TimeDeposited = null;
             else result.TimeDeposited = reader.GetDateTime(12);

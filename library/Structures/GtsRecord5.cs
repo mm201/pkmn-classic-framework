@@ -59,7 +59,7 @@ namespace PkmnFoundations.Structures
         public byte RequestedMinLevel;
         public byte RequestedMaxLevel;
         public byte Unknown1;
-        public GtsTrainerGenders TrainerGender;
+        public TrainerGenders TrainerGender;
         public byte Unknown2;
 
         public DateTime ? TimeDeposited;
@@ -141,7 +141,7 @@ namespace PkmnFoundations.Structures
             RequestedMinLevel = data[0xF3];
             RequestedMaxLevel = data[0xF4];
             Unknown1 = data[0xF5];
-            TrainerGender = (GtsTrainerGenders)data[0xF6];
+            TrainerGender = (TrainerGenders)data[0xF6];
             Unknown2 = data[0xF7];
             TimeDeposited = TimestampToDate(BitConverter.ToUInt64(data, 0xF8));
             TimeWithdrawn = TimestampToDate(BitConverter.ToUInt64(data, 0x100));

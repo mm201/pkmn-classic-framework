@@ -15,7 +15,7 @@ namespace PkmnFoundations.Structures
         Generation6 = 6
     }
 
-    [FlagsAttribute]
+    [Flags]
     public enum GenerationFlags
     {
         Generation1 = 1,
@@ -28,13 +28,37 @@ namespace PkmnFoundations.Structures
 
     public enum Versions
     {
+        // todo: fact check that these GenIII values
+        // are retained as-is through pal park.
+        FatefulEncounter = 0x00,
+        Sapphire = 0x01,
+        Ruby = 0x02,
+        Emerald = 0x03,
+        FireRed = 0x04,
+        LeafGreen = 0x05,
+        Colosseum = 0x0f,
+
         Diamond = 0x0a,
         Pearl = 0x0b,
         Platinum = 0x0c,
         HeartGold = 0x07,
         SoulSilver = 0x08,
+
         White = 0x14,
         Black = 0x15,
+        // todo: BW2
+        // todo: GenVI
+    }
+
+    public enum Languages : byte
+    {
+        Japanese = 0x01,
+        English = 0x02,
+        French = 0x03,
+        Italian = 0x04,
+        German = 0x05,
+        Spanish = 0x07,
+        Korean = 0x08,
     }
 
     public enum EvolutionTriggers
@@ -62,7 +86,7 @@ namespace PkmnFoundations.Structures
         SpecialDefense = 6
     }
 
-    public enum StatLines
+    public enum DamageClass
     {
         Physical = 1,
         Special = 2,
@@ -87,9 +111,20 @@ namespace PkmnFoundations.Structures
         Either = 3
     }
 
-    public enum GtsTrainerGenders : byte
+    public enum TrainerGenders : byte
     {
         Male = 0,
         Female = 1
+    }
+
+    [Flags]
+    public enum Markings : byte
+    {
+        Circle = 0x01,
+        Triangle = 0x02,
+        Square = 0x04,
+        Heart = 0x08,
+        Star = 0x10,
+        Diamond = 0x20
     }
 }
