@@ -16,7 +16,8 @@ namespace PkmnFoundations.GlobalTerminalService
             InitializeComponent();
         }
 
-        private GTServer4 m_server;
+        private GTServer4 m_server_4;
+        private GTServer5 m_server_5;
 
         protected override void OnStart(string[] args)
         {
@@ -25,13 +26,18 @@ namespace PkmnFoundations.GlobalTerminalService
 
         public void Start()
         {
-            m_server = new GTServer4();
-            m_server.BeginPolling();
+            m_server_4 = new GTServer4();
+            m_server_4.BeginPolling();
+            m_server_5 = new GTServer5();
+            m_server_5.BeginPolling();
         }
 
         protected override void OnStop()
         {
-            if (m_server != null) m_server.EndPolling();
+            if (m_server_4 != null) m_server_4.EndPolling();
+            // fixme: it waits for the GenIV server to stop completely before
+            // shutting down the GenV server. Should shut them both down async.
+            if (m_server_5 != null) m_server_5.EndPolling();
         }
     }
 }
