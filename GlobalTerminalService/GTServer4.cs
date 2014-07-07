@@ -51,10 +51,9 @@ namespace PkmnFoundations.GlobalTerminalService
 
             try
             {
-                // todo: fact check this for GenIV.
-                //int pid = BitConverter.ToInt32(data, 8);
-                //byte version = data[0x0c];
-                //byte language = data[0x0d];
+                int pid = BitConverter.ToInt32(data, 8);
+                byte version = data[0x0c];
+                byte language = data[0x0d];
 
                 switch (requestType)
                 {
@@ -66,7 +65,6 @@ namespace PkmnFoundations.GlobalTerminalService
                             break;
                         }
 
-                        int pid = BitConverter.ToInt32(data, 8);
                         BoxLabels4 label = (BoxLabels4)BitConverter.ToInt32(data, 0x140);
                         byte[] boxData = new byte[0x21c];
                         Array.Copy(data, 0x144, boxData, 0, 0x21c);
@@ -118,7 +116,6 @@ namespace PkmnFoundations.GlobalTerminalService
                             break;
                         }
 
-                        int pid = BitConverter.ToInt32(data, 8);
                         byte[] dressupData = new byte[0xe0];
                         Array.Copy(data, 0x140, dressupData, 0, 0xe0);
                         DressupRecord4 record = new DressupRecord4(pid, 0, dressupData);
@@ -168,7 +165,6 @@ namespace PkmnFoundations.GlobalTerminalService
                             break;
                         }
 
-                        int pid = BitConverter.ToInt32(data, 8);
                         byte[] battlevidData = new byte[0x1d4c];
                         Array.Copy(data, 0x140, battlevidData, 0, 0x1d4c);
                         BattleVideoRecord4 record = new BattleVideoRecord4(pid, 0, battlevidData);
