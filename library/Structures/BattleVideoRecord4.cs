@@ -29,7 +29,7 @@ namespace PkmnFoundations.Structures
 
         public BattleVideoRecord4(int pid, long serial_number, BattleVideoHeader4 header, byte[] data_main)
         {
-            if (data_main.Length != 7272) throw new ArgumentException("Battle video main data must be 7500 bytes.");
+            if (data_main.Length != 7272) throw new ArgumentException("Battle video main data must be 7272 bytes.");
 
             PID = pid;
             SerialNumber = serial_number;
