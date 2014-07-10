@@ -15,12 +15,12 @@ namespace PkmnFoundations.GlobalTerminalService
     public abstract class GTServerBase
     {
         public GTServerBase(int port) 
-            : this(port, false, 4, 5000)
+            : this(port, false, 16, 5000)
         {
         }
 
         public GTServerBase(int port, bool useSsl)
-            : this(port, useSsl, 4, 5000)
+            : this(port, useSsl, 16, 5000)
         {
         }
 
