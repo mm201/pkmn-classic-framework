@@ -33,8 +33,8 @@ namespace PkmnFoundations.GlobalTerminalService
         // app.config, but since the DS doesn't even validate it, there's no
         // real point in securing it.
         public GTServerBase(int port, bool useSsl, int threads, int timeout)
-            : this(port, useSsl, threads, timeout, 
-            useSsl ? new X509Certificate2("cert.pfx", "letmein") : null)
+            : this(port, useSsl, threads, timeout,
+            useSsl ? new X509Certificate2(AppDomain.CurrentDomain.BaseDirectory + Path.DirectorySeparatorChar + "cert.pfx", "letmein") : null)
         {
         }
 

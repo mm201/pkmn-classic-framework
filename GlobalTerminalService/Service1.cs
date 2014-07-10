@@ -14,6 +14,8 @@ namespace PkmnFoundations.GlobalTerminalService
         public Service1()
         {
             InitializeComponent();
+            m_server_4 = new GTServer4();
+            m_server_5 = new GTServer5();
         }
 
         private GTServer4 m_server_4;
@@ -26,9 +28,7 @@ namespace PkmnFoundations.GlobalTerminalService
 
         public void Start()
         {
-            m_server_4 = new GTServer4();
             m_server_4.BeginPolling();
-            m_server_5 = new GTServer5();
             m_server_5.BeginPolling();
         }
 

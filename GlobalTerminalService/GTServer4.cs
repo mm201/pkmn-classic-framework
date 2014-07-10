@@ -33,7 +33,7 @@ namespace PkmnFoundations.GlobalTerminalService
         {
             m_pad = new byte[256];
 
-            using (FileStream s = File.Open("pad.bin", FileMode.Open))
+            using (FileStream s = File.OpenRead(AppDomain.CurrentDomain.BaseDirectory + Path.DirectorySeparatorChar + "pad.bin"))
             {
                 s.Read(m_pad, 0, m_pad.Length);
                 s.Close();
