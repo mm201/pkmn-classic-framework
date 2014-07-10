@@ -14,12 +14,13 @@ namespace PkmnFoundations.GlobalTerminalService
 {
     public abstract class GTServerBase
     {
-        public GTServerBase(int port) : this(port, false, 4)
+        public GTServerBase(int port) 
+            : this(port, false, 4, 5000)
         {
         }
 
         public GTServerBase(int port, bool useSsl)
-            : this(port, useSsl, 4)
+            : this(port, useSsl, 4, 5000)
         {
         }
 
@@ -28,17 +29,23 @@ namespace PkmnFoundations.GlobalTerminalService
         {
         }
 
+        // todo: It would probably be better to load a custom certificate from
+        // app.config, but since the DS doesn't even validate it, there's no
+        // real point in securing it.
         public GTServerBase(int port, bool useSsl, int threads, int timeout)
+            : this(port, useSsl, threads, timeout, 
+            useSsl ? new X509Certificate2("cert.pfx", "letmein") : null)
+        {
+        }
+
+        public GTServerBase(int port, bool useSsl, int threads, int timeout, X509Certificate2 certificate)
         {
             Threads = threads;
             Timeout = timeout;
             UseSsl = useSsl;
+            Certificate = certificate;
             m_workers = new List<Thread>(threads);
             m_listener = new TcpListener(IPAddress.Any, port);
-            if (UseSsl)
-            {
-                Certificate = new X509Certificate2("cert.pfx", "letmein");
-            }
         }
 
         public int Threads
@@ -120,8 +127,8 @@ namespace PkmnFoundations.GlobalTerminalService
                             continue;
                         }
 
-                        c.ReceiveTimeout = 5000;
-                        c.SendTimeout = 5000;
+                        c.ReceiveTimeout = Timeout;
+                        c.SendTimeout = Timeout;
 
                         Stream s = GetStream(c);
                         BinaryReader br = new BinaryReader(s);

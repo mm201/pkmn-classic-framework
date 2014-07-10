@@ -6,6 +6,7 @@ using PkmnFoundations.Support;
 using System.IO;
 using PkmnFoundations.Structures;
 using PkmnFoundations.Data;
+using System.Security.Cryptography.X509Certificates;
 
 namespace PkmnFoundations.GlobalTerminalService
 {
@@ -19,6 +20,18 @@ namespace PkmnFoundations.GlobalTerminalService
 
         public GTServer5(int threads)
             : base(12401, true, threads)
+        {
+            Initialize();
+        }
+
+        public GTServer5(int threads, int timeout)
+            : base(12401, true, threads, timeout)
+        {
+            Initialize();
+        }
+
+        public GTServer5(int threads, int timeout, X509Certificate2 certificate)
+            : base(12401, true, threads, timeout, certificate)
         {
             Initialize();
         }

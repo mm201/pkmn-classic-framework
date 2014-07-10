@@ -23,6 +23,12 @@ namespace PkmnFoundations.GlobalTerminalService
             Initialize();
         }
 
+        public GTServer4(int threads, int timeout)
+            : base(12400, false, threads, timeout)
+        {
+            Initialize();
+        }
+
         private void Initialize()
         {
             m_pad = new byte[256];
