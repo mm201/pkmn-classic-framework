@@ -106,11 +106,11 @@ namespace PkmnFoundations.Structures
         BattleCompetition = 0x38,
     }
 
-    public enum BattleVideoSearchTypes5 : uint
+    public enum BattleVideoRankings5 : uint
     {
         None = 0x00000000,
-        Latest30 = 0x00000001,
-        TopLinkBattles = 0x00000003,
-        TopSubwayBattles = 0x00000002,
+        Newest30 = 0x00000001,
+        LinkBattles = 0x00000003,
+        SubwayBattles = 0x00000002,
     }
 }

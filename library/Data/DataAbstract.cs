@@ -102,7 +102,7 @@ namespace PkmnFoundations.Data
         public abstract MusicalRecord5[] MusicalSearch5(ushort species, int count);
 
         public abstract long BattleVideoUpload5(BattleVideoRecord5 record);
-        public abstract BattleVideoHeader5[] BattleVideoSearch5(ushort species, BattleVideoSearchTypes5 type, BattleVideoMetagames5 metagame, byte country, byte region, int count);
+        public abstract BattleVideoHeader5[] BattleVideoSearch5(ushort species, BattleVideoRankings5 type, BattleVideoMetagames5 metagame, byte country, byte region, int count);
         public abstract BattleVideoRecord5 BattleVideoGet5(long serial);
         #endregion
     }

@@ -144,7 +144,7 @@ namespace PkmnFoundations.GlobalTerminalService
                         }
 
                         // todo: validate or log some of this?
-                        BattleVideoSearchTypes5 type = (BattleVideoSearchTypes5)BitConverter.ToUInt32(data, 0x140);
+                        BattleVideoRankings5 type = (BattleVideoRankings5)BitConverter.ToUInt32(data, 0x140);
                         ushort species = BitConverter.ToUInt16(data, 0x144);
                         BattleVideoMetagames5 meta = (BattleVideoMetagames5)data[0x146];
                         // Byte 148 contains a magic number related to the searched metagame.
@@ -153,7 +153,7 @@ namespace PkmnFoundations.GlobalTerminalService
                         byte region = data[0x14b];
 
                         Console.Write("Searching for ");
-                        if (type != BattleVideoSearchTypes5.None)
+                        if (type != BattleVideoRankings5.None)
                             Console.Write("{0}, ", type);
                         if (species != 0xffff)
                             Console.Write("species {0}, ", species);

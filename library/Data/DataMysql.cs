@@ -1141,7 +1141,7 @@ namespace PkmnFoundations.Data
                 MySqlDataReader reader = (MySqlDataReader)db.ExecuteReader("SELECT pid, " +
                     "SerialNumber, Data FROM TerminalMusicals5 " +
                     "WHERE EXISTS(SELECT * FROM TerminalMusicalPokemon5 " +
-                    "WHERE musical_id = TerminalBattleVideos4.id AND Species = @species) " +
+                    "WHERE musical_id = TerminalMusicals5.SerialNumber AND Species = @species) " +
                     "ORDER BY TimeAdded DESC LIMIT @count",
                     new MySqlParameter("@species", species),
                     new MySqlParameter("@count", count));
@@ -1261,7 +1261,7 @@ namespace PkmnFoundations.Data
             }
         }
 
-        public override BattleVideoHeader5[] BattleVideoSearch5(ushort species, BattleVideoSearchTypes5 type, BattleVideoMetagames5 metagame, byte country, byte region, int count)
+        public override BattleVideoHeader5[] BattleVideoSearch5(ushort species, BattleVideoRankings5 ranking, BattleVideoMetagames5 metagame, byte country, byte region, int count)
         {
             using (MySqlConnection db = CreateConnection())
             {
@@ -1269,49 +1269,52 @@ namespace PkmnFoundations.Data
                 String where = "";
                 bool hasSearch = false;
 
-                switch (type)
+                if (ranking == BattleVideoRankings5.None)
                 {
-                    case BattleVideoSearchTypes5.TopLinkBattles:
-                        break;
-                    case BattleVideoSearchTypes5.TopSubwayBattles:
-                        break;
-                }
+                    switch (ranking)
+                    {
+                        case BattleVideoRankings5.LinkBattles:
+                            break;
+                        case BattleVideoRankings5.SubwayBattles:
+                            break;
+                    }
 
-                if (species != 0xffff)
-                {
-                    where += (hasSearch ? " AND " : " WHERE ") + 
-                        "EXISTS(SELECT * FROM TerminalBattleVideoPokemon5 " +
-                        "WHERE video_id = TerminalBattleVideos5.id AND Species = @species)";
-                    _params.Add(new MySqlParameter("@species", species));
-                    hasSearch = true;
-                }
+                    if (species != 0xffff)
+                    {
+                        where += (hasSearch ? " AND " : " WHERE ") +
+                            "EXISTS(SELECT * FROM TerminalBattleVideoPokemon5 " +
+                            "WHERE video_id = TerminalBattleVideos5.id AND Species = @species)";
+                        _params.Add(new MySqlParameter("@species", species));
+                        hasSearch = true;
+                    }
 
-                // todo: find out if there are ranged searches on GenV too.
-                /*
-                if (metagame == BattleVideoMetagames4.SearchColosseumSingleNoRestrictions)
-                    metagame = BattleVideoMetagames4.ColosseumSingleNoRestrictions;
-                if (metagame == BattleVideoMetagames4.SearchColosseumDoubleNoRestrictions)
-                    metagame = BattleVideoMetagames4.ColosseumDoubleNoRestrictions;
-                 * */
+                    // todo: find out if there are ranged searches on GenV too.
+                    /*
+                    if (metagame == BattleVideoMetagames4.SearchColosseumSingleNoRestrictions)
+                        metagame = BattleVideoMetagames4.ColosseumSingleNoRestrictions;
+                    if (metagame == BattleVideoMetagames4.SearchColosseumDoubleNoRestrictions)
+                        metagame = BattleVideoMetagames4.ColosseumDoubleNoRestrictions;
+                     * */
 
-                if (metagame != BattleVideoMetagames5.None)
-                {
-                    where += (hasSearch ? " AND " : " WHERE ") + "Metagame = @metagame";
-                    _params.Add(new MySqlParameter("@metagame", (byte)metagame));
-                    hasSearch = true;
-                }
+                    if (metagame != BattleVideoMetagames5.None)
+                    {
+                        where += (hasSearch ? " AND " : " WHERE ") + "Metagame = @metagame";
+                        _params.Add(new MySqlParameter("@metagame", (byte)metagame));
+                        hasSearch = true;
+                    }
 
-                if (country != 0xff)
-                {
-                    where += (hasSearch ? " AND " : " WHERE ") + "Country = @country";
-                    _params.Add(new MySqlParameter("@country", country));
-                    hasSearch = true;
-                }
+                    if (country != 0xff)
+                    {
+                        where += (hasSearch ? " AND " : " WHERE ") + "Country = @country";
+                        _params.Add(new MySqlParameter("@country", country));
+                        hasSearch = true;
+                    }
 
-                if (region != 0xff)
-                {
-                    where += (hasSearch ? " AND " : " WHERE ") + "Region = @region";
-                    _params.Add(new MySqlParameter("@region", region));
+                    if (region != 0xff)
+                    {
+                        where += (hasSearch ? " AND " : " WHERE ") + "Region = @region";
+                        _params.Add(new MySqlParameter("@region", region));
+                    }
                 }
 
                 _params.Add(new MySqlParameter("@count", count));
