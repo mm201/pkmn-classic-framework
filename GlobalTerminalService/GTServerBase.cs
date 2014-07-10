@@ -24,8 +24,14 @@ namespace PkmnFoundations.GlobalTerminalService
         }
 
         public GTServerBase(int port, bool useSsl, int threads)
+            : this(port, useSsl, threads, 5000)
+        {
+        }
+
+        public GTServerBase(int port, bool useSsl, int threads, int timeout)
         {
             Threads = threads;
+            Timeout = timeout;
             UseSsl = useSsl;
             m_workers = new List<Thread>(threads);
             m_listener = new TcpListener(IPAddress.Any, port);
@@ -38,7 +44,13 @@ namespace PkmnFoundations.GlobalTerminalService
         public int Threads
         {
             get;
-            private set;
+            protected set;
+        }
+
+        public int Timeout
+        {
+            get;
+            protected set;
         }
 
         protected bool UseSsl
@@ -93,38 +105,57 @@ namespace PkmnFoundations.GlobalTerminalService
 
             while (!m_closing)
             {
-                if (!m_listener.Pending())
+                try
                 {
-                    Thread.Sleep(10);
-                    continue;
+                    if (!m_listener.Pending())
+                    {
+                        Thread.Sleep(10);
+                        continue;
+                    }
+                    using (TcpClient c = AcceptClient())
+                    {
+                        if (c == null)
+                        {
+                            Thread.Sleep(10);
+                            continue;
+                        }
+
+                        c.ReceiveTimeout = 5000;
+                        c.SendTimeout = 5000;
+
+                        Stream s = GetStream(c);
+                        BinaryReader br = new BinaryReader(s);
+
+                        int length = br.ReadInt32();
+                        byte[] data = new byte[length];
+                        BitConverter.GetBytes(length).CopyTo(data, 0);
+                        br.ReadBlock(data, 4, length - 4);
+
+                        byte[] response = ProcessRequest(data);
+                        s.Write(response, 0, response.Length);
+                    }
                 }
-                Stream s = AcceptRequest();
-                if (s == null)
+                catch (Exception ex)
                 {
-                    Thread.Sleep(10);
-                    continue;
+                    Console.WriteLine(ex.ToString());
                 }
-
-                byte[] data = new byte[4];
-                s.ReadBlock(data, 0, 4);
-                int length = BitConverter.ToInt32(data, 0);
-                data = new byte[length];
-                BitConverter.GetBytes(length).CopyTo(data, 0);
-                s.ReadBlock(data, 4, length - 4); // todo: stop DoS by timing out blocking requests
-                // todo after that: ban IPs that make lots of blocking requests
-
-                byte[] response = ProcessRequest(data);
-                s.Write(response, 0, response.Length);
             }
 
             Console.WriteLine("Thread {0} ends.", threadIndex);
             m_workers.Remove(Thread.CurrentThread);
         }
 
-        private Stream AcceptRequest()
+        private TcpClient AcceptClient()
         {
-            // todo: handle case that another thread took the request and return null
-            TcpClient c = m_listener.AcceptTcpClient();
+            lock (m_listener)
+            {
+                if (!m_listener.Pending()) return null;
+                return m_listener.AcceptTcpClient();
+            }
+        }
+
+        private Stream GetStream(TcpClient c)
+        {
             if (UseSsl)
             {
                 SslStream sslClient = new SslStream(c.GetStream());
