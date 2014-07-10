@@ -25,6 +25,14 @@ namespace PkmnFoundations.Structures
         public long SerialNumber;
         public byte[] Data;
 
+        public ushort Streak
+        {
+            get
+            {
+                return BitConverter.ToUInt16(Data, 0xa4);
+            }
+        }
+
         public ushort[] Party
         {
             get

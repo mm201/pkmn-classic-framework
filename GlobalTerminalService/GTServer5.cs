@@ -147,8 +147,12 @@ namespace PkmnFoundations.GlobalTerminalService
                         BattleVideoRankings5 type = (BattleVideoRankings5)BitConverter.ToUInt32(data, 0x140);
                         ushort species = BitConverter.ToUInt16(data, 0x144);
                         BattleVideoMetagames5 meta = (BattleVideoMetagames5)data[0x146];
+                        
                         // Byte 148 contains a magic number related to the searched metagame.
-                        // I don't think there's any need to verify it here.
+                        // If 0, disable metagame search. Metagame being 00 is insufficient
+                        // since that value could mean Battle Subway Single.
+                        if (data[0x148] == 0x00) meta = BattleVideoMetagames5.SearchNone;
+
                         byte country = data[0x14a];
                         byte region = data[0x14b];
 

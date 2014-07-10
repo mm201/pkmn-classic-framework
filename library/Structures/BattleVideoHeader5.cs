@@ -25,6 +25,14 @@ namespace PkmnFoundations.Structures
         public long SerialNumber;
         public byte[] Data;
 
+        public ushort Streak
+        {
+            get
+            {
+                return BitConverter.ToUInt16(Data, 0xa4);
+            }
+        }
+
         public ushort[] Party
         {
             get
@@ -80,17 +88,16 @@ namespace PkmnFoundations.Structures
 
     public enum BattleVideoMetagames5 : byte
     {
-        None = 0x00,
-
         ColosseumSingleNoLauncher = 0x18,
-        ColosseumSingleLauncher = 0x98,
         ColosseumDoubleNoLauncher = 0x19,
-        ColosseumDoubleLauncher = 0x99,
         ColosseumTripleNoLauncher = 0x1a,
-        ColosseumTripleLauncher = 0x9a,
         ColosseumRotationNoLauncher = 0x1b,
-        ColosseumRotationLauncher = 0x9b,
         ColosseumMultiNoLauncher = 0x1c,
+
+        ColosseumSingleLauncher = 0x98,
+        ColosseumDoubleLauncher = 0x99,
+        ColosseumTripleLauncher = 0x9a,
+        ColosseumRotationLauncher = 0x9b,
         ColosseumMultiLauncher = 0x9c,
 
         BattleSubwaySingle = 0x00,
@@ -103,7 +110,23 @@ namespace PkmnFoundations.Structures
         RandomMatchupRotation = 0x2b,
         RandomMatchupLauncher = 0xaa,
 
-        BattleCompetition = 0x38,
+        RatingSingle = 0x68,
+        RatingDouble = 0x69,
+        RatingTriple = 0x6a,
+        RatingRotation = 0x6b,
+
+        BattleCompetitionSingle = 0x38,
+        BattleCompetitionDouble = 0x39,
+        BattleCompetitionTriple = 0x3a,
+        BattleCompetitionRotation = 0x3b,
+
+        SearchBattleCompetition = 0x38,
+        // This is not a legal value in either a search or a record.
+        // I'm using it to indicate that no search is being done
+        // (byte 0x148 in the search is 0).
+        // Otherwise, the value 00 collides with Battle Subway Single
+        // which is a legitimate search.
+        SearchNone = 0xff,
     }
 
     public enum BattleVideoRankings5 : uint

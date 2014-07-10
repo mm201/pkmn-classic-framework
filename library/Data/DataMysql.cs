@@ -874,14 +874,15 @@ namespace PkmnFoundations.Data
                     if (record.SerialNumber == 0)
                     {
                         long key = (long)tran.ExecuteScalar("INSERT INTO TerminalBattleVideos4 " +
-                            "(pid, Header, Data, md5, TimeAdded, ParseVersion, TrainerName, " +
+                            "(pid, Header, Data, md5, TimeAdded, ParseVersion, Streak, TrainerName, " +
                             "Metagame, Country, Region) " +
                             "VALUES (@pid, @header, @data, unhex(md5(CONCAT(@header, @data))), " +
-                            "UTC_TIMESTAMP(), 1, @trainer, @metagame, @country, @region); " +
+                            "UTC_TIMESTAMP(), 1, @streak, @trainer, @metagame, @country, @region); " +
                             "SELECT LAST_INSERT_ID()",
                             new MySqlParameter("@pid", record.PID),
                             new MySqlParameter("@header", record.Header.Data),
                             new MySqlParameter("@data", record.Data),
+                            new MySqlParameter("@streak", record.Header.Streak),
                             new MySqlParameter("@trainer", record.Header.TrainerName),
                             new MySqlParameter("@metagame", (byte)record.Header.Metagame),
                             new MySqlParameter("@country", (byte)record.Header.Country),
@@ -905,15 +906,18 @@ namespace PkmnFoundations.Data
                         ulong key = (ulong)BattleVideoHeader4.SerialToKey(record.SerialNumber);
 
                         int rows = tran.ExecuteNonQuery("INSERT INTO TerminalBattleVideos4 " +
-                            "(id, pid, SerialNumber, Header, Data, md5, TimeAdded, ParseVersion, TrainerName, " +
+                            "(id, pid, SerialNumber, Header, Data, md5, TimeAdded, " +
+                            "ParseVersion, Streak, TrainerName, " +
                             "Metagame, Country, Region) " +
-                            "VALUES (@key, @pid, @serial, @header, @data, unhex(md5(CONCAT(@header, @data))), " +
-                            "UTC_TIMESTAMP(), 1, @trainer, @metagame, @country, @region)",
+                            "VALUES (@key, @pid, @serial, @header, @data, " +
+                            "unhex(md5(CONCAT(@header, @data))), " +
+                            "UTC_TIMESTAMP(), 1, @streak, @trainer, @metagame, @country, @region)",
                             new MySqlParameter("@key", key),
                             new MySqlParameter("@pid", record.PID),
                             new MySqlParameter("@serial", record.SerialNumber),
                             new MySqlParameter("@header", record.Header.Data),
                             new MySqlParameter("@data", record.Data),
+                            new MySqlParameter("@streak", record.Header.Streak),
                             new MySqlParameter("@trainer", record.Header.TrainerName),
                             new MySqlParameter("@metagame", (byte)record.Header.Metagame),
                             new MySqlParameter("@country", (byte)record.Header.Country),
@@ -1009,7 +1013,7 @@ namespace PkmnFoundations.Data
                 List<BattleVideoHeader4> results = new List<BattleVideoHeader4>(count);
                 MySqlDataReader reader = (MySqlDataReader)db.ExecuteReader("SELECT pid, " +
                     "SerialNumber, Header FROM TerminalBattleVideos4" + where +
-                    " ORDER BY TimeAdded DESC LIMIT @count",
+                    " ORDER BY TimeAdded DESC, id DESC LIMIT @count",
                     _params.ToArray());
                 while (reader.Read())
                 {
@@ -1184,14 +1188,15 @@ namespace PkmnFoundations.Data
                     if (record.SerialNumber == 0)
                     {
                         long key = (long)tran.ExecuteScalar("INSERT INTO TerminalBattleVideos5 " +
-                            "(pid, Header, Data, md5, TimeAdded, ParseVersion, TrainerName, " +
+                            "(pid, Header, Data, md5, TimeAdded, ParseVersion, Streak, TrainerName, " +
                             "Metagame, Country, Region) " +
                             "VALUES (@pid, @header, @data, unhex(md5(CONCAT(@header, @data))), " +
-                            "UTC_TIMESTAMP(), 1, @trainer, @metagame, @country, @region); " +
+                            "UTC_TIMESTAMP(), 1, @streak, @trainer, @metagame, @country, @region); " +
                             "SELECT LAST_INSERT_ID()",
                             new MySqlParameter("@pid", record.PID),
                             new MySqlParameter("@header", record.Header.Data),
                             new MySqlParameter("@data", record.Data),
+                            new MySqlParameter("@streak", record.Header.Streak),
                             new MySqlParameter("@trainer", record.Header.TrainerName),
                             new MySqlParameter("@metagame", (byte)record.Header.Metagame),
                             new MySqlParameter("@country", (byte)record.Header.Country),
@@ -1215,15 +1220,18 @@ namespace PkmnFoundations.Data
                         ulong key = (ulong)BattleVideoHeader4.SerialToKey(record.SerialNumber);
 
                         int rows = tran.ExecuteNonQuery("INSERT INTO TerminalBattleVideos5 " +
-                            "(id, pid, SerialNumber, Header, Data, md5, TimeAdded, ParseVersion, TrainerName, " +
+                            "(id, pid, SerialNumber, Header, Data, md5, TimeAdded, " +
+                            "ParseVersion, Streak, TrainerName, " +
                             "Metagame, Country, Region) " +
-                            "VALUES (@key, @pid, @serial, @header, @data, unhex(md5(CONCAT(@header, @data))), " +
-                            "UTC_TIMESTAMP(), 1, @trainer, @metagame, @country, @region)",
+                            "VALUES (@key, @pid, @serial, @header, @data, " +
+                            "unhex(md5(CONCAT(@header, @data))), " +
+                            "UTC_TIMESTAMP(), 1, @streak, @trainer, @metagame, @country, @region)",
                             new MySqlParameter("@key", key),
                             new MySqlParameter("@pid", record.PID),
                             new MySqlParameter("@serial", record.SerialNumber),
                             new MySqlParameter("@header", record.Header.Data),
                             new MySqlParameter("@data", record.Data),
+                            new MySqlParameter("@streak", record.Header.Streak),
                             new MySqlParameter("@trainer", record.Header.TrainerName),
                             new MySqlParameter("@metagame", (byte)record.Header.Metagame),
                             new MySqlParameter("@country", (byte)record.Header.Country),
@@ -1267,6 +1275,7 @@ namespace PkmnFoundations.Data
             {
                 List<MySqlParameter> _params = new List<MySqlParameter>();
                 String where = "";
+                String sort = "";
                 bool hasSearch = false;
 
                 if (ranking == BattleVideoRankings5.None)
@@ -1288,15 +1297,32 @@ namespace PkmnFoundations.Data
                         hasSearch = true;
                     }
 
-                    // todo: find out if there are ranged searches on GenV too.
-                    /*
-                    if (metagame == BattleVideoMetagames4.SearchColosseumSingleNoRestrictions)
-                        metagame = BattleVideoMetagames4.ColosseumSingleNoRestrictions;
-                    if (metagame == BattleVideoMetagames4.SearchColosseumDoubleNoRestrictions)
-                        metagame = BattleVideoMetagames4.ColosseumDoubleNoRestrictions;
-                     * */
-
-                    if (metagame != BattleVideoMetagames5.None)
+                    if (metagame == BattleVideoMetagames5.RandomMatchupSingle)
+                    {
+                        where += (hasSearch ? " AND " : " WHERE ") + "Metagame IN (40, 104)";
+                        hasSearch = true;
+                    }
+                    else if (metagame == BattleVideoMetagames5.RandomMatchupDouble)
+                    {
+                        where += (hasSearch ? " AND " : " WHERE ") + "Metagame IN (41, 105)";
+                        hasSearch = true;
+                    }
+                    else if (metagame == BattleVideoMetagames5.RandomMatchupTriple)
+                    {
+                        where += (hasSearch ? " AND " : " WHERE ") + "Metagame IN (42, 106)";
+                        hasSearch = true;
+                    }
+                    else if (metagame == BattleVideoMetagames5.RandomMatchupRotation)
+                    {
+                        where += (hasSearch ? " AND " : " WHERE ") + "Metagame IN (43, 107)";
+                        hasSearch = true;
+                    }
+                    else if (metagame == BattleVideoMetagames5.SearchBattleCompetition)
+                    {
+                        where += (hasSearch ? " AND " : " WHERE ") + "Metagame BETWEEN 56 AND 59";
+                        hasSearch = true;
+                    }
+                    else if (metagame != BattleVideoMetagames5.SearchNone)
                     {
                         where += (hasSearch ? " AND " : " WHERE ") + "Metagame = @metagame";
                         _params.Add(new MySqlParameter("@metagame", (byte)metagame));
@@ -1315,6 +1341,23 @@ namespace PkmnFoundations.Data
                         where += (hasSearch ? " AND " : " WHERE ") + "Region = @region";
                         _params.Add(new MySqlParameter("@region", region));
                     }
+
+                    sort = " ORDER BY TimeAdded DESC, id DESC";
+                }
+                else if (ranking == BattleVideoRankings5.LinkBattles)
+                {
+                    // todo: sort by .. something.
+                    where = " WHERE NOT (Metagame BETWEEN 0 AND 4)";
+                    sort = " ORDER BY Streak DESC, TimeAdded DESC, id DESC";
+                }
+                else if (ranking == BattleVideoRankings5.SubwayBattles)
+                {
+                    where = " WHERE Metagame BETWEEN 0 AND 4";
+                    sort = " ORDER BY TimeAdded DESC, id DESC";
+                }
+                else
+                {
+                    sort = " ORDER BY TimeAdded DESC, id DESC";
                 }
 
                 _params.Add(new MySqlParameter("@count", count));
@@ -1324,7 +1367,7 @@ namespace PkmnFoundations.Data
                 List<BattleVideoHeader5> results = new List<BattleVideoHeader5>(count);
                 MySqlDataReader reader = (MySqlDataReader)db.ExecuteReader("SELECT pid, " +
                     "SerialNumber, Header FROM TerminalBattleVideos5" + where +
-                    " ORDER BY TimeAdded DESC LIMIT @count",
+                    sort + " LIMIT @count",
                     _params.ToArray());
                 while (reader.Read())
                 {
