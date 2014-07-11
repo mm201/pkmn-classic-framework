@@ -220,6 +220,7 @@ namespace PkmnFoundations.GlobalTerminalService
                         }
 
                         // todo: validate or log some of this?
+                        BattleVideoRankings4 ranking = (BattleVideoRankings4)BitConverter.ToUInt32(data, 0x140);
                         ushort species = BitConverter.ToUInt16(data, 0x144);
                         BattleVideoMetagames4 meta = (BattleVideoMetagames4)data[0x146];
                         byte country = data[0x147];
@@ -235,7 +236,7 @@ namespace PkmnFoundations.GlobalTerminalService
                             logEntry.AppendFormat(", region {0}", region);
                         logEntry.AppendLine(".");
 
-                        BattleVideoHeader4[] results = DataAbstract.Instance.BattleVideoSearch4(species, meta, country, region, 30);
+                        BattleVideoHeader4[] results = DataAbstract.Instance.BattleVideoSearch4(species, ranking, meta, country, region, 30);
                         response.Write(new byte[] { 0x00, 0x00 }, 0, 2); // result code (0 for OK)
                         response.Write(BitConverter.GetBytes(results.Length), 0, 4);
 

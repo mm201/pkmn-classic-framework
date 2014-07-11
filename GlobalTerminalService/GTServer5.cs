@@ -247,7 +247,6 @@ namespace PkmnFoundations.GlobalTerminalService
                     default:
                         logEntry.AppendLine("Unrecognized request type.");
                         response.Write(new byte[] { 0x02, 0x00 }, 0, 2);
-                        response.Write(new byte[] { 0x02, 0x00 }, 0, 2);
                         break;
                 }
             }

@@ -90,7 +90,7 @@ namespace PkmnFoundations.Data
         public abstract BoxRecord4[] BoxSearch4(BoxLabels4 label, int count);
 
         public abstract long BattleVideoUpload4(BattleVideoRecord4 record);
-        public abstract BattleVideoHeader4[] BattleVideoSearch4(ushort species, BattleVideoMetagames4 metagame, byte country, byte region, int count);
+        public abstract BattleVideoHeader4[] BattleVideoSearch4(ushort species, BattleVideoRankings4 ranking, BattleVideoMetagames4 metagame, byte country, byte region, int count);
         public abstract BattleVideoRecord4 BattleVideoGet4(long serial);
         #endregion
 
@@ -102,7 +102,7 @@ namespace PkmnFoundations.Data
         public abstract MusicalRecord5[] MusicalSearch5(ushort species, int count);
 
         public abstract long BattleVideoUpload5(BattleVideoRecord5 record);
-        public abstract BattleVideoHeader5[] BattleVideoSearch5(ushort species, BattleVideoRankings5 type, BattleVideoMetagames5 metagame, byte country, byte region, int count);
+        public abstract BattleVideoHeader5[] BattleVideoSearch5(ushort species, BattleVideoRankings5 ranking, BattleVideoMetagames5 metagame, byte country, byte region, int count);
         public abstract BattleVideoRecord5 BattleVideoGet5(long serial);
         #endregion
     }

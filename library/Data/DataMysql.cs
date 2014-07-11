@@ -955,55 +955,76 @@ namespace PkmnFoundations.Data
             }
         }
 
-        public override BattleVideoHeader4[] BattleVideoSearch4(ushort species, BattleVideoMetagames4 metagame, byte country, byte region, int count)
+        public override BattleVideoHeader4[] BattleVideoSearch4(ushort species, BattleVideoRankings4 ranking, BattleVideoMetagames4 metagame, byte country, byte region, int count)
         {
             using (MySqlConnection db = CreateConnection())
             {
                 List<MySqlParameter> _params = new List<MySqlParameter>();
                 String where = "";
+                String sort = "";
                 bool hasSearch = false;
 
-                if (species != 0xffff)
+                if (ranking == BattleVideoRankings4.None)
                 {
-                    where += " WHERE EXISTS(SELECT * FROM TerminalBattleVideoPokemon4 " +
-                        "WHERE video_id = TerminalBattleVideos4.id AND Species = @species)";
-                    _params.Add(new MySqlParameter("@species", species));
-                    hasSearch = true;
-                }
+                    if (species != 0xffff)
+                    {
+                        where += " WHERE EXISTS(SELECT * FROM TerminalBattleVideoPokemon4 " +
+                            "WHERE video_id = TerminalBattleVideos4.id AND Species = @species)";
+                        _params.Add(new MySqlParameter("@species", species));
+                        hasSearch = true;
+                    }
 
-                if (metagame == BattleVideoMetagames4.SearchColosseumSingleNoRestrictions)
-                    metagame = BattleVideoMetagames4.ColosseumSingleNoRestrictions;
-                if (metagame == BattleVideoMetagames4.SearchColosseumDoubleNoRestrictions)
-                    metagame = BattleVideoMetagames4.ColosseumDoubleNoRestrictions;
+                    if (metagame == BattleVideoMetagames4.SearchColosseumSingleNoRestrictions)
+                        metagame = BattleVideoMetagames4.ColosseumSingleNoRestrictions;
+                    if (metagame == BattleVideoMetagames4.SearchColosseumDoubleNoRestrictions)
+                        metagame = BattleVideoMetagames4.ColosseumDoubleNoRestrictions;
 
-                if (metagame == BattleVideoMetagames4.SearchColosseumSingleCupMatch)
-                {
-                    where += (hasSearch ? " AND " : " WHERE ") + "Metagame BETWEEN 1 AND 6";
-                    hasSearch = true;
-                }
-                else if (metagame == BattleVideoMetagames4.SearchColosseumDoubleCupMatch)
-                {
-                    where += (hasSearch ? " AND " : " WHERE ") + "Metagame BETWEEN 8 AND 13";
-                    hasSearch = true;
-                }
-                else if (metagame != BattleVideoMetagames4.SearchLatest30)
-                {
-                    where += (hasSearch ? " AND " : " WHERE ") + "Metagame = @metagame";
-                    _params.Add(new MySqlParameter("@metagame", (byte)metagame));
-                    hasSearch = true;
-                }
+                    if (metagame == BattleVideoMetagames4.SearchColosseumSingleCupMatch)
+                    {
+                        where += (hasSearch ? " AND " : " WHERE ") + "Metagame BETWEEN 1 AND 6";
+                        hasSearch = true;
+                    }
+                    else if (metagame == BattleVideoMetagames4.SearchColosseumDoubleCupMatch)
+                    {
+                        where += (hasSearch ? " AND " : " WHERE ") + "Metagame BETWEEN 8 AND 13";
+                        hasSearch = true;
+                    }
+                    else if (metagame != BattleVideoMetagames4.SearchLatest30)
+                    {
+                        where += (hasSearch ? " AND " : " WHERE ") + "Metagame = @metagame";
+                        _params.Add(new MySqlParameter("@metagame", (byte)metagame));
+                        hasSearch = true;
+                    }
 
-                if (country != 0xff)
-                {
-                    where += (hasSearch ? " AND " : " WHERE ") + "Country = @country";
-                    _params.Add(new MySqlParameter("@country", country));
-                    hasSearch = true;
-                }
+                    if (country != 0xff)
+                    {
+                        where += (hasSearch ? " AND " : " WHERE ") + "Country = @country";
+                        _params.Add(new MySqlParameter("@country", country));
+                        hasSearch = true;
+                    }
 
-                if (region != 0xff)
+                    if (region != 0xff)
+                    {
+                        where += (hasSearch ? " AND " : " WHERE ") + "Region = @region";
+                        _params.Add(new MySqlParameter("@region", region));
+                    }
+
+                    sort = " ORDER BY TimeAdded DESC, id DESC";
+                }
+                else if (ranking == BattleVideoRankings4.Colosseum)
                 {
-                    where += (hasSearch ? " AND " : " WHERE ") + "Region = @region";
-                    _params.Add(new MySqlParameter("@region", region));
+                    // todo: sort by .. something.
+                    where = " WHERE Metagame BETWEEN 0 AND 14";
+                    sort = " ORDER BY Streak DESC, TimeAdded DESC, id DESC";
+                }
+                else if (ranking == BattleVideoRankings4.BattleFrontier)
+                {
+                    where = " WHERE NOT (Metagame BETWEEN 0 AND 14)";
+                    sort = " ORDER BY Streak DESC, TimeAdded DESC, id DESC";
+                }
+                else
+                {
+                    sort = " ORDER BY TimeAdded DESC, id DESC";
                 }
 
                 _params.Add(new MySqlParameter("@count", count));
@@ -1013,7 +1034,7 @@ namespace PkmnFoundations.Data
                 List<BattleVideoHeader4> results = new List<BattleVideoHeader4>(count);
                 MySqlDataReader reader = (MySqlDataReader)db.ExecuteReader("SELECT pid, " +
                     "SerialNumber, Header FROM TerminalBattleVideos4" + where +
-                    " ORDER BY TimeAdded DESC, id DESC LIMIT @count",
+                    sort + " LIMIT @count",
                     _params.ToArray());
                 while (reader.Read())
                 {
@@ -1280,14 +1301,6 @@ namespace PkmnFoundations.Data
 
                 if (ranking == BattleVideoRankings5.None)
                 {
-                    switch (ranking)
-                    {
-                        case BattleVideoRankings5.LinkBattles:
-                            break;
-                        case BattleVideoRankings5.SubwayBattles:
-                            break;
-                    }
-
                     if (species != 0xffff)
                     {
                         where += (hasSearch ? " AND " : " WHERE ") +
@@ -1353,7 +1366,7 @@ namespace PkmnFoundations.Data
                 else if (ranking == BattleVideoRankings5.SubwayBattles)
                 {
                     where = " WHERE Metagame BETWEEN 0 AND 4";
-                    sort = " ORDER BY TimeAdded DESC, id DESC";
+                    sort = " ORDER BY Streak DESC, TimeAdded DESC, id DESC";
                 }
                 else
                 {

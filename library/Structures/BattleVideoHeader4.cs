@@ -309,4 +309,11 @@ namespace PkmnFoundations.Structures
         SearchColosseumDoubleCupMatch = 0xfd,
         SearchLatest30 = 0xff,
     }
+
+    public enum BattleVideoRankings4 : uint
+    {
+        None = 0x00000000,
+        Colosseum = 0x00000001,
+        BattleFrontier = 0x00000002,
+    }
 }
