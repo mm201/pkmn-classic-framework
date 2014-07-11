@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.ServiceProcess;
 using System.Text;
+using PkmnFoundations.Support;
 
 namespace PkmnFoundations.GlobalTerminalService
 {
@@ -16,6 +17,9 @@ namespace PkmnFoundations.GlobalTerminalService
             InitializeComponent();
             m_server_4 = new GTServer4();
             m_server_5 = new GTServer5();
+#if !DEBUG
+            LogHelper.UseEventLog(this.EventLog);
+#endif
         }
 
         private GTServer4 m_server_4;
