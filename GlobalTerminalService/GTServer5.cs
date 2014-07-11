@@ -189,7 +189,7 @@ namespace PkmnFoundations.GlobalTerminalService
 
                         logEntry.Append("Searching for ");
                         if (ranking != BattleVideoRankings5.None)
-                            logEntry.AppendFormat("{0}, ", type);
+                            logEntry.AppendFormat("{0}, ", ranking);
                         if (species != 0xffff)
                             logEntry.AppendFormat("species {0}, ", species);
                         logEntry.AppendFormat("{0}", meta);

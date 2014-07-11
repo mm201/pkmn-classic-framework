@@ -228,7 +228,7 @@ namespace PkmnFoundations.GlobalTerminalService
 
                         logEntry.AppendFormat("Searching for ");
                         if (ranking != BattleVideoRankings4.None)
-                            logEntry.AppendFormat("{0}, ", type);
+                            logEntry.AppendFormat("{0}, ", ranking);
                         if (species != 0xffff)
                             logEntry.AppendFormat("species {0}, ", species);
                         logEntry.AppendFormat("{0}", meta);
