@@ -57,7 +57,7 @@ namespace PkmnFoundations.GlobalTerminalService
             MemoryStream response = new MemoryStream();
             response.Write(new byte[] { 0x00, 0x00, 0x00, 0x00 }, 0, 4); // placeholder for length
             response.WriteByte((byte)requestType);
-            response.WriteByte(Byte6(requestType));
+            response.WriteByte(data[5]);
 
             try
             {
