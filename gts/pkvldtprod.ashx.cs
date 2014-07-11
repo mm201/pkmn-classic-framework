@@ -18,11 +18,13 @@ namespace PkmnFoundations.GTS
             byte[] requestData = new byte[(int)context.Request.InputStream.Length];
             context.Request.InputStream.ReadBlock(requestData, 0, (int)context.Request.InputStream.Length);
 
-            // this is a mysterious token of unknown purpose. It seems to vary with the
-            // type of request being done.
+            // this is a mysterious token of unknown purpose. It seems to vary
+            // with the type of request being done.
             // On GTS requests, it's 83 characters long and begins with NDS.
-            // In Random Matchup, it looks more like a base64 string, is 88 chars long
-            // and encodes 64 bytes of random looking data.
+            // In Random Matchup, it looks more like a base64 string, is 88
+            // chars long and encodes 64 bytes of random looking data.
+            // It is null terminated (variable length), followed immediately 
+            // by the rest of the message.
             int tokenLength = Array.IndexOf<byte>(requestData, 0x00);
             String token = StringHelper.BytesToString(requestData, 0, tokenLength, Encoding.UTF8);
             int offset = tokenLength + 1;
@@ -55,6 +57,7 @@ namespace PkmnFoundations.GTS
                         // todo: Need more info on this structure
                     } break;
                 */
+                // todo: there also appears to be a Battle Video request?
                 default:
                     {
                         // Don't understand this request. Give it a response containing
