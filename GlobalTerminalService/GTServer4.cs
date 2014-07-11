@@ -227,6 +227,8 @@ namespace PkmnFoundations.GlobalTerminalService
                         byte region = data[0x148];
 
                         logEntry.AppendFormat("Searching for ");
+                        if (ranking != BattleVideoRankings4.None)
+                            logEntry.AppendFormat("{0}, ", type);
                         if (species != 0xffff)
                             logEntry.AppendFormat("species {0}, ", species);
                         logEntry.AppendFormat("{0}", meta);
