@@ -9,6 +9,7 @@ using System.Security.Cryptography.X509Certificates;
 using System.Net.Security;
 using System.Net;
 using PkmnFoundations.Support;
+using System.Diagnostics;
 
 namespace PkmnFoundations.GlobalTerminalService
 {
@@ -79,7 +80,7 @@ namespace PkmnFoundations.GlobalTerminalService
             {
                 if (m_workers.Count > 0) return;
 
-                Console.WriteLine("{0} server running on port {1} with {2} threads.", Title, ((IPEndPoint)m_listener.LocalEndpoint).Port, Threads);
+                LogHelper.Write(String.Format("{0} server running on port {1} with {2} threads.", Title, ((IPEndPoint)m_listener.LocalEndpoint).Port, Threads));
 
                 m_closing = false;
                 m_listener.Start();
@@ -108,7 +109,8 @@ namespace PkmnFoundations.GlobalTerminalService
         private void MainLoop(object o)
         {
             int threadIndex = m_workers.IndexOf(Thread.CurrentThread);
-            Console.WriteLine("Thread {0} begins.", threadIndex);
+            // This is too chatty for an event log.
+            //LogHelper.Write(String.Format("Thread {0} begins.", threadIndex));
 
             while (!m_closing)
             {
@@ -127,28 +129,52 @@ namespace PkmnFoundations.GlobalTerminalService
                             continue;
                         }
 
-                        c.ReceiveTimeout = Timeout;
-                        c.SendTimeout = Timeout;
+                        try
+                        {
+                            c.ReceiveTimeout = Timeout;
+                            c.SendTimeout = Timeout;
 
-                        Stream s = GetStream(c);
-                        BinaryReader br = new BinaryReader(s);
+                            Stream s = GetStream(c);
+                            BinaryReader br = new BinaryReader(s);
 
-                        int length = br.ReadInt32();
-                        byte[] data = new byte[length];
-                        BitConverter.GetBytes(length).CopyTo(data, 0);
-                        br.ReadBlock(data, 4, length - 4);
+                            int length = br.ReadInt32();
+                            if (length > 7820)
+                            {
+                                LogHelper.Write(String.Format("Indicated request length is over limit.\nHost: {0}", c.Client.RemoteEndPoint), EventLogEntryType.FailureAudit);
+                                continue;
+                            }
+                            if (length < 320)
+                            {
+                                LogHelper.Write(String.Format("Indicated request length is under limit.\nHost: {0}", c.Client.RemoteEndPoint), EventLogEntryType.FailureAudit);
+                                continue;
+                            }
 
-                        byte[] response = ProcessRequest(data);
-                        s.Write(response, 0, response.Length);
+                            byte[] data = new byte[length];
+                            BitConverter.GetBytes(length).CopyTo(data, 0);
+
+                            int actualLength = br.ReadBlock(data, 4, length - 4);
+                            if (actualLength + 4 != length)
+                            {
+                                LogHelper.Write(String.Format("The client disconnected prematurely.\nHost: {0}", c.Client.RemoteEndPoint), EventLogEntryType.FailureAudit);
+                                continue;
+                            }
+
+                            byte[] response = ProcessRequest(data, c);
+                            s.Write(response, 0, response.Length);
+                        }
+                        catch (Exception ex)
+                        {
+                            LogHelper.Write(String.Format("Unhandled exception while handling request:\nHost: {0}\nException: {1}", c.Client.RemoteEndPoint, ex.Message), EventLogEntryType.Error);
+                        }
                     }
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine(ex.ToString());
+                    LogHelper.Write(String.Format("Unhandled exception while handling request:\nException: {0}", ex.Message), EventLogEntryType.Error);
                 }
             }
 
-            Console.WriteLine("Thread {0} ends.", threadIndex);
+            //LogHelper.Write(String.Format("Thread {0} ends.", threadIndex));
             m_workers.Remove(Thread.CurrentThread);
         }
 
@@ -172,7 +198,7 @@ namespace PkmnFoundations.GlobalTerminalService
             else return c.GetStream();
         }
 
-        protected abstract byte[] ProcessRequest(byte[] data);
+        protected abstract byte[] ProcessRequest(byte[] data, TcpClient c);
 
         public abstract String Title { get; }
 

@@ -6,6 +6,8 @@ using System.IO;
 using PkmnFoundations.Support;
 using PkmnFoundations.Structures;
 using PkmnFoundations.Data;
+using System.Net.Sockets;
+using System.Diagnostics;
 
 namespace PkmnFoundations.GlobalTerminalService
 {
@@ -40,13 +42,16 @@ namespace PkmnFoundations.GlobalTerminalService
             }
         }
 
-        protected override byte[] ProcessRequest(byte[] data)
+        protected override byte[] ProcessRequest(byte[] data, TcpClient c)
         {
             int length = BitConverter.ToInt32(data, 0);
             AssertHelper.Equals(length, data.Length);
 
             RequestTypes4 requestType = (RequestTypes4)data[4];
-            Console.WriteLine("Handling Generation IV {0} request.", requestType);
+            StringBuilder logEntry = new StringBuilder();
+            logEntry.AppendFormat("Handling Generation IV {0} request.\nHost: {1}", requestType, c.Client.RemoteEndPoint);
+            logEntry.AppendLine();
+            EventLogEntryType type = EventLogEntryType.Information;
 
             CryptMessage(data);
 
@@ -60,6 +65,8 @@ namespace PkmnFoundations.GlobalTerminalService
                 int pid = BitConverter.ToInt32(data, 8);
                 byte version = data[0x0c];
                 byte language = data[0x0d];
+                logEntry.AppendFormat("pid: {0}", pid);
+                logEntry.AppendLine();
 
                 switch (requestType)
                 {
@@ -67,6 +74,8 @@ namespace PkmnFoundations.GlobalTerminalService
                     {
                         if (data.Length != 0x360)
                         {
+                            logEntry.AppendLine("Length did not validate.");
+                            type = EventLogEntryType.FailureAudit;
                             response.Write(new byte[] { 0x02, 0x00 }, 0, 2);
                             break;
                         }
@@ -79,12 +88,13 @@ namespace PkmnFoundations.GlobalTerminalService
 
                         if (serial == 0)
                         {
-                            Console.WriteLine("Uploaded box already in server.");
+                            logEntry.AppendLine("Uploaded box already in server.");
                             response.Write(new byte[] { 0x02, 0x00 }, 0, 2);
                             break;
                         }
 
-                        Console.WriteLine("Box uploaded successfully.");
+                        logEntry.AppendFormat("Box {0} uploaded successfully.", record.SerialNumber);
+                        logEntry.AppendLine();
                         response.Write(new byte[] { 0x00, 0x00 }, 0, 2); // result code (0 for OK)
                         response.Write(BitConverter.GetBytes(serial), 0, 8);
 
@@ -93,6 +103,8 @@ namespace PkmnFoundations.GlobalTerminalService
                     {
                         if (data.Length != 0x14c)
                         {
+                            logEntry.AppendLine("Length did not validate.");
+                            type = EventLogEntryType.FailureAudit;
                             response.Write(new byte[] { 0x02, 0x00 }, 0, 2);
                             break;
                         }
@@ -111,13 +123,16 @@ namespace PkmnFoundations.GlobalTerminalService
                             response.Write(BitConverter.GetBytes(result.SerialNumber), 0, 8);
                             response.Write(result.Data, 0, 0x21c);
                         }
-                        Console.WriteLine("Retrieved {0} boxes.", results.Length);
+                        logEntry.AppendFormat("Retrieved {0} boxes.", results.Length);
+                        logEntry.AppendLine();
 
                     } break;
                     case RequestTypes4.DressupUpload:
                     {
                         if (data.Length != 0x220)
                         {
+                            logEntry.AppendLine("Length did not validate.");
+                            type = EventLogEntryType.FailureAudit;
                             response.Write(new byte[] { 0x02, 0x00 }, 0, 2);
                             break;
                         }
@@ -129,12 +144,12 @@ namespace PkmnFoundations.GlobalTerminalService
 
                         if (serial == 0)
                         {
-                            Console.WriteLine("Uploaded dressup already in server.");
+                            logEntry.AppendLine("Uploaded dressup already in server.");
                             response.Write(new byte[] { 0x02, 0x00 }, 0, 2);
                             break;
                         }
 
-                        Console.WriteLine("Dressup uploaded successfully.");
+                        logEntry.AppendFormat("Dressup {0} uploaded successfully.", record.SerialNumber);
                         response.Write(new byte[] { 0x00, 0x00 }, 0, 2); // result code (0 for OK)
                         response.Write(BitConverter.GetBytes(serial), 0, 8);
 
@@ -143,6 +158,8 @@ namespace PkmnFoundations.GlobalTerminalService
                     {
                         if (data.Length != 0x14c)
                         {
+                            logEntry.AppendLine("Length did not validate.");
+                            type = EventLogEntryType.FailureAudit;
                             response.Write(new byte[] { 0x02, 0x00 }, 0, 2);
                             break;
                         }
@@ -160,13 +177,16 @@ namespace PkmnFoundations.GlobalTerminalService
                             response.Write(BitConverter.GetBytes(result.SerialNumber), 0, 8);
                             response.Write(result.Data, 0, 0xe0);
                         }
-                        Console.WriteLine("Retrieved {0} dressup results.", results.Length);
+                        logEntry.AppendFormat("Retrieved {0} dressup results.", results.Length);
+                        logEntry.AppendLine();
 
                     } break;
                     case RequestTypes4.BattleVideoUpload:
                     {
                         if (data.Length != 0x1e8c)
                         {
+                            logEntry.AppendLine("Length did not validate.");
+                            type = EventLogEntryType.FailureAudit;
                             response.Write(new byte[] { 0x02, 0x00 }, 0, 2);
                             break;
                         }
@@ -178,12 +198,13 @@ namespace PkmnFoundations.GlobalTerminalService
 
                         if (serial == 0)
                         {
-                            Console.WriteLine("Uploaded battle video already in server.");
+                            logEntry.AppendFormat("Uploaded battle video already in server.");
                             response.Write(new byte[] { 0x02, 0x00 }, 0, 2);
                             break;
                         }
 
-                        Console.WriteLine("Battle video uploaded successfully.");
+                        logEntry.AppendFormat("Battle video {0} uploaded successfully.", BattleVideoHeader4.FormatSerial(record.SerialNumber));
+                        logEntry.AppendLine();
                         response.Write(new byte[] { 0x00, 0x00 }, 0, 2); // result code (0 for OK)
                         response.Write(BitConverter.GetBytes(serial), 0, 8);
 
@@ -192,6 +213,8 @@ namespace PkmnFoundations.GlobalTerminalService
                     {
                         if (data.Length != 0x15c)
                         {
+                            logEntry.AppendLine("Length did not validate.");
+                            type = EventLogEntryType.FailureAudit;
                             response.Write(new byte[] { 0x02, 0x00 }, 0, 2);
                             break;
                         }
@@ -202,15 +225,15 @@ namespace PkmnFoundations.GlobalTerminalService
                         byte country = data[0x147];
                         byte region = data[0x148];
 
-                        Console.Write("Searching for ");
+                        logEntry.AppendFormat("Searching for ");
                         if (species != 0xffff)
-                            Console.Write("species {0}, ", species);
-                        Console.Write("{0}", meta);
+                            logEntry.AppendFormat("species {0}, ", species);
+                        logEntry.AppendFormat("{0}", meta);
                         if (country != 0xff)
-                            Console.Write(", country {0}", country);
+                            logEntry.AppendFormat(", country {0}", country);
                         if (region != 0xff)
-                            Console.Write(", region {0}", region);
-                        Console.WriteLine(".");
+                            logEntry.AppendFormat(", region {0}", region);
+                        logEntry.AppendLine(".");
 
                         BattleVideoHeader4[] results = DataAbstract.Instance.BattleVideoSearch4(species, meta, country, region, 30);
                         response.Write(new byte[] { 0x00, 0x00 }, 0, 2); // result code (0 for OK)
@@ -222,13 +245,16 @@ namespace PkmnFoundations.GlobalTerminalService
                             response.Write(BitConverter.GetBytes(result.SerialNumber), 0, 8);
                             response.Write(result.Data, 0, 0xe4);
                         }
-                        Console.WriteLine("Retrieved {0} battle video results.", results.Length);
+                        logEntry.AppendFormat("Retrieved {0} battle video results.", results.Length);
+                        logEntry.AppendLine();
 
                     } break;
                     case RequestTypes4.BattleVideoWatch:
                     {
                         if (data.Length != 0x14c)
                         {
+                            logEntry.AppendLine("Length did not validate.");
+                            type = EventLogEntryType.FailureAudit;
                             response.Write(new byte[] { 0x02, 0x00 }, 0, 2);
                             break;
                         }
@@ -238,7 +264,9 @@ namespace PkmnFoundations.GlobalTerminalService
                         if (record == null)
                         {
                             response.Write(new byte[] { 0x02, 0x00 }, 0, 2);
-                            Console.WriteLine("Requested battle video {0} was missing.", BattleVideoHeader4.FormatSerial(serial));
+                            logEntry.AppendFormat("Requested battle video {0} was missing.", BattleVideoHeader4.FormatSerial(serial));
+                            logEntry.AppendLine();
+                            type = EventLogEntryType.FailureAudit;
                             break;
                         }
 
@@ -247,17 +275,20 @@ namespace PkmnFoundations.GlobalTerminalService
                         response.Write(BitConverter.GetBytes(record.SerialNumber), 0, 8);
                         response.Write(record.Header.Data, 0, 0xe4);
                         response.Write(record.Data, 0, 0x1c68);
-                        Console.WriteLine("Retrieved battle video {0}.", BattleVideoHeader4.FormatSerial(serial));
+                        logEntry.AppendFormat("Retrieved battle video {0}.", BattleVideoHeader4.FormatSerial(serial));
+                        logEntry.AppendLine();
 
                     } break;
                     default:
+                        logEntry.AppendLine("Unrecognized request type.");
                         response.Write(new byte[] { 0x02, 0x00 }, 0, 2);
                         break;
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.ToString());
+                logEntry.AppendFormat("Unhandled exception while handling request.\nException: {0}", ex.ToString());
+                logEntry.AppendLine();
                 response.Write(new byte[] { 0x02, 0x00 }, 0, 2);
             }
 
@@ -265,6 +296,8 @@ namespace PkmnFoundations.GlobalTerminalService
             byte[] responseData = response.ToArray();
             WriteLength(responseData);
             CryptMessage(responseData);
+
+            LogHelper.Write(logEntry.ToString(), type);
             return responseData;
         }
 
