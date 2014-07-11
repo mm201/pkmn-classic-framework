@@ -5,14 +5,23 @@
 
 <asp:Content ID="Content2" ContentPlaceHolderID="cpMain" runat="server">
 
+    <h1>Update - July 11:</h1>
+    <p>The battle video server is up and running! View any of the
+        thousands of battle videos from Nintendo WFC 
+        <asp:HyperLink ID="hlBattleVideos" NavigateUrl="~/BattleVideo.aspx" runat="server">
+            which I was able to save</asp:HyperLink>
+        and upload your own!
+    </p>
+    <p>Dressup photos, box uploads, and musical photos are also available.</p>
+
 <h1>What is Foundations GTS?</h1>
 <p>Foundations GTS aims to re-create the same functionality of the original 
 <abbr title="Global Trading Station">GTS</abbr> service found in the games, Pokémon Diamond,
 Pearl, Platinum, Heart Gold, Soul Silver, Black, White, Black 2, and White 2, in an open source
 project.</p>
 <p>The main reason I chose to write my own GTS is because of the 
-<a href="http://www.nintendo.com/whatsnew/detail/vyWpoM6CBIe6FjW8NIY7bvzOrgBURhzw">planned
-shutdown of Nintendo Wi-fi Connection services</a> scheduled for May 20. To allow players to
+<a href="http://www.nintendo.com/whatsnew/detail/vyWpoM6CBIe6FjW8NIY7bvzOrgBURhzw">shutdown 
+    of Nintendo Wi-fi Connection services</a> on May 20. To allow players to
 continue trading, someone would need to make a replacement server, so I decided to help out.</p>
 
 <p><strong style="color: #cc0000;">This is a WORK IN PROGRESS. I make no promises that your
@@ -29,12 +38,11 @@ and data related to the main series of Pokémon RPG videogames. Planned is a Pok
 damage calculator, and possibly more! (For now, it’s just a GTS.)</p>
 
 <h1>How do I use this GTS?</h1>
-<p>Connections are made through <a href="https://github.com/polaris-/nintendo_dwc_emulator/wiki">
-Nintendo DWC Emulator</a>. Complete instructions on how to patch your game are found at the
+<p>Connections are made through the <a href="https://github.com/polaris-/nintendo_dwc_emulator/wiki">
+DWC Network Server Emulator (altWFC)</a>. Complete instructions on how to patch your game are found at the
 above link.</p>
-<p>Once your game has been patched, configure your DNS in the usual way.
-Under Nintendo Wi-fi Connection Settings in your DS, change your primary DNS server to:</p>
+<p>To preview the latest features, you can use this alternate DNS:</p>
 <p class="code">191.236.98.208</p>
-<p>If you use the Nintendo Wi-fi USB Connector, change the primary DNS on the computer you 
-plug it into.</p>
+<p>Please note that using this DNS server may interfere with the operation of some other
+    titles besides Pokémon.</p>
 </asp:Content>

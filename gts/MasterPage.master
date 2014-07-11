@@ -20,8 +20,8 @@
             <p>Fan-operated GTS for Pokémon Generations IV and V, by mm201</p>
             <div class="right">
                 <div class="dns">
-                <div class="dnsHeading">DNS server:</div>
-                <div class="dnsIp">191.236.98.208</div>
+                <div class="dnsHeading">altwfc DNS:</div>
+                <div class="dnsIp">75.127.5.215</div>
                 </div>
             <div class="stats">
                 <asp:Literal ID="litPokemon" runat="server" />
