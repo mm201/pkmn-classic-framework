@@ -102,7 +102,10 @@ namespace PkmnFoundations.GlobalTerminalService
                 m_listener.Stop();
                 m_closing = true;
                 // wait for worker threads to exit
-                while (m_workers.Count > 0) { }
+                while (m_workers.Count > 0) 
+                {
+                    Thread.Sleep(10);
+                }
             }
         }
 
