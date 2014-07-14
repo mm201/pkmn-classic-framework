@@ -328,7 +328,8 @@ namespace PkmnFoundations.GlobalTerminalService
                 case RequestTypes4.BattleVideoSearch:
                 case RequestTypes4.BattleVideoWatch:
                     return 0x59;
-                case RequestTypes4.TopTrainers:
+                case RequestTypes4.TopTrainersHead:
+                case RequestTypes4.TopTrainersSearch:
                     return 0x55;
                 default:
                     return 0x00;
@@ -358,6 +359,7 @@ namespace PkmnFoundations.GlobalTerminalService
         BattleVideoSearch = 0xd9,
         BattleVideoWatch = 0xda,
 
-        TopTrainers = 0xf0,
+        TopTrainersHead = 0xf0,
+        TopTrainersSearch = 0xf1
     }
 }
