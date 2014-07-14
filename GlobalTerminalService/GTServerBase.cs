@@ -99,13 +99,13 @@ namespace PkmnFoundations.GlobalTerminalService
             {
                 if (m_workers.Count == 0) return;
 
-                m_listener.Stop();
                 m_closing = true;
                 // wait for worker threads to exit
                 while (m_workers.Count > 0) 
                 {
                     Thread.Sleep(10);
                 }
+                m_listener.Stop();
             }
         }
 
