@@ -7,7 +7,7 @@
 #
 # Host: 127.0.0.1 (MySQL 5.5.27)
 # Database: gts
-# Generation Time: 2014-07-05 06:12:32 +0000
+# Generation Time: 2014-07-14 23:49:09 +0000
 # ************************************************************
 
 
@@ -79,6 +79,132 @@ CREATE TABLE `BattleVideoSearchHistory5` (
   `Region` int(11) DEFAULT NULL,
   `Special` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+
+# Dump of table FoundationsCountries
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `FoundationsCountries`;
+
+CREATE TABLE `FoundationsCountries` (
+  `Value` tinyint(3) unsigned NOT NULL DEFAULT '0',
+  `Name` varchar(30) DEFAULT NULL,
+  PRIMARY KEY (`Value`),
+  KEY `Name` (`Name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+
+# Dump of table FoundationsCountryRegions
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `FoundationsCountryRegions`;
+
+CREATE TABLE `FoundationsCountryRegions` (
+  `country_id` tinyint(3) unsigned NOT NULL DEFAULT '0',
+  `Value` tinyint(3) unsigned NOT NULL DEFAULT '0',
+  `Name` varchar(30) DEFAULT NULL,
+  PRIMARY KEY (`country_id`,`Value`),
+  KEY `Country_ID` (`country_id`),
+  KEY `Country_ID_2` (`country_id`,`Name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+
+# Dump of table FoundationsItems
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `FoundationsItems`;
+
+CREATE TABLE `FoundationsItems` (
+  `Value` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `Name` varchar(30) DEFAULT NULL,
+  PRIMARY KEY (`Value`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+
+# Dump of table FoundationsMoves
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `FoundationsMoves`;
+
+CREATE TABLE `FoundationsMoves` (
+  `Value` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `Name` varchar(30) DEFAULT NULL,
+  `Type` int(11) DEFAULT NULL,
+  `DamageClass` tinyint(3) unsigned NOT NULL,
+  PRIMARY KEY (`Value`),
+  KEY `Type` (`Type`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+
+# Dump of table FoundationsPokemon
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `FoundationsPokemon`;
+
+CREATE TABLE `FoundationsPokemon` (
+  `NationalDex` int(11) unsigned NOT NULL,
+  `Name` varchar(36) NOT NULL DEFAULT '',
+  `Experience` int(11) NOT NULL,
+  PRIMARY KEY (`NationalDex`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+
+# Dump of table FoundationsPokemonForms
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `FoundationsPokemonForms`;
+
+CREATE TABLE `FoundationsPokemonForms` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `NationalDex` int(11) unsigned NOT NULL,
+  `GenderRatio` tinyint(3) unsigned DEFAULT NULL,
+  `FormValue` tinyint(3) unsigned NOT NULL,
+  `FormName` varchar(30) DEFAULT NULL,
+  `FormSuffix` varchar(30) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `NationalDex` (`NationalDex`),
+  CONSTRAINT `foundationspokemonforms_ibfk_1` FOREIGN KEY (`NationalDex`) REFERENCES `FoundationsPokemon` (`NationalDex`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+
+# Dump of table FoundationsPokemonStats2
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `FoundationsPokemonStats2`;
+
+CREATE TABLE `FoundationsPokemonStats2` (
+  `form_id` int(11) unsigned NOT NULL,
+  `Type1` int(11) DEFAULT NULL,
+  `Type2` int(11) DEFAULT NULL,
+  `BaseHP` int(11) DEFAULT NULL,
+  `BaseAttack` int(11) DEFAULT NULL,
+  `BaseDefense` int(11) DEFAULT NULL,
+  `BaseSpeed` int(11) DEFAULT NULL,
+  `BaseSpAttack` int(11) DEFAULT NULL,
+  `BaseSpDefense` int(11) DEFAULT NULL,
+  PRIMARY KEY (`form_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+
+# Dump of table FoundationsTypes
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `FoundationsTypes`;
+
+CREATE TABLE `FoundationsTypes` (
+  `Value` int(11) NOT NULL,
+  `Name` varchar(30) NOT NULL DEFAULT '',
+  `DamageClass` tinyint(3) unsigned DEFAULT NULL,
+  PRIMARY KEY (`Value`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
@@ -234,9 +360,11 @@ CREATE TABLE `TerminalBattleVideos4` (
   `TimeAdded` datetime NOT NULL,
   `ParseVersion` int(11) NOT NULL,
   `TrainerName` blob NOT NULL,
+  `Streak` smallint(5) unsigned DEFAULT NULL,
   `Metagame` tinyint(3) unsigned NOT NULL,
   `Country` tinyint(3) unsigned NOT NULL,
   `Region` tinyint(3) unsigned NOT NULL,
+  `Views` int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `SerialNumber` (`SerialNumber`),
   KEY `TimeAdded` (`TimeAdded`),
@@ -263,9 +391,11 @@ CREATE TABLE `TerminalBattleVideos5` (
   `TimeAdded` datetime NOT NULL,
   `ParseVersion` int(11) NOT NULL,
   `TrainerName` blob NOT NULL,
+  `Streak` smallint(5) unsigned DEFAULT NULL,
   `Metagame` tinyint(3) unsigned NOT NULL,
   `Country` tinyint(3) unsigned NOT NULL,
   `Region` tinyint(3) unsigned NOT NULL,
+  `Views` int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `SerialNumber` (`SerialNumber`),
   KEY `TimeAdded` (`TimeAdded`),
