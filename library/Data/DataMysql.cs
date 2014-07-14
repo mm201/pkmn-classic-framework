@@ -410,6 +410,7 @@ namespace PkmnFoundations.Data
 
         public bool GtsDepositPokemon5(MySqlTransaction tran, GtsRecord5 record)
         {
+            if (record == null) throw new ArgumentNullException("record");
             if (record.Data.Length != 220) throw new FormatException("pkm data must be 220 bytes.");
             if (record.Unknown0.Length != 16) throw new FormatException("pkm padding must be 16 bytes.");
             if (record.TrainerName.RawData.Length != 16) throw new FormatException("Trainer name must be 16 bytes.");
@@ -444,6 +445,7 @@ namespace PkmnFoundations.Data
 
         public override bool GtsDepositPokemon5(GtsRecord5 record)
         {
+            if (record == null) throw new ArgumentNullException("record");
             if (record.Data.Length != 220) throw new FormatException("pkm data must be 220 bytes.");
             if (record.Unknown0.Length != 16) throw new FormatException("pkm padding must be 16 bytes.");
             if (record.TrainerName.RawData.Length != 16) throw new FormatException("Trainer name must be 16 bytes.");

@@ -309,8 +309,18 @@ namespace PkmnFoundations.GTS
 
                         // find a matching session which contains our record
                         GtsSession4 prevSession = manager.FindSession4(pid, "/worldexchange/post.asp");
+                        if (prevSession == null)
+                        {
+                            response.Write(new byte[] { 0x00, 0x00 }, 0, 2);
+                            return;
+                        }
 
                         manager.Remove(prevSession);
+                        if (prevSession.Tag == null)
+                        {
+                            response.Write(new byte[] { 0x00, 0x00 }, 0, 2);
+                            return;
+                        }
                         AssertHelper.Assert(prevSession.Tag is GtsRecord4);
                         GtsRecord4 record = (GtsRecord4)prevSession.Tag;
 
@@ -437,8 +447,18 @@ namespace PkmnFoundations.GTS
 
                         // find a matching session which contains our record
                         GtsSession4 prevSession = manager.FindSession4(pid, "/worldexchange/exchange.asp");
+                        if (prevSession == null)
+                        {
+                            response.Write(new byte[] { 0x00, 0x00 }, 0, 2);
+                            return;
+                        }
 
                         manager.Remove(prevSession);
+                        if (prevSession.Tag == null)
+                        {
+                            response.Write(new byte[] { 0x00, 0x00 }, 0, 2);
+                            return;
+                        }
                         AssertHelper.Assert(prevSession.Tag is GtsRecord4[]);
                         GtsRecord4[] tag = (GtsRecord4[])prevSession.Tag;
                         AssertHelper.Assert(tag.Length == 2);
@@ -474,7 +494,7 @@ namespace PkmnFoundations.GTS
         {
             get
             {
-                return false;
+                return true;
             }
         }
     }

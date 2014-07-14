@@ -313,8 +313,18 @@ namespace PkmnFoundations.GTS
 
                             // find a matching session which contains our record
                             GtsSession5 prevSession = manager.FindSession5(pid, "/worldexchange/post.asp");
+                            if (prevSession == null)
+                            {
+                                response.Write(new byte[] { 0x00, 0x00 }, 0, 2);
+                                return;
+                            }
 
                             manager.Remove(prevSession);
+                            if (prevSession.Tag == null)
+                            {
+                                response.Write(new byte[] { 0x00, 0x00 }, 0, 2);
+                                return;
+                            }
                             AssertHelper.Assert(prevSession.Tag is GtsRecord5);
                             GtsRecord5 record = (GtsRecord5)prevSession.Tag;
 
@@ -438,8 +448,18 @@ namespace PkmnFoundations.GTS
 
                             // find a matching session which contains our record
                             GtsSession5 prevSession = manager.FindSession5(pid, "/worldexchange/exchange.asp");
+                            if (prevSession == null)
+                            {
+                                response.Write(new byte[] { 0x00, 0x00 }, 0, 2);
+                                return;
+                            }
 
                             manager.Remove(prevSession);
+                            if (prevSession.Tag == null)
+                            {
+                                response.Write(new byte[] { 0x00, 0x00 }, 0, 2);
+                                return;
+                            }
                             AssertHelper.Assert(prevSession.Tag is GtsRecord5[]);
                             GtsRecord5[] tag = (GtsRecord5[])prevSession.Tag;
                             AssertHelper.Assert(tag.Length == 2);
@@ -482,7 +502,7 @@ namespace PkmnFoundations.GTS
         {
             get
             {
-                return false;
+                return true;
             }
         }
     }
