@@ -1057,12 +1057,16 @@ namespace PkmnFoundations.Data
             return new BattleVideoHeader4(reader.GetInt32(0), reader.GetInt64(1), data);
         }
 
-        public override BattleVideoRecord4 BattleVideoGet4(long serial)
+        public override BattleVideoRecord4 BattleVideoGet4(long serial, bool incrementViews = false)
         {
+            String update = incrementViews ? "UPDATE TerminalBattleVideos4 " +
+                "SET Views = Views + 1 WHERE SerialNumber = @serial; "
+                : "";
+
             using (MySqlConnection db = CreateConnection())
             {
                 db.Open();
-                MySqlDataReader reader = (MySqlDataReader)db.ExecuteReader("SELECT pid, " +
+                MySqlDataReader reader = (MySqlDataReader)db.ExecuteReader(update + "SELECT pid, " +
                     "SerialNumber, Header, Data FROM TerminalBattleVideos4 " +
                     "WHERE SerialNumber = @serial", 
                     new MySqlParameter("@serial", serial));
@@ -1403,12 +1407,16 @@ namespace PkmnFoundations.Data
             return new BattleVideoHeader5(reader.GetInt32(0), reader.GetInt64(1), data);
         }
 
-        public override BattleVideoRecord5 BattleVideoGet5(long serial)
+        public override BattleVideoRecord5 BattleVideoGet5(long serial, bool incrementViews = false)
         {
+            String update = incrementViews ? "UPDATE TerminalBattleVideos5 " +
+                "SET Views = Views + 1 WHERE SerialNumber = @serial; " 
+                : "";
+
             using (MySqlConnection db = CreateConnection())
             {
                 db.Open();
-                MySqlDataReader reader = (MySqlDataReader)db.ExecuteReader("SELECT pid, " +
+                MySqlDataReader reader = (MySqlDataReader)db.ExecuteReader(update + "SELECT pid, " +
                     "SerialNumber, Header, Data FROM TerminalBattleVideos5 " +
                     "WHERE SerialNumber = @serial",
                     new MySqlParameter("@serial", serial));

@@ -91,7 +91,7 @@ namespace PkmnFoundations.Data
 
         public abstract long BattleVideoUpload4(BattleVideoRecord4 record);
         public abstract BattleVideoHeader4[] BattleVideoSearch4(ushort species, BattleVideoRankings4 ranking, BattleVideoMetagames4 metagame, byte country, byte region, int count);
-        public abstract BattleVideoRecord4 BattleVideoGet4(long serial);
+        public abstract BattleVideoRecord4 BattleVideoGet4(long serial, bool incrementViews = false);
         #endregion
 
         #region Global Terminal 5
@@ -103,7 +103,7 @@ namespace PkmnFoundations.Data
 
         public abstract long BattleVideoUpload5(BattleVideoRecord5 record);
         public abstract BattleVideoHeader5[] BattleVideoSearch5(ushort species, BattleVideoRankings5 ranking, BattleVideoMetagames5 metagame, byte country, byte region, int count);
-        public abstract BattleVideoRecord5 BattleVideoGet5(long serial);
+        public abstract BattleVideoRecord5 BattleVideoGet5(long serial, bool incrementViews = false);
         #endregion
     }
 }

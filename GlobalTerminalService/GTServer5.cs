@@ -224,7 +224,7 @@ namespace PkmnFoundations.GlobalTerminalService
                         }
 
                         long serial = BitConverter.ToInt64(data, 0x140);
-                        BattleVideoRecord5 record = DataAbstract.Instance.BattleVideoGet5(serial);
+                        BattleVideoRecord5 record = DataAbstract.Instance.BattleVideoGet5(serial, true);
                         if (record == null)
                         {
                             response.Write(new byte[] { 0x02, 0x00 }, 0, 2);
