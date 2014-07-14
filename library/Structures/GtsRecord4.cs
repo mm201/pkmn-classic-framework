@@ -203,8 +203,14 @@ namespace PkmnFoundations.Structures
             byte second = (byte)((timestamp >> 0x08) & 0xff);
             //byte fractional = (byte)(timestamp & 0xff); // always 0
 
-            // allow ArgumentOutOfRangeExceptions to escape
-            return new DateTime(year, month, day, hour, minute, second);
+            try
+            {
+                return new DateTime(year, month, day, hour, minute, second);
+            }
+            catch (ArgumentOutOfRangeException)
+            {
+                return null;
+            }
         }
 
         public static ulong DateToTimestamp(DateTime ? date)

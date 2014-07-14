@@ -276,9 +276,7 @@ namespace PkmnFoundations.GTS
 
                             // todo: figure out what bytes 304-439 do:
                             // appears to be 4 bytes of 00, 128 bytes of stuff, 4 bytes of 80 00 00 00
-                            // projectpokemon says it's a "signature of pokémon struct."
-                            // does this mean sha1 with a secret const?
-                            // if it's just a checksum, we can probably ignore it for now.
+                            // probably a pkvldtprod signature
 
                             if (!record.Validate())
                             {
@@ -292,6 +290,8 @@ namespace PkmnFoundations.GTS
                             // the following two fields are blank in the uploaded record.
                             // The server must provide them instead.
                             record.TimeDeposited = DateTime.UtcNow;
+                            record.TimeWithdrawn = null;
+                            record.IsExchanged = 0;
                             record.PID = pid;
 
                             session.Tag = record;

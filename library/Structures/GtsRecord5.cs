@@ -108,8 +108,8 @@ namespace PkmnFoundations.Structures
             s.WriteByte(Unknown1);
             s.WriteByte((byte)TrainerGender);
             s.WriteByte(Unknown2);
-            s.Write(BitConverter.GetBytes(DateToTimestamp(TimeDeposited)), 0, 8);
-            s.Write(BitConverter.GetBytes(DateToTimestamp(TimeWithdrawn)), 0, 8);
+            s.Write(BitConverter.GetBytes(GtsRecord4.DateToTimestamp(TimeDeposited)), 0, 8);
+            s.Write(BitConverter.GetBytes(GtsRecord4.DateToTimestamp(TimeWithdrawn)), 0, 8);
             s.Write(BitConverter.GetBytes(PID), 0, 4);
             s.Write(BitConverter.GetBytes(TrainerOT), 0, 4);
             s.Write(TrainerName.RawData, 0, 0x10);
@@ -143,8 +143,8 @@ namespace PkmnFoundations.Structures
             Unknown1 = data[0xF5];
             TrainerGender = (TrainerGenders)data[0xF6];
             Unknown2 = data[0xF7];
-            TimeDeposited = TimestampToDate(BitConverter.ToUInt64(data, 0xF8));
-            TimeWithdrawn = TimestampToDate(BitConverter.ToUInt64(data, 0x100));
+            TimeDeposited = GtsRecord4.TimestampToDate(BitConverter.ToUInt64(data, 0xF8));
+            TimeWithdrawn = GtsRecord4.TimestampToDate(BitConverter.ToUInt64(data, 0x100));
             PID = BitConverter.ToInt32(data, 0x108);
             TrainerOT = BitConverter.ToUInt32(data, 0x10C);
             TrainerName = new EncodedString5(data, 0x110, 0x10);
@@ -204,35 +204,6 @@ namespace PkmnFoundations.Structures
         {
             if (max == 0) max = 255;
             return other >= min && other <= max;
-        }
-
-        public static DateTime ? TimestampToDate(ulong timestamp)
-        {
-            if (timestamp == 0) return null;
-
-            ushort year = (ushort)((timestamp >> 0x30) & 0xffff);
-            byte month = (byte)((timestamp >> 0x28) & 0xff);
-            byte day = (byte)((timestamp >> 0x20) & 0xff);
-            byte hour = (byte)((timestamp >> 0x18) & 0xff);
-            byte minute = (byte)((timestamp >> 0x10) & 0xff);
-            byte second = (byte)((timestamp >> 0x08) & 0xff);
-            //byte fractional = (byte)(timestamp & 0xff); // always 0
-
-            // allow ArgumentOutOfRangeExceptions to escape
-            return new DateTime(year, month, day, hour, minute, second);
-        }
-
-        public static ulong DateToTimestamp(DateTime ? date)
-        {
-            if (date == null) return 0;
-            DateTime date2 = (DateTime)date;
-
-            return (ulong)(date2.Year & 0xffff) << 0x30
-                | (ulong)(date2.Month & 0xff) << 0x28
-                | (ulong)(date2.Day & 0xff) << 0x20
-                | (ulong)(date2.Hour & 0xff) << 0x18
-                | (ulong)(date2.Minute & 0xff) << 0x10
-                | (ulong)(date2.Second & 0xff) << 0x08;
         }
 
         public static bool operator ==(GtsRecord5 a, GtsRecord5 b)
