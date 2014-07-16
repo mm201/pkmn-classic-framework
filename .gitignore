@@ -2,6 +2,7 @@
 [Tt]humbs.db
 *.suo
 *.csproj.user
+*.pubxml.user
 [Dd]ebug/
 [Rr]elease/
 [Bb]in/
