@@ -60,6 +60,8 @@ namespace PkmnFoundations.Data
 
         public abstract GtsRecord4[] GtsSearch4(int pid, ushort species, Genders gender, byte minLevel, byte maxLevel, byte country, int count);
         public abstract int GtsAvailablePokemon4();
+
+        public abstract void GtsLogTrade4(GtsRecord4 record, DateTime ? timeWithdrawn);
         #endregion
 
         #region GTS 5
@@ -76,6 +78,8 @@ namespace PkmnFoundations.Data
 
         public abstract GtsRecord5[] GtsSearch5(int pid, ushort species, Genders gender, byte minLevel, byte maxLevel, byte country, int count);
         public abstract int GtsAvailablePokemon5();
+
+        public abstract void GtsLogTrade5(GtsRecord5 record, DateTime ? timeWithdrawn);
         #endregion
 
         #region Global Terminal 4

@@ -201,7 +201,12 @@ namespace PkmnFoundations.GTS
                             bool success = DataAbstract.Instance.GtsDeletePokemon4(pid);
                             if (success)
                             {
-                                manager.RefreshStats();
+                                try
+                                {
+                                    DataAbstract.Instance.GtsLogTrade4(record, DateTime.UtcNow);
+                                    manager.RefreshStats();
+                                }
+                                catch { }
                                 response.Write(new byte[] { 0x01, 0x00 }, 0, 2);
                             }
                             else
@@ -470,7 +475,12 @@ namespace PkmnFoundations.GTS
 
                         if (DataAbstract.Instance.GtsTradePokemon4(upload, result))
                         {
-                            manager.RefreshStats();
+                            try
+                            {
+                                DataAbstract.Instance.GtsLogTrade4(result, null);
+                                manager.RefreshStats();
+                            }
+                            catch { }
                             response.Write(new byte[] { 0x01, 0x00 }, 0, 2);
                         }
                         else

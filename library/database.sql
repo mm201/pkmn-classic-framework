@@ -7,7 +7,7 @@
 #
 # Host: 127.0.0.1 (MySQL 5.5.27)
 # Database: gts
-# Generation Time: 2014-07-16 00:39:24 +0000
+# Generation Time: 2014-07-16 01:32:50 +0000
 # ************************************************************
 
 
@@ -205,6 +205,89 @@ CREATE TABLE `FoundationsTypes` (
   `Name` varchar(30) NOT NULL DEFAULT '',
   `DamageClass` tinyint(3) unsigned DEFAULT NULL,
   PRIMARY KEY (`Value`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+
+# Dump of table GtsHistory4
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `GtsHistory4`;
+
+CREATE TABLE `GtsHistory4` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `Data` blob NOT NULL,
+  `Species` smallint(5) unsigned NOT NULL,
+  `Gender` tinyint(3) unsigned NOT NULL,
+  `Level` tinyint(3) unsigned NOT NULL,
+  `RequestedSpecies` smallint(5) unsigned NOT NULL,
+  `RequestedGender` tinyint(3) unsigned NOT NULL,
+  `RequestedMinLevel` tinyint(3) unsigned NOT NULL,
+  `RequestedMaxLevel` tinyint(3) unsigned NOT NULL,
+  `Unknown1` tinyint(3) unsigned NOT NULL,
+  `TrainerGender` tinyint(3) unsigned NOT NULL,
+  `Unknown2` tinyint(3) unsigned NOT NULL,
+  `TimeDeposited` datetime DEFAULT NULL,
+  `TimeExchanged` datetime DEFAULT NULL,
+  `pid` int(11) NOT NULL,
+  `TrainerName` blob NOT NULL,
+  `TrainerOT` smallint(5) unsigned NOT NULL,
+  `TrainerCountry` tinyint(3) unsigned NOT NULL,
+  `TrainerRegion` tinyint(3) unsigned NOT NULL,
+  `TrainerClass` tinyint(3) unsigned NOT NULL,
+  `IsExchanged` tinyint(3) unsigned NOT NULL,
+  `TrainerVersion` tinyint(3) unsigned NOT NULL,
+  `TrainerLanguage` tinyint(3) unsigned NOT NULL,
+  `ParseVersion` int(11) unsigned DEFAULT NULL,
+  `TimeWithdrawn` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `pid` (`pid`),
+  KEY `Species` (`Species`),
+  KEY `Gender` (`Gender`),
+  KEY `Level` (`Level`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+
+# Dump of table GtsHistory5
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `GtsHistory5`;
+
+CREATE TABLE `GtsHistory5` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `Data` blob NOT NULL,
+  `Unknown0` blob NOT NULL,
+  `Species` smallint(5) unsigned NOT NULL,
+  `Gender` tinyint(3) unsigned NOT NULL,
+  `Level` tinyint(3) unsigned NOT NULL,
+  `RequestedSpecies` smallint(5) unsigned NOT NULL,
+  `RequestedGender` tinyint(3) unsigned NOT NULL,
+  `RequestedMinLevel` tinyint(3) unsigned NOT NULL,
+  `RequestedMaxLevel` tinyint(3) unsigned NOT NULL,
+  `Unknown1` tinyint(3) unsigned NOT NULL,
+  `TrainerGender` tinyint(3) unsigned NOT NULL,
+  `Unknown2` tinyint(3) unsigned NOT NULL,
+  `TimeDeposited` datetime DEFAULT NULL,
+  `TimeExchanged` datetime DEFAULT NULL,
+  `pid` int(11) NOT NULL,
+  `TrainerOT` int(11) unsigned NOT NULL,
+  `TrainerName` blob NOT NULL,
+  `TrainerCountry` tinyint(3) unsigned NOT NULL,
+  `TrainerRegion` tinyint(3) unsigned NOT NULL,
+  `TrainerClass` tinyint(3) unsigned NOT NULL,
+  `IsExchanged` tinyint(3) unsigned NOT NULL,
+  `TrainerVersion` tinyint(3) unsigned NOT NULL,
+  `TrainerLanguage` tinyint(3) unsigned NOT NULL,
+  `TrainerBadges` tinyint(3) unsigned NOT NULL,
+  `TrainerUnityTower` tinyint(3) unsigned NOT NULL,
+  `ParseVersion` int(10) unsigned DEFAULT NULL,
+  `TimeWithdrawn` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `pid` (`pid`),
+  KEY `Species` (`Species`),
+  KEY `Gender` (`Gender`),
+  KEY `Level` (`Level`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 

@@ -367,6 +367,45 @@ namespace PkmnFoundations.Data
                 return (int)(long)db.ExecuteScalar("SELECT Count(*) FROM GtsPokemon4 WHERE IsExchanged = 0");
             }
         }
+
+        public override void GtsLogTrade4(GtsRecord4 record, DateTime ? timeWithdrawn)
+        {
+            using (MySqlConnection db = CreateConnection())
+            {
+                db.Open();
+                using (MySqlTransaction tran = db.BeginTransaction())
+                {
+                    GtsLogTrade4(tran, record, timeWithdrawn);
+                    tran.Commit();
+                }
+            }
+        }
+
+        public void GtsLogTrade4(MySqlTransaction tran, GtsRecord4 record, DateTime ? timeWithdrawn)
+        {
+            if (record.Data.Length != 236) throw new FormatException("pkm data must be 236 bytes.");
+            if (record.TrainerName.RawData.Length != 16) throw new FormatException("Trainer name must be 16 bytes.");
+            // note that IsTraded being true in the record is not an error condition
+            // since it might have use later on. You should check for this in the upload handler.
+
+            MySqlParameter[] _params = ParamsFromRecord4(record);
+            MySqlParameter[] _params2 = new MySqlParameter[23];
+            Array.Copy(_params, _params2, 22);
+            _params2[22] = new MySqlParameter("@TimeWithdrawn", timeWithdrawn);
+
+            tran.ExecuteNonQuery("INSERT INTO GtsHistory4 " +
+                "(Data, Species, Gender, Level, RequestedSpecies, RequestedGender, " +
+                "RequestedMinLevel, RequestedMaxLevel, Unknown1, TrainerGender, " +
+                "Unknown2, TimeDeposited, TimeExchanged, pid, TrainerName, TrainerOT, " +
+                "TrainerCountry, TrainerRegion, TrainerClass, IsExchanged, TrainerVersion, " +
+                "TrainerLanguage, TimeWithdrawn) " +
+                "VALUES (@Data, @Species, @Gender, @Level, @RequestedSpecies, " +
+                "@RequestedGender, @RequestedMinLevel, @RequestedMaxLevel, @Unknown1, " +
+                "@TrainerGender, @Unknown2, @TimeDeposited, @TimeExchanged, @pid, " +
+                "@TrainerName, @TrainerOT, @TrainerCountry, @TrainerRegion, @TrainerClass, " +
+                "@IsExchanged, @TrainerVersion, @TrainerLanguage, @TimeWithdrawn)",
+                _params2);
+        }
         #endregion
 
         #region GTS 5
@@ -713,6 +752,50 @@ namespace PkmnFoundations.Data
                 return (int)(long)db.ExecuteScalar("SELECT Count(*) FROM GtsPokemon5 WHERE IsExchanged = 0");
             }
         }
+
+        public override void GtsLogTrade5(GtsRecord5 record, DateTime ? timeWithdrawn)
+        {
+            using (MySqlConnection db = CreateConnection())
+            {
+                db.Open();
+                using (MySqlTransaction tran = db.BeginTransaction())
+                {
+                    GtsLogTrade5(tran, record, timeWithdrawn);
+                    tran.Commit();
+                }
+            }
+        }
+
+        public void GtsLogTrade5(MySqlTransaction tran, GtsRecord5 record, DateTime ? timeWithdrawn)
+        {
+            // todo: Bring these out into a ValidateRecord5 method
+            if (record == null) throw new ArgumentNullException("record");
+            if (record.Data.Length != 220) throw new FormatException("pkm data must be 220 bytes.");
+            if (record.Unknown0.Length != 16) throw new FormatException("pkm padding must be 16 bytes.");
+            if (record.TrainerName.RawData.Length != 16) throw new FormatException("Trainer name must be 16 bytes.");
+            // note that IsTraded being true in the record is not an error condition
+            // since it might have use later on. You should check for this in the upload handler.
+
+            MySqlParameter[] _params = ParamsFromRecord5(record);
+            MySqlParameter[] _params2 = new MySqlParameter[26];
+            Array.Copy(_params, _params2, 25);
+            _params2[25] = new MySqlParameter("@TimeWithdrawn", timeWithdrawn);
+
+            tran.ExecuteNonQuery("INSERT INTO GtsHistory5 " +
+                "(Data, Unknown0, Species, Gender, Level, RequestedSpecies, RequestedGender, " +
+                "RequestedMinLevel, RequestedMaxLevel, Unknown1, TrainerGender, " +
+                "Unknown2, TimeDeposited, TimeExchanged, pid, TrainerOT, TrainerName, " +
+                "TrainerCountry, TrainerRegion, TrainerClass, IsExchanged, TrainerVersion, " +
+                "TrainerLanguage, TrainerBadges, TrainerUnityTower, TimeWithdrawn) " +
+                "VALUES (@Data, @Unknown0, @Species, @Gender, @Level, @RequestedSpecies, " +
+                "@RequestedGender, @RequestedMinLevel, @RequestedMaxLevel, @Unknown1, " +
+                "@TrainerGender, @Unknown2, @TimeDeposited, @TimeExchanged, @pid, " +
+                "@TrainerOT, @TrainerName, @TrainerCountry, @TrainerRegion, @TrainerClass, " +
+                "@IsExchanged, @TrainerVersion, @TrainerLanguage, @TrainerBadges, " +
+                "@TrainerUnityTower, @TimeWithdrawn)",
+                _params2);
+        }
+
         #endregion
 
         #region Global Terminal 4
