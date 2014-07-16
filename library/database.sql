@@ -7,7 +7,7 @@
 #
 # Host: 127.0.0.1 (MySQL 5.5.27)
 # Database: gts
-# Generation Time: 2014-07-14 23:49:09 +0000
+# Generation Time: 2014-07-16 00:39:24 +0000
 # ************************************************************
 
 
@@ -228,7 +228,7 @@ CREATE TABLE `GtsPokemon4` (
   `TrainerGender` tinyint(3) unsigned NOT NULL,
   `Unknown2` tinyint(3) unsigned NOT NULL,
   `TimeDeposited` datetime DEFAULT NULL,
-  `TimeWithdrawn` datetime DEFAULT NULL,
+  `TimeExchanged` datetime DEFAULT NULL,
   `pid` int(11) NOT NULL,
   `TrainerName` blob NOT NULL,
   `TrainerOT` smallint(5) unsigned NOT NULL,
@@ -268,7 +268,7 @@ CREATE TABLE `GtsPokemon5` (
   `TrainerGender` tinyint(3) unsigned NOT NULL,
   `Unknown2` tinyint(3) unsigned NOT NULL,
   `TimeDeposited` datetime DEFAULT NULL,
-  `TimeWithdrawn` datetime DEFAULT NULL,
+  `TimeExchanged` datetime DEFAULT NULL,
   `pid` int(11) NOT NULL,
   `TrainerOT` int(11) unsigned NOT NULL,
   `TrainerName` blob NOT NULL,

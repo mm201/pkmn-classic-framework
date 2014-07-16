@@ -46,7 +46,7 @@ namespace PkmnFoundations.Data
         {
             MySqlDataReader reader = (MySqlDataReader)tran.ExecuteReader("SELECT Data, Species, Gender, Level, " +
                 "RequestedSpecies, RequestedGender, RequestedMinLevel, RequestedMaxLevel, " +
-                "Unknown1, TrainerGender, Unknown2, TimeDeposited, TimeWithdrawn, pid, " +
+                "Unknown1, TrainerGender, Unknown2, TimeDeposited, TimeExchanged, pid, " +
                 "TrainerName, TrainerOT, TrainerCountry, TrainerRegion, TrainerClass, " +
                 "IsExchanged, TrainerVersion, TrainerLanguage FROM GtsPokemon4 WHERE pid = @pid",
                 new MySqlParameter("@pid", pid));
@@ -98,12 +98,12 @@ namespace PkmnFoundations.Data
             tran.ExecuteNonQuery("INSERT INTO GtsPokemon4 " +
                 "(Data, Species, Gender, Level, RequestedSpecies, RequestedGender, " +
                 "RequestedMinLevel, RequestedMaxLevel, Unknown1, TrainerGender, " +
-                "Unknown2, TimeDeposited, TimeWithdrawn, pid, TrainerName, TrainerOT, " +
+                "Unknown2, TimeDeposited, TimeExchanged, pid, TrainerName, TrainerOT, " +
                 "TrainerCountry, TrainerRegion, TrainerClass, IsExchanged, TrainerVersion, " +
                 "TrainerLanguage) " +
                 "VALUES (@Data, @Species, @Gender, @Level, @RequestedSpecies, " +
                 "@RequestedGender, @RequestedMinLevel, @RequestedMaxLevel, @Unknown1, " +
-                "@TrainerGender, @Unknown2, @TimeDeposited, @TimeWithdrawn, @pid, " +
+                "@TrainerGender, @Unknown2, @TimeDeposited, @TimeExchanged, @pid, " +
                 "@TrainerName, @TrainerOT, @TrainerCountry, @TrainerRegion, @TrainerClass, " +
                 "@IsExchanged, @TrainerVersion, @TrainerLanguage)",
                 ParamsFromRecord4(record));
@@ -138,7 +138,7 @@ namespace PkmnFoundations.Data
         public int GtsGetDepositId4(int pid, MySqlTransaction tran)
         {
             object o = tran.ExecuteScalar("SELECT id FROM GtsPokemon4 WHERE pid = @pid " +
-                "ORDER BY IsExchanged DESC, TimeWithdrawn, TimeDeposited LIMIT 1",
+                "ORDER BY IsExchanged DESC, TimeExchanged, TimeDeposited LIMIT 1",
                 new MySqlParameter("@pid", pid));
             if (o == null || o == DBNull.Value) return 0;
             return (int)((uint)o);
@@ -269,7 +269,7 @@ namespace PkmnFoundations.Data
                 // todo: sort me in creative ways
                 MySqlDataReader reader = (MySqlDataReader)db.ExecuteReader("SELECT Data, Species, Gender, Level, " +
                     "RequestedSpecies, RequestedGender, RequestedMinLevel, RequestedMaxLevel, " +
-                    "Unknown1, TrainerGender, Unknown2, TimeDeposited, TimeWithdrawn, pid, " +
+                    "Unknown1, TrainerGender, Unknown2, TimeDeposited, TimeExchanged, pid, " +
                     "TrainerName, TrainerOT, TrainerCountry, TrainerRegion, TrainerClass, " +
                     "IsExchanged, TrainerVersion, TrainerLanguage FROM GtsPokemon4 " + where +
                     " ORDER BY TimeDeposited DESC" + limit,
@@ -309,8 +309,8 @@ namespace PkmnFoundations.Data
             result.Unknown2 = reader.GetByte(10);
             if (reader.IsDBNull(11)) result.TimeDeposited = null;
             else result.TimeDeposited = reader.GetDateTime(11);
-            if (reader.IsDBNull(12)) result.TimeWithdrawn = null;
-            else result.TimeWithdrawn = reader.GetDateTime(12);
+            if (reader.IsDBNull(12)) result.TimeExchanged = null;
+            else result.TimeExchanged = reader.GetDateTime(12);
             result.PID = reader.GetInt32(13);
 
             data = new byte[16];
@@ -345,7 +345,7 @@ namespace PkmnFoundations.Data
             result[9] = new MySqlParameter("@TrainerGender", (byte)record.TrainerGender);
             result[10] = new MySqlParameter("@Unknown2", record.Unknown2);
             result[11] = new MySqlParameter("@TimeDeposited", record.TimeDeposited);
-            result[12] = new MySqlParameter("@TimeWithdrawn", record.TimeWithdrawn);
+            result[12] = new MySqlParameter("@TimeExchanged", record.TimeExchanged);
             result[13] = new MySqlParameter("@pid", record.PID);
             result[14] = new MySqlParameter("@TrainerName", record.TrainerName.RawData);
             result[15] = new MySqlParameter("@TrainerOT", record.TrainerOT);
@@ -375,7 +375,7 @@ namespace PkmnFoundations.Data
             MySqlDataReader reader = (MySqlDataReader)tran.ExecuteReader("SELECT Data, Unknown0, " +
                 "Species, Gender, Level, " +
                 "RequestedSpecies, RequestedGender, RequestedMinLevel, RequestedMaxLevel, " +
-                "Unknown1, TrainerGender, Unknown2, TimeDeposited, TimeWithdrawn, pid, " +
+                "Unknown1, TrainerGender, Unknown2, TimeDeposited, TimeExchanged, pid, " +
                 "TrainerOT, TrainerName, TrainerCountry, TrainerRegion, TrainerClass, " +
                 "IsExchanged, TrainerVersion, TrainerLanguage, TrainerBadges, TrainerUnityTower " +
                 "FROM GtsPokemon5 WHERE pid = @pid",
@@ -430,12 +430,12 @@ namespace PkmnFoundations.Data
             tran.ExecuteNonQuery("INSERT INTO GtsPokemon5 " +
                 "(Data, Unknown0, Species, Gender, Level, RequestedSpecies, RequestedGender, " +
                 "RequestedMinLevel, RequestedMaxLevel, Unknown1, TrainerGender, " +
-                "Unknown2, TimeDeposited, TimeWithdrawn, pid, TrainerOT, TrainerName, " +
+                "Unknown2, TimeDeposited, TimeExchanged, pid, TrainerOT, TrainerName, " +
                 "TrainerCountry, TrainerRegion, TrainerClass, IsExchanged, TrainerVersion, " +
                 "TrainerLanguage, TrainerBadges, TrainerUnityTower) " +
                 "VALUES (@Data, @Unknown0, @Species, @Gender, @Level, @RequestedSpecies, " +
                 "@RequestedGender, @RequestedMinLevel, @RequestedMaxLevel, @Unknown1, " +
-                "@TrainerGender, @Unknown2, @TimeDeposited, @TimeWithdrawn, @pid, " +
+                "@TrainerGender, @Unknown2, @TimeDeposited, @TimeExchanged, @pid, " +
                 "@TrainerOT, @TrainerName, @TrainerCountry, @TrainerRegion, @TrainerClass, " +
                 "@IsExchanged, @TrainerVersion, @TrainerLanguage, @TrainerBadges, @TrainerUnityTower)",
                 ParamsFromRecord5(record));
@@ -472,7 +472,7 @@ namespace PkmnFoundations.Data
         public int GtsGetDepositId5(int pid, MySqlTransaction tran)
         {
             object o = tran.ExecuteScalar("SELECT id FROM GtsPokemon5 WHERE pid = @pid " +
-                "ORDER BY IsExchanged DESC, TimeWithdrawn, TimeDeposited LIMIT 1",
+                "ORDER BY IsExchanged DESC, TimeExchanged, TimeDeposited LIMIT 1",
                 new MySqlParameter("@pid", pid));
             if (o == null || o == DBNull.Value) return 0;
             return (int)((uint)o);
@@ -604,7 +604,7 @@ namespace PkmnFoundations.Data
                 MySqlDataReader reader = (MySqlDataReader)db.ExecuteReader("SELECT Data, Unknown0, " +
                     "Species, Gender, Level, " +
                     "RequestedSpecies, RequestedGender, RequestedMinLevel, RequestedMaxLevel, " +
-                    "Unknown1, TrainerGender, Unknown2, TimeDeposited, TimeWithdrawn, pid, " +
+                    "Unknown1, TrainerGender, Unknown2, TimeDeposited, TimeExchanged, pid, " +
                     "TrainerOT, TrainerName, TrainerCountry, TrainerRegion, TrainerClass, " +
                     "IsExchanged, TrainerVersion, TrainerLanguage, TrainerBadges, TrainerUnityTower " +
                     "FROM GtsPokemon5 " + where +
@@ -650,8 +650,8 @@ namespace PkmnFoundations.Data
             result.Unknown2 = reader.GetByte(11);
             if (reader.IsDBNull(12)) result.TimeDeposited = null;
             else result.TimeDeposited = reader.GetDateTime(12);
-            if (reader.IsDBNull(13)) result.TimeWithdrawn = null;
-            else result.TimeWithdrawn = reader.GetDateTime(13);
+            if (reader.IsDBNull(13)) result.TimeExchanged = null;
+            else result.TimeExchanged = reader.GetDateTime(13);
             result.PID = reader.GetInt32(14);
             result.TrainerOT = reader.GetUInt32(15);
 
@@ -689,7 +689,7 @@ namespace PkmnFoundations.Data
             result[10] = new MySqlParameter("@TrainerGender", (byte)record.TrainerGender);
             result[11] = new MySqlParameter("@Unknown2", record.Unknown2);
             result[12] = new MySqlParameter("@TimeDeposited", record.TimeDeposited);
-            result[13] = new MySqlParameter("@TimeWithdrawn", record.TimeWithdrawn);
+            result[13] = new MySqlParameter("@TimeExchanged", record.TimeExchanged);
             result[14] = new MySqlParameter("@pid", record.PID);
             result[15] = new MySqlParameter("@TrainerOT", record.TrainerOT);
             result[16] = new MySqlParameter("@TrainerName", record.TrainerName.RawData);

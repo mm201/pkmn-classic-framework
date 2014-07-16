@@ -63,7 +63,7 @@ namespace PkmnFoundations.Structures
         public byte Unknown2;
 
         public DateTime ? TimeDeposited;
-        public DateTime ? TimeWithdrawn;
+        public DateTime ? TimeExchanged;
 
         /// <summary>
         /// User ID of the player (not Personality Value)
@@ -109,7 +109,7 @@ namespace PkmnFoundations.Structures
             s.WriteByte((byte)TrainerGender);
             s.WriteByte(Unknown2);
             s.Write(BitConverter.GetBytes(GtsRecord4.DateToTimestamp(TimeDeposited)), 0, 8);
-            s.Write(BitConverter.GetBytes(GtsRecord4.DateToTimestamp(TimeWithdrawn)), 0, 8);
+            s.Write(BitConverter.GetBytes(GtsRecord4.DateToTimestamp(TimeExchanged)), 0, 8);
             s.Write(BitConverter.GetBytes(PID), 0, 4);
             s.Write(BitConverter.GetBytes(TrainerOT), 0, 4);
             s.Write(TrainerName.RawData, 0, 0x10);
@@ -144,7 +144,7 @@ namespace PkmnFoundations.Structures
             TrainerGender = (TrainerGenders)data[0xF6];
             Unknown2 = data[0xF7];
             TimeDeposited = GtsRecord4.TimestampToDate(BitConverter.ToUInt64(data, 0xF8));
-            TimeWithdrawn = GtsRecord4.TimestampToDate(BitConverter.ToUInt64(data, 0x100));
+            TimeExchanged = GtsRecord4.TimestampToDate(BitConverter.ToUInt64(data, 0x100));
             PID = BitConverter.ToInt32(data, 0x108);
             TrainerOT = BitConverter.ToUInt32(data, 0x10C);
             TrainerName = new EncodedString5(data, 0x110, 0x10);
@@ -195,7 +195,7 @@ namespace PkmnFoundations.Structures
             RequestedMinLevel = other.RequestedMinLevel;
             RequestedMaxLevel = other.RequestedMaxLevel;
             TimeDeposited = other.TimeDeposited;
-            TimeWithdrawn = DateTime.UtcNow;
+            TimeExchanged = DateTime.UtcNow;
             PID = other.PID;
             IsExchanged = 0x01;
         }

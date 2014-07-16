@@ -290,7 +290,7 @@ namespace PkmnFoundations.GTS
                             // the following two fields are blank in the uploaded record.
                             // The server must provide them instead.
                             record.TimeDeposited = DateTime.UtcNow;
-                            record.TimeWithdrawn = null;
+                            record.TimeExchanged = null;
                             record.IsExchanged = 0;
                             record.PID = pid;
 
