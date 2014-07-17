@@ -221,12 +221,16 @@ namespace PkmnFoundations.GTS
                                 bool success = DataAbstract.Instance.GtsDeletePokemon5(pid);
                                 if (success)
                                 {
+#if !DEBUG
                                     try
                                     {
+#endif
                                         DataAbstract.Instance.GtsLogTrade5(record, DateTime.UtcNow);
                                         manager.RefreshStats();
+#if !DEBUG
                                     }
                                     catch { }
+#endif
                                     response.Write(new byte[] { 0x01, 0x00 }, 0, 2);
                                 }
                                 else
@@ -492,12 +496,16 @@ namespace PkmnFoundations.GTS
 
                             if (DataAbstract.Instance.GtsTradePokemon5(upload, result))
                             {
+#if !DEBUG
                                 try
                                 {
+#endif
                                     DataAbstract.Instance.GtsLogTrade5(result, null);
                                     manager.RefreshStats();
+#if !DEBUG
                                 }
                                 catch { }
+#endif
                                 response.Write(new byte[] { 0x01, 0x00 }, 0, 2);
                             }
                             else
