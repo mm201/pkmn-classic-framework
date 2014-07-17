@@ -444,14 +444,17 @@ namespace PkmnFoundations.Data
             {
                 return tran.ExecuteNonQuery("UPDATE GtsProfiles4 SET Data = @data, " +
                     "Version = @version, Language = @language, Country = @country, " +
-                    "Region = @region, OT = @ot, Name = @name, ParseVersion = 1 " +
+                    "Region = @region, OT = @ot, Name = @name, ParseVersion = 1, " +
+                    "TimeUpdated = UTC_TIMESTAMP() " +
                     "WHERE pid = @pid", _params) > 0;
             }
             else
             {
-                return tran.ExecuteNonQuery("INSERT INTO GtsProfiles4 (pid, Data, Version, Language, " +
-                    "Country, Region, OT, Name, ParseVersion) VALUES (@pid, @data, " +
-                    "@version, @language, @country, @region, @ot, @name, 1)", _params) > 0;
+                return tran.ExecuteNonQuery("INSERT INTO GtsProfiles4 " +
+                    "(pid, Data, Version, Language, Country, Region, OT, Name, " +
+                    "ParseVersion, TimeAdded, TimeUpdated) VALUES " +
+                    "(@pid, @data, @version, @language, @country, @region, @ot, " +
+                    "@name, 1, UTC_TIMESTAMP(), UTC_TIMESTAMP())", _params) > 0;
             }
         }
         #endregion
@@ -882,14 +885,17 @@ namespace PkmnFoundations.Data
             {
                 return tran.ExecuteNonQuery("UPDATE GtsProfiles5 SET Data = @data, " +
                     "Version = @version, Language = @language, Country = @country, " +
-                    "Region = @region, OT = @ot, Name = @name, ParseVersion = 1 " +
+                    "Region = @region, OT = @ot, Name = @name, ParseVersion = 1, " +
+                    "TimeUpdated = UTC_TIMESTAMP() " +
                     "WHERE pid = @pid", _params) > 0;
             }
             else
             {
-                return tran.ExecuteNonQuery("INSERT INTO GtsProfiles5 (pid, Data, Version, Language, " +
-                    "Country, Region, OT, Name, ParseVersion) VALUES (@pid, @data, " +
-                    "@version, @language, @country, @region, @ot, @name, 1)", _params) > 0;
+                return tran.ExecuteNonQuery("INSERT INTO GtsProfiles5 " +
+                    "(pid, Data, Version, Language, Country, Region, OT, Name, " +
+                    "ParseVersion, TimeAdded, TimeUpdated) VALUES " +
+                    "(@pid, @data, @version, @language, @country, @region, @ot, " +
+                    "@name, 1, UTC_TIMESTAMP(), UTC_TIMESTAMP())", _params) > 0;
             }
         }
         #endregion

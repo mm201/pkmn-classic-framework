@@ -7,7 +7,7 @@
 #
 # Host: 127.0.0.1 (MySQL 5.5.27)
 # Database: gts
-# Generation Time: 2014-07-17 03:56:18 +0000
+# Generation Time: 2014-07-17 15:50:48 +0000
 # ************************************************************
 
 
@@ -389,6 +389,8 @@ CREATE TABLE `GtsProfiles4` (
   `OT` int(11) unsigned NOT NULL,
   `Name` blob NOT NULL,
   `ParseVersion` int(11) unsigned NOT NULL,
+  `TimeAdded` datetime DEFAULT NULL,
+  `TimeUpdated` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `pid` (`pid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -411,6 +413,8 @@ CREATE TABLE `GtsProfiles5` (
   `OT` int(11) unsigned NOT NULL,
   `Name` blob NOT NULL,
   `ParseVersion` int(11) unsigned NOT NULL,
+  `TimeAdded` datetime DEFAULT NULL,
+  `TimeUpdated` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `pid` (`pid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
