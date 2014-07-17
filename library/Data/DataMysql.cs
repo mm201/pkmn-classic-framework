@@ -408,6 +408,54 @@ namespace PkmnFoundations.Data
         }
         #endregion
 
+        #region Other Gamestats 4
+        public override bool GamestatsSetProfile4(TrainerProfile4 profile)
+        {
+            using (MySqlConnection db = CreateConnection())
+            {
+                db.Open();
+                using (MySqlTransaction tran = db.BeginTransaction())
+                {
+                    bool result = GamestatsSetProfile4(tran, profile);
+                    tran.Commit();
+                    return result;
+                }
+            }
+        }
+
+        public bool GamestatsSetProfile4(MySqlTransaction tran, TrainerProfile4 profile)
+        {
+            if (profile.Data.Length != 100) throw new FormatException("Profile data must be 100 bytes.");
+
+            long exists = (long)tran.ExecuteScalar("SELECT EXISTS(SELECT * FROM GtsProfiles4 WHERE pid = @pid)", new MySqlParameter("@pid", profile.PID));
+
+            MySqlParameter[] _params = new MySqlParameter[]{
+                new MySqlParameter("@pid", profile.PID),
+                new MySqlParameter("@data", profile.Data),
+                new MySqlParameter("@version", (byte)profile.Version),
+                new MySqlParameter("@language", (byte)profile.Language),
+                new MySqlParameter("@country", profile.Country),
+                new MySqlParameter("@region", profile.Region),
+                new MySqlParameter("@ot", profile.OT),
+                new MySqlParameter("@name", profile.Name.RawData)
+            };
+
+            if (exists != 0)
+            {
+                return tran.ExecuteNonQuery("UPDATE GtsProfiles4 SET Data = @data, " +
+                    "Version = @version, Language = @language, Country = @country, " +
+                    "Region = @region, OT = @ot, Name = @name, ParseVersion = 1 " +
+                    "WHERE pid = @pid", _params) > 0;
+            }
+            else
+            {
+                return tran.ExecuteNonQuery("INSERT INTO GtsProfiles4 (pid, Data, Version, Language, " +
+                    "Country, Region, OT, Name, ParseVersion) VALUES (@pid, @data, " +
+                    "@version, @language, @country, @region, @ot, @name, 1)", _params) > 0;
+            }
+        }
+        #endregion
+
         #region GTS 5
         public GtsRecord5 GtsDataForUser5(MySqlTransaction tran, int pid)
         {
@@ -796,6 +844,54 @@ namespace PkmnFoundations.Data
                 _params2);
         }
 
+        #endregion
+
+        #region Other Gamestats 5
+        public override bool GamestatsSetProfile5(TrainerProfile5 profile)
+        {
+            using (MySqlConnection db = CreateConnection())
+            {
+                db.Open();
+                using (MySqlTransaction tran = db.BeginTransaction())
+                {
+                    bool result = GamestatsSetProfile5(tran, profile);
+                    tran.Commit();
+                    return result;
+                }
+            }
+        }
+
+        public bool GamestatsSetProfile5(MySqlTransaction tran, TrainerProfile5 profile)
+        {
+            if (profile.Data.Length != 100) throw new FormatException("Profile data must be 100 bytes.");
+
+            long exists = (long)tran.ExecuteScalar("SELECT EXISTS(SELECT * FROM GtsProfiles5 WHERE pid = @pid)", new MySqlParameter("@pid", profile.PID));
+
+            MySqlParameter[] _params = new MySqlParameter[]{
+                new MySqlParameter("@pid", profile.PID),
+                new MySqlParameter("@data", profile.Data),
+                new MySqlParameter("@version", (byte)profile.Version),
+                new MySqlParameter("@language", (byte)profile.Language),
+                new MySqlParameter("@country", profile.Country),
+                new MySqlParameter("@region", profile.Region),
+                new MySqlParameter("@ot", profile.OT),
+                new MySqlParameter("@name", profile.Name.RawData)
+            };
+
+            if (exists != 0)
+            {
+                return tran.ExecuteNonQuery("UPDATE GtsProfiles5 SET Data = @data, " +
+                    "Version = @version, Language = @language, Country = @country, " +
+                    "Region = @region, OT = @ot, Name = @name, ParseVersion = 1 " +
+                    "WHERE pid = @pid", _params) > 0;
+            }
+            else
+            {
+                return tran.ExecuteNonQuery("INSERT INTO GtsProfiles5 (pid, Data, Version, Language, " +
+                    "Country, Region, OT, Name, ParseVersion) VALUES (@pid, @data, " +
+                    "@version, @language, @country, @region, @ot, @name, 1)", _params) > 0;
+            }
+        }
         #endregion
 
         #region Global Terminal 4

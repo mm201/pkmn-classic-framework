@@ -63,6 +63,8 @@
     <Compile Include="Structures\Enums.cs" />
     <Compile Include="Structures\GtsRecord4.cs" />
     <Compile Include="Structures\MusicalRecord5.cs" />
+    <Compile Include="Structures\TrainerProfile4.cs" />
+    <Compile Include="Structures\TrainerProfile5.cs" />
     <Compile Include="Support\AssertHelper.cs" />
     <Compile Include="Support\EncodedString4.cs" />
     <Compile Include="Support\EncodedString5.cs" />

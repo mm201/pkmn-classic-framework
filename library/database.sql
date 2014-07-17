@@ -7,7 +7,7 @@
 #
 # Host: 127.0.0.1 (MySQL 5.5.27)
 # Database: gts
-# Generation Time: 2014-07-16 01:32:50 +0000
+# Generation Time: 2014-07-17 03:56:18 +0000
 # ************************************************************
 
 
@@ -382,16 +382,37 @@ CREATE TABLE `GtsProfiles4` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `pid` int(11) NOT NULL,
   `Data` blob NOT NULL,
-  `Name` blob NOT NULL,
-  `OT` int(11) unsigned NOT NULL,
-  `Country` tinyint(3) unsigned NOT NULL,
-  `Region` tinyint(3) unsigned NOT NULL,
-  `Class` tinyint(3) unsigned NOT NULL,
-  `Gender` tinyint(3) unsigned NOT NULL,
   `Version` tinyint(3) unsigned NOT NULL,
   `Language` tinyint(3) unsigned NOT NULL,
+  `Country` tinyint(3) unsigned NOT NULL,
+  `Region` tinyint(3) unsigned NOT NULL,
+  `OT` int(11) unsigned NOT NULL,
+  `Name` blob NOT NULL,
   `ParseVersion` int(11) unsigned NOT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `pid` (`pid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+
+# Dump of table GtsProfiles5
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `GtsProfiles5`;
+
+CREATE TABLE `GtsProfiles5` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `pid` int(11) NOT NULL,
+  `Data` blob NOT NULL,
+  `Version` tinyint(3) unsigned NOT NULL,
+  `Language` tinyint(3) unsigned NOT NULL,
+  `Country` tinyint(3) unsigned NOT NULL,
+  `Region` tinyint(3) unsigned NOT NULL,
+  `OT` int(11) unsigned NOT NULL,
+  `Name` blob NOT NULL,
+  `ParseVersion` int(11) unsigned NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `pid` (`pid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 

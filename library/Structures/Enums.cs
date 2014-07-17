@@ -46,8 +46,8 @@ namespace PkmnFoundations.Structures
 
         White = 0x14,
         Black = 0x15,
-        // todo: BW2
-        // todo: GenVI
+        White2 = 0x16,
+        Black2 = 0x17,
     }
 
     public enum Languages : byte

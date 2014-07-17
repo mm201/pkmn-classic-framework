@@ -83,9 +83,9 @@
     <Content Include="pkvldtprod.ashx" />
     <None Include="Properties\PublishProfiles\Azure.pubxml" />
     <None Include="Properties\PublishProfiles\Local IIS.pubxml" />
-    <None Include="Web.config">
+    <Content Include="Web.config">
       <SubType>Designer</SubType>
-    </None>
+    </Content>
     <Content Include="test\VideoId.aspx" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>

@@ -16,6 +16,8 @@ namespace PkmnFoundations.Support
         public EncodedString4(byte[] data, int start, int count)
         {
             if (data.Length < start + count) throw new ArgumentOutOfRangeException("count");
+            if (count < 0) throw new ArgumentOutOfRangeException("count");
+            if (count % 2 != 0) throw new ArgumentException("count");
 
             byte[] trim = new byte[count];
             Array.Copy(data, start, trim, 0, count);
@@ -31,6 +33,8 @@ namespace PkmnFoundations.Support
 		public static string DecodeString(byte[] data, int start, int count)
 		{
             if (data.Length < start + count) throw new ArgumentOutOfRangeException("count");
+            if (count < 0) throw new ArgumentOutOfRangeException("count");
+            if (count % 2 != 0) throw new ArgumentException("count");
 
 			StringBuilder sb = new StringBuilder();
 

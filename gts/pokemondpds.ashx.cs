@@ -116,7 +116,25 @@ namespace PkmnFoundations.GTS
                     case "/common/setProfile.asp":
                         manager.Remove(session);
 
-                        // todo: Figure out what fun stuff is contained in this blob!
+                        if (data.Length != 104)
+                        {
+                            Error400(context);
+                            return;
+                        }
+
+#if !DEBUG
+                        try
+                        {
+#endif
+                            // todo: Figure out what fun stuff is contained in this blob!
+                            byte[] profileBinary = new byte[100];
+                            Array.Copy(data, 4, profileBinary, 0, 100);
+                            TrainerProfile4 profile = new TrainerProfile4(pid, profileBinary);
+                            DataAbstract.Instance.GamestatsSetProfile4(profile);
+#if !DEBUG
+                        }
+                        catch { }
+#endif
 
                         response.Write(new byte[] 
                             { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 }, 

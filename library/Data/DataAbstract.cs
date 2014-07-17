@@ -64,6 +64,10 @@ namespace PkmnFoundations.Data
         public abstract void GtsLogTrade4(GtsRecord4 record, DateTime ? timeWithdrawn);
         #endregion
 
+        #region Other Gamestats 4
+        public abstract bool GamestatsSetProfile4(TrainerProfile4 profile);
+        #endregion
+
         #region GTS 5
         public const int GTS_VERSION_5 = 0;
 
@@ -80,6 +84,10 @@ namespace PkmnFoundations.Data
         public abstract int GtsAvailablePokemon5();
 
         public abstract void GtsLogTrade5(GtsRecord5 record, DateTime ? timeWithdrawn);
+        #endregion
+
+        #region Other Gamestats 5
+        public abstract bool GamestatsSetProfile5(TrainerProfile5 profile);
         #endregion
 
         #region Global Terminal 4
