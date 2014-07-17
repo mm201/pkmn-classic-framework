@@ -106,8 +106,8 @@ namespace PkmnFoundations.GTS
                         manager.Remove(session);
 
                         // unrecognized page url
-                        // should be error 404 once we're done debugging
-                        context.Response.Write("Almost there. Your path is:\n");
+                        context.Response.StatusCode = 404;
+                        context.Response.Write("This handler has not been implemented.\n");
                         context.Response.Write(session.URL);
                         return;
 
