@@ -111,15 +111,7 @@ namespace PkmnFoundations.GTS
                         context.Response.Write(session.URL);
                         return;
 
-                    // Called during startup. Unknown purpose.
-                    case "/worldexchange/info.asp":
-                        manager.Remove(session);
-
-                        // todo: find out the meaning of this request.
-                        // is it simply done to check whether the GTS is online?
-                        response.Write(new byte[] { 0x01, 0x00 }, 0, 2);
-                        break;
-
+                    #region Common
                     // Called during startup. Seems to contain trainer profile stats.
                     case "/common/setProfile.asp":
                         manager.Remove(session);
@@ -134,11 +126,11 @@ namespace PkmnFoundations.GTS
                         try
                         {
 #endif
-                            // todo: Figure out what fun stuff is contained in this blob!
-                            byte[] profileBinary = new byte[100];
-                            Array.Copy(data, 8, profileBinary, 0, 100);
-                            TrainerProfile5 profile = new TrainerProfile5(pid, profileBinary);
-                            DataAbstract.Instance.GamestatsSetProfile5(profile);
+                        // todo: Figure out what fun stuff is contained in this blob!
+                        byte[] profileBinary = new byte[100];
+                        Array.Copy(data, 8, profileBinary, 0, 100);
+                        TrainerProfile5 profile = new TrainerProfile5(pid, profileBinary);
+                        DataAbstract.Instance.GamestatsSetProfile5(profile);
 #if !DEBUG
                         }
                         catch { }
@@ -146,6 +138,17 @@ namespace PkmnFoundations.GTS
 
                         response.Write(new byte[] { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 },
                             0, 8);
+                        break;
+                    #endregion
+
+                    #region GTS
+                    // Called during startup. Unknown purpose.
+                    case "/worldexchange/info.asp":
+                        manager.Remove(session);
+
+                        // todo: find out the meaning of this request.
+                        // is it simply done to check whether the GTS is online?
+                        response.Write(new byte[] { 0x01, 0x00 }, 0, 2);
                         break;
 
                     // Called during startup and when you check your pokemon's status.
@@ -512,6 +515,7 @@ namespace PkmnFoundations.GTS
                                 response.Write(new byte[] { 0x00, 0x00 }, 0, 2);
 
                         } break;
+                    #endregion
                 }
 
                 response.Flush();
