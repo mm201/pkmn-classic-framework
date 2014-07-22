@@ -244,6 +244,8 @@ namespace PkmnFoundations.GlobalTerminalService
 
                     } break;
 
+                    // todo: A mysterious 0xf3 request type is appearing in my logs. Implement.
+
                     default:
                         logEntry.AppendLine("Unrecognized request type.");
                         response.Write(new byte[] { 0x02, 0x00 }, 0, 2);
