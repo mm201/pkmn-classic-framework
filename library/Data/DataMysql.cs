@@ -1083,7 +1083,7 @@ namespace PkmnFoundations.Data
                             new MySqlParameter("@key", key));
 
                         // todo: make a proc to insert both video and party.
-                        InsertBattleVideoParty4(record.Header, (ulong)key, tran);
+                        InsertBattleVideoParty4(record.Header, key, tran);
 
                         tran.Commit();
                         return serial;
@@ -1422,7 +1422,7 @@ namespace PkmnFoundations.Data
                             new MySqlParameter("@key", key));
 
                         // todo: make a proc to insert both video and party.
-                        InsertBattleVideoParty5(record.Header, (ulong)key, tran);
+                        InsertBattleVideoParty5(record.Header, key, tran);
 
                         tran.Commit();
                         return serial;

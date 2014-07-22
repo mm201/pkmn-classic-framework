@@ -93,7 +93,7 @@ namespace PkmnFoundations.GlobalTerminalService
                             break;
                         }
 
-                        logEntry.AppendFormat("Box {0} uploaded successfully.", record.SerialNumber);
+                        logEntry.AppendFormat("Box {0} uploaded successfully.", serial);
                         logEntry.AppendLine();
                         response.Write(new byte[] { 0x00, 0x00 }, 0, 2); // result code (0 for OK)
                         response.Write(BitConverter.GetBytes(serial), 0, 8);
@@ -149,7 +149,7 @@ namespace PkmnFoundations.GlobalTerminalService
                             break;
                         }
 
-                        logEntry.AppendFormat("Dressup {0} uploaded successfully.", record.SerialNumber);
+                        logEntry.AppendFormat("Dressup {0} uploaded successfully.", serial);
                         response.Write(new byte[] { 0x00, 0x00 }, 0, 2); // result code (0 for OK)
                         response.Write(BitConverter.GetBytes(serial), 0, 8);
 
@@ -203,7 +203,7 @@ namespace PkmnFoundations.GlobalTerminalService
                             break;
                         }
 
-                        logEntry.AppendFormat("Battle video {0} uploaded successfully.", BattleVideoHeader4.FormatSerial(record.SerialNumber));
+                        logEntry.AppendFormat("Battle video {0} uploaded successfully.", BattleVideoHeader4.FormatSerial(serial));
                         logEntry.AppendLine();
                         response.Write(new byte[] { 0x00, 0x00 }, 0, 2); // result code (0 for OK)
                         response.Write(BitConverter.GetBytes(serial), 0, 8);
