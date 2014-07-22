@@ -48,7 +48,7 @@ namespace PkmnFoundations.GTS.admin
             for (int x = 0; x < results; x++)
             {
                 int pid = BitConverter.ToInt32(data, 12 + 572 * x);
-                long serial = BitConverter.ToInt64(data, 16 + 572 * x);
+                ulong serial = BitConverter.ToUInt64(data, 16 + 572 * x);
                 if (serial == 0) continue;
 
                 byte[] result = new byte[560];

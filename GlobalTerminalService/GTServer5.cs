@@ -82,7 +82,7 @@ namespace PkmnFoundations.GlobalTerminalService
                         byte[] musicalData = new byte[0x230];
                         Array.Copy(data, 0x140, musicalData, 0, 0x230);
                         MusicalRecord5 record = new MusicalRecord5(pid, 0, musicalData);
-                        long serial = DataAbstract.Instance.MusicalUpload5(record);
+                        ulong serial = DataAbstract.Instance.MusicalUpload5(record);
 
                         if (serial == 0)
                         {
@@ -149,7 +149,7 @@ namespace PkmnFoundations.GlobalTerminalService
                         Array.Copy(data, 0x19e8, vldtSignature, 0, sigLength);
                         // todo: validate signature.
 
-                        long serial = DataAbstract.Instance.BattleVideoUpload5(record);
+                        ulong serial = DataAbstract.Instance.BattleVideoUpload5(record);
 
                         if (serial == 0)
                         {
@@ -223,7 +223,7 @@ namespace PkmnFoundations.GlobalTerminalService
                             break;
                         }
 
-                        long serial = BitConverter.ToInt64(data, 0x140);
+                        ulong serial = BitConverter.ToUInt64(data, 0x140);
                         BattleVideoRecord5 record = DataAbstract.Instance.BattleVideoGet5(serial, true);
                         if (record == null)
                         {

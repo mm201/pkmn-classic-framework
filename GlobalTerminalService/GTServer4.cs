@@ -84,7 +84,7 @@ namespace PkmnFoundations.GlobalTerminalService
                         byte[] boxData = new byte[0x21c];
                         Array.Copy(data, 0x144, boxData, 0, 0x21c);
                         BoxRecord4 record = new BoxRecord4(pid, label, 0, boxData);
-                        long serial = DataAbstract.Instance.BoxUpload4(record);
+                        ulong serial = DataAbstract.Instance.BoxUpload4(record);
 
                         if (serial == 0)
                         {
@@ -140,7 +140,7 @@ namespace PkmnFoundations.GlobalTerminalService
                         byte[] dressupData = new byte[0xe0];
                         Array.Copy(data, 0x140, dressupData, 0, 0xe0);
                         DressupRecord4 record = new DressupRecord4(pid, 0, dressupData);
-                        long serial = DataAbstract.Instance.DressupUpload4(record);
+                        ulong serial = DataAbstract.Instance.DressupUpload4(record);
 
                         if (serial == 0)
                         {
@@ -194,7 +194,7 @@ namespace PkmnFoundations.GlobalTerminalService
                         byte[] battlevidData = new byte[0x1d4c];
                         Array.Copy(data, 0x140, battlevidData, 0, 0x1d4c);
                         BattleVideoRecord4 record = new BattleVideoRecord4(pid, 0, battlevidData);
-                        long serial = DataAbstract.Instance.BattleVideoUpload4(record);
+                        ulong serial = DataAbstract.Instance.BattleVideoUpload4(record);
 
                         if (serial == 0)
                         {
@@ -262,7 +262,7 @@ namespace PkmnFoundations.GlobalTerminalService
                             break;
                         }
 
-                        long serial = BitConverter.ToInt64(data, 0x140);
+                        ulong serial = BitConverter.ToUInt64(data, 0x140);
                         BattleVideoRecord4 record = DataAbstract.Instance.BattleVideoGet4(serial, true);
                         if (record == null)
                         {
@@ -292,6 +292,7 @@ namespace PkmnFoundations.GlobalTerminalService
             {
                 logEntry.AppendFormat("Unhandled exception while handling request.\nException: {0}", ex.ToString());
                 logEntry.AppendLine();
+                type = EventLogEntryType.Error;
                 response.Write(new byte[] { 0x02, 0x00 }, 0, 2);
             }
 

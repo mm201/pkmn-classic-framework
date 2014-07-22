@@ -11,7 +11,7 @@ namespace PkmnFoundations.Structures
         {
         }
 
-        public BattleVideoRecord5(int pid, long serial_number, byte[] data)
+        public BattleVideoRecord5(int pid, ulong serial_number, byte[] data)
         {
             if (data.Length != 6308) throw new ArgumentException("Battle video data must be 6308 bytes.");
 
@@ -27,7 +27,7 @@ namespace PkmnFoundations.Structures
             Data = data_main;
         }
 
-        public BattleVideoRecord5(int pid, long serial_number, BattleVideoHeader5 header, byte[] data_main)
+        public BattleVideoRecord5(int pid, ulong serial_number, BattleVideoHeader5 header, byte[] data_main)
         {
             if (data_main.Length != 6112) throw new ArgumentException("Battle video main data must be 6112 bytes.");
 
@@ -38,7 +38,7 @@ namespace PkmnFoundations.Structures
         }
 
         public int PID;
-        public long SerialNumber;
+        public ulong SerialNumber;
         public BattleVideoHeader5 Header;
         public byte[] Data;
 

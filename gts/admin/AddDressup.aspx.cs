@@ -50,7 +50,7 @@ namespace PkmnFoundations.GTS.test
             for (int x = 0; x < results; x++)
             {
                 int pid = BitConverter.ToInt32(data, 12 + 236 * x);
-                long serial = BitConverter.ToInt64(data, 16 + 236 * x);
+                ulong serial = BitConverter.ToUInt64(data, 16 + 236 * x);
                 if (serial == 0) continue;
 
                 byte[] result = new byte[224];

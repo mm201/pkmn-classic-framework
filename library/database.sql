@@ -7,7 +7,7 @@
 #
 # Host: 127.0.0.1 (MySQL 5.5.27)
 # Database: gts
-# Generation Time: 2014-07-17 15:50:48 +0000
+# Generation Time: 2014-07-22 15:58:36 +0000
 # ************************************************************
 
 
@@ -215,7 +215,7 @@ CREATE TABLE `FoundationsTypes` (
 DROP TABLE IF EXISTS `GtsHistory4`;
 
 CREATE TABLE `GtsHistory4` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `Data` blob NOT NULL,
   `Species` smallint(5) unsigned NOT NULL,
   `Gender` tinyint(3) unsigned NOT NULL,
@@ -230,7 +230,7 @@ CREATE TABLE `GtsHistory4` (
   `TimeDeposited` datetime DEFAULT NULL,
   `TimeExchanged` datetime DEFAULT NULL,
   `pid` int(11) NOT NULL,
-  `TrainerName` blob NOT NULL,
+  `TrainerName` binary(16) NOT NULL DEFAULT '\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0',
   `TrainerOT` smallint(5) unsigned NOT NULL,
   `TrainerCountry` tinyint(3) unsigned NOT NULL,
   `TrainerRegion` tinyint(3) unsigned NOT NULL,
@@ -255,7 +255,7 @@ CREATE TABLE `GtsHistory4` (
 DROP TABLE IF EXISTS `GtsHistory5`;
 
 CREATE TABLE `GtsHistory5` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `Data` blob NOT NULL,
   `Unknown0` blob NOT NULL,
   `Species` smallint(5) unsigned NOT NULL,
@@ -272,7 +272,7 @@ CREATE TABLE `GtsHistory5` (
   `TimeExchanged` datetime DEFAULT NULL,
   `pid` int(11) NOT NULL,
   `TrainerOT` int(11) unsigned NOT NULL,
-  `TrainerName` blob NOT NULL,
+  `TrainerName` binary(16) NOT NULL DEFAULT '\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0',
   `TrainerCountry` tinyint(3) unsigned NOT NULL,
   `TrainerRegion` tinyint(3) unsigned NOT NULL,
   `TrainerClass` tinyint(3) unsigned NOT NULL,
@@ -298,7 +298,7 @@ CREATE TABLE `GtsHistory5` (
 DROP TABLE IF EXISTS `GtsPokemon4`;
 
 CREATE TABLE `GtsPokemon4` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `Data` blob NOT NULL,
   `Species` smallint(5) unsigned NOT NULL,
   `Gender` tinyint(3) unsigned NOT NULL,
@@ -313,7 +313,7 @@ CREATE TABLE `GtsPokemon4` (
   `TimeDeposited` datetime DEFAULT NULL,
   `TimeExchanged` datetime DEFAULT NULL,
   `pid` int(11) NOT NULL,
-  `TrainerName` blob NOT NULL,
+  `TrainerName` binary(16) NOT NULL DEFAULT '\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0',
   `TrainerOT` smallint(5) unsigned NOT NULL,
   `TrainerCountry` tinyint(3) unsigned NOT NULL,
   `TrainerRegion` tinyint(3) unsigned NOT NULL,
@@ -337,7 +337,7 @@ CREATE TABLE `GtsPokemon4` (
 DROP TABLE IF EXISTS `GtsPokemon5`;
 
 CREATE TABLE `GtsPokemon5` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `Data` blob NOT NULL,
   `Unknown0` blob NOT NULL,
   `Species` smallint(5) unsigned NOT NULL,
@@ -354,7 +354,7 @@ CREATE TABLE `GtsPokemon5` (
   `TimeExchanged` datetime DEFAULT NULL,
   `pid` int(11) NOT NULL,
   `TrainerOT` int(11) unsigned NOT NULL,
-  `TrainerName` blob NOT NULL,
+  `TrainerName` binary(16) NOT NULL DEFAULT '\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0',
   `TrainerCountry` tinyint(3) unsigned NOT NULL,
   `TrainerRegion` tinyint(3) unsigned NOT NULL,
   `TrainerClass` tinyint(3) unsigned NOT NULL,
@@ -379,20 +379,18 @@ CREATE TABLE `GtsPokemon5` (
 DROP TABLE IF EXISTS `GtsProfiles4`;
 
 CREATE TABLE `GtsProfiles4` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `pid` int(11) NOT NULL,
   `Data` blob NOT NULL,
   `Version` tinyint(3) unsigned NOT NULL,
   `Language` tinyint(3) unsigned NOT NULL,
   `Country` tinyint(3) unsigned NOT NULL,
   `Region` tinyint(3) unsigned NOT NULL,
-  `OT` int(11) unsigned NOT NULL,
-  `Name` blob NOT NULL,
-  `ParseVersion` int(11) unsigned NOT NULL,
+  `OT` int(10) unsigned NOT NULL,
+  `Name` binary(16) NOT NULL DEFAULT '\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0',
+  `ParseVersion` int(10) unsigned NOT NULL,
   `TimeAdded` datetime DEFAULT NULL,
   `TimeUpdated` datetime DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `pid` (`pid`)
+  PRIMARY KEY (`pid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
@@ -403,7 +401,6 @@ CREATE TABLE `GtsProfiles4` (
 DROP TABLE IF EXISTS `GtsProfiles5`;
 
 CREATE TABLE `GtsProfiles5` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `pid` int(11) NOT NULL,
   `Data` blob NOT NULL,
   `Version` tinyint(3) unsigned NOT NULL,
@@ -411,12 +408,11 @@ CREATE TABLE `GtsProfiles5` (
   `Country` tinyint(3) unsigned NOT NULL,
   `Region` tinyint(3) unsigned NOT NULL,
   `OT` int(11) unsigned NOT NULL,
-  `Name` blob NOT NULL,
+  `Name` binary(16) NOT NULL DEFAULT '\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0',
   `ParseVersion` int(11) unsigned NOT NULL,
   `TimeAdded` datetime DEFAULT NULL,
   `TimeUpdated` datetime DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `pid` (`pid`)
+  PRIMARY KEY (`pid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
@@ -461,13 +457,13 @@ DROP TABLE IF EXISTS `TerminalBattleVideos4`;
 CREATE TABLE `TerminalBattleVideos4` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `pid` int(11) NOT NULL,
-  `SerialNumber` bigint(20) DEFAULT NULL,
+  `SerialNumber` bigint(20) unsigned DEFAULT NULL,
   `Header` blob NOT NULL,
   `Data` blob NOT NULL,
   `md5` binary(16) NOT NULL DEFAULT '\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0',
   `TimeAdded` datetime NOT NULL,
-  `ParseVersion` int(11) NOT NULL,
-  `TrainerName` blob NOT NULL,
+  `ParseVersion` int(10) unsigned NOT NULL,
+  `TrainerName` binary(16) NOT NULL DEFAULT '\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0',
   `Streak` smallint(5) unsigned DEFAULT NULL,
   `Metagame` tinyint(3) unsigned NOT NULL,
   `Country` tinyint(3) unsigned NOT NULL,
@@ -492,13 +488,13 @@ DROP TABLE IF EXISTS `TerminalBattleVideos5`;
 CREATE TABLE `TerminalBattleVideos5` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `pid` int(11) NOT NULL,
-  `SerialNumber` bigint(20) DEFAULT NULL,
+  `SerialNumber` bigint(20) unsigned DEFAULT NULL,
   `Header` blob NOT NULL,
   `Data` blob NOT NULL,
   `md5` binary(16) NOT NULL DEFAULT '\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0',
   `TimeAdded` datetime NOT NULL,
-  `ParseVersion` int(11) NOT NULL,
-  `TrainerName` blob NOT NULL,
+  `ParseVersion` int(10) unsigned NOT NULL,
+  `TrainerName` binary(16) NOT NULL DEFAULT '\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0',
   `Streak` smallint(5) unsigned DEFAULT NULL,
   `Metagame` tinyint(3) unsigned NOT NULL,
   `Country` tinyint(3) unsigned NOT NULL,
@@ -522,7 +518,7 @@ DROP TABLE IF EXISTS `TerminalBoxes4`;
 
 CREATE TABLE `TerminalBoxes4` (
   `pid` int(11) NOT NULL,
-  `SerialNumber` bigint(20) NOT NULL AUTO_INCREMENT,
+  `SerialNumber` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `Data` blob NOT NULL,
   `md5` binary(16) NOT NULL DEFAULT '\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0',
   `TimeAdded` datetime NOT NULL,
@@ -543,7 +539,7 @@ DROP TABLE IF EXISTS `TerminalDressup4`;
 
 CREATE TABLE `TerminalDressup4` (
   `pid` int(11) NOT NULL,
-  `SerialNumber` bigint(20) NOT NULL AUTO_INCREMENT,
+  `SerialNumber` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `Data` blob NOT NULL,
   `md5` binary(16) NOT NULL DEFAULT '\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0',
   `TimeAdded` datetime NOT NULL,
@@ -563,7 +559,7 @@ CREATE TABLE `TerminalDressup4` (
 DROP TABLE IF EXISTS `TerminalMusicalPokemon5`;
 
 CREATE TABLE `TerminalMusicalPokemon5` (
-  `musical_id` bigint(20) NOT NULL,
+  `musical_id` bigint(20) unsigned NOT NULL,
   `Slot` tinyint(3) unsigned NOT NULL,
   `Species` smallint(6) unsigned NOT NULL,
   PRIMARY KEY (`musical_id`,`Slot`),
@@ -580,7 +576,7 @@ DROP TABLE IF EXISTS `TerminalMusicals5`;
 
 CREATE TABLE `TerminalMusicals5` (
   `pid` int(11) NOT NULL,
-  `SerialNumber` bigint(20) NOT NULL AUTO_INCREMENT,
+  `SerialNumber` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `Data` blob NOT NULL,
   `md5` binary(16) NOT NULL DEFAULT '\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0',
   `TimeAdded` datetime NOT NULL,

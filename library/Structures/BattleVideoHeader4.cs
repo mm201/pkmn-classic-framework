@@ -11,7 +11,7 @@ namespace PkmnFoundations.Structures
         {
         }
 
-        public BattleVideoHeader4(int pid, long serial_number, byte[] data)
+        public BattleVideoHeader4(int pid, ulong serial_number, byte[] data)
         {
             if (data.Length != 228) throw new ArgumentException("Battle video header data must be 228 bytes.");
 
@@ -22,7 +22,7 @@ namespace PkmnFoundations.Structures
 
         // todo: encapsulate these so calculated fields are always correct
         public int PID;
-        public long SerialNumber;
+        public ulong SerialNumber;
         public byte[] Data;
 
         public ushort Streak
@@ -144,7 +144,7 @@ namespace PkmnFoundations.Structures
         /// <summary>
         /// Converts a primary key (auto incrementing) into a Battle Video ID.
         /// </summary>
-        public static long KeyToSerial(long key)
+        public static ulong KeyToSerial(ulong key)
         {
             if (key > 899999999999L || key < 0L) throw new ArgumentOutOfRangeException();
 
@@ -184,7 +184,7 @@ namespace PkmnFoundations.Structures
         /// <summary>
         /// Converts Battle Video ID back into a primary key.
         /// </summary>
-        public static long SerialToKey(long serial)
+        public static ulong SerialToKey(ulong serial)
         {
             if (serial > 999999999999L || serial < 100000000000L)
                 throw new ArgumentOutOfRangeException();
@@ -220,7 +220,7 @@ namespace PkmnFoundations.Structures
             return DigitsToLong(serialDigits);
         }
 
-        private static byte[] LongToDigits(long value)
+        private static byte[] LongToDigits(ulong value)
         {
             if (value > 999999999999L || value < 0L) throw new ArgumentException();
             byte[] result = new byte[12];
@@ -232,11 +232,11 @@ namespace PkmnFoundations.Structures
             return result;
         }
 
-        private static long DigitsToLong(byte[] digits)
+        private static ulong DigitsToLong(byte[] digits)
         {
             if (digits.Length != 12) throw new ArgumentException();
-            long result = 0;
-            long pow = 1;
+            ulong result = 0;
+            ulong pow = 1;
             for (int x = 11; x >= 0; x--)
             {
                 if (digits[x] > 9) throw new ArgumentException();
@@ -248,7 +248,7 @@ namespace PkmnFoundations.Structures
 
         #endregion
 
-        public static String FormatSerial(long serial)
+        public static String FormatSerial(ulong serial)
         {
             String number = serial.ToString("D12");
             String[] split = new String[3];

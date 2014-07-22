@@ -11,7 +11,7 @@ namespace PkmnFoundations.Structures
         {
         }
 
-        public BoxRecord4(int pid, BoxLabels4 label, long serial_number, byte[] data)
+        public BoxRecord4(int pid, BoxLabels4 label, ulong serial_number, byte[] data)
         {
             if (data.Length != 540) throw new ArgumentException("Box data must be 540 bytes.");
 
@@ -24,7 +24,7 @@ namespace PkmnFoundations.Structures
         // todo: encapsulate these so calculated fields are always correct
         public int PID;
         public BoxLabels4 Label;
-        public long SerialNumber;
+        public ulong SerialNumber;
         public byte[] Data;
 
         public BoxRecord4 Clone()

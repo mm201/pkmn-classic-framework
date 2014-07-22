@@ -11,7 +11,7 @@ namespace PkmnFoundations.Structures
         {
         }
 
-        public DressupRecord4(int pid, long serial_number, byte[] data)
+        public DressupRecord4(int pid, ulong serial_number, byte[] data)
         {
             if (data.Length != 224) throw new ArgumentException("Dressup data must be 224 bytes.");
 
@@ -22,7 +22,7 @@ namespace PkmnFoundations.Structures
 
         // todo: encapsulate these so calculated fields are always correct
         public int PID;
-        public long SerialNumber;
+        public ulong SerialNumber;
         public byte[] Data;
 
         public ushort Species

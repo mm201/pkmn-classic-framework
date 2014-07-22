@@ -11,7 +11,7 @@ namespace PkmnFoundations.Structures
         {
         }
 
-        public BattleVideoHeader5(int pid, long serial_number, byte[] data)
+        public BattleVideoHeader5(int pid, ulong serial_number, byte[] data)
         {
             if (data.Length != 196) throw new ArgumentException("Battle video header data must be 196 bytes.");
 
@@ -22,7 +22,7 @@ namespace PkmnFoundations.Structures
 
         // todo: encapsulate these so calculated fields are always correct
         public int PID;
-        public long SerialNumber;
+        public ulong SerialNumber;
         public byte[] Data;
 
         public ushort Streak

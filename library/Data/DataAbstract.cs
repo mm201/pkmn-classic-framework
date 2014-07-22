@@ -95,27 +95,27 @@ namespace PkmnFoundations.Data
         public const int BOX_VERSION_4 = 1;
         public const int BATTLEVIDEO_VERSION_4 = 1;
 
-        public abstract long DressupUpload4(DressupRecord4 record);
+        public abstract ulong DressupUpload4(DressupRecord4 record);
         public abstract DressupRecord4[] DressupSearch4(ushort species, int count);
 
-        public abstract long BoxUpload4(BoxRecord4 record);
+        public abstract ulong BoxUpload4(BoxRecord4 record);
         public abstract BoxRecord4[] BoxSearch4(BoxLabels4 label, int count);
 
-        public abstract long BattleVideoUpload4(BattleVideoRecord4 record);
+        public abstract ulong BattleVideoUpload4(BattleVideoRecord4 record);
         public abstract BattleVideoHeader4[] BattleVideoSearch4(ushort species, BattleVideoRankings4 ranking, BattleVideoMetagames4 metagame, byte country, byte region, int count);
-        public abstract BattleVideoRecord4 BattleVideoGet4(long serial, bool incrementViews = false);
+        public abstract BattleVideoRecord4 BattleVideoGet4(ulong serial, bool incrementViews = false);
         #endregion
 
         #region Global Terminal 5
         public const int MUSICAL_VERSION_5 = 1;
         public const int BATTLEVIDEO_VERSION_5 = 1;
 
-        public abstract long MusicalUpload5(MusicalRecord5 record);
+        public abstract ulong MusicalUpload5(MusicalRecord5 record);
         public abstract MusicalRecord5[] MusicalSearch5(ushort species, int count);
 
-        public abstract long BattleVideoUpload5(BattleVideoRecord5 record);
+        public abstract ulong BattleVideoUpload5(BattleVideoRecord5 record);
         public abstract BattleVideoHeader5[] BattleVideoSearch5(ushort species, BattleVideoRankings5 ranking, BattleVideoMetagames5 metagame, byte country, byte region, int count);
-        public abstract BattleVideoRecord5 BattleVideoGet5(long serial, bool incrementViews = false);
+        public abstract BattleVideoRecord5 BattleVideoGet5(ulong serial, bool incrementViews = false);
         #endregion
     }
 }

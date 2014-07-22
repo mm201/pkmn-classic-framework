@@ -901,7 +901,7 @@ namespace PkmnFoundations.Data
         #endregion
 
         #region Global Terminal 4
-        public override long DressupUpload4(DressupRecord4 record)
+        public override ulong DressupUpload4(DressupRecord4 record)
         {
             if (record.Data.Length != 224) throw new ArgumentException("Dressup data must be 224 bytes.");
             using (MySqlConnection db = CreateConnection())
@@ -914,12 +914,12 @@ namespace PkmnFoundations.Data
 
                     if (record.SerialNumber == 0)
                     {
-                        long serial = (long)tran.ExecuteScalar("INSERT INTO TerminalDressup4 (pid, " +
+                        ulong serial = Convert.ToUInt64(tran.ExecuteScalar("INSERT INTO TerminalDressup4 (pid, " +
                             "Data, md5, TimeAdded, ParseVersion, Species) VALUES (@pid, @data, " +
                             "unhex(md5(@data)), UTC_TIMESTAMP(), 1, @species); SELECT LAST_INSERT_ID()",
                             new MySqlParameter("@pid", record.PID),
                             new MySqlParameter("@data", record.Data),
-                            new MySqlParameter("@species", record.Species));
+                            new MySqlParameter("@species", record.Species)));
                         tran.Commit();
                         return serial;
                     }
@@ -968,10 +968,10 @@ namespace PkmnFoundations.Data
             byte[] data = new byte[224];
             reader.GetBytes(2, 0, data, 0, 224);
 
-            return new DressupRecord4(reader.GetInt32(0), reader.GetInt64(1), data);
+            return new DressupRecord4(reader.GetInt32(0), reader.GetUInt64(1), data);
         }
 
-        public override long BoxUpload4(BoxRecord4 record)
+        public override ulong BoxUpload4(BoxRecord4 record)
         {
             if (record.Data.Length != 540) throw new ArgumentException("Box data must be 540 bytes.");
             using (MySqlConnection db = CreateConnection())
@@ -984,12 +984,12 @@ namespace PkmnFoundations.Data
 
                     if (record.SerialNumber == 0)
                     {
-                        long serial = (long)tran.ExecuteScalar("INSERT INTO TerminalBoxes4 (pid, " +
+                        ulong serial = Convert.ToUInt64(tran.ExecuteScalar("INSERT INTO TerminalBoxes4 (pid, " +
                             "Data, md5, TimeAdded, ParseVersion, Label) VALUES (@pid, @data, " +
                             "unhex(md5(@data)), UTC_TIMESTAMP(), 1, @label); SELECT LAST_INSERT_ID()",
                             new MySqlParameter("@pid", record.PID),
                             new MySqlParameter("@data", record.Data),
-                            new MySqlParameter("@label", (int)record.Label));
+                            new MySqlParameter("@label", (int)record.Label)));
                         tran.Commit();
                         return serial;
                     }
@@ -1038,10 +1038,10 @@ namespace PkmnFoundations.Data
             byte[] data = new byte[540];
             reader.GetBytes(3, 0, data, 0, 540);
 
-            return new BoxRecord4(reader.GetInt32(0), (BoxLabels4)reader.GetInt32(1), reader.GetInt64(2), data);
+            return new BoxRecord4(reader.GetInt32(0), (BoxLabels4)reader.GetInt32(1), reader.GetUInt64(2), data);
         }
 
-        public override long BattleVideoUpload4(BattleVideoRecord4 record)
+        public override ulong BattleVideoUpload4(BattleVideoRecord4 record)
         {
             if (record.Data.Length != 7272) throw new ArgumentException();
             if (record.Header.Data.Length != 228) throw new ArgumentException();
@@ -1060,7 +1060,7 @@ namespace PkmnFoundations.Data
 
                     if (record.SerialNumber == 0)
                     {
-                        long key = (long)tran.ExecuteScalar("INSERT INTO TerminalBattleVideos4 " +
+                        ulong key = Convert.ToUInt64(tran.ExecuteScalar("INSERT INTO TerminalBattleVideos4 " +
                             "(pid, Header, Data, md5, TimeAdded, ParseVersion, Streak, TrainerName, " +
                             "Metagame, Country, Region) " +
                             "VALUES (@pid, @header, @data, unhex(md5(CONCAT(@header, @data))), " +
@@ -1074,8 +1074,8 @@ namespace PkmnFoundations.Data
                             new MySqlParameter("@metagame", (byte)record.Header.Metagame),
                             new MySqlParameter("@country", (byte)record.Header.Country),
                             new MySqlParameter("@region", (byte)record.Header.Region)
-                            );
-                        long serial = BattleVideoHeader4.KeyToSerial((long)key);
+                            ));
+                        ulong serial = BattleVideoHeader4.KeyToSerial(key);
 
                         tran.ExecuteNonQuery("UPDATE TerminalBattleVideos4 SET " +
                             "SerialNumber = @serial WHERE id = @key", 
@@ -1090,7 +1090,7 @@ namespace PkmnFoundations.Data
                     }
                     else
                     {
-                        ulong key = (ulong)BattleVideoHeader4.SerialToKey(record.SerialNumber);
+                        ulong key = BattleVideoHeader4.SerialToKey(record.SerialNumber);
 
                         int rows = tran.ExecuteNonQuery("INSERT INTO TerminalBattleVideos4 " +
                             "(id, pid, SerialNumber, Header, Data, md5, TimeAdded, " +
@@ -1239,10 +1239,10 @@ namespace PkmnFoundations.Data
             byte[] data = new byte[228];
             reader.GetBytes(2, 0, data, 0, 228);
 
-            return new BattleVideoHeader4(reader.GetInt32(0), reader.GetInt64(1), data);
+            return new BattleVideoHeader4(reader.GetInt32(0), reader.GetUInt64(1), data);
         }
 
-        public override BattleVideoRecord4 BattleVideoGet4(long serial, bool incrementViews = false)
+        public override BattleVideoRecord4 BattleVideoGet4(ulong serial, bool incrementViews = false)
         {
             String update = incrementViews ? "UPDATE TerminalBattleVideos4 " +
                 "SET Views = Views + 1 WHERE SerialNumber = @serial; "
@@ -1273,7 +1273,7 @@ namespace PkmnFoundations.Data
         #endregion
 
         #region Global Terminal 5
-        public override long MusicalUpload5(MusicalRecord5 record)
+        public override ulong MusicalUpload5(MusicalRecord5 record)
         {
             if (record.Data.Length != 560) throw new ArgumentException();
 
@@ -1290,14 +1290,14 @@ namespace PkmnFoundations.Data
 
                     if (record.SerialNumber == 0)
                     {
-                        long serial = (long)tran.ExecuteScalar("INSERT INTO TerminalMusicals5 " +
+                        ulong serial = Convert.ToUInt64(tran.ExecuteScalar("INSERT INTO TerminalMusicals5 " +
                             "(pid, Data, md5, TimeAdded, ParseVersion) " +
                             "VALUES (@pid, @data, unhex(md5(@data)), " +
                             "UTC_TIMESTAMP(), 1); " +
                             "SELECT LAST_INSERT_ID()",
                             new MySqlParameter("@pid", record.PID),
                             new MySqlParameter("@data", record.Data)
-                            );
+                            ));
 
                         // todo: make a proc to insert both musical and party.
                         InsertMusicalParticipants5(record, serial, tran);
@@ -1327,7 +1327,7 @@ namespace PkmnFoundations.Data
             }
         }
 
-        private void InsertMusicalParticipants5(MusicalRecord5 record, long SerialNumber, MySqlTransaction tran)
+        private void InsertMusicalParticipants5(MusicalRecord5 record, ulong SerialNumber, MySqlTransaction tran)
         {
             MySqlCommand cmd = new MySqlCommand("INSERT INTO " +
             "TerminalMusicalPokemon5 (musical_id, Slot, Species) VALUES " +
@@ -1377,10 +1377,10 @@ namespace PkmnFoundations.Data
             byte[] data = new byte[560];
             reader.GetBytes(2, 0, data, 0, 560);
 
-            return new MusicalRecord5(reader.GetInt32(0), reader.GetInt64(1), data);
+            return new MusicalRecord5(reader.GetInt32(0), reader.GetUInt64(1), data);
         }
 
-        public override long BattleVideoUpload5(BattleVideoRecord5 record)
+        public override ulong BattleVideoUpload5(BattleVideoRecord5 record)
         {
             if (record.Data.Length != 6112) throw new ArgumentException();
             if (record.Header.Data.Length != 196) throw new ArgumentException();
@@ -1399,7 +1399,7 @@ namespace PkmnFoundations.Data
 
                     if (record.SerialNumber == 0)
                     {
-                        long key = (long)tran.ExecuteScalar("INSERT INTO TerminalBattleVideos5 " +
+                        ulong key = Convert.ToUInt64(tran.ExecuteScalar("INSERT INTO TerminalBattleVideos5 " +
                             "(pid, Header, Data, md5, TimeAdded, ParseVersion, Streak, TrainerName, " +
                             "Metagame, Country, Region) " +
                             "VALUES (@pid, @header, @data, unhex(md5(CONCAT(@header, @data))), " +
@@ -1413,8 +1413,8 @@ namespace PkmnFoundations.Data
                             new MySqlParameter("@metagame", (byte)record.Header.Metagame),
                             new MySqlParameter("@country", (byte)record.Header.Country),
                             new MySqlParameter("@region", (byte)record.Header.Region)
-                            );
-                        long serial = BattleVideoHeader4.KeyToSerial((long)key);
+                            ));
+                        ulong serial = BattleVideoHeader4.KeyToSerial(key);
 
                         tran.ExecuteNonQuery("UPDATE TerminalBattleVideos5 SET " +
                             "SerialNumber = @serial WHERE id = @key",
@@ -1589,10 +1589,10 @@ namespace PkmnFoundations.Data
             byte[] data = new byte[196];
             reader.GetBytes(2, 0, data, 0, 196);
 
-            return new BattleVideoHeader5(reader.GetInt32(0), reader.GetInt64(1), data);
+            return new BattleVideoHeader5(reader.GetInt32(0), reader.GetUInt64(1), data);
         }
 
-        public override BattleVideoRecord5 BattleVideoGet5(long serial, bool incrementViews = false)
+        public override BattleVideoRecord5 BattleVideoGet5(ulong serial, bool incrementViews = false)
         {
             String update = incrementViews ? "UPDATE TerminalBattleVideos5 " +
                 "SET Views = Views + 1 WHERE SerialNumber = @serial; " 

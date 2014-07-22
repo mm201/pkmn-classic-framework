@@ -11,7 +11,7 @@ namespace PkmnFoundations.Structures
         {
         }
 
-        public MusicalRecord5(int pid, long serial_number, byte[] data)
+        public MusicalRecord5(int pid, ulong serial_number, byte[] data)
         {
             if (data.Length != 560) throw new ArgumentException("Musical data must be 560 bytes.");
 
@@ -23,7 +23,7 @@ namespace PkmnFoundations.Structures
 
         // todo: encapsulate these so calculated fields are always correct
         public int PID;
-        public long SerialNumber;
+        public ulong SerialNumber;
 
         private byte[] m_data;
         public byte[] Data

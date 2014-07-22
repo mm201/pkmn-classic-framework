@@ -17,13 +17,13 @@ namespace PkmnFoundations.GTS.test
 
         protected void btnToSerial_Click(object sender, EventArgs e)
         {
-            long valueNumeric = Convert.ToInt64(txtBattleVideo.Text.Replace("-", ""));
+            ulong valueNumeric = Convert.ToUInt64(txtBattleVideo.Text.Replace("-", ""));
             txtSerial.Text = BattleVideoHeader4.SerialToKey(valueNumeric).ToString();
         }
 
         protected void btnToVideo_Click(object sender, EventArgs e)
         {
-            long valueNumeric = Convert.ToInt64(txtSerial.Text.Replace("-", ""));
+            ulong valueNumeric = Convert.ToUInt64(txtSerial.Text.Replace("-", ""));
             txtBattleVideo.Text = BattleVideoHeader4.KeyToSerial(valueNumeric).ToString();
         }
     }

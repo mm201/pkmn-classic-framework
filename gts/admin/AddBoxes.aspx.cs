@@ -50,7 +50,7 @@ namespace PkmnFoundations.GTS.admin
             {
                 int pid = BitConverter.ToInt32(data, 12 + 556 * x);
                 BoxLabels4 label = (BoxLabels4)BitConverter.ToInt32(data, 16 + 556 * x);
-                long serial = BitConverter.ToInt64(data, 20 + 556 * x);
+                ulong serial = BitConverter.ToUInt64(data, 20 + 556 * x);
                 if (serial == 0) continue;
 
                 byte[] result = new byte[540];

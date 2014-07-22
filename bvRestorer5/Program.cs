@@ -57,7 +57,7 @@ namespace bvRestorer5
                 }
 
                 int pid = BitConverter.ToInt32(data, 0x08);
-                long serial = BitConverter.ToInt64(data, 0x0c);
+                ulong serial = BitConverter.ToUInt64(data, 0x0c);
                 byte[] mainData = new byte[0x18a4];
                 Array.Copy(data, 0x14, mainData, 0, 0x18a4);
 
