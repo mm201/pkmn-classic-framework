@@ -110,6 +110,8 @@ namespace PkmnFoundations.GlobalTerminalService
                         // todo: validate or log some of this?
                         ushort species = BitConverter.ToUInt16(data, 0x144);
 
+                        logEntry.AppendFormat("Searching for musical photos of species {0}.", species);
+
                         MusicalRecord5[] results = DataAbstract.Instance.MusicalSearch5(species, 5);
                         response.Write(new byte[] { 0x00, 0x00 }, 0, 2); // result code (0 for OK)
                         response.Write(BitConverter.GetBytes(results.Length), 0, 4);
@@ -189,14 +191,17 @@ namespace PkmnFoundations.GlobalTerminalService
 
                         logEntry.Append("Searching for ");
                         if (ranking != BattleVideoRankings5.None)
-                            logEntry.AppendFormat("{0}, ", ranking);
-                        if (species != 0xffff)
-                            logEntry.AppendFormat("species {0}, ", species);
-                        logEntry.AppendFormat("{0}", meta);
-                        if (country != 0xff)
-                            logEntry.AppendFormat(", country {0}", country);
-                        if (region != 0xff)
-                            logEntry.AppendFormat(", region {0}", region);
+                            logEntry.AppendFormat("{0}", ranking);
+                        else
+                        {
+                            if (species != 0xffff)
+                                logEntry.AppendFormat("species {0}, ", species);
+                            logEntry.AppendFormat("{0}", meta);
+                            if (country != 0xff)
+                                logEntry.AppendFormat(", country {0}", country);
+                            if (region != 0xff)
+                                logEntry.AppendFormat(", region {0}", region);
+                        }
                         logEntry.AppendLine(".");
 
                         BattleVideoHeader5[] results = DataAbstract.Instance.BattleVideoSearch5(species, ranking, meta, country, region, 30);

@@ -112,6 +112,8 @@ namespace PkmnFoundations.GlobalTerminalService
                         // todo: validate or log some of this?
                         BoxLabels4 label = (BoxLabels4)BitConverter.ToInt32(data, 0x144);
 
+                        logEntry.AppendFormat("Searching for {0} boxes.", label);
+
                         BoxRecord4[] results = DataAbstract.Instance.BoxSearch4(label, 20);
                         response.Write(new byte[] { 0x00, 0x00 }, 0, 2); // result code (0 for OK)
                         response.Write(BitConverter.GetBytes(results.Length), 0, 4);
@@ -166,6 +168,8 @@ namespace PkmnFoundations.GlobalTerminalService
 
                         // todo: validate or log some of this?
                         ushort species = BitConverter.ToUInt16(data, 0x144);
+
+                        logEntry.AppendFormat("Searching for dressups of species {0}.", species);
 
                         DressupRecord4[] results = DataAbstract.Instance.DressupSearch4(species, 10);
                         response.Write(new byte[] { 0x00, 0x00 }, 0, 2); // result code (0 for OK)
@@ -226,16 +230,19 @@ namespace PkmnFoundations.GlobalTerminalService
                         byte country = data[0x147];
                         byte region = data[0x148];
 
-                        logEntry.AppendFormat("Searching for ");
+                        logEntry.Append("Searching for ");
                         if (ranking != BattleVideoRankings4.None)
-                            logEntry.AppendFormat("{0}, ", ranking);
-                        if (species != 0xffff)
-                            logEntry.AppendFormat("species {0}, ", species);
-                        logEntry.AppendFormat("{0}", meta);
-                        if (country != 0xff)
-                            logEntry.AppendFormat(", country {0}", country);
-                        if (region != 0xff)
-                            logEntry.AppendFormat(", region {0}", region);
+                            logEntry.AppendFormat("{0}", ranking);
+                        else
+                        {
+                            if (species != 0xffff)
+                                logEntry.AppendFormat("species {0}, ", species);
+                            logEntry.AppendFormat("{0}", meta);
+                            if (country != 0xff)
+                                logEntry.AppendFormat(", country {0}", country);
+                            if (region != 0xff)
+                                logEntry.AppendFormat(", region {0}", region);
+                        }
                         logEntry.AppendLine(".");
 
                         BattleVideoHeader4[] results = DataAbstract.Instance.BattleVideoSearch4(species, ranking, meta, country, region, 30);
