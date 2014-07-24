@@ -67,6 +67,7 @@
   <ItemGroup>
     <Content Include="admin\AddBoxes.aspx" />
     <Content Include="admin\AddMusical.aspx" />
+    <Content Include="admin\Sessions.aspx" />
     <Content Include="AllPokemon.aspx" />
     <Content Include="BattleVideo.aspx" />
     <Content Include="css\main.css" />
@@ -108,6 +109,13 @@
     </Compile>
     <Compile Include="admin\AddMusical.aspx.designer.cs">
       <DependentUpon>AddMusical.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="admin\Sessions.aspx.cs">
+      <DependentUpon>Sessions.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="admin\Sessions.aspx.designer.cs">
+      <DependentUpon>Sessions.aspx</DependentUpon>
     </Compile>
     <Compile Include="AllPokemon.aspx.cs">
       <DependentUpon>AllPokemon.aspx</DependentUpon>
