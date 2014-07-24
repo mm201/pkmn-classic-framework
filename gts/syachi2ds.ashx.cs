@@ -423,6 +423,7 @@ namespace PkmnFoundations.GTS
                         byte[] uploadData = new byte[296];
                         Array.Copy(data, 8, uploadData, 0, 296);
                         GtsRecord5 upload = new GtsRecord5(uploadData);
+                        upload.IsExchanged = 0;
                         int targetPid = BitConverter.ToInt32(data, 304);
                         GtsRecord5 result = DataAbstract.Instance.GtsDataForUser5(targetPid);
 

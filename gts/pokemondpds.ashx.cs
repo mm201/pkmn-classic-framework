@@ -415,6 +415,7 @@ namespace PkmnFoundations.GTS
                         byte[] uploadData = new byte[292];
                         Array.Copy(data, 4, uploadData, 0, 292);
                         GtsRecord4 upload = new GtsRecord4(uploadData);
+                        upload.IsExchanged = 0;
                         int targetPid = BitConverter.ToInt32(data, 296);
                         GtsRecord4 result = DataAbstract.Instance.GtsDataForUser4(targetPid);
 
