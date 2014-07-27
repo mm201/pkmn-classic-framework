@@ -64,6 +64,13 @@ namespace PkmnFoundations.Data
         public abstract void GtsLogTrade4(GtsRecord4 record, DateTime ? timeWithdrawn);
         #endregion
 
+        #region Battle Tower 4
+        public abstract ulong BattleTowerUpdateRecord4(BattleTowerRecord4 record);
+        public abstract ulong BattleTowerAddLeader4(BattleTowerProfile4 profile);
+        public abstract BattleTowerRecord4[] BattleTowerGetOpponents4(byte rank, byte roomNum);
+        public abstract BattleTowerProfile4[] BattleTowerGetLeaders4(byte rank, byte roomNum);
+        #endregion
+
         #region Other Gamestats 4
         public abstract bool GamestatsSetProfile4(TrainerProfile4 profile);
         #endregion
@@ -88,6 +95,9 @@ namespace PkmnFoundations.Data
 
         #region Other Gamestats 5
         public abstract bool GamestatsSetProfile5(TrainerProfile5 profile);
+        #endregion
+
+        #region Battle Subway 5
         #endregion
 
         #region Global Terminal 4

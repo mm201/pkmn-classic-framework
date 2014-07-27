@@ -7,7 +7,7 @@
 #
 # Host: 127.0.0.1 (MySQL 5.5.27)
 # Database: gts
-# Generation Time: 2014-07-22 15:58:36 +0000
+# Generation Time: 2014-07-27 05:56:06 +0000
 # ************************************************************
 
 
@@ -205,6 +205,93 @@ CREATE TABLE `FoundationsTypes` (
   `Name` varchar(30) NOT NULL DEFAULT '',
   `DamageClass` tinyint(3) unsigned DEFAULT NULL,
   PRIMARY KEY (`Value`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+
+# Dump of table GtsBattleTower4
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `GtsBattleTower4`;
+
+CREATE TABLE `GtsBattleTower4` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `pid` int(11) NOT NULL,
+  `Name` binary(16) DEFAULT '\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0',
+  `Version` tinyint(3) unsigned DEFAULT NULL,
+  `Language` tinyint(3) unsigned DEFAULT NULL,
+  `Country` tinyint(3) unsigned DEFAULT NULL,
+  `Region` tinyint(3) unsigned DEFAULT NULL,
+  `TrainerID` int(10) unsigned DEFAULT NULL,
+  `Unknown1` smallint(5) unsigned DEFAULT NULL,
+  `TrendyPhrase` binary(6) DEFAULT NULL,
+  `Unknown2` smallint(5) unsigned DEFAULT NULL,
+  `Unknown3` blob,
+  `Unknown4` bigint(20) DEFAULT NULL,
+  `ParseVersion` int(10) unsigned DEFAULT NULL,
+  `Rank` tinyint(3) unsigned DEFAULT NULL,
+  `RoomNum` tinyint(3) unsigned NOT NULL DEFAULT '0',
+  `BattlesWon` tinyint(3) unsigned DEFAULT NULL,
+  `Position` int(10) unsigned DEFAULT NULL,
+  `TimeAdded` datetime DEFAULT NULL,
+  `TimeUpdated` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `RoomNum` (`RoomNum`,`Rank`,`Position`),
+  KEY `pid` (`pid`,`RoomNum`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+
+# Dump of table GtsBattleTowerLeaders4
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `GtsBattleTowerLeaders4`;
+
+CREATE TABLE `GtsBattleTowerLeaders4` (
+  `pid` int(11) NOT NULL DEFAULT '0',
+  `Name` binary(16) DEFAULT NULL,
+  `Version` tinyint(3) unsigned DEFAULT NULL,
+  `Language` tinyint(3) unsigned DEFAULT NULL,
+  `Country` tinyint(3) unsigned DEFAULT NULL,
+  `Region` tinyint(3) unsigned DEFAULT NULL,
+  `TrainerID` int(10) unsigned DEFAULT NULL,
+  `Unknown1` smallint(5) unsigned DEFAULT NULL,
+  `TrendyPhrase` binary(6) DEFAULT NULL,
+  `Unknown2` smallint(5) unsigned DEFAULT NULL,
+  `ParseVersion` int(10) unsigned DEFAULT NULL,
+  `Rank` tinyint(3) unsigned DEFAULT NULL,
+  `RoomNum` tinyint(3) unsigned NOT NULL DEFAULT '0',
+  `TimeAdded` datetime DEFAULT NULL,
+  PRIMARY KEY (`pid`,`RoomNum`),
+  KEY `RoomNum` (`RoomNum`,`Rank`,`TimeAdded`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+
+# Dump of table GtsBattleTowerPokemon4
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `GtsBattleTowerPokemon4`;
+
+CREATE TABLE `GtsBattleTowerPokemon4` (
+  `party_id` bigint(20) unsigned NOT NULL,
+  `Slot` tinyint(3) unsigned NOT NULL,
+  `Species` smallint(5) unsigned DEFAULT NULL,
+  `HeldItem` smallint(5) unsigned DEFAULT NULL,
+  `Move1` smallint(5) unsigned DEFAULT NULL,
+  `Move2` smallint(5) unsigned DEFAULT NULL,
+  `Move3` smallint(5) unsigned DEFAULT NULL,
+  `Move4` smallint(5) unsigned DEFAULT NULL,
+  `TrainerID` int(10) unsigned DEFAULT NULL,
+  `Personality` int(10) unsigned DEFAULT NULL,
+  `IVs` int(10) unsigned DEFAULT NULL,
+  `EVs` binary(6) DEFAULT NULL,
+  `Unknown1` tinyint(3) unsigned DEFAULT NULL,
+  `Language` tinyint(3) unsigned DEFAULT NULL,
+  `Ability` tinyint(3) unsigned DEFAULT NULL,
+  `Happiness` tinyint(3) unsigned DEFAULT NULL,
+  `Nickname` binary(22) DEFAULT NULL,
+  PRIMARY KEY (`party_id`,`Slot`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 

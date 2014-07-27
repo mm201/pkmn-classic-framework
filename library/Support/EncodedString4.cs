@@ -8,11 +8,21 @@ namespace PkmnFoundations.Support
 {
 	public class EncodedString4
     {
+        /// <summary>
+        /// Instances an EncodedString4 from its binary representation.
+        /// </summary>
+        /// <param name="data">This buffer is NOT copied.</param>
         public EncodedString4(byte[] data)
         {
             RawData = data;
         }
 
+        /// <summary>
+        /// Instances an EncodedString4 from its binary representation.
+        /// </summary>
+        /// <param name="data">Buffer to copy from</param>
+        /// <param name="start">Offset in buffer</param>
+        /// <param name="count">Number of bytes (not chars) to copy</param>
         public EncodedString4(byte[] data, int start, int count)
         {
             if (data.Length < start + count) throw new ArgumentOutOfRangeException("count");

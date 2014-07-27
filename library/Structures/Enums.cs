@@ -26,7 +26,7 @@ namespace PkmnFoundations.Structures
         Generation6 = 32
     }
 
-    public enum Versions
+    public enum Versions : byte
     {
         // todo: fact check that these GenIII values
         // are retained as-is through pal park.
