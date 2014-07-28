@@ -7,7 +7,7 @@
 #
 # Host: 127.0.0.1 (MySQL 5.5.27)
 # Database: gts
-# Generation Time: 2014-07-27 05:56:06 +0000
+# Generation Time: 2014-07-28 22:05:36 +0000
 # ************************************************************
 
 
@@ -248,6 +248,7 @@ CREATE TABLE `GtsBattleTower4` (
 DROP TABLE IF EXISTS `GtsBattleTowerLeaders4`;
 
 CREATE TABLE `GtsBattleTowerLeaders4` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `pid` int(11) NOT NULL DEFAULT '0',
   `Name` binary(16) DEFAULT NULL,
   `Version` tinyint(3) unsigned DEFAULT NULL,
@@ -262,8 +263,10 @@ CREATE TABLE `GtsBattleTowerLeaders4` (
   `Rank` tinyint(3) unsigned DEFAULT NULL,
   `RoomNum` tinyint(3) unsigned NOT NULL DEFAULT '0',
   `TimeAdded` datetime DEFAULT NULL,
-  PRIMARY KEY (`pid`,`RoomNum`),
-  KEY `RoomNum` (`RoomNum`,`Rank`,`TimeAdded`)
+  `TimeUpdated` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `RoomNum` (`RoomNum`,`Rank`,`TimeAdded`),
+  KEY `pid` (`pid`,`RoomNum`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 

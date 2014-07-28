@@ -411,6 +411,8 @@ namespace PkmnFoundations.Data
         #region Battle Tower 4
         public override ulong BattleTowerUpdateRecord4(BattleTowerRecord4 record)
         {
+            if (record.BattlesWon > 7) throw new ArgumentException("Battles won can not be greater than 7.");
+
             using (MySqlConnection db = CreateConnection())
             {
                 db.Open();
@@ -429,16 +431,17 @@ namespace PkmnFoundations.Data
 
             // Does this player already have a record in this room?
             // Also get primary key if it does. (We need it for updating party)
-            object objPkey = tran.ExecuteScalar("SELECT id FROM GtsBattleTower4 " +
-                "WHERE pid = @pid AND RoomNum = @room",
-                new MySqlParameter("@pid", record.PID),
-                new MySqlParameter("@room", record.RoomNum));
-            ulong pkey = (ulong)(objPkey ?? 0);
+            ulong pkey = FindBattleTowerRecord4(tran, record, false);
 
-            if (objPkey != null)
+            if (pkey != 0)
             {
                 // If the player already has a record, move everyone below it up one position
                 // (effectively removing this record from the ordering)
+
+                // todo: In the case that the player's rank hasn't changed,
+                // we can optimize this and the next down to a single BETWEEN
+                // query.
+                // This does require retrieving their old rank from the db.
                 tran.ExecuteNonQuery("SELECT @old_rank = Rank, @old_position = Position " +
                     "FROM GtsBattleTower4 WHERE pid = @pid AND RoomNum = @room); " +
                     "UPDATE GtsBattleTower4 SET Position = Position - 1 " +
@@ -447,102 +450,77 @@ namespace PkmnFoundations.Data
                     new MySqlParameter("@room", record.RoomNum));
             }
 
+            uint position = (uint)(7 - record.BattlesWon);
+
             // Shift down all the players in the player's new rank by one.
             tran.ExecuteNonQuery("UPDATE GtsBattleTower4 SET Position = Position + 1 " +
                 "WHERE RoomNum = @room AND Rank = @rank AND Position <= @position",
                 new MySqlParameter("@room", record.RoomNum),
                 new MySqlParameter("@rank", record.Rank),
-                new MySqlParameter("@position", 7 - record.BattlesWon));
+                new MySqlParameter("@position", position));
 
             // Update the actual record
-            if (objPkey != null)
+            if (pkey != 0)
             {
-                tran.ExecuteNonQuery("UPDATE GtsBattleTower4 SET Name = @name, " +
+                List<MySqlParameter> _params = ParamsFromBattleTowerRecord4(record, false);
+                _params.Add(new MySqlParameter("@position", position));
+                _params.Add(new MySqlParameter("@id", pkey));
+
+                tran.ExecuteNonQuery("UPDATE GtsBattleTower4 SET pid = @pid, Name = @name, " +
                     "Version = @version, Language = @language, Country = @country, " +
                     "Region = @region, TrainerID = @trainer_id, Unknown1 = @unknown1, " +
                     "TrendyPhrase = @trendy_phrase, Unknown2 = @unknown2, Unknown3 = @unknown3, " +
                     "Unknown4 = @unknown4, ParseVersion = 1, Rank = @rank, " +
                     "BattlesWon = @battles_won, Position = @position, " +
                     "TimeUpdated = UTC_TIMESTAMP() WHERE id = @id",
-                    new MySqlParameter("@name", record.Profile.Name.RawData),
-                    new MySqlParameter("@version", (byte)record.Profile.Version),
-                    new MySqlParameter("@language", (byte)record.Profile.Language),
-                    new MySqlParameter("@country", record.Profile.Country),
-                    new MySqlParameter("@region", record.Profile.Region),
-                    new MySqlParameter("@trainer_id", record.Profile.OT),
-                    new MySqlParameter("@unknown1", record.Profile.Unknown1),
-                    new MySqlParameter("@trendy_phrase", record.Profile.TrendyPhrase),
-                    new MySqlParameter("@unknown2", record.Profile.Unknown2),
-                    new MySqlParameter("@unknown3", record.Unknown3),
-                    new MySqlParameter("@unknown4", record.Unknown4),
-                    new MySqlParameter("@rank", record.Rank),
-                    new MySqlParameter("@battles_won", record.BattlesWon),
-                    new MySqlParameter("@position", 7 - record.BattlesWon),
-                    new MySqlParameter("@id", pkey));
+                    _params.ToArray());
 
-                UpdateBattleTowerPokemon(tran, record.Party[0], pkey, 0);
-                UpdateBattleTowerPokemon(tran, record.Party[1], pkey, 1);
-                UpdateBattleTowerPokemon(tran, record.Party[2], pkey, 2);
+                UpdateBattleTowerPokemon4(tran, record.Party[0], pkey, 0);
+                UpdateBattleTowerPokemon4(tran, record.Party[1], pkey, 1);
+                UpdateBattleTowerPokemon4(tran, record.Party[2], pkey, 2);
             }
             else
             {
+                List<MySqlParameter> _params = ParamsFromBattleTowerRecord4(record, false);
+                _params.Add(new MySqlParameter("@position", position));
+
                 pkey = Convert.ToUInt64(tran.ExecuteNonQuery("INSERT INTO GtsBattleTower4 " +
                     "(pid, Name, Version, Language, Country, Region, TrainerID, " +
                     "Unknown1, TrendyPhrase, Unknown2, Unknown3, Unknown4, ParseVersion, " +
-                    "RoomNum, Rank, BattlesWon, Position, TimeAdded, TimeUpdated) VALUES " +
+                    "Rank, RoomNum, BattlesWon, Position, TimeAdded, TimeUpdated) VALUES " +
                     "(@pid, @name, @version, @language, @country, @region, @trainer_id, " +
                     "@unknown1, @trendy_phrase, @unknown2, @unknown3, @unknown4, 1, " +
-                    "@room, @rank, @battles_won, @position, UTC_TIMESTAMP(), UTC_TIMESTAMP()); " +
+                    "@rank, @room, @battles_won, @position, UTC_TIMESTAMP(), UTC_TIMESTAMP()); " +
                     "SELECT LAST_INSERT_ID()",
-                    new MySqlParameter("@pid", record.PID),
-                    new MySqlParameter("@name", record.Profile.Name.RawData),
-                    new MySqlParameter("@version", (byte)record.Profile.Version),
-                    new MySqlParameter("@language", (byte)record.Profile.Language),
-                    new MySqlParameter("@country", record.Profile.Country),
-                    new MySqlParameter("@region", record.Profile.Region),
-                    new MySqlParameter("@trainer_id", record.Profile.OT),
-                    new MySqlParameter("@unknown1", record.Profile.Unknown1),
-                    new MySqlParameter("@trendy_phrase", record.Profile.TrendyPhrase),
-                    new MySqlParameter("@unknown2", record.Profile.Unknown2),
-                    new MySqlParameter("@unknown3", record.Unknown3),
-                    new MySqlParameter("@unknown4", record.Unknown4),
-                    new MySqlParameter("@room", record.RoomNum),
-                    new MySqlParameter("@rank", record.Rank),
-                    new MySqlParameter("@battles_won", record.BattlesWon),
-                    new MySqlParameter("@position", 7 - record.BattlesWon)
-                    ));
+                    _params.ToArray()));
 
-                InsertBattleTowerPokemon(tran, record.Party[0], pkey, 0);
-                InsertBattleTowerPokemon(tran, record.Party[1], pkey, 1);
-                InsertBattleTowerPokemon(tran, record.Party[2], pkey, 2);
+                InsertBattleTowerPokemon4(tran, record.Party[0], pkey, 0);
+                InsertBattleTowerPokemon4(tran, record.Party[1], pkey, 1);
+                InsertBattleTowerPokemon4(tran, record.Party[2], pkey, 2);
             }
 
             return pkey;
         }
 
-        private void InsertBattleTowerPokemon(MySqlTransaction tran, BattleTowerPokemon4 pokemon, ulong partyId, byte slot)
+        private void InsertBattleTowerPokemon4(MySqlTransaction tran, BattleTowerPokemon4 pokemon, ulong partyId, byte slot)
         {
-            MySqlParameter[] _params1 = ParamsFromBattleTowerPokemon4(pokemon);
-            MySqlParameter[] _params2 = new MySqlParameter[_params1.Length + 2];
-            Array.Copy(_params1, 0, _params2, 2, _params1.Length);
-            _params2[0] = new MySqlParameter("@id", partyId);
-            _params2[1] = new MySqlParameter("@slot", slot);
+            List<MySqlParameter> _params = ParamsFromBattleTowerPokemon4(pokemon);
+            _params.Add(new MySqlParameter("@id", partyId));
+            _params.Add(new MySqlParameter("@slot", slot));
 
             tran.ExecuteNonQuery("INSERT INTO GtsBattleTowerPokemon4 " +
                 "(party_id, Slot, Species, HeldItem, Move1, Move2, Move3, Move4, TrainerID, " +
                 "Personality, IVs, EVs, Unknown1, Language, Ability, Happiness, Nickname) VALUES " +
                 "(@id, @slot, @species, @held_item, @move1, @move2, @move3, @move4, @trainer_id, " +
                 "@personality, @ivs, @evs, @unknown1, @language, @ability, @happiness, @nickname)",
-                _params2);
+                _params.ToArray());
         }
 
-        private void UpdateBattleTowerPokemon(MySqlTransaction tran, BattleTowerPokemon4 pokemon, ulong partyId, byte slot)
+        private void UpdateBattleTowerPokemon4(MySqlTransaction tran, BattleTowerPokemon4 pokemon, ulong partyId, byte slot)
         {
-            MySqlParameter[] _params1 = ParamsFromBattleTowerPokemon4(pokemon);
-            MySqlParameter[] _params2 = new MySqlParameter[_params1.Length + 2];
-            Array.Copy(_params1, 0, _params2, 2, _params1.Length);
-            _params2[0] = new MySqlParameter("@id", partyId);
-            _params2[1] = new MySqlParameter("@slot", slot);
+            List<MySqlParameter> _params = ParamsFromBattleTowerPokemon4(pokemon);
+            _params.Add(new MySqlParameter("@id", partyId));
+            _params.Add(new MySqlParameter("@slot", slot));
 
             tran.ExecuteNonQuery("UPDATE GtsBattleTowerPokemon4 SET Species = @species, " +
                 "HeldItem = @held_item, Move1 = @move1, Move2 = @move2, Move3 = @move3, " +
@@ -550,33 +528,151 @@ namespace PkmnFoundations.Data
                 "IVs = @ivs, EVs = @evs, Unknown1 = @unknown1, Language = @language, " +
                 "Ability = @ability, Happiness = @happiness, Nickname = @nickname " +
                 "WHERE party_id = @id AND Slot = @slot",
-                _params2);
+                _params.ToArray());
         }
 
-        private MySqlParameter[] ParamsFromBattleTowerPokemon4(BattleTowerPokemon4 pokemon)
+        private List<MySqlParameter> ParamsFromBattleTowerRecord4(BattleTowerRecord4 record, bool leader)
         {
-            MySqlParameter[] result = new MySqlParameter[15];
-            result[0] = new MySqlParameter("@species", pokemon.Species);
-            result[1] = new MySqlParameter("@held_item", pokemon.HeldItem);
-            result[2] = new MySqlParameter("@move1", pokemon.Moveset[0]);
-            result[3] = new MySqlParameter("@move2", pokemon.Moveset[1]);
-            result[4] = new MySqlParameter("@move3", pokemon.Moveset[2]);
-            result[5] = new MySqlParameter("@move4", pokemon.Moveset[3]);
-            result[6] = new MySqlParameter("@trainer_id", pokemon.OT);
-            result[7] = new MySqlParameter("@personality", pokemon.Personality);
-            result[8] = new MySqlParameter("@ivs", pokemon.IVs);
-            result[9] = new MySqlParameter("@evs", pokemon.EVs);
-            result[10] = new MySqlParameter("@unknown1", pokemon.Unknown1);
-            result[11] = new MySqlParameter("@language", (byte)pokemon.Language);
-            result[12] = new MySqlParameter("@ability", pokemon.Ability);
-            result[13] = new MySqlParameter("@happiness", pokemon.Happiness);
-            result[14] = new MySqlParameter("@nickname", pokemon.Nickname.RawData);
+            List<MySqlParameter> result = new List<MySqlParameter>(15);
+            result.Add(new MySqlParameter("@pid", record.PID));
+            result.Add(new MySqlParameter("@name", record.Profile.Name.RawData));
+            result.Add(new MySqlParameter("@version", (byte)record.Profile.Version));
+            result.Add(new MySqlParameter("@language", (byte)record.Profile.Language));
+            result.Add(new MySqlParameter("@country", record.Profile.Country));
+            result.Add(new MySqlParameter("@region", record.Profile.Region));
+            result.Add(new MySqlParameter("@trainer_id", record.Profile.OT));
+            result.Add(new MySqlParameter("@unknown1", record.Profile.Unknown1));
+            result.Add(new MySqlParameter("@trendy_phrase", record.Profile.TrendyPhrase));
+            result.Add(new MySqlParameter("@unknown2", record.Profile.Unknown2));
+            result.Add(new MySqlParameter("@rank", record.Rank));
+            result.Add(new MySqlParameter("@room", record.RoomNum));
+            if (!leader)
+            {
+                result.Add(new MySqlParameter("@unknown3", record.Unknown3));
+                result.Add(new MySqlParameter("@unknown4", record.Unknown4));
+                result.Add(new MySqlParameter("@battles_won", record.BattlesWon));
+            }
             return result;
         }
 
-        public override void BattleTowerAddLeader4(BattleTowerProfile4 profile)
+        private List<MySqlParameter> ParamsFromBattleTowerPokemon4(BattleTowerPokemon4 pokemon)
         {
-            throw new NotImplementedException();
+            List<MySqlParameter> result = new List<MySqlParameter>(15);
+            result.Add(new MySqlParameter("@species", pokemon.Species));
+            result.Add(new MySqlParameter("@held_item", pokemon.HeldItem));
+            result.Add(new MySqlParameter("@move1", pokemon.Moveset[0]));
+            result.Add(new MySqlParameter("@move2", pokemon.Moveset[1]));
+            result.Add(new MySqlParameter("@move3", pokemon.Moveset[2]));
+            result.Add(new MySqlParameter("@move4", pokemon.Moveset[3]));
+            result.Add(new MySqlParameter("@trainer_id", pokemon.OT));
+            result.Add(new MySqlParameter("@personality", pokemon.Personality));
+            result.Add(new MySqlParameter("@ivs", pokemon.IVs));
+            result.Add(new MySqlParameter("@evs", pokemon.EVs));
+            result.Add(new MySqlParameter("@unknown1", pokemon.Unknown1));
+            result.Add(new MySqlParameter("@language", (byte)pokemon.Language));
+            result.Add(new MySqlParameter("@ability", pokemon.Ability));
+            result.Add(new MySqlParameter("@happiness", pokemon.Happiness));
+            result.Add(new MySqlParameter("@nickname", pokemon.Nickname.RawData));
+            return result;
+        }
+
+        public override ulong BattleTowerAddLeader4(BattleTowerRecord4 record)
+        {
+            using (MySqlConnection db = CreateConnection())
+            {
+                db.Open();
+                using (MySqlTransaction tran = db.BeginTransaction())
+                {
+                    ulong result = BattleTowerAddLeader4(tran, record);
+                    tran.Commit();
+                    return result;
+                }
+            }
+        }
+
+        private ulong BattleTowerAddLeader4(MySqlTransaction tran, BattleTowerRecord4 record)
+        {
+            ulong pkey = FindBattleTowerRecord4(tran, record, true);
+
+            // Update the actual record
+            if (pkey != 0)
+            {
+                List<MySqlParameter> _params = ParamsFromBattleTowerRecord4(record, true);
+                _params.Add(new MySqlParameter("@id", pkey));
+
+                tran.ExecuteNonQuery("UPDATE GtsBattleTowerLeaders4 SET " +
+                    "pid = @pid, Name = @name, Version = @version, " +
+                    "Language = @language, Country = @country, Region = @region, " +
+                    "TrainerID = @trainer_id, Unknown1 = @unknown1, " +
+                    "TrendyPhrase = @trendy_phrase, Unknown2 = @unknown2, " +
+                    "ParseVersion = 1, Rank = @rank, " +
+                    "TimeUpdated = UTC_TIMESTAMP() WHERE id = @id",
+                    _params.ToArray());
+            }
+            else
+            {
+                List<MySqlParameter> _params = ParamsFromBattleTowerRecord4(record, true);
+
+                pkey = Convert.ToUInt64(tran.ExecuteNonQuery("INSERT INTO " +
+                    "GtsBattleTowerLeaders4 " +
+                    "(pid, Name, Version, Language, Country, Region, TrainerID, " +
+                    "Unknown1, TrendyPhrase, Unknown2, ParseVersion, Rank, " +
+                    "RoomNum, TimeAdded, TimeUpdated) VALUES " +
+                    "(@pid, @name, @version, @language, @country, @region, @trainer_id, " +
+                    "@unknown1, @trendy_phrase, @unknown2, 1, @rank, " +
+                    "@room, UTC_TIMESTAMP(), UTC_TIMESTAMP()); " +
+                    "SELECT LAST_INSERT_ID()",
+                    _params.ToArray()));
+            }
+
+            return pkey;
+        }
+
+        /// <summary>
+        /// Tries to find an existing database record for the provided player
+        /// record. The match must be found in the same rank and room number.
+        /// </summary>
+        /// <param name="tran"></param>
+        /// <param name="record"></param>
+        /// <param name="leader">If true, look up against the Leaders table.
+        /// Otherwise looks up against the opponents table.</param>
+        /// <returns>The match's primary key or 0 if no match is found
+        /// </returns>
+        private ulong FindBattleTowerRecord4(MySqlTransaction tran, BattleTowerRecord4 record, bool leader)
+        {
+            String tblName = leader ? "GtsBattleTowerLeaders4" : "GtsBattleTower4";
+
+            // If PID is missing, this is restored data.
+            // We assume the original server took care of matching existing
+            // records, so we don't allow it to match here.
+            if (record.PID == 0) return 0;
+
+            // Match normally.
+            object oPkey = tran.ExecuteScalar("SELECT id FROM " + tblName +
+                " WHERE pid = @pid AND RoomNum = @room" + (leader ? " AND Rank = @rank" : ""), // Only require rank to match if this is the leaderboard.
+                new MySqlParameter("@pid", record.PID),
+                new MySqlParameter("@rank", record.Rank),
+                new MySqlParameter("@room", record.RoomNum));
+
+            if (oPkey == null)
+            {
+                // PID isn't found. Try to match one of Pikachu025's saved
+                // records based on unchanging properties of the savegame.
+                oPkey = tran.ExecuteScalar("SELECT id FROM " + tblName +
+                    " WHERE pid = 0 AND RoomNum = @room " + (leader ? " AND Rank = @rank" : "") + // Only require rank to match if this is the leaderboard.
+                    "AND Name = @name AND Version = @version " +
+                    "AND Language = @language AND TrainerID = @trainer_id",
+                    new MySqlParameter("@rank", record.Rank),
+                    new MySqlParameter("@room", record.RoomNum),
+                    new MySqlParameter("@name", record.Profile.Name),
+                    new MySqlParameter("@version", (byte)record.Profile.Version),
+                    new MySqlParameter("@language", (byte)record.Profile.Language),
+                    new MySqlParameter("@trainer_id", record.Profile.OT)
+                );
+            }
+
+            // Don't need to worry about DBNull since the column is non-null.
+            return (ulong)(oPkey ?? 0UL);
         }
 
         public override BattleTowerRecord4[] BattleTowerGetOpponents4(byte rank, byte roomNum)
