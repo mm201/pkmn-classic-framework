@@ -542,7 +542,11 @@ namespace PkmnFoundations.Data
             result.Add(new MySqlParameter("@region", record.Profile.Region));
             result.Add(new MySqlParameter("@trainer_id", record.Profile.OT));
             result.Add(new MySqlParameter("@unknown1", record.Profile.Unknown1));
-            result.Add(new MySqlParameter("@trendy_phrase", record.Profile.TrendyPhrase));
+
+            byte[] trendy_phrase = new byte[6];
+            Buffer.BlockCopy(record.Profile.TrendyPhrase, 0, trendy_phrase, 0, 6);
+            result.Add(new MySqlParameter("@trendy_phrase", trendy_phrase));
+            
             result.Add(new MySqlParameter("@unknown2", record.Profile.Unknown2));
             result.Add(new MySqlParameter("@rank", record.Rank));
             result.Add(new MySqlParameter("@room", record.RoomNum));
