@@ -13,12 +13,14 @@ namespace PkmnFoundations.Support
             RawData = data;
         }
 
-        public EncodedString5(byte[] data, int start, int count)
+        public EncodedString5(byte[] data, int start, int length)
         {
-            if (data.Length < start + count) throw new ArgumentOutOfRangeException("count");
+            if (data.Length < start + length) throw new ArgumentOutOfRangeException("length");
+            if (length < 0) throw new ArgumentOutOfRangeException("length");
+            if (length % 2 != 0) throw new ArgumentException("length");
 
-            byte[] trim = new byte[count];
-            Array.Copy(data, start, trim, 0, count);
+            byte[] trim = new byte[length];
+            Array.Copy(data, start, trim, 0, length);
             AssignData(trim);
         }
 
@@ -31,6 +33,7 @@ namespace PkmnFoundations.Support
 		public static string DecodeString(byte[] data, int start, int count)
 		{
             if (data.Length < start + count) throw new ArgumentOutOfRangeException("count");
+            if (count < 0) throw new ArgumentOutOfRangeException("count");
 
 			StringBuilder sb = new StringBuilder();
 
@@ -39,7 +42,7 @@ namespace PkmnFoundations.Support
 				ushort gamecode = BitConverter.ToUInt16(data, i);
                 // todo: convert some characters via lookup table
                 // http://projectpokemon.org/wiki/Pokemon_Black/White_NDS_Structure#Characters_that_can_be_replaced_in_Unicode
-				if (gamecode == 0xFFFF) { break; }
+				if (gamecode == 0xffff) { break; }
 				sb.Append((char)gamecode);
 			}
 

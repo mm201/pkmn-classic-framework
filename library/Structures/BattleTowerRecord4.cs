@@ -60,7 +60,7 @@ namespace PkmnFoundations.Structures
             {
                 Party[x] = new BattleTowerPokemon4(data, start + x * 0x38);
             }
-            Profile = new BattleTowerProfile4(data, 0xa8);
+            Profile = new BattleTowerProfile4(data, 0xa8 + start);
             Unknown3 = new byte[0x1a];
             Array.Copy(data, start + 0xca, Unknown3, 0, 0x1a);
         }

@@ -77,27 +77,27 @@ namespace PkmnFoundations.Structures
         {
             if (start + 0x38 > data.Length) throw new ArgumentOutOfRangeException("start");
 
-            Species = BitConverter.ToUInt16(data, 0x00);
-            HeldItem = BitConverter.ToUInt16(data, 0x02);
+            Species = BitConverter.ToUInt16(data, 0x00 + start);
+            HeldItem = BitConverter.ToUInt16(data, 0x02 + start);
             Moveset = new ushort[4];
             for (int x = 0; x < 4; x++)
             {
-                Moveset[x] = BitConverter.ToUInt16(data, 0x04 + x * 2);
+                Moveset[x] = BitConverter.ToUInt16(data, 0x04 + x * 2 + start);
             }
-            OT = BitConverter.ToUInt32(data, 0x0c);
-            Personality = BitConverter.ToUInt32(data, 0x10);
-            IVs = BitConverter.ToUInt32(data, 0x14);
+            OT = BitConverter.ToUInt32(data, 0x0c + start);
+            Personality = BitConverter.ToUInt32(data, 0x10 + start);
+            IVs = BitConverter.ToUInt32(data, 0x14 + start);
 
             EVs = new byte[6];
             for (int x = 0; x < 6; x++)
             {
-                EVs[x] = data[0x18 + x];
+                EVs[x] = data[0x18 + x + start];
             }
-            Unknown1 = data[0x1e];
-            Language = (Languages)data[0x1f];
-            Ability = data[0x20];
-            Happiness = data[0x21];
-            Nickname = new EncodedString4(data, 0x22, 0x16);
+            Unknown1 = data[0x1e + start];
+            Language = (Languages)data[0x1f + start];
+            Ability = data[0x20 + start];
+            Happiness = data[0x21 + start];
+            Nickname = new EncodedString4(data, 0x22 + start, 0x16);
         }
 
         public BattleTowerPokemon4 Clone()

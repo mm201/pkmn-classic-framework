@@ -21,7 +21,7 @@ namespace PkmnFoundations.Structures
 
         public BattleTowerProfile4(byte[] data, int start)
         {
-            Load(data, 0);
+            Load(data, start);
         }
 
         public EncodedString4 Name;
@@ -63,19 +63,19 @@ namespace PkmnFoundations.Structures
         {
             if (start + 0x22 > data.Length) throw new ArgumentOutOfRangeException("start");
 
-            Name = new EncodedString4(data, 0, 0x10);
-            Version = (Versions)data[0x10];
-            Language = (Languages)data[0x11];
-            Country = data[0x12];
-            Region = data[0x13];
-            OT = BitConverter.ToUInt32(data, 0x14);
-            Unknown1 = BitConverter.ToUInt16(data, 0x18);
+            Name = new EncodedString4(data, start, 0x10);
+            Version = (Versions)data[0x10 + start];
+            Language = (Languages)data[0x11 + start];
+            Country = data[0x12 + start];
+            Region = data[0x13 + start];
+            OT = BitConverter.ToUInt32(data, 0x14 + start);
+            Unknown1 = BitConverter.ToUInt16(data, 0x18 + start);
             TrendyPhrase = new ushort[3];
             for (int x = 0; x < 3; x++)
             {
-                TrendyPhrase[x] = BitConverter.ToUInt16(data, 0x1a + x * 2);
+                TrendyPhrase[x] = BitConverter.ToUInt16(data, 0x1a + x * 2 + start);
             }
-            Unknown2 = BitConverter.ToUInt16(data, 0x20);
+            Unknown2 = BitConverter.ToUInt16(data, 0x20 + start);
         }
     }
 }

@@ -454,7 +454,7 @@ namespace PkmnFoundations.Data
 
             // Shift down all the players in the player's new rank by one.
             tran.ExecuteNonQuery("UPDATE GtsBattleTower4 SET Position = Position + 1 " +
-                "WHERE RoomNum = @room AND Rank = @rank AND Position <= @position",
+                "WHERE RoomNum = @room AND Rank = @rank AND Position >= @position",
                 new MySqlParameter("@room", record.RoomNum),
                 new MySqlParameter("@rank", record.Rank),
                 new MySqlParameter("@position", position));
@@ -484,7 +484,7 @@ namespace PkmnFoundations.Data
                 List<MySqlParameter> _params = ParamsFromBattleTowerRecord4(record, false);
                 _params.Add(new MySqlParameter("@position", position));
 
-                pkey = Convert.ToUInt64(tran.ExecuteNonQuery("INSERT INTO GtsBattleTower4 " +
+                pkey = Convert.ToUInt64(tran.ExecuteScalar("INSERT INTO GtsBattleTower4 " +
                     "(pid, Name, Version, Language, Country, Region, TrainerID, " +
                     "Unknown1, TrendyPhrase, Unknown2, Unknown3, Unknown4, ParseVersion, " +
                     "Rank, RoomNum, BattlesWon, Position, TimeAdded, TimeUpdated) VALUES " +
@@ -613,7 +613,7 @@ namespace PkmnFoundations.Data
             {
                 List<MySqlParameter> _params = ParamsFromBattleTowerRecord4(record, true);
 
-                pkey = Convert.ToUInt64(tran.ExecuteNonQuery("INSERT INTO " +
+                pkey = Convert.ToUInt64(tran.ExecuteScalar("INSERT INTO " +
                     "GtsBattleTowerLeaders4 " +
                     "(pid, Name, Version, Language, Country, Region, TrainerID, " +
                     "Unknown1, TrendyPhrase, Unknown2, ParseVersion, Rank, " +

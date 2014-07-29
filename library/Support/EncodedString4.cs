@@ -22,15 +22,15 @@ namespace PkmnFoundations.Support
         /// </summary>
         /// <param name="data">Buffer to copy from</param>
         /// <param name="start">Offset in buffer</param>
-        /// <param name="count">Number of bytes (not chars) to copy</param>
-        public EncodedString4(byte[] data, int start, int count)
+        /// <param name="length">Number of bytes (not chars) to copy</param>
+        public EncodedString4(byte[] data, int start, int length)
         {
-            if (data.Length < start + count) throw new ArgumentOutOfRangeException("count");
-            if (count < 0) throw new ArgumentOutOfRangeException("count");
-            if (count % 2 != 0) throw new ArgumentException("count");
+            if (data.Length < start + length) throw new ArgumentOutOfRangeException("length");
+            if (length < 0) throw new ArgumentOutOfRangeException("length");
+            if (length % 2 != 0) throw new ArgumentException("length");
 
-            byte[] trim = new byte[count];
-            Array.Copy(data, start, trim, 0, count);
+            byte[] trim = new byte[length];
+            Array.Copy(data, start, trim, 0, length);
             AssignData(trim);
         }
 
@@ -44,14 +44,13 @@ namespace PkmnFoundations.Support
 		{
             if (data.Length < start + count) throw new ArgumentOutOfRangeException("count");
             if (count < 0) throw new ArgumentOutOfRangeException("count");
-            if (count % 2 != 0) throw new ArgumentException("count");
 
 			StringBuilder sb = new StringBuilder();
 
             for (int i = start; i < start + count * 2; i += 2)
 			{
 				ushort gamecode = BitConverter.ToUInt16(data, i);
-				if (gamecode == 0xFFFF) { break; }
+				if (gamecode == 0xffff) { break; }
 				char ch = Generation4TextLookupTable[gamecode];
 				sb.Append(ch);
 			}
