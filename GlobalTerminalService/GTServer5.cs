@@ -111,6 +111,7 @@ namespace PkmnFoundations.GlobalTerminalService
                         ushort species = BitConverter.ToUInt16(data, 0x144);
 
                         logEntry.AppendFormat("Searching for musical photos of species {0}.", species);
+                        logEntry.AppendLine();
 
                         MusicalRecord5[] results = DataAbstract.Instance.MusicalSearch5(species, 5);
                         response.Write(new byte[] { 0x00, 0x00 }, 0, 2); // result code (0 for OK)

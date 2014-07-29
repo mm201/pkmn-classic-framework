@@ -113,6 +113,7 @@ namespace PkmnFoundations.GlobalTerminalService
                         BoxLabels4 label = (BoxLabels4)BitConverter.ToInt32(data, 0x144);
 
                         logEntry.AppendFormat("Searching for {0} boxes.", label);
+                        logEntry.AppendLine();
 
                         BoxRecord4[] results = DataAbstract.Instance.BoxSearch4(label, 20);
                         response.Write(new byte[] { 0x00, 0x00 }, 0, 2); // result code (0 for OK)
@@ -170,6 +171,7 @@ namespace PkmnFoundations.GlobalTerminalService
                         ushort species = BitConverter.ToUInt16(data, 0x144);
 
                         logEntry.AppendFormat("Searching for dressups of species {0}.", species);
+                        logEntry.AppendLine();
 
                         DressupRecord4[] results = DataAbstract.Instance.DressupSearch4(species, 10);
                         response.Write(new byte[] { 0x00, 0x00 }, 0, 2); // result code (0 for OK)
