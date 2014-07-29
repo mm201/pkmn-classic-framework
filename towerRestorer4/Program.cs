@@ -68,6 +68,9 @@ namespace towerRestorer4
                     continue;
                 }
 
+                rank--;
+                room--;
+
                 FileStream fs = File.OpenRead(s);
                 if (fs.Length != 0xa38)
                 {
