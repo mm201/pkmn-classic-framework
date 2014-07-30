@@ -679,14 +679,130 @@ namespace PkmnFoundations.Data
             return (ulong)(oPkey ?? 0UL);
         }
 
-        public override BattleTowerRecord4[] BattleTowerGetOpponents4(byte rank, byte roomNum)
+        public override BattleTowerRecord4[] BattleTowerGetOpponents4(int pid, byte rank, byte roomNum)
         {
-            throw new NotImplementedException();
+            using (MySqlConnection db = CreateConnection())
+            {
+                db.Open();
+                using (MySqlTransaction tran = db.BeginTransaction())
+                {
+                    List<BattleTowerRecord4> records = new List<BattleTowerRecord4>(7);
+                    List<ulong> keys = new List<ulong>(7);
+                    MySqlDataReader reader = (MySqlDataReader)tran.ExecuteReader(
+                        "SELECT id, pid, Name, " +
+                        "Version, Language, Country, Region, TrainerID, Unknown1, " +
+                        "TrendyPhrase, Unknown2, Unknown3 FROM GtsBattleTower4 " +
+                        "WHERE Rank = @rank AND RoomNum = @room AND pid != @pid " +
+                        "ORDER BY Position LIMIT 7",
+                        new MySqlParameter("@rank", rank),
+                        new MySqlParameter("@room", roomNum),
+                        new MySqlParameter("@pid", pid));
+                    while (reader.Read())
+                    {
+                        BattleTowerRecord4 record = BattleTowerRecord4FromReader(reader);
+                        record.Party = new BattleTowerPokemon4[3];
+                        records.Add(record);
+                        keys.Add(reader.GetUInt64(0));
+                    }
+                    reader.Close();
+
+                    if (records.Count == 0) return new BattleTowerRecord4[0];
+
+                    String inClause = String.Join(", ", keys.Select(i => i.ToString()).ToArray());
+                    reader = (MySqlDataReader)tran.ExecuteReader("SELECT party_id, " +
+                        "Slot, Species, HeldItem, Move1, Move2, Move3, Move4, " +
+                        "TrainerID, Personality, IVs, EVs, Unknown1, Language, " +
+                        "Ability, Happiness, Nickname FROM GtsBattleTowerPokemon4 " +
+                        "WHERE party_id IN (" + inClause + ")");
+                    while (reader.Read())
+                    {
+                        BattleTowerRecord4 record = records[keys.IndexOf(reader.GetUInt64(0))];
+                        record.Party[reader.GetByte(1)] = BattleTowerPokemon4FromReader(reader);
+                    }
+                    reader.Close();
+
+                    tran.Commit();
+                    return Enumerable.Reverse(records).ToArray();
+                }
+            }
+        }
+
+        private BattleTowerRecord4 BattleTowerRecord4FromReader(MySqlDataReader reader)
+        {
+            // todo: Stop using ordinals everywhere.
+            BattleTowerRecord4 result = new BattleTowerRecord4();
+            result.PID = reader.GetInt32(1);
+            if (reader.FieldCount > 11) result.Unknown3 = reader.GetByteArray(11, 26);
+
+            BattleTowerProfile4 profile = new BattleTowerProfile4();
+            profile.Name = new EncodedString4(reader.GetByteArray(2, 16));
+            profile.Version = (Versions)reader.GetByte(3);
+            profile.Language = (Languages)reader.GetByte(4);
+            profile.Country = reader.GetByte(5);
+            profile.Region = reader.GetByte(6);
+            profile.OT = reader.GetUInt32(7);
+            profile.Unknown1 = reader.GetUInt16(8);
+
+            byte[] buffer = reader.GetByteArray(9, 6);
+            ushort[] trendyPhrase = new ushort[3];
+            Buffer.BlockCopy(buffer, 0, trendyPhrase, 0, 6);
+            profile.TrendyPhrase = trendyPhrase;
+
+            profile.Unknown2 = reader.GetUInt16(10);
+
+            result.Profile = profile;
+            return result;
+        }
+
+        private BattleTowerPokemon4 BattleTowerPokemon4FromReader(MySqlDataReader reader)
+        {
+            BattleTowerPokemon4 result = new BattleTowerPokemon4();
+            result.Species = reader.GetUInt16(2);
+            result.HeldItem = reader.GetUInt16(3);
+            result.Moveset = new ushort[4];
+            result.Moveset[0] = reader.GetUInt16(4);
+            result.Moveset[1] = reader.GetUInt16(5);
+            result.Moveset[2] = reader.GetUInt16(6);
+            result.Moveset[3] = reader.GetUInt16(7);
+            result.OT = reader.GetUInt32(8);
+            result.Personality = reader.GetUInt32(9);
+            result.IVs = reader.GetUInt32(10);
+            result.EVs = reader.GetByteArray(11, 6);
+            result.Unknown1 = reader.GetByte(12);
+            result.Language = (Languages)reader.GetByte(13);
+            result.Ability = reader.GetByte(14);
+            result.Happiness = reader.GetByte(15);
+            result.Nickname = new EncodedString4(reader.GetByteArray(16, 22));
+
+            return result;
         }
 
         public override BattleTowerProfile4[] BattleTowerGetLeaders4(byte rank, byte roomNum)
         {
-            throw new NotImplementedException();
+            using (MySqlConnection db = CreateConnection())
+            {
+                db.Open();
+                using (MySqlTransaction tran = db.BeginTransaction())
+                {
+                    List<BattleTowerProfile4> profiles = new List<BattleTowerProfile4>(30);
+                    MySqlDataReader reader = (MySqlDataReader)tran.ExecuteReader(
+                        "SELECT id, pid, Name, " +
+                        "Version, Language, Country, Region, TrainerID, Unknown1, " +
+                        "TrendyPhrase, Unknown2 FROM GtsBattleTowerLeaders4 " +
+                        "WHERE Rank = @rank AND RoomNum = @room " +
+                        "ORDER BY TimeUpdated DESC, id LIMIT 30",
+                        new MySqlParameter("@rank", rank),
+                        new MySqlParameter("@room", roomNum));
+                    while (reader.Read())
+                    {
+                        profiles.Add(BattleTowerRecord4FromReader(reader).Profile);
+                    }
+                    reader.Close();
+
+                    tran.Commit();
+                    return profiles.ToArray();
+                }
+            }
         }
         #endregion
 

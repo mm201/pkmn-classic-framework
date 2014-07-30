@@ -67,7 +67,7 @@ namespace PkmnFoundations.Data
         #region Battle Tower 4
         public abstract ulong BattleTowerUpdateRecord4(BattleTowerRecord4 record);
         public abstract ulong BattleTowerAddLeader4(BattleTowerRecord4 record);
-        public abstract BattleTowerRecord4[] BattleTowerGetOpponents4(byte rank, byte roomNum);
+        public abstract BattleTowerRecord4[] BattleTowerGetOpponents4(int pid, byte rank, byte roomNum);
         public abstract BattleTowerProfile4[] BattleTowerGetLeaders4(byte rank, byte roomNum);
         #endregion
 

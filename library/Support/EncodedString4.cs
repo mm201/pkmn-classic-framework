@@ -36,6 +36,9 @@ namespace PkmnFoundations.Support
 
         public EncodedString4(String text)
         {
+            // fixme: All encoded strings are a constant length with null
+            // termination and padding. This ctor should take a length and
+            // pad the binary data as necessary.
             Text = text;
         }
 

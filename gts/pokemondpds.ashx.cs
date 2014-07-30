@@ -99,13 +99,14 @@ namespace PkmnFoundations.GTS
 
                         // unrecognized page url
                         context.Response.StatusCode = 404;
-                        context.Response.Write("This handler has not been implemented.\n");
+                        context.Response.Write("This handler has not been implemented. (404)\n");
                         context.Response.Write(session.URL);
                         return;
 
                     #region Common
                     // Called during startup. Seems to contain trainer profile stats.
                     case "/common/setProfile.asp":
+                    {
                         manager.Remove(session);
 
                         if (data.Length != 104)
@@ -130,7 +131,7 @@ namespace PkmnFoundations.GTS
 
                         response.Write(new byte[] { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 },
                             0, 8);
-                        break;
+                    } break;
                     #endregion
 
                     #region GTS
@@ -516,6 +517,72 @@ namespace PkmnFoundations.GTS
                             response.Write(new byte[] { 0x00, 0x00 }, 0, 2);
 
                     } break;
+                    #endregion
+
+                    #region Battle Tower
+                    case "/battletower/info.asp":
+                        manager.Remove(session);
+
+                        // Probably an availability/status code.
+                        // todo: See how the game reacts to various values.
+                        response.Write(new byte[] { 0x01, 0x00 }, 0, 2);
+                        break;
+
+                    case "/battletower/roomnum.asp":
+                        manager.Remove(session);
+
+                        //byte rank = data[0x05];
+                        response.Write(new byte[] { 0x32, 0x00 }, 0, 2);
+                        break;
+
+                    case "/battletower/download.asp":
+                    {
+                        byte rank = data[0x04];
+                        byte roomNum = data[0x05];
+
+                        BattleTowerRecord4[] opponents = DataAbstract.Instance.BattleTowerGetOpponents4(pid, rank, roomNum);
+
+                        if (opponents.Length != 7)
+                        {
+                            // todo: Instead of failing, add fake trainers
+                            // to pad the results up to 7.
+                            response.Write(new byte[] { 0x00, 0x00 }, 0, 2);
+                            break;
+                        }
+
+                        BattleTowerProfile4[] leaders = DataAbstract.Instance.BattleTowerGetLeaders4(rank, roomNum);
+
+                        foreach (BattleTowerRecord4 record in opponents)
+                        {
+                            response.Write(record.Save(), 0, 228);
+                        }
+
+                        foreach (BattleTowerProfile4 leader in leaders)
+                        {
+                            response.Write(leader.Save(), 0, 34);
+                        }
+
+                    } break;
+
+                    case "/battletower/upload.asp":
+                    {
+                        BattleTowerRecord4 record = new BattleTowerRecord4(data, 4);
+
+                        record.Rank = data[0xe8];
+                        record.RoomNum = data[0xe9];
+                        record.BattlesWon = data[0xea];
+                        record.Unknown4 = BitConverter.ToUInt64(data, 0xeb);
+
+                        // todo: Do we want to store their record anyway if they lost the first round?
+                        if (record.BattlesWon > 0)
+                            DataAbstract.Instance.BattleTowerUpdateRecord4(record);
+                        if (record.BattlesWon == 7)
+                            DataAbstract.Instance.BattleTowerAddLeader4(record);
+
+                        response.Write(new byte[] { 0x01, 0x00 }, 0, 2);
+
+                    } break;
+
                     #endregion
                 }
             }

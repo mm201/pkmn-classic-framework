@@ -6,6 +6,7 @@ using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
 using MySql.Data.MySqlClient;
+using System.IO;
 
 namespace PkmnFoundations.Data
 {
@@ -14,6 +15,7 @@ namespace PkmnFoundations.Data
     /// </summary>
     public static class DatabaseExtender
     {
+        #region Command Execution
         /// <summary>
         /// Runs a command and returns a DataTable containing its results.
         /// </summary>
@@ -192,6 +194,7 @@ namespace PkmnFoundations.Data
             cmd.Parameters.AddRange(_params);
             return cmd.ExecuteNonQuery();
         }
+        #endregion
 
         #region MS-SQL
         // I can't find anything like a "parameter factory" in ADO.NET nor a virutal clone method,
@@ -389,6 +392,7 @@ namespace PkmnFoundations.Data
         }
         #endregion
 
+        #region DataReader convenience
         /// <summary>
         /// Obtains a string value or returns a default value if null.
         /// </summary>
@@ -434,5 +438,51 @@ namespace PkmnFoundations.Data
         {
             return (reader[column] is DBNull) ? "" : (String)reader[column];
         }
+
+        public static void GetBytes(this IDataReader reader, String column, long fieldOffset, byte[] buffer, int bufferOffset, int length)
+        {
+            reader.GetBytes(reader.GetOrdinal(column), fieldOffset, buffer, bufferOffset, length);
+        }
+
+        public static byte[] GetByteArray(this IDataReader reader, int column)
+        {
+            // optimized version of http://msdn.microsoft.com/en-us/library/87z0hy49%28v=vs.110%29.aspx
+
+            MemoryStream m = new MemoryStream();
+            const int BUFFER_LENGTH = 256;
+            byte[] buffer = new byte[BUFFER_LENGTH];
+
+            long progress = 0;
+            long lastProgress;
+
+            do
+            {
+                lastProgress = reader.GetBytes(column, progress, buffer, 0, BUFFER_LENGTH);
+                m.Write(buffer, 0, (int)lastProgress);
+                progress += lastProgress;
+
+            } while (lastProgress == BUFFER_LENGTH);
+
+            m.Flush();
+            return m.GetBuffer();
+        }
+
+        public static byte[] GetByteArray(this IDataReader reader, int column, int length)
+        {
+            byte[] result = new byte[length];
+            reader.GetBytes(column, 0, result, 0, length);
+            return result;
+        }
+
+        public static byte[] GetByteArray(this IDataReader reader, String column)
+        {
+            return GetByteArray(reader, reader.GetOrdinal(column));
+        }
+
+        public static byte[] GetByteArray(this IDataReader reader, String column, int length)
+        {
+            return GetByteArray(reader, reader.GetOrdinal(column), length);
+        }
+        #endregion
     }
 }

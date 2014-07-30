@@ -46,7 +46,7 @@ namespace PkmnFoundations.Structures
         public byte[] Save()
         {
             byte[] data = new byte[0x38];
-            MemoryStream ms = new MemoryStream();
+            MemoryStream ms = new MemoryStream(data);
             BinaryWriter writer = new BinaryWriter(ms);
 
             writer.Write(Species);
