@@ -7,6 +7,7 @@ using PkmnFoundations.Data;
 using PkmnFoundations.Structures;
 using PkmnFoundations.Support;
 using System.IO;
+using System.Threading;
 
 namespace PkmnFoundations.GTS
 {
@@ -569,6 +570,14 @@ namespace PkmnFoundations.GTS
                         {
                             response.Write(leader.Save(), 0, 34);
                         }
+
+                        // This is completely insane. The game crashes when you
+                        // use Check Leaders if the response arrives too fast,
+                        // so we artificially delay it.
+                        // todo: This is slower than it needs to be if the
+                        // database is slow to respond. We should sleep for a
+                        // variable time based on when the request was received.
+                        Thread.Sleep(500);
 
                     } break;
 
