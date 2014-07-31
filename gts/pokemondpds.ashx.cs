@@ -537,6 +537,14 @@ namespace PkmnFoundations.GTS
 
                     case "/battletower/download.asp":
                     {
+                        manager.Remove(session);
+
+                        if (data.Length != 6)
+                        {
+                            Error400(context);
+                            return;
+                        }
+
                         byte rank = data[0x04];
                         byte roomNum = data[0x05];
 
@@ -566,6 +574,14 @@ namespace PkmnFoundations.GTS
 
                     case "/battletower/upload.asp":
                     {
+                        manager.Remove(session);
+
+                        if (data.Length != 243)
+                        {
+                            Error400(context);
+                            return;
+                        }
+
                         BattleTowerRecord4 record = new BattleTowerRecord4(data, 4);
 
                         record.Rank = data[0xe8];
