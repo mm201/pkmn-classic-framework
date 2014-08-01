@@ -283,6 +283,7 @@ namespace PkmnFoundations.GlobalTerminalService
                 case RequestTypes5.BattleVideoUpload:
                 case RequestTypes5.BattleVideoSearch:
                 case RequestTypes5.BattleVideoWatch:
+                case RequestTypes5.BattleVideoSaved:
                     return 0x55;
                 default:
                     return 0x00;
@@ -305,6 +306,7 @@ namespace PkmnFoundations.GlobalTerminalService
 
         BattleVideoUpload = 0xf0,
         BattleVideoSearch = 0xf1,
-        BattleVideoWatch = 0xf2
+        BattleVideoWatch = 0xf2,
+        BattleVideoSaved = 0xf3
     }
 }
