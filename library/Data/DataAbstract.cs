@@ -98,6 +98,8 @@ namespace PkmnFoundations.Data
         #endregion
 
         #region Battle Subway 5
+
+
         #endregion
 
         #region Global Terminal 4
