@@ -459,6 +459,18 @@ namespace PkmnFoundations.Data
                 new MySqlParameter("@rank", record.Rank),
                 new MySqlParameter("@position", position));
 
+            object lastPosition = tran.ExecuteScalar("SELECT MAX(Position) " +
+                "FROM GtsBattleTower4 WHERE RoomNum = @room AND Rank = @rank",
+                new MySqlParameter("@room", record.RoomNum),
+                new MySqlParameter("@rank", record.Rank));
+
+            // If the room has fewer than 7 trainers, insert this one at the
+            // end but don't leave any gaps in the numbering.
+            if (lastPosition is DBNull)
+                position = 0;
+            else
+                position = Math.Min(position, (uint)lastPosition + 1);
+
             // Update the actual record
             if (pkey != 0)
             {
