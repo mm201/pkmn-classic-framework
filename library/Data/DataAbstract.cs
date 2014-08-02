@@ -98,8 +98,10 @@ namespace PkmnFoundations.Data
         #endregion
 
         #region Battle Subway 5
-
-
+        public abstract ulong BattleSubwayUpdateRecord5(BattleSubwayRecord5 record);
+        public abstract ulong BattleSubwayAddLeader5(BattleSubwayRecord5 record);
+        public abstract BattleSubwayRecord5[] BattleSubwayGetOpponents5(int pid, byte rank, byte roomNum);
+        public abstract BattleSubwayProfile5[] BattleSubwayGetLeaders5(byte rank, byte roomNum);
         #endregion
 
         #region Global Terminal 4

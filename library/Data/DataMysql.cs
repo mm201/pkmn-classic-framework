@@ -1259,6 +1259,421 @@ namespace PkmnFoundations.Data
 
         #endregion
 
+        #region Battle Subway 5
+        public override ulong BattleSubwayUpdateRecord5(BattleSubwayRecord5 record)
+        {
+            if (record.BattlesWon > 7) throw new ArgumentException("Battles won can not be greater than 7.");
+
+            using (MySqlConnection db = CreateConnection())
+            {
+                db.Open();
+                using (MySqlTransaction tran = db.BeginTransaction())
+                {
+                    ulong result = BattleSubwayUpdateRecord5(tran, record);
+                    tran.Commit();
+                    return result;
+                }
+            }
+        }
+
+        private ulong BattleSubwayUpdateRecord5(MySqlTransaction tran, BattleSubwayRecord5 record)
+        {
+            if (record.BattlesWon > 7) throw new ArgumentException("Battles won can not be greater than 7.");
+
+            // Does this player already have a record in this room?
+            // Also get primary key if it does. (We need it for updating party)
+            ulong pkey = FindBattleSubwayRecord5(tran, record, false);
+
+            if (pkey != 0)
+            {
+                // If the player already has a record, move everyone below it up one position
+                // (effectively removing this record from the ordering)
+
+                // todo: In the case that the player's rank hasn't changed,
+                // we can optimize this and the next down to a single BETWEEN
+                // query.
+                // This does require retrieving their old rank from the db.
+                tran.ExecuteNonQuery("SELECT @old_rank = Rank, @old_position = Position " +
+                    "FROM GtsBattleSubway5 WHERE pid = @pid AND RoomNum = @room); " +
+                    "UPDATE GtsBattleSubway5 SET Position = Position - 1 " +
+                    "WHERE RoomNum = @room AND Rank = @old_rank AND Position > @old_position",
+                    new MySqlParameter("@pid", record.PID),
+                    new MySqlParameter("@room", record.RoomNum));
+            }
+
+            uint position = (uint)(7 - record.BattlesWon);
+
+            // Shift down all the players in the player's new rank by one.
+            tran.ExecuteNonQuery("UPDATE GtsBattleSubway5 SET Position = Position + 1 " +
+                "WHERE RoomNum = @room AND Rank = @rank AND Position >= @position",
+                new MySqlParameter("@room", record.RoomNum),
+                new MySqlParameter("@rank", record.Rank),
+                new MySqlParameter("@position", position));
+
+            object lastPosition = tran.ExecuteScalar("SELECT MAX(Position) " +
+                "FROM GtsBattleSubway5 WHERE RoomNum = @room AND Rank = @rank",
+                new MySqlParameter("@room", record.RoomNum),
+                new MySqlParameter("@rank", record.Rank));
+
+            // If the room has fewer than 7 trainers, insert this one at the
+            // end but don't leave any gaps in the numbering.
+            if (lastPosition is DBNull)
+                position = 0;
+            else
+                position = Math.Min(position, (uint)lastPosition + 1);
+
+            // Update the actual record
+            if (pkey != 0)
+            {
+                List<MySqlParameter> _params = ParamsFromBattleSubwayRecord5(record, false);
+                _params.Add(new MySqlParameter("@position", position));
+                _params.Add(new MySqlParameter("@id", pkey));
+
+                tran.ExecuteNonQuery("UPDATE GtsBattleSubway5 SET pid = @pid, Name = @name, " +
+                    "Version = @version, Language = @language, Country = @country, " +
+                    "Region = @region, TrainerID = @trainer_id, Unknown1 = @unknown1, " +
+                    "TrendyPhrase = @trendy_phrase, Unknown2 = @unknown2, Unknown3 = @unknown3, " +
+                    "Unknown4 = @unknown4, ParseVersion = 1, Rank = @rank, " +
+                    "BattlesWon = @battles_won, Position = @position, " +
+                    "TimeUpdated = UTC_TIMESTAMP() WHERE id = @id",
+                    _params.ToArray());
+
+                UpdateBattleSubwayPokemon5(tran, record.Party[0], pkey, 0);
+                UpdateBattleSubwayPokemon5(tran, record.Party[1], pkey, 1);
+                UpdateBattleSubwayPokemon5(tran, record.Party[2], pkey, 2);
+            }
+            else
+            {
+                List<MySqlParameter> _params = ParamsFromBattleSubwayRecord5(record, false);
+                _params.Add(new MySqlParameter("@position", position));
+
+                pkey = Convert.ToUInt64(tran.ExecuteScalar("INSERT INTO GtsBattleSubway5 " +
+                    "(pid, Name, Version, Language, Country, Region, TrainerID, " +
+                    "Unknown1, TrendyPhrase, Unknown2, Unknown3, Unknown4, ParseVersion, " +
+                    "Rank, RoomNum, BattlesWon, Position, TimeAdded, TimeUpdated) VALUES " +
+                    "(@pid, @name, @version, @language, @country, @region, @trainer_id, " +
+                    "@unknown1, @trendy_phrase, @unknown2, @unknown3, @unknown4, 1, " +
+                    "@rank, @room, @battles_won, @position, UTC_TIMESTAMP(), UTC_TIMESTAMP()); " +
+                    "SELECT LAST_INSERT_ID()",
+                    _params.ToArray()));
+
+                InsertBattleSubwayPokemon5(tran, record.Party[0], pkey, 0);
+                InsertBattleSubwayPokemon5(tran, record.Party[1], pkey, 1);
+                InsertBattleSubwayPokemon5(tran, record.Party[2], pkey, 2);
+            }
+
+            return pkey;
+        }
+
+        private void InsertBattleSubwayPokemon5(MySqlTransaction tran, BattleSubwayPokemon5 pokemon, ulong partyId, byte slot)
+        {
+            List<MySqlParameter> _params = ParamsFromBattleSubwayPokemon5(pokemon);
+            _params.Add(new MySqlParameter("@id", partyId));
+            _params.Add(new MySqlParameter("@slot", slot));
+
+            tran.ExecuteNonQuery("INSERT INTO GtsBattleSubwayPokemon5 " +
+                "(party_id, Slot, Species, HeldItem, Move1, Move2, Move3, Move4, TrainerID, " +
+                "Personality, IVs, EVs, Unknown1, Language, Ability, Happiness, " +
+                "Nickname, Unknown2) VALUES " +
+                "(@id, @slot, @species, @held_item, @move1, @move2, @move3, @move4, @trainer_id, " +
+                "@personality, @ivs, @evs, @unknown1, @language, @ability, @happiness, " +
+                "@nickname, @unknown2)",
+                _params.ToArray());
+        }
+
+        private void UpdateBattleSubwayPokemon5(MySqlTransaction tran, BattleSubwayPokemon5 pokemon, ulong partyId, byte slot)
+        {
+            List<MySqlParameter> _params = ParamsFromBattleSubwayPokemon5(pokemon);
+            _params.Add(new MySqlParameter("@id", partyId));
+            _params.Add(new MySqlParameter("@slot", slot));
+
+            tran.ExecuteNonQuery("UPDATE GtsBattleSubwayPokemon5 SET Species = @species, " +
+                "HeldItem = @held_item, Move1 = @move1, Move2 = @move2, Move3 = @move3, " +
+                "Move4 = @move4, TrainerID = @trainer_id, Personality = @personality, " +
+                "IVs = @ivs, EVs = @evs, Unknown1 = @unknown1, Language = @language, " +
+                "Ability = @ability, Happiness = @happiness, Nickname = @nickname, " +
+                "Unknown2 = @unknown2 " +
+                "WHERE party_id = @id AND Slot = @slot",
+                _params.ToArray());
+        }
+
+        private List<MySqlParameter> ParamsFromBattleSubwayRecord5(BattleSubwayRecord5 record, bool leader)
+        {
+            List<MySqlParameter> result = new List<MySqlParameter>(15);
+            result.Add(new MySqlParameter("@pid", record.PID));
+            result.Add(new MySqlParameter("@name", record.Profile.Name.RawData));
+            result.Add(new MySqlParameter("@version", (byte)record.Profile.Version));
+            result.Add(new MySqlParameter("@language", (byte)record.Profile.Language));
+            result.Add(new MySqlParameter("@country", record.Profile.Country));
+            result.Add(new MySqlParameter("@region", record.Profile.Region));
+            result.Add(new MySqlParameter("@trainer_id", record.Profile.OT));
+            result.Add(new MySqlParameter("@unknown1", record.Profile.Unknown1));
+
+            byte[] trendy_phrase = new byte[6];
+            Buffer.BlockCopy(record.Profile.TrendyPhrase, 0, trendy_phrase, 0, 6);
+            result.Add(new MySqlParameter("@trendy_phrase", trendy_phrase));
+
+            result.Add(new MySqlParameter("@unknown2", record.Profile.Unknown2));
+            result.Add(new MySqlParameter("@rank", record.Rank));
+            result.Add(new MySqlParameter("@room", record.RoomNum));
+            if (!leader)
+            {
+                result.Add(new MySqlParameter("@unknown3", record.Unknown3));
+                result.Add(new MySqlParameter("@unknown4", record.Unknown4));
+                result.Add(new MySqlParameter("@battles_won", record.BattlesWon));
+            }
+            return result;
+        }
+
+        private List<MySqlParameter> ParamsFromBattleSubwayPokemon5(BattleSubwayPokemon5 pokemon)
+        {
+            List<MySqlParameter> result = new List<MySqlParameter>(15);
+            result.Add(new MySqlParameter("@species", pokemon.Species));
+            result.Add(new MySqlParameter("@held_item", pokemon.HeldItem));
+            result.Add(new MySqlParameter("@move1", pokemon.Moveset[0]));
+            result.Add(new MySqlParameter("@move2", pokemon.Moveset[1]));
+            result.Add(new MySqlParameter("@move3", pokemon.Moveset[2]));
+            result.Add(new MySqlParameter("@move4", pokemon.Moveset[3]));
+            result.Add(new MySqlParameter("@trainer_id", pokemon.OT));
+            result.Add(new MySqlParameter("@personality", pokemon.Personality));
+            result.Add(new MySqlParameter("@ivs", pokemon.IVs));
+            result.Add(new MySqlParameter("@evs", pokemon.EVs));
+            result.Add(new MySqlParameter("@unknown1", pokemon.Unknown1));
+            result.Add(new MySqlParameter("@language", (byte)pokemon.Language));
+            result.Add(new MySqlParameter("@ability", pokemon.Ability));
+            result.Add(new MySqlParameter("@happiness", pokemon.Happiness));
+            result.Add(new MySqlParameter("@nickname", pokemon.Nickname.RawData));
+            result.Add(new MySqlParameter("@unknown2", pokemon.Unknown2));
+            return result;
+        }
+
+        public override ulong BattleSubwayAddLeader5(BattleSubwayRecord5 record)
+        {
+            using (MySqlConnection db = CreateConnection())
+            {
+                db.Open();
+                using (MySqlTransaction tran = db.BeginTransaction())
+                {
+                    ulong result = BattleSubwayAddLeader5(tran, record);
+                    tran.Commit();
+                    return result;
+                }
+            }
+        }
+
+        private ulong BattleSubwayAddLeader5(MySqlTransaction tran, BattleSubwayRecord5 record)
+        {
+            ulong pkey = FindBattleSubwayRecord5(tran, record, true);
+
+            // Update the actual record
+            if (pkey != 0)
+            {
+                List<MySqlParameter> _params = ParamsFromBattleSubwayRecord5(record, true);
+                _params.Add(new MySqlParameter("@id", pkey));
+
+                tran.ExecuteNonQuery("UPDATE GtsBattleSubwayLeaders5 SET " +
+                    "pid = @pid, Name = @name, Version = @version, " +
+                    "Language = @language, Country = @country, Region = @region, " +
+                    "TrainerID = @trainer_id, Unknown1 = @unknown1, " +
+                    "TrendyPhrase = @trendy_phrase, Unknown2 = @unknown2, " +
+                    "ParseVersion = 1, Rank = @rank, " +
+                    "TimeUpdated = UTC_TIMESTAMP() WHERE id = @id",
+                    _params.ToArray());
+            }
+            else
+            {
+                List<MySqlParameter> _params = ParamsFromBattleSubwayRecord5(record, true);
+
+                pkey = Convert.ToUInt64(tran.ExecuteScalar("INSERT INTO " +
+                    "GtsBattleSubwayLeaders5 " +
+                    "(pid, Name, Version, Language, Country, Region, TrainerID, " +
+                    "Unknown1, TrendyPhrase, Unknown2, ParseVersion, Rank, " +
+                    "RoomNum, TimeAdded, TimeUpdated) VALUES " +
+                    "(@pid, @name, @version, @language, @country, @region, @trainer_id, " +
+                    "@unknown1, @trendy_phrase, @unknown2, 1, @rank, " +
+                    "@room, UTC_TIMESTAMP(), UTC_TIMESTAMP()); " +
+                    "SELECT LAST_INSERT_ID()",
+                    _params.ToArray()));
+            }
+
+            return pkey;
+        }
+
+        /// <summary>
+        /// Tries to find an existing database record for the provided player
+        /// record. The match must be found in the same rank and room number.
+        /// </summary>
+        /// <param name="tran"></param>
+        /// <param name="record"></param>
+        /// <param name="leader">If true, look up against the Leaders table.
+        /// Otherwise looks up against the opponents table.</param>
+        /// <returns>The match's primary key or 0 if no match is found
+        /// </returns>
+        private ulong FindBattleSubwayRecord5(MySqlTransaction tran, BattleSubwayRecord5 record, bool leader)
+        {
+            String tblName = leader ? "GtsBattleSubwayLeaders5" : "GtsBattleSubway5";
+
+            // If PID is missing, this is restored data.
+            // We assume the original server took care of matching existing
+            // records, so we don't allow it to match here.
+            if (record.PID == 0) return 0;
+
+            // Match normally.
+            object oPkey = tran.ExecuteScalar("SELECT id FROM " + tblName +
+                " WHERE pid = @pid AND RoomNum = @room" + (leader ? " AND Rank = @rank" : ""), // Only require rank to match if this is the leaderboard.
+                new MySqlParameter("@pid", record.PID),
+                new MySqlParameter("@rank", record.Rank),
+                new MySqlParameter("@room", record.RoomNum));
+
+            if (oPkey == null)
+            {
+                // PID isn't found. Try to match one of Pikachu025's saved
+                // records based on unchanging properties of the savegame.
+                oPkey = tran.ExecuteScalar("SELECT id FROM " + tblName +
+                    " WHERE pid = 0 AND RoomNum = @room " + (leader ? " AND Rank = @rank" : "") + // Only require rank to match if this is the leaderboard.
+                    "AND Name = @name AND Version = @version " +
+                    "AND Language = @language AND TrainerID = @trainer_id",
+                    new MySqlParameter("@rank", record.Rank),
+                    new MySqlParameter("@room", record.RoomNum),
+                    new MySqlParameter("@name", record.Profile.Name),
+                    new MySqlParameter("@version", (byte)record.Profile.Version),
+                    new MySqlParameter("@language", (byte)record.Profile.Language),
+                    new MySqlParameter("@trainer_id", record.Profile.OT)
+                );
+            }
+
+            // Don't need to worry about DBNull since the column is non-null.
+            return (ulong)(oPkey ?? 0UL);
+        }
+
+        public override BattleSubwayRecord5[] BattleSubwayGetOpponents5(int pid, byte rank, byte roomNum)
+        {
+            using (MySqlConnection db = CreateConnection())
+            {
+                db.Open();
+                using (MySqlTransaction tran = db.BeginTransaction())
+                {
+                    List<BattleSubwayRecord5> records = new List<BattleSubwayRecord5>(7);
+                    List<ulong> keys = new List<ulong>(7);
+                    MySqlDataReader reader = (MySqlDataReader)tran.ExecuteReader(
+                        "SELECT id, pid, Name, " +
+                        "Version, Language, Country, Region, TrainerID, Unknown1, " +
+                        "TrendyPhrase, Unknown2, Unknown3 FROM GtsBattleSubway5 " +
+                        "WHERE Rank = @rank AND RoomNum = @room AND pid != @pid " +
+                        "ORDER BY Position LIMIT 7",
+                        new MySqlParameter("@rank", rank),
+                        new MySqlParameter("@room", roomNum),
+                        new MySqlParameter("@pid", pid));
+                    while (reader.Read())
+                    {
+                        BattleSubwayRecord5 record = BattleSubwayRecord5FromReader(reader);
+                        record.Party = new BattleSubwayPokemon5[3];
+                        records.Add(record);
+                        keys.Add(reader.GetUInt64(0));
+                    }
+                    reader.Close();
+
+                    if (records.Count == 0) return new BattleSubwayRecord5[0];
+
+                    String inClause = String.Join(", ", keys.Select(i => i.ToString()).ToArray());
+                    reader = (MySqlDataReader)tran.ExecuteReader("SELECT party_id, " +
+                        "Slot, Species, HeldItem, Move1, Move2, Move3, Move4, " +
+                        "TrainerID, Personality, IVs, EVs, Unknown1, Language, " +
+                        "Ability, Happiness, Nickname, Unknown2 FROM GtsBattleSubwayPokemon5 " +
+                        "WHERE party_id IN (" + inClause + ")");
+                    while (reader.Read())
+                    {
+                        BattleSubwayRecord5 record = records[keys.IndexOf(reader.GetUInt64(0))];
+                        record.Party[reader.GetByte(1)] = BattleSubwayPokemon5FromReader(reader);
+                    }
+                    reader.Close();
+
+                    tran.Commit();
+                    return Enumerable.Reverse(records).ToArray();
+                }
+            }
+        }
+
+        private BattleSubwayRecord5 BattleSubwayRecord5FromReader(MySqlDataReader reader)
+        {
+            // todo: Stop using ordinals everywhere.
+            BattleSubwayRecord5 result = new BattleSubwayRecord5();
+            result.PID = reader.GetInt32(1);
+            if (reader.FieldCount > 11) result.Unknown3 = reader.GetByteArray(11, 26);
+
+            BattleSubwayProfile5 profile = new BattleSubwayProfile5();
+            profile.Name = new EncodedString5(reader.GetByteArray(2, 16));
+            profile.Version = (Versions)reader.GetByte(3);
+            profile.Language = (Languages)reader.GetByte(4);
+            profile.Country = reader.GetByte(5);
+            profile.Region = reader.GetByte(6);
+            profile.OT = reader.GetUInt32(7);
+            profile.Unknown1 = reader.GetUInt16(8);
+
+            byte[] buffer = reader.GetByteArray(9, 6);
+            ushort[] trendyPhrase = new ushort[3];
+            Buffer.BlockCopy(buffer, 0, trendyPhrase, 0, 6);
+            profile.TrendyPhrase = trendyPhrase;
+
+            profile.Unknown2 = reader.GetUInt16(10);
+
+            result.Profile = profile;
+            return result;
+        }
+
+        private BattleSubwayPokemon5 BattleSubwayPokemon5FromReader(MySqlDataReader reader)
+        {
+            BattleSubwayPokemon5 result = new BattleSubwayPokemon5();
+            result.Species = reader.GetUInt16(2);
+            result.HeldItem = reader.GetUInt16(3);
+            result.Moveset = new ushort[4];
+            result.Moveset[0] = reader.GetUInt16(4);
+            result.Moveset[1] = reader.GetUInt16(5);
+            result.Moveset[2] = reader.GetUInt16(6);
+            result.Moveset[3] = reader.GetUInt16(7);
+            result.OT = reader.GetUInt32(8);
+            result.Personality = reader.GetUInt32(9);
+            result.IVs = reader.GetUInt32(10);
+            result.EVs = reader.GetByteArray(11, 6);
+            result.Unknown1 = reader.GetByte(12);
+            result.Language = (Languages)reader.GetByte(13);
+            result.Ability = reader.GetByte(14);
+            result.Happiness = reader.GetByte(15);
+            result.Nickname = new EncodedString5(reader.GetByteArray(16, 22));
+            result.Unknown2 = reader.GetUInt32(17);
+
+            return result;
+        }
+
+        public override BattleSubwayProfile5[] BattleSubwayGetLeaders5(byte rank, byte roomNum)
+        {
+            using (MySqlConnection db = CreateConnection())
+            {
+                db.Open();
+                using (MySqlTransaction tran = db.BeginTransaction())
+                {
+                    List<BattleSubwayProfile5> profiles = new List<BattleSubwayProfile5>(30);
+                    MySqlDataReader reader = (MySqlDataReader)tran.ExecuteReader(
+                        "SELECT id, pid, Name, " +
+                        "Version, Language, Country, Region, TrainerID, Unknown1, " +
+                        "TrendyPhrase, Unknown2 FROM GtsBattleTowerLeaders4 " +
+                        "WHERE Rank = @rank AND RoomNum = @room " +
+                        "ORDER BY TimeUpdated DESC, id LIMIT 30",
+                        new MySqlParameter("@rank", rank),
+                        new MySqlParameter("@room", roomNum));
+                    while (reader.Read())
+                    {
+                        profiles.Add(BattleSubwayRecord5FromReader(reader).Profile);
+                    }
+                    reader.Close();
+
+                    tran.Commit();
+                    return profiles.ToArray();
+                }
+            }
+        }
+        #endregion
+
         #region Other Gamestats 5
         public override bool GamestatsSetProfile5(TrainerProfile5 profile)
         {
