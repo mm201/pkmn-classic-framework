@@ -517,6 +517,91 @@ namespace PkmnFoundations.GTS
 
                     } break;
                     #endregion
+
+                    #region Battle Subway
+                    case "/battletower/info.asp":
+                        manager.Remove(session);
+
+                        // Probably an availability/status code.
+                        // todo: See how the game reacts to various values.
+                        response.Write(new byte[] { 0x01, 0x00 }, 0, 2);
+                        break;
+
+                    case "/battletower/roomnum.asp":
+                        manager.Remove(session);
+
+                        //byte rank = data[0x05];
+                        response.Write(new byte[] { 0x32, 0x00 }, 0, 2);
+                        break;
+
+                    case "/battletower/download.asp":
+                    {
+                        manager.Remove(session);
+
+                        if (data.Length != 6)
+                        {
+                            Error400(context);
+                            return;
+                        }
+
+                        byte rank = data[0x04];
+                        byte roomNum = data[0x05];
+
+                        BattleSubwayRecord5[] opponents = DataAbstract.Instance.BattleSubwayGetOpponents5(pid, rank, roomNum);
+
+                        if (opponents.Length != 7)
+                        {
+                            // todo: Instead of failing, add fake trainers
+                            // to pad the results up to 7.
+                            response.Write(new byte[] { 0x00, 0x00 }, 0, 2);
+                            break;
+                        }
+
+                        BattleSubwayProfile5[] leaders = DataAbstract.Instance.BattleSubwayGetLeaders5(rank, roomNum);
+
+                        foreach (BattleSubwayRecord5 record in opponents)
+                        {
+                            response.Write(record.Save(), 0, 240);
+                        }
+
+                        foreach (BattleSubwayProfile5 leader in leaders)
+                        {
+                            response.Write(leader.Save(), 0, 34);
+                        }
+
+                    } break;
+
+                    case "/battletower/upload.asp":
+                    {
+                        manager.Remove(session);
+
+                        if (data.Length != 243)
+                        {
+                            Error400(context);
+                            return;
+                        }
+
+                        BattleSubwayRecord5 record = new BattleSubwayRecord5(data, 4);
+
+                        record.Rank = data[0xf8];
+                        record.RoomNum = data[0xf9];
+                        record.BattlesWon = data[0xfa];
+                        record.Unknown4 = new byte[5];
+                        Array.Copy(data, 0xfb, record.Unknown4, 0, 5);
+                        record.Unknown5 = BitConverter.ToUInt64(data, 0x100);
+
+                        // todo: Do we want to store their record anyway if they lost the first round?
+                        if (record.BattlesWon > 0)
+                            DataAbstract.Instance.BattleSubwayUpdateRecord5(record);
+                        if (record.BattlesWon == 7)
+                            DataAbstract.Instance.BattleSubwayAddLeader5(record);
+
+                        response.Write(new byte[] { 0x01, 0x00 }, 0, 2);
+
+                    } break;
+
+                    #endregion
+
                 }
 
                 response.Flush();
