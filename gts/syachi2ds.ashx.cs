@@ -107,7 +107,7 @@ namespace PkmnFoundations.GTS
 
                         // unrecognized page url
                         context.Response.StatusCode = 404;
-                        context.Response.Write("This handler has not been implemented.\n");
+                        context.Response.Write("This handler is not supported. (404)\n");
                         context.Response.Write(session.URL);
                         return;
 
