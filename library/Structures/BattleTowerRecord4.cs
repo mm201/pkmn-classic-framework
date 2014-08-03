@@ -30,7 +30,7 @@ namespace PkmnFoundations.Structures
         public byte Rank;
         public byte RoomNum;
         public byte BattlesWon;
-        public ulong Unknown4;
+        public ulong Unknown5;
         public int PID;
 
         public byte[] Save()

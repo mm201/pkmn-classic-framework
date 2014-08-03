@@ -482,7 +482,7 @@ namespace PkmnFoundations.Data
                     "Version = @version, Language = @language, Country = @country, " +
                     "Region = @region, TrainerID = @trainer_id, Unknown1 = @unknown1, " +
                     "TrendyPhrase = @trendy_phrase, Unknown2 = @unknown2, Unknown3 = @unknown3, " +
-                    "Unknown4 = @unknown4, ParseVersion = 1, Rank = @rank, " +
+                    "Unknown5 = @unknown5, ParseVersion = 1, Rank = @rank, " +
                     "BattlesWon = @battles_won, Position = @position, " +
                     "TimeUpdated = UTC_TIMESTAMP() WHERE id = @id",
                     _params.ToArray());
@@ -498,10 +498,10 @@ namespace PkmnFoundations.Data
 
                 pkey = Convert.ToUInt64(tran.ExecuteScalar("INSERT INTO GtsBattleTower4 " +
                     "(pid, Name, Version, Language, Country, Region, TrainerID, " +
-                    "Unknown1, TrendyPhrase, Unknown2, Unknown3, Unknown4, ParseVersion, " +
+                    "Unknown1, TrendyPhrase, Unknown2, Unknown3, Unknown5, ParseVersion, " +
                     "Rank, RoomNum, BattlesWon, Position, TimeAdded, TimeUpdated) VALUES " +
                     "(@pid, @name, @version, @language, @country, @region, @trainer_id, " +
-                    "@unknown1, @trendy_phrase, @unknown2, @unknown3, @unknown4, 1, " +
+                    "@unknown1, @trendy_phrase, @unknown2, @unknown3, @unknown5, 1, " +
                     "@rank, @room, @battles_won, @position, UTC_TIMESTAMP(), UTC_TIMESTAMP()); " +
                     "SELECT LAST_INSERT_ID()",
                     _params.ToArray()));
@@ -565,7 +565,7 @@ namespace PkmnFoundations.Data
             if (!leader)
             {
                 result.Add(new MySqlParameter("@unknown3", record.Unknown3));
-                result.Add(new MySqlParameter("@unknown4", record.Unknown4));
+                result.Add(new MySqlParameter("@unknown5", record.Unknown5));
                 result.Add(new MySqlParameter("@battles_won", record.BattlesWon));
             }
             return result;
@@ -703,7 +703,7 @@ namespace PkmnFoundations.Data
                     MySqlDataReader reader = (MySqlDataReader)tran.ExecuteReader(
                         "SELECT id, pid, Name, " +
                         "Version, Language, Country, Region, TrainerID, Unknown1, " +
-                        "TrendyPhrase, Unknown2, Unknown3 FROM GtsBattleTower4 " +
+                        "TrendyPhrase, Unknown2, Unknown3, Unknown4 FROM GtsBattleTower4 " +
                         "WHERE Rank = @rank AND RoomNum = @room AND pid != @pid " +
                         "ORDER BY Position LIMIT 7",
                         new MySqlParameter("@rank", rank),
@@ -745,6 +745,7 @@ namespace PkmnFoundations.Data
             BattleTowerRecord4 result = new BattleTowerRecord4();
             result.PID = reader.GetInt32(1);
             if (reader.FieldCount > 11) result.Unknown3 = reader.GetByteArray(11, 26);
+            if (reader.FieldCount > 12) result.Unknown5 = reader.GetUInt64(12);
 
             BattleTowerProfile4 profile = new BattleTowerProfile4();
             profile.Name = new EncodedString4(reader.GetByteArray(2, 16));
@@ -1333,7 +1334,7 @@ namespace PkmnFoundations.Data
                     "Version = @version, Language = @language, Country = @country, " +
                     "Region = @region, TrainerID = @trainer_id, Unknown1 = @unknown1, " +
                     "TrendyPhrase = @trendy_phrase, Unknown2 = @unknown2, Unknown3 = @unknown3, " +
-                    "Unknown4 = @unknown4, ParseVersion = 1, Rank = @rank, " +
+                    "Unknown4 = @unknown4, Unknown5 = @unknown5, ParseVersion = 1, Rank = @rank, " +
                     "BattlesWon = @battles_won, Position = @position, " +
                     "TimeUpdated = UTC_TIMESTAMP() WHERE id = @id",
                     _params.ToArray());
@@ -1349,10 +1350,10 @@ namespace PkmnFoundations.Data
 
                 pkey = Convert.ToUInt64(tran.ExecuteScalar("INSERT INTO GtsBattleSubway5 " +
                     "(pid, Name, Version, Language, Country, Region, TrainerID, " +
-                    "Unknown1, TrendyPhrase, Unknown2, Unknown3, Unknown4, ParseVersion, " +
+                    "Unknown1, TrendyPhrase, Unknown2, Unknown3, Unknown4, Unknown5, ParseVersion, " +
                     "Rank, RoomNum, BattlesWon, Position, TimeAdded, TimeUpdated) VALUES " +
                     "(@pid, @name, @version, @language, @country, @region, @trainer_id, " +
-                    "@unknown1, @trendy_phrase, @unknown2, @unknown3, @unknown4, 1, " +
+                    "@unknown1, @trendy_phrase, @unknown2, @unknown3, @unknown4, @unknown5, 1, " +
                     "@rank, @room, @battles_won, @position, UTC_TIMESTAMP(), UTC_TIMESTAMP()); " +
                     "SELECT LAST_INSERT_ID()",
                     _params.ToArray()));
@@ -1420,6 +1421,7 @@ namespace PkmnFoundations.Data
             {
                 result.Add(new MySqlParameter("@unknown3", record.Unknown3));
                 result.Add(new MySqlParameter("@unknown4", record.Unknown4));
+                result.Add(new MySqlParameter("@unknown5", record.Unknown5));
                 result.Add(new MySqlParameter("@battles_won", record.BattlesWon));
             }
             return result;
@@ -1558,7 +1560,7 @@ namespace PkmnFoundations.Data
                     MySqlDataReader reader = (MySqlDataReader)tran.ExecuteReader(
                         "SELECT id, pid, Name, " +
                         "Version, Language, Country, Region, TrainerID, Unknown1, " +
-                        "TrendyPhrase, Unknown2, Unknown3 FROM GtsBattleSubway5 " +
+                        "TrendyPhrase, Unknown2, Unknown3, Unknown4, Unknown5 FROM GtsBattleSubway5 " +
                         "WHERE Rank = @rank AND RoomNum = @room AND pid != @pid " +
                         "ORDER BY Position LIMIT 7",
                         new MySqlParameter("@rank", rank),
@@ -1599,7 +1601,10 @@ namespace PkmnFoundations.Data
             // todo: Stop using ordinals everywhere.
             BattleSubwayRecord5 result = new BattleSubwayRecord5();
             result.PID = reader.GetInt32(1);
+            // this is unsustainable. What happens if I add columns to Leaders?
             if (reader.FieldCount > 11) result.Unknown3 = reader.GetByteArray(11, 26);
+            if (reader.FieldCount > 12) result.Unknown4 = reader.GetByteArray(12, 5);
+            if (reader.FieldCount > 13) result.Unknown5 = reader.GetUInt64(13);
 
             BattleSubwayProfile5 profile = new BattleSubwayProfile5();
             profile.Name = new EncodedString5(reader.GetByteArray(2, 16));

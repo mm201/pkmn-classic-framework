@@ -596,7 +596,7 @@ namespace PkmnFoundations.GTS
                         record.Rank = data[0xe8];
                         record.RoomNum = data[0xe9];
                         record.BattlesWon = data[0xea];
-                        record.Unknown4 = BitConverter.ToUInt64(data, 0xeb);
+                        record.Unknown5 = BitConverter.ToUInt64(data, 0xeb);
 
                         // todo: Do we want to store their record anyway if they lost the first round?
                         if (record.BattlesWon > 0)

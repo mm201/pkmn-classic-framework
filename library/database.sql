@@ -7,7 +7,7 @@
 #
 # Host: 127.0.0.1 (MySQL 5.5.27)
 # Database: gts
-# Generation Time: 2014-08-02 05:49:14 +0000
+# Generation Time: 2014-08-03 23:14:23 +0000
 # ************************************************************
 
 
@@ -227,7 +227,8 @@ CREATE TABLE `GtsBattleSubway5` (
   `TrendyPhrase` binary(6) DEFAULT NULL,
   `Unknown2` smallint(5) unsigned DEFAULT NULL,
   `Unknown3` blob,
-  `Unknown4` bigint(20) DEFAULT NULL,
+  `Unknown4` binary(5) DEFAULT NULL,
+  `Unknown5` bigint(20) DEFAULT NULL,
   `ParseVersion` int(10) unsigned DEFAULT NULL,
   `Rank` tinyint(3) unsigned DEFAULT NULL,
   `RoomNum` tinyint(3) unsigned NOT NULL DEFAULT '0',
@@ -318,7 +319,7 @@ CREATE TABLE `GtsBattleTower4` (
   `TrendyPhrase` binary(6) DEFAULT NULL,
   `Unknown2` smallint(5) unsigned DEFAULT NULL,
   `Unknown3` blob,
-  `Unknown4` bigint(20) DEFAULT NULL,
+  `Unknown5` bigint(20) DEFAULT NULL,
   `ParseVersion` int(10) unsigned DEFAULT NULL,
   `Rank` tinyint(3) unsigned DEFAULT NULL,
   `RoomNum` tinyint(3) unsigned NOT NULL DEFAULT '0',
