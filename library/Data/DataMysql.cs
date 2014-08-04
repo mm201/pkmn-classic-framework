@@ -703,7 +703,7 @@ namespace PkmnFoundations.Data
                     MySqlDataReader reader = (MySqlDataReader)tran.ExecuteReader(
                         "SELECT id, pid, Name, " +
                         "Version, Language, Country, Region, TrainerID, Unknown1, " +
-                        "TrendyPhrase, Unknown2, Unknown3, Unknown4 FROM GtsBattleTower4 " +
+                        "TrendyPhrase, Unknown2, Unknown3, Unknown5 FROM GtsBattleTower4 " +
                         "WHERE Rank = @rank AND RoomNum = @room AND pid != @pid " +
                         "ORDER BY Position LIMIT 7",
                         new MySqlParameter("@rank", rank),
