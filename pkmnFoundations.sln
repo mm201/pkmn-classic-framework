@@ -23,7 +23,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "bvRestorer4", "bvRestorer4\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "bvRestorer5", "bvRestorer5\bvRestorer5.csproj", "{9F2A0A44-B90E-4B30-8DFF-2B5E273F5BEC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "towerRestorer4", "towerRestorer4\towerRestorer4.csproj", "{750A0BFD-7258-4B32-A4F9-60EEEB0BA64A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "towerRestorer", "towerRestorer4\towerRestorer.csproj", "{750A0BFD-7258-4B32-A4F9-60EEEB0BA64A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
