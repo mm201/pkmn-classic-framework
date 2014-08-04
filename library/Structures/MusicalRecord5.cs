@@ -1,29 +1,41 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 
 namespace PkmnFoundations.Structures
 {
-    public class MusicalRecord5
+    public class MusicalRecord5 : BinarySerializableBase
     {
         public MusicalRecord5()
         {
         }
 
-        public MusicalRecord5(int pid, ulong serial_number, byte[] data)
+        public MusicalRecord5(int pid, ulong serial_number, BinaryReader data)
+            : base(data)
         {
-            if (data.Length != 560) throw new ArgumentException("Musical data must be 560 bytes.");
-
             PID = pid;
             SerialNumber = serial_number;
-            Data = data;
-            UpdateParticipants();
+        }
+
+        public MusicalRecord5(int pid, ulong serial_number, byte[] data)
+            : base(data)
+        {
+            PID = pid;
+            SerialNumber = serial_number;
+        }
+
+        public MusicalRecord5(int pid, ulong serial_number, byte[] data, int offset)
+            : base(data, offset)
+        {
+            PID = pid;
+            SerialNumber = serial_number;
         }
 
         // todo: encapsulate these so calculated fields are always correct
-        public int PID;
-        public ulong SerialNumber;
+        public int PID { get; set; }
+        public ulong SerialNumber { get; set; }
 
         private byte[] m_data;
         public byte[] Data
@@ -36,51 +48,110 @@ namespace PkmnFoundations.Structures
             set
             {
                 if (m_data == value) return;
-                if (value.Length != 560) throw new ArgumentException("Musical data must be 560 bytes.");
+                if (value == null)
+                {
+                    m_data = null;
+                    return;
+                }
 
-                m_data = value;
+                if (value.Length != 560) throw new ArgumentException("Musical data must be 560 bytes.");
+                m_data = value.ToArray();
                 UpdateParticipants();
             }
         }
 
-        public MusicalParticipant5[] Participants;
+        private MusicalParticipant5[] m_participants;
+        public MusicalParticipant5[] Participants
+        {
+            get
+            {
+                // fixme: Data doesn't update if the consumer modifies this array.
+                // todo: Split out participants from main data.
+                return m_participants;
+            }
+        }
 
         public void UpdateParticipants()
         {
-            Participants = new MusicalParticipant5[4];
-            if (m_data.Length != 560) throw new InvalidOperationException("Musical data must be 560 bytes.");
+            if (m_data == null)
+            {
+                m_participants = null;
+                return;
+            }
+
+            m_participants = new MusicalParticipant5[4];
             for (int x = 0; x < 4; x++)
             {
                 Participants[x] = new MusicalParticipant5(m_data, x * 0x58 + 0x84);
             }
         }
 
+        public override int Size
+        {
+            get
+            {
+                return 560;
+            }
+        }
+
+        protected override void Load(System.IO.BinaryReader reader)
+        {
+            m_data = reader.ReadBytes(560);
+            UpdateParticipants();
+        }
+
+        protected override void Save(System.IO.BinaryWriter writer)
+        {
+            writer.Write(m_data);
+        }
+
         public MusicalRecord5 Clone()
         {
-            return new MusicalRecord5(PID, SerialNumber, Data.ToArray());
+            return new MusicalRecord5(PID, SerialNumber, Data);
         }
     }
 
-    public class MusicalParticipant5
+    public class MusicalParticipant5 : BinarySerializableBase
     {
         public MusicalParticipant5()
         {
         }
 
+        public MusicalParticipant5(BinaryReader data)
+            : base(data)
+        {
+        }
+
         public MusicalParticipant5(byte[] data)
+            : base(data)
         {
-            if (data.Length != 88) throw new ArgumentException("Musical Participant data must be 88 bytes.");
-            Data = data;
         }
 
-        public MusicalParticipant5(byte[] buffer, int offset)
+        public MusicalParticipant5(byte[] data, int offset)
+            : base(data, offset)
         {
-            if (buffer.Length - offset < 88) throw new ArgumentException("Not enough room in buffer to copy 88 bytes of Musical Participant data.");
-            Data = new byte[88];
-            Array.Copy(buffer, offset, Data, 0, 88);
         }
 
-        public byte[] Data;
+        private byte[] m_data;
+        public byte[] Data
+        {
+            get
+            {
+                return m_data;
+            }
+            set
+            {
+                if (m_data == value) return;
+                if (value == null)
+                {
+                    m_data = null;
+                    return;
+                }
+
+                if (value.Length != 88) throw new ArgumentException("Musical Participant data must be 88 bytes.");
+                m_data = value.ToArray();
+            }
+        }
 
         public ushort Species
         {
@@ -88,6 +159,29 @@ namespace PkmnFoundations.Structures
             {
                 return BitConverter.ToUInt16(Data, 0);
             }
+        }
+
+        public override int Size
+        {
+            get
+            {
+                return 88;
+            }
+        }
+
+        protected override void Load(System.IO.BinaryReader reader)
+        {
+            m_data = reader.ReadBytes(88);
+        }
+
+        protected override void Save(System.IO.BinaryWriter writer)
+        {
+            writer.Write(m_data);
+        }
+
+        public MusicalParticipant5 Clone()
+        {
+            return new MusicalParticipant5(Data);
         }
     }
 }

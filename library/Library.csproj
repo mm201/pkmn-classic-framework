@@ -63,6 +63,7 @@
     <Compile Include="Structures\BattleVideoHeader5.cs" />
     <Compile Include="Structures\BattleVideoRecord4.cs" />
     <Compile Include="Structures\BattleVideoRecord5.cs" />
+    <Compile Include="Structures\BinarySerializableBase.cs" />
     <Compile Include="Structures\BoxRecord4.cs" />
     <Compile Include="Structures\DressupRecord4.cs" />
     <Compile Include="Structures\GtsRecord5.cs" />

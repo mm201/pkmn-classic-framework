@@ -1,35 +1,87 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 
 namespace PkmnFoundations.Structures
 {
-    public class BoxRecord4
+    public class BoxRecord4 : BinarySerializableBase
     {
         public BoxRecord4()
         {
         }
 
-        public BoxRecord4(int pid, BoxLabels4 label, ulong serial_number, byte[] data)
+        public BoxRecord4(int pid, BoxLabels4 label, ulong serial_number, BinaryReader data)
+            : base(data)
         {
-            if (data.Length != 540) throw new ArgumentException("Box data must be 540 bytes.");
-
             PID = pid;
             Label = label;
             SerialNumber = serial_number;
-            Data = data;
         }
 
-        // todo: encapsulate these so calculated fields are always correct
-        public int PID;
-        public BoxLabels4 Label;
-        public ulong SerialNumber;
-        public byte[] Data;
+        public BoxRecord4(int pid, BoxLabels4 label, ulong serial_number, byte[] data)
+            : base(data)
+        {
+            PID = pid;
+            Label = label;
+            SerialNumber = serial_number;
+        }
+
+        public BoxRecord4(int pid, BoxLabels4 label, ulong serial_number, byte[] data, int offset)
+            : base(data, offset)
+        {
+            PID = pid;
+            Label = label;
+            SerialNumber = serial_number;
+        }
+
+        public int PID { get; set; }
+        public BoxLabels4 Label { get; set; }
+        public ulong SerialNumber { get; set; }
+
+        private byte[] m_data;
+        public byte[] Data
+        {
+            get
+            {
+                return m_data;
+            }
+            set
+            {
+                if (m_data == value) return;
+                if (value == null)
+                {
+                    m_data = null;
+                    return;
+                }
+
+                if (value.Length != 540) throw new ArgumentException("Box data must be 540 bytes.");
+                m_data = value.ToArray();
+            }
+        }
+
+        public override int Size
+        {
+            get 
+            {
+                return 540;
+            }
+        }
+
+        protected override void Load(System.IO.BinaryReader reader)
+        {
+            m_data = reader.ReadBytes(540);
+        }
+
+        protected override void Save(System.IO.BinaryWriter writer)
+        {
+            writer.Write(m_data);
+        }
 
         public BoxRecord4 Clone()
         {
-            return new BoxRecord4(PID, Label, SerialNumber, Data.ToArray());
+            return new BoxRecord4(PID, Label, SerialNumber, Data);
         }
     }
 

@@ -1,29 +1,61 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 
 namespace PkmnFoundations.Structures
 {
-    public class DressupRecord4
+    public class DressupRecord4 : BinarySerializableBase
     {
         public DressupRecord4()
         {
         }
 
-        public DressupRecord4(int pid, ulong serial_number, byte[] data)
+        public DressupRecord4(int pid, ulong serial_number, BinaryReader data)
+            : base(data)
         {
-            if (data.Length != 224) throw new ArgumentException("Dressup data must be 224 bytes.");
-
             PID = pid;
             SerialNumber = serial_number;
-            Data = data;
         }
 
-        // todo: encapsulate these so calculated fields are always correct
-        public int PID;
-        public ulong SerialNumber;
-        public byte[] Data;
+        public DressupRecord4(int pid, ulong serial_number, byte[] data)
+            : base(data)
+        {
+            PID = pid;
+            SerialNumber = serial_number;
+        }
+
+        public DressupRecord4(int pid, ulong serial_number, byte[] data, int offset)
+            : base(data, offset)
+        {
+            PID = pid;
+            SerialNumber = serial_number;
+        }
+
+        public int PID { get; set; }
+        public ulong SerialNumber { get; set; }
+
+        private byte[] m_data;
+        public byte[] Data
+        {
+            get
+            {
+                return m_data;
+            }
+            set
+            {
+                if (m_data == value) return;
+                if (value == null)
+                {
+                    m_data = null;
+                    return;
+                }
+
+                if (value.Length != 224) throw new ArgumentException("Dressup data must be 224 bytes.");
+                m_data = value.ToArray();
+            }
+        }
 
         public ushort Species
         {
@@ -33,9 +65,27 @@ namespace PkmnFoundations.Structures
             }
         }
 
+        public override int Size
+        {
+            get
+            {
+                return 224;
+            }
+        }
+
+        protected override void Load(System.IO.BinaryReader reader)
+        {
+            m_data = reader.ReadBytes(224);
+        }
+
+        protected override void Save(System.IO.BinaryWriter writer)
+        {
+            writer.Write(m_data);
+        }
+
         public DressupRecord4 Clone()
         {
-            return new DressupRecord4(PID, SerialNumber, Data.ToArray());
+            return new DressupRecord4(PID, SerialNumber, Data);
         }
     }
 }
