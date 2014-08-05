@@ -16,16 +16,21 @@ namespace PkmnFoundations.Support
         public EncodedString5(byte[] data, int start, int length)
         {
             if (data.Length < start + length) throw new ArgumentOutOfRangeException("length");
-            if (length < 0) throw new ArgumentOutOfRangeException("length");
+            if (length < 2) throw new ArgumentOutOfRangeException("length");
             if (length % 2 != 0) throw new ArgumentException("length");
 
+            m_size = length;
             byte[] trim = new byte[length];
             Array.Copy(data, start, trim, 0, length);
             AssignData(trim);
         }
 
-        public EncodedString5(String text)
+        public EncodedString5(String text, int length)
         {
+            if (length < 2) throw new ArgumentOutOfRangeException("length");
+            if (length % 2 != 0) throw new ArgumentException("length");
+
+            m_size = length;
             Text = text;
         }
 
@@ -54,22 +59,36 @@ namespace PkmnFoundations.Support
             return DecodeString(data, 0, data.Length >> 1);
         }
 
-        public static byte[] EncodeString(string str)
+        public static byte[] EncodeString(String str, int size)
         {
-            MemoryStream m = new MemoryStream(str.Length * 2 + 2);
+            int actualLength = (size >> 1) - 1;
+            if (str.Length > actualLength) throw new ArgumentOutOfRangeException("size");
+
+            byte[] result = new byte[size];
+            MemoryStream m = new MemoryStream(result);
+
             foreach (char c in str.ToCharArray())
-            {
                 m.Write(BitConverter.GetBytes(c), 0, 2);
-            }
+
             m.WriteByte(0xff);
             m.WriteByte(0xff);
-            return m.ToArray();
+            return result;
         }
 
+        private int m_size;
 		private byte[] m_raw_data;
 		private string m_text;
 
-		public string Text
+        public int Size
+        {
+            get
+            {
+                return m_size;
+            }
+            // todo: set
+        }
+
+        public string Text
         {
             get
             {
@@ -79,6 +98,8 @@ namespace PkmnFoundations.Support
             }
             set
             {
+                int actualLength = (m_size >> 1) - 1;
+                if (value.Length > actualLength) throw new ArgumentException();
                 AssignText(value);
             }
         }
@@ -88,11 +109,16 @@ namespace PkmnFoundations.Support
             get
             {
                 if (m_raw_data == null && m_text == null) return null;
-                if (m_raw_data == null) m_raw_data = EncodeString(m_text);
+                if (m_raw_data == null) m_raw_data = EncodeString(m_text, m_size);
                 return m_raw_data.ToArray();
             }
             set
             {
+                int size = value.Length;
+                if (size < 2) throw new ArgumentException();
+                if (size % 2 != 0) throw new ArgumentException();
+
+                m_size = size;
                 AssignData(value.ToArray());
             }
         }
