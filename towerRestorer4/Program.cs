@@ -77,7 +77,6 @@ namespace towerRestorer
                 {
                     case 4:
                     {
-                        continue;
                         FileStream fs = File.OpenRead(s);
                         if (fs.Length != 0xa38)
                         {
