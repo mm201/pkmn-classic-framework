@@ -78,6 +78,7 @@
     <Compile Include="Support\LogHelper.cs" />
     <Compile Include="Support\StreamExtender.cs" />
     <Compile Include="Support\StringHelper.cs" />
+    <Compile Include="Support\TrendyPhrase4.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
