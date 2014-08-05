@@ -7,7 +7,7 @@
 #
 # Host: 127.0.0.1 (MySQL 5.5.27)
 # Database: gts
-# Generation Time: 2014-08-03 23:14:23 +0000
+# Generation Time: 2014-08-05 04:32:22 +0000
 # ************************************************************
 
 
@@ -223,9 +223,9 @@ CREATE TABLE `GtsBattleSubway5` (
   `Country` tinyint(3) unsigned DEFAULT NULL,
   `Region` tinyint(3) unsigned DEFAULT NULL,
   `TrainerID` int(10) unsigned DEFAULT NULL,
-  `Unknown1` smallint(5) unsigned DEFAULT NULL,
   `TrendyPhrase` binary(6) DEFAULT NULL,
-  `Unknown2` smallint(5) unsigned DEFAULT NULL,
+  `Gender` tinyint(3) unsigned DEFAULT NULL,
+  `Unknown2` tinyint(3) unsigned DEFAULT NULL,
   `Unknown3` blob,
   `Unknown4` binary(5) DEFAULT NULL,
   `Unknown5` bigint(20) DEFAULT NULL,
@@ -257,9 +257,9 @@ CREATE TABLE `GtsBattleSubwayLeaders5` (
   `Country` tinyint(3) unsigned DEFAULT NULL,
   `Region` tinyint(3) unsigned DEFAULT NULL,
   `TrainerID` int(10) unsigned DEFAULT NULL,
-  `Unknown1` smallint(5) unsigned DEFAULT NULL,
   `TrendyPhrase` binary(6) DEFAULT NULL,
-  `Unknown2` smallint(5) unsigned DEFAULT NULL,
+  `Gender` tinyint(3) unsigned DEFAULT NULL,
+  `Unknown2` tinyint(3) unsigned DEFAULT NULL,
   `ParseVersion` int(10) unsigned DEFAULT NULL,
   `Rank` tinyint(3) unsigned DEFAULT NULL,
   `RoomNum` tinyint(3) unsigned NOT NULL DEFAULT '0',
@@ -315,9 +315,9 @@ CREATE TABLE `GtsBattleTower4` (
   `Country` tinyint(3) unsigned DEFAULT NULL,
   `Region` tinyint(3) unsigned DEFAULT NULL,
   `TrainerID` int(10) unsigned DEFAULT NULL,
-  `Unknown1` smallint(5) unsigned DEFAULT NULL,
   `TrendyPhrase` binary(6) DEFAULT NULL,
-  `Unknown2` smallint(5) unsigned DEFAULT NULL,
+  `Gender` tinyint(3) unsigned DEFAULT NULL,
+  `Unknown2` tinyint(3) unsigned DEFAULT NULL,
   `Unknown3` blob,
   `Unknown5` bigint(20) DEFAULT NULL,
   `ParseVersion` int(10) unsigned DEFAULT NULL,
@@ -348,9 +348,9 @@ CREATE TABLE `GtsBattleTowerLeaders4` (
   `Country` tinyint(3) unsigned DEFAULT NULL,
   `Region` tinyint(3) unsigned DEFAULT NULL,
   `TrainerID` int(10) unsigned DEFAULT NULL,
-  `Unknown1` smallint(5) unsigned DEFAULT NULL,
   `TrendyPhrase` binary(6) DEFAULT NULL,
-  `Unknown2` smallint(5) unsigned DEFAULT NULL,
+  `Gender` tinyint(3) unsigned DEFAULT NULL,
+  `Unknown2` tinyint(3) unsigned DEFAULT NULL,
   `ParseVersion` int(10) unsigned DEFAULT NULL,
   `Rank` tinyint(3) unsigned DEFAULT NULL,
   `RoomNum` tinyint(3) unsigned NOT NULL DEFAULT '0',

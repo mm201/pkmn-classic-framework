@@ -480,8 +480,8 @@ namespace PkmnFoundations.Data
 
                 tran.ExecuteNonQuery("UPDATE GtsBattleTower4 SET pid = @pid, Name = @name, " +
                     "Version = @version, Language = @language, Country = @country, " +
-                    "Region = @region, TrainerID = @trainer_id, Unknown1 = @unknown1, " +
-                    "TrendyPhrase = @trendy_phrase, Unknown2 = @unknown2, Unknown3 = @unknown3, " +
+                    "Region = @region, TrainerID = @trainer_id, " +
+                    "TrendyPhrase = @trendy_phrase, Gender = @gender, Unknown2 = @unknown2, Unknown3 = @unknown3, " +
                     "Unknown5 = @unknown5, ParseVersion = 1, Rank = @rank, " +
                     "BattlesWon = @battles_won, Position = @position, " +
                     "TimeUpdated = UTC_TIMESTAMP() WHERE id = @id",
@@ -498,10 +498,10 @@ namespace PkmnFoundations.Data
 
                 pkey = Convert.ToUInt64(tran.ExecuteScalar("INSERT INTO GtsBattleTower4 " +
                     "(pid, Name, Version, Language, Country, Region, TrainerID, " +
-                    "Unknown1, TrendyPhrase, Unknown2, Unknown3, Unknown5, ParseVersion, " +
+                    "TrendyPhrase, Gender, Unknown2, Unknown3, Unknown5, ParseVersion, " +
                     "Rank, RoomNum, BattlesWon, Position, TimeAdded, TimeUpdated) VALUES " +
                     "(@pid, @name, @version, @language, @country, @region, @trainer_id, " +
-                    "@unknown1, @trendy_phrase, @unknown2, @unknown3, @unknown5, 1, " +
+                    "@trendy_phrase, @gender, @unknown2, @unknown3, @unknown5, 1, " +
                     "@rank, @room, @battles_won, @position, UTC_TIMESTAMP(), UTC_TIMESTAMP()); " +
                     "SELECT LAST_INSERT_ID()",
                     _params.ToArray()));
@@ -553,13 +553,13 @@ namespace PkmnFoundations.Data
             result.Add(new MySqlParameter("@country", record.Profile.Country));
             result.Add(new MySqlParameter("@region", record.Profile.Region));
             result.Add(new MySqlParameter("@trainer_id", record.Profile.OT));
-            result.Add(new MySqlParameter("@unknown1", record.Profile.Unknown1));
 
-            byte[] trendy_phrase = new byte[6];
-            Buffer.BlockCopy(record.Profile.TrendyPhrase, 0, trendy_phrase, 0, 6);
+            byte[] trendy_phrase = new byte[8];
+            Buffer.BlockCopy(record.Profile.TrendyPhrase, 0, trendy_phrase, 0, 8);
             result.Add(new MySqlParameter("@trendy_phrase", trendy_phrase));
-            
-            result.Add(new MySqlParameter("@unknown2", record.Profile.Unknown2));
+
+            result.Add(new MySqlParameter("@gender", record.Profile.Gender));
+            result.Add(new MySqlParameter("@unknown2", record.Profile.Unknown));
             result.Add(new MySqlParameter("@rank", record.Rank));
             result.Add(new MySqlParameter("@room", record.RoomNum));
             if (!leader)
@@ -619,8 +619,8 @@ namespace PkmnFoundations.Data
                 tran.ExecuteNonQuery("UPDATE GtsBattleTowerLeaders4 SET " +
                     "pid = @pid, Name = @name, Version = @version, " +
                     "Language = @language, Country = @country, Region = @region, " +
-                    "TrainerID = @trainer_id, Unknown1 = @unknown1, " +
-                    "TrendyPhrase = @trendy_phrase, Unknown2 = @unknown2, " +
+                    "TrainerID = @trainer_id, " +
+                    "TrendyPhrase = @trendy_phrase, Gender = @gender, Unknown2 = @unknown2, " +
                     "ParseVersion = 1, Rank = @rank, " +
                     "TimeUpdated = UTC_TIMESTAMP() WHERE id = @id",
                     _params.ToArray());
@@ -632,10 +632,10 @@ namespace PkmnFoundations.Data
                 pkey = Convert.ToUInt64(tran.ExecuteScalar("INSERT INTO " +
                     "GtsBattleTowerLeaders4 " +
                     "(pid, Name, Version, Language, Country, Region, TrainerID, " +
-                    "Unknown1, TrendyPhrase, Unknown2, ParseVersion, Rank, " +
+                    "TrendyPhrase, Gender, Unknown2, ParseVersion, Rank, " +
                     "RoomNum, TimeAdded, TimeUpdated) VALUES " +
                     "(@pid, @name, @version, @language, @country, @region, @trainer_id, " +
-                    "@unknown1, @trendy_phrase, @unknown2, 1, @rank, " +
+                    "@trendy_phrase, @gender, @unknown2, 1, @rank, " +
                     "@room, UTC_TIMESTAMP(), UTC_TIMESTAMP()); " +
                     "SELECT LAST_INSERT_ID()",
                     _params.ToArray()));
@@ -702,8 +702,8 @@ namespace PkmnFoundations.Data
                     List<ulong> keys = new List<ulong>(7);
                     MySqlDataReader reader = (MySqlDataReader)tran.ExecuteReader(
                         "SELECT id, pid, Name, " +
-                        "Version, Language, Country, Region, TrainerID, Unknown1, " +
-                        "TrendyPhrase, Unknown2, Unknown3, Unknown5 FROM GtsBattleTower4 " +
+                        "Version, Language, Country, Region, TrainerID, " +
+                        "TrendyPhrase, Gender, Unknown2, Unknown3, Unknown5 FROM GtsBattleTower4 " +
                         "WHERE Rank = @rank AND RoomNum = @room AND pid != @pid " +
                         "ORDER BY Position LIMIT 7",
                         new MySqlParameter("@rank", rank),
@@ -754,14 +754,14 @@ namespace PkmnFoundations.Data
             profile.Country = reader.GetByte(5);
             profile.Region = reader.GetByte(6);
             profile.OT = reader.GetUInt32(7);
-            profile.Unknown1 = reader.GetUInt16(8);
 
-            byte[] buffer = reader.GetByteArray(9, 6);
-            ushort[] trendyPhrase = new ushort[3];
-            Buffer.BlockCopy(buffer, 0, trendyPhrase, 0, 6);
+            byte[] buffer = reader.GetByteArray(8, 8);
+            ushort[] trendyPhrase = new ushort[4];
+            Buffer.BlockCopy(buffer, 0, trendyPhrase, 0, 8);
             profile.TrendyPhrase = trendyPhrase;
 
-            profile.Unknown2 = reader.GetUInt16(10);
+            profile.Gender = reader.GetByte(9);
+            profile.Unknown = reader.GetByte(10);
 
             result.Profile = profile;
             return result;
@@ -800,8 +800,8 @@ namespace PkmnFoundations.Data
                     List<BattleTowerProfile4> profiles = new List<BattleTowerProfile4>(30);
                     MySqlDataReader reader = (MySqlDataReader)tran.ExecuteReader(
                         "SELECT id, pid, Name, " +
-                        "Version, Language, Country, Region, TrainerID, Unknown1, " +
-                        "TrendyPhrase, Unknown2 FROM GtsBattleTowerLeaders4 " +
+                        "Version, Language, Country, Region, TrainerID, " +
+                        "TrendyPhrase, Gender, Unknown2 FROM GtsBattleTowerLeaders4 " +
                         "WHERE Rank = @rank AND RoomNum = @room " +
                         "ORDER BY TimeUpdated DESC, id LIMIT 30",
                         new MySqlParameter("@rank", rank),
@@ -1332,8 +1332,8 @@ namespace PkmnFoundations.Data
 
                 tran.ExecuteNonQuery("UPDATE GtsBattleSubway5 SET pid = @pid, Name = @name, " +
                     "Version = @version, Language = @language, Country = @country, " +
-                    "Region = @region, TrainerID = @trainer_id, Unknown1 = @unknown1, " +
-                    "TrendyPhrase = @trendy_phrase, Unknown2 = @unknown2, Unknown3 = @unknown3, " +
+                    "Region = @region, TrainerID = @trainer_id, " +
+                    "TrendyPhrase = @trendy_phrase, Gender = @gender, Unknown2 = @unknown2, Unknown3 = @unknown3, " +
                     "Unknown4 = @unknown4, Unknown5 = @unknown5, ParseVersion = 1, Rank = @rank, " +
                     "BattlesWon = @battles_won, Position = @position, " +
                     "TimeUpdated = UTC_TIMESTAMP() WHERE id = @id",
@@ -1350,10 +1350,10 @@ namespace PkmnFoundations.Data
 
                 pkey = Convert.ToUInt64(tran.ExecuteScalar("INSERT INTO GtsBattleSubway5 " +
                     "(pid, Name, Version, Language, Country, Region, TrainerID, " +
-                    "Unknown1, TrendyPhrase, Unknown2, Unknown3, Unknown4, Unknown5, ParseVersion, " +
+                    "TrendyPhrase, Gender, Unknown2, Unknown3, Unknown4, Unknown5, ParseVersion, " +
                     "Rank, RoomNum, BattlesWon, Position, TimeAdded, TimeUpdated) VALUES " +
                     "(@pid, @name, @version, @language, @country, @region, @trainer_id, " +
-                    "@unknown1, @trendy_phrase, @unknown2, @unknown3, @unknown4, @unknown5, 1, " +
+                    "@trendy_phrase, @gender, @unknown2, @unknown3, @unknown4, @unknown5, 1, " +
                     "@rank, @room, @battles_won, @position, UTC_TIMESTAMP(), UTC_TIMESTAMP()); " +
                     "SELECT LAST_INSERT_ID()",
                     _params.ToArray()));
@@ -1408,13 +1408,13 @@ namespace PkmnFoundations.Data
             result.Add(new MySqlParameter("@country", record.Profile.Country));
             result.Add(new MySqlParameter("@region", record.Profile.Region));
             result.Add(new MySqlParameter("@trainer_id", record.Profile.OT));
-            result.Add(new MySqlParameter("@unknown1", record.Profile.Unknown1));
 
-            byte[] trendy_phrase = new byte[6];
-            Buffer.BlockCopy(record.Profile.TrendyPhrase, 0, trendy_phrase, 0, 6);
+            byte[] trendy_phrase = new byte[8];
+            Buffer.BlockCopy(record.Profile.TrendyPhrase, 0, trendy_phrase, 0, 8);
             result.Add(new MySqlParameter("@trendy_phrase", trendy_phrase));
 
-            result.Add(new MySqlParameter("@unknown2", record.Profile.Unknown2));
+            result.Add(new MySqlParameter("@gender", record.Profile.Gender));
+            result.Add(new MySqlParameter("@unknown2", record.Profile.Unknown));
             result.Add(new MySqlParameter("@rank", record.Rank));
             result.Add(new MySqlParameter("@room", record.RoomNum));
             if (!leader)
@@ -1476,8 +1476,8 @@ namespace PkmnFoundations.Data
                 tran.ExecuteNonQuery("UPDATE GtsBattleSubwayLeaders5 SET " +
                     "pid = @pid, Name = @name, Version = @version, " +
                     "Language = @language, Country = @country, Region = @region, " +
-                    "TrainerID = @trainer_id, Unknown1 = @unknown1, " +
-                    "TrendyPhrase = @trendy_phrase, Unknown2 = @unknown2, " +
+                    "TrainerID = @trainer_id, " +
+                    "TrendyPhrase = @trendy_phrase, Gender = @gender, Unknown2 = @unknown2, " +
                     "ParseVersion = 1, Rank = @rank, " +
                     "TimeUpdated = UTC_TIMESTAMP() WHERE id = @id",
                     _params.ToArray());
@@ -1489,10 +1489,10 @@ namespace PkmnFoundations.Data
                 pkey = Convert.ToUInt64(tran.ExecuteScalar("INSERT INTO " +
                     "GtsBattleSubwayLeaders5 " +
                     "(pid, Name, Version, Language, Country, Region, TrainerID, " +
-                    "Unknown1, TrendyPhrase, Unknown2, ParseVersion, Rank, " +
+                    "TrendyPhrase, Gender, Unknown2, ParseVersion, Rank, " +
                     "RoomNum, TimeAdded, TimeUpdated) VALUES " +
                     "(@pid, @name, @version, @language, @country, @region, @trainer_id, " +
-                    "@unknown1, @trendy_phrase, @unknown2, 1, @rank, " +
+                    "@trendy_phrase, @gender, @unknown2, 1, @rank, " +
                     "@room, UTC_TIMESTAMP(), UTC_TIMESTAMP()); " +
                     "SELECT LAST_INSERT_ID()",
                     _params.ToArray()));
@@ -1559,8 +1559,8 @@ namespace PkmnFoundations.Data
                     List<ulong> keys = new List<ulong>(7);
                     MySqlDataReader reader = (MySqlDataReader)tran.ExecuteReader(
                         "SELECT id, pid, Name, " +
-                        "Version, Language, Country, Region, TrainerID, Unknown1, " +
-                        "TrendyPhrase, Unknown2, Unknown3, Unknown4, Unknown5 FROM GtsBattleSubway5 " +
+                        "Version, Language, Country, Region, TrainerID, " +
+                        "TrendyPhrase, Gender, Unknown2, Unknown3, Unknown4, Unknown5 FROM GtsBattleSubway5 " +
                         "WHERE Rank = @rank AND RoomNum = @room AND pid != @pid " +
                         "ORDER BY Position LIMIT 7",
                         new MySqlParameter("@rank", rank),
@@ -1613,14 +1613,14 @@ namespace PkmnFoundations.Data
             profile.Country = reader.GetByte(5);
             profile.Region = reader.GetByte(6);
             profile.OT = reader.GetUInt32(7);
-            profile.Unknown1 = reader.GetUInt16(8);
 
-            byte[] buffer = reader.GetByteArray(9, 6);
-            ushort[] trendyPhrase = new ushort[3];
-            Buffer.BlockCopy(buffer, 0, trendyPhrase, 0, 6);
+            byte[] buffer = reader.GetByteArray(8, 8);
+            ushort[] trendyPhrase = new ushort[4];
+            Buffer.BlockCopy(buffer, 0, trendyPhrase, 0, 8);
             profile.TrendyPhrase = trendyPhrase;
 
-            profile.Unknown2 = reader.GetUInt16(10);
+            profile.Gender = reader.GetByte(9);
+            profile.Unknown = reader.GetByte(10);
 
             result.Profile = profile;
             return result;
@@ -1660,8 +1660,8 @@ namespace PkmnFoundations.Data
                     List<BattleSubwayProfile5> profiles = new List<BattleSubwayProfile5>(30);
                     MySqlDataReader reader = (MySqlDataReader)tran.ExecuteReader(
                         "SELECT id, pid, Name, " +
-                        "Version, Language, Country, Region, TrainerID, Unknown1, " +
-                        "TrendyPhrase, Unknown2 FROM GtsBattleTowerLeaders4 " +
+                        "Version, Language, Country, Region, TrainerID, " +
+                        "TrendyPhrase, Gender, Unknown2 FROM GtsBattleTowerLeaders4 " +
                         "WHERE Rank = @rank AND RoomNum = @room " +
                         "ORDER BY TimeUpdated DESC, id LIMIT 30",
                         new MySqlParameter("@rank", rank),
