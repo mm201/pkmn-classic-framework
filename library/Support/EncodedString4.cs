@@ -156,14 +156,15 @@ namespace PkmnFoundations.Support
             {
                 if (m_lookup_reverse == null)
                 {
-                    lock (m_lookup_reverse)
-                    {
-                        Dictionary<char, ushort> reverse = new Dictionary<char, ushort>(Generation4TextLookupTable.Count);
-                        foreach (KeyValuePair<ushort, char> pair in Generation4TextLookupTable)
-                            reverse.Add(pair.Value, pair.Key);
+                    Dictionary<char, ushort> reverse = new Dictionary<char, ushort>(Generation4TextLookupTable.Count);
 
-                        m_lookup_reverse = reverse;
+                    foreach (KeyValuePair<ushort, char> pair in Generation4TextLookupTable)
+                    {
+                        if (!reverse.ContainsKey(pair.Value))
+                            reverse.Add(pair.Value, pair.Key);
                     }
+
+                    m_lookup_reverse = reverse;
                 }
                 return m_lookup_reverse;
             }
