@@ -7,7 +7,7 @@
 #
 # Host: 127.0.0.1 (MySQL 5.5.27)
 # Database: gts
-# Generation Time: 2014-08-05 04:32:22 +0000
+# Generation Time: 2014-08-06 06:32:15 +0000
 # ************************************************************
 
 
@@ -223,10 +223,10 @@ CREATE TABLE `GtsBattleSubway5` (
   `Country` tinyint(3) unsigned DEFAULT NULL,
   `Region` tinyint(3) unsigned DEFAULT NULL,
   `TrainerID` int(10) unsigned DEFAULT NULL,
-  `TrendyPhrase` binary(6) DEFAULT NULL,
+  `TrendyPhrase` binary(8) DEFAULT NULL,
   `Gender` tinyint(3) unsigned DEFAULT NULL,
   `Unknown2` tinyint(3) unsigned DEFAULT NULL,
-  `Unknown3` blob,
+  `Unknown3` binary(26) DEFAULT '\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0',
   `Unknown4` binary(5) DEFAULT NULL,
   `Unknown5` bigint(20) DEFAULT NULL,
   `ParseVersion` int(10) unsigned DEFAULT NULL,
@@ -257,7 +257,7 @@ CREATE TABLE `GtsBattleSubwayLeaders5` (
   `Country` tinyint(3) unsigned DEFAULT NULL,
   `Region` tinyint(3) unsigned DEFAULT NULL,
   `TrainerID` int(10) unsigned DEFAULT NULL,
-  `TrendyPhrase` binary(6) DEFAULT NULL,
+  `TrendyPhrase` binary(8) DEFAULT NULL,
   `Gender` tinyint(3) unsigned DEFAULT NULL,
   `Unknown2` tinyint(3) unsigned DEFAULT NULL,
   `ParseVersion` int(10) unsigned DEFAULT NULL,
@@ -315,10 +315,10 @@ CREATE TABLE `GtsBattleTower4` (
   `Country` tinyint(3) unsigned DEFAULT NULL,
   `Region` tinyint(3) unsigned DEFAULT NULL,
   `TrainerID` int(10) unsigned DEFAULT NULL,
-  `TrendyPhrase` binary(6) DEFAULT NULL,
+  `TrendyPhrase` binary(8) DEFAULT NULL,
   `Gender` tinyint(3) unsigned DEFAULT NULL,
   `Unknown2` tinyint(3) unsigned DEFAULT NULL,
-  `Unknown3` blob,
+  `Unknown3` binary(26) DEFAULT '\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0',
   `Unknown5` bigint(20) DEFAULT NULL,
   `ParseVersion` int(10) unsigned DEFAULT NULL,
   `Rank` tinyint(3) unsigned DEFAULT NULL,
@@ -348,7 +348,7 @@ CREATE TABLE `GtsBattleTowerLeaders4` (
   `Country` tinyint(3) unsigned DEFAULT NULL,
   `Region` tinyint(3) unsigned DEFAULT NULL,
   `TrainerID` int(10) unsigned DEFAULT NULL,
-  `TrendyPhrase` binary(6) DEFAULT NULL,
+  `TrendyPhrase` binary(8) DEFAULT NULL,
   `Gender` tinyint(3) unsigned DEFAULT NULL,
   `Unknown2` tinyint(3) unsigned DEFAULT NULL,
   `ParseVersion` int(10) unsigned DEFAULT NULL,

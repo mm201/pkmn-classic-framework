@@ -25,12 +25,13 @@ namespace PkmnFoundations.Structures
 
         public BattleSubwayPokemon5[] Party;
         public BattleSubwayProfile5 Profile;
+        // todo: Should be three trendy phrases followed by 2 bytes of Unknown3.
         public byte[] Unknown3;
 
         public byte Rank;
         public byte RoomNum;
         public byte BattlesWon;
-        public byte[] Unknown4;
+        public byte[] Unknown4; // 5 bytes
         public ulong Unknown5;
         public int PID;
 
