@@ -5,40 +5,18 @@ using System.Text;
 
 namespace PkmnFoundations.Support
 {
-    public class TrendyPhrase4
+    public class TrendyPhrase4 : TrendyPhraseBase
     {
-        public TrendyPhrase4(byte[] data)
+        public TrendyPhrase4(byte[] data) : base(data)
         {
-            Data = data;
         }
 
-        private byte[] m_data;
-        public byte[] Data
+        public override String Render(String wordFormat)
         {
-            get
-            {
-                return m_data;
-            }
-            set
-            {
-                if (m_data == value) return;
-                if (value == null)
-                {
-                    m_data = null;
-                    return;
-                }
-
-                if (value.Length != 8) throw new ArgumentException("Trendy phrase data must be 8 bytes.");
-                m_data = value.ToArray();
-            }
+            return RenderPhrase(Data, wordFormat);
         }
 
-        public override string ToString()
-        {
-            return RenderPhrase(Data);
-        }
-
-        public static String RenderPhrase(byte[] data)
+        public static String RenderPhrase(byte[] data, String wordFormat)
         {
             if (data == null) throw new ArgumentNullException();
             if (data.Length != 8) throw new ArgumentException();
@@ -50,7 +28,10 @@ namespace PkmnFoundations.Support
 
             if (mood >= 5) return "";
             if (index >= 20) return "";
-            return String.Format(PHRASES[mood, index], RenderWord(word1), RenderWord(word2));
+            return String.Format(PHRASES[mood, index], 
+                String.Format(wordFormat, RenderWord(word1)),
+                String.Format(wordFormat, RenderWord(word2))
+                );
         }
 
         public static String RenderWord(ushort word)
