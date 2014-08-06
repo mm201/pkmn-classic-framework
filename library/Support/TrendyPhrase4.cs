@@ -7,6 +7,68 @@ namespace PkmnFoundations.Support
 {
     public class TrendyPhrase4
     {
+        public TrendyPhrase4(byte[] data)
+        {
+            Data = data;
+        }
+
+        private byte[] m_data;
+        public byte[] Data
+        {
+            get
+            {
+                return m_data;
+            }
+            set
+            {
+                if (m_data == value) return;
+                if (value == null)
+                {
+                    m_data = null;
+                    return;
+                }
+
+                if (value.Length != 8) throw new ArgumentException("Trendy phrase data must be 8 bytes.");
+                m_data = value.ToArray();
+            }
+        }
+
+        public override string ToString()
+        {
+            return RenderPhrase(Data);
+        }
+
+        public static String RenderPhrase(byte[] data)
+        {
+            if (data == null) throw new ArgumentNullException();
+            if (data.Length != 8) throw new ArgumentException();
+
+            ushort mood = BitConverter.ToUInt16(data, 0);
+            ushort index = BitConverter.ToUInt16(data, 2);
+            ushort word1 = BitConverter.ToUInt16(data, 4);
+            ushort word2 = BitConverter.ToUInt16(data, 6);
+
+            if (mood >= 5) return "";
+            if (index >= 20) return "";
+            return String.Format(PHRASES[mood, index], RenderWord(word1), RenderWord(word2));
+        }
+
+        public static String RenderWord(ushort word)
+        {
+            if (word < 496) return WORDS_POKEMON[word];
+            if (word < 964) return WORDS_MOVES[word - 496];
+            if (word < 982) return WORDS_TYPES[word - 964];
+            if (word < 1106) return WORDS_ABILITIES[word - 982];
+            if (word < 1144) return WORDS_TRAINER[word - 1106];
+            if (word < 1182) return WORDS_PEOPLE[word - 1144];
+            if (word < 1289) return WORDS_GREETINGS[word - 1182];
+            if (word < 1393) return WORDS_LIFESTYLE[word - 1289];
+            if (word < 1440) return WORDS_FEELINGS[word - 1393];
+            if (word < 1472) return WORDS_TOUGH[word - 1440];
+            if (word < 1495) return WORDS_UNION[word - 1472];
+            return "";
+        }
+
         #region String tables
         // Special thanks to http://projectpokemon.org/rawdb/diamond/msg.php
         // for their string table dumps.
