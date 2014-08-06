@@ -72,6 +72,7 @@
     <Content Include="BattleVideo.aspx" />
     <Content Include="css\main.css" />
     <Content Include="admin\AddDressup.aspx" />
+    <Content Include="RoomLeaders.aspx" />
     <Content Include="test\BoxUp.aspx" />
     <Content Include="test\NameDecode.aspx" />
     <Content Include="test\Decode.aspx" />
@@ -133,6 +134,13 @@
     </Compile>
     <Compile Include="pkvldtprod.ashx.cs">
       <DependentUpon>pkvldtprod.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="RoomLeaders.aspx.cs">
+      <DependentUpon>RoomLeaders.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="RoomLeaders.aspx.designer.cs">
+      <DependentUpon>RoomLeaders.aspx</DependentUpon>
     </Compile>
     <Compile Include="src\GamestatsSessionPlat.cs" />
     <Compile Include="src\HeaderColour.cs" />
