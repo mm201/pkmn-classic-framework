@@ -45,17 +45,44 @@ namespace PkmnFoundations.GTS
             BattleTowerProfile4[] results = DataAbstract.Instance.BattleTowerGetLeaders4(rank, room);
 
             StringBuilder builder = new StringBuilder();
-            builder.Append("<ul>");
+
+            builder.Append("<p>Leaders:</p><ul>");
             foreach (BattleTowerProfile4 profile in results)
             {
                 builder.Append("<li>");
                 byte[] phrase = new byte[8];
                 System.Buffer.BlockCopy(profile.TrendyPhrase, 0, phrase, 0, 8);
                 TrendyPhrase4 tp = new TrendyPhrase4(phrase);
-                builder.Append(Common.HtmlEncode(tp.ToString()));
+                builder.Append(tp.Render("<span style=\"color: #0066ff; font-weight: bold;\">{0}</span>"));
                 builder.Append("</li>");
             }
-            builder.Append("</ul>");
+            builder.Append("</ul><p>Opponents:</p><ul>");
+
+            BattleTowerRecord4[] opponents = DataAbstract.Instance.BattleTowerGetOpponents4(-1, rank, room);
+            foreach (BattleTowerRecord4 record in opponents)
+            {
+                builder.Append("<li>");
+
+
+                byte[] phrase = new byte[8];
+                System.Buffer.BlockCopy(record.Unknown3, 0, phrase, 0, 8);
+                TrendyPhrase4 tp = new TrendyPhrase4(phrase);
+                builder.Append(tp.Render("<span style=\"color: #0066ff; font-weight: bold;\">{0}</span>"));
+                builder.Append("<br />");
+
+                phrase = new byte[8];
+                System.Buffer.BlockCopy(record.Unknown3, 8, phrase, 0, 8);
+                tp = new TrendyPhrase4(phrase);
+                builder.Append(tp.Render("<span style=\"color: #0066ff; font-weight: bold;\">{0}</span>"));
+                builder.Append("<br />");
+
+                phrase = new byte[8];
+                System.Buffer.BlockCopy(record.Unknown3, 16, phrase, 0, 8);
+                tp = new TrendyPhrase4(phrase);
+                builder.Append(tp.Render("<span style=\"color: #0066ff; font-weight: bold;\">{0}</span>"));
+
+                builder.Append("</li>");
+            }
             litResults.Text = builder.ToString();
         }
     }
