@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using PkmnFoundations.Support;
 
 namespace PkmnFoundations.Structures
 {
@@ -25,8 +26,11 @@ namespace PkmnFoundations.Structures
 
         public BattleSubwayPokemon5[] Party;
         public BattleSubwayProfile5 Profile;
-        // todo: Should be three trendy phrases followed by 2 bytes of Unknown3.
-        public byte[] Unknown3;
+
+        public TrendyPhrase5 PhraseChallenged;
+        public TrendyPhrase5 PhraseWon;
+        public TrendyPhrase5 PhraseLost;
+        public ushort Unknown3;
 
         public byte Rank;
         public byte RoomNum;
@@ -46,6 +50,9 @@ namespace PkmnFoundations.Structures
                 writer.Write(Party[x].Save());
             }
             writer.Write(Profile.Save());
+            writer.Write(PhraseChallenged.Data);
+            writer.Write(PhraseWon.Data);
+            writer.Write(PhraseLost.Data);
             writer.Write(Unknown3);
 
             writer.Flush();
@@ -63,8 +70,18 @@ namespace PkmnFoundations.Structures
                 Party[x] = new BattleSubwayPokemon5(data, start + x * 0x3c);
             }
             Profile = new BattleSubwayProfile5(data, 0xb4 + start);
-            Unknown3 = new byte[0x1a];
-            Array.Copy(data, start + 0xd6, Unknown3, 0, 0x1a);
+
+            byte[] trendyPhrase = new byte[8];
+            Array.Copy(data, 0xd6 + start, trendyPhrase, 0, 8);
+            PhraseChallenged = new TrendyPhrase5(trendyPhrase);
+            trendyPhrase = new byte[8];
+            Array.Copy(data, 0xde + start, trendyPhrase, 0, 8);
+            PhraseWon = new TrendyPhrase5(trendyPhrase);
+            trendyPhrase = new byte[8];
+            Array.Copy(data, 0xe6 + start, trendyPhrase, 0, 8);
+            PhraseLost = new TrendyPhrase5(trendyPhrase);
+
+            Unknown3 = BitConverter.ToUInt16(data, 0xee + start);
         }
     }
 }

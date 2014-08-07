@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using PkmnFoundations.Support;
 
 namespace PkmnFoundations.Structures
 {
@@ -25,7 +26,11 @@ namespace PkmnFoundations.Structures
 
         public BattleTowerPokemon4[] Party;
         public BattleTowerProfile4 Profile;
-        public byte[] Unknown3;
+
+        public TrendyPhrase4 PhraseChallenged;
+        public TrendyPhrase4 PhraseWon;
+        public TrendyPhrase4 PhraseLost;
+        public ushort Unknown3;
 
         public byte Rank;
         public byte RoomNum;
@@ -44,6 +49,9 @@ namespace PkmnFoundations.Structures
                 writer.Write(Party[x].Save());
             }
             writer.Write(Profile.Save());
+            writer.Write(PhraseChallenged.Data);
+            writer.Write(PhraseWon.Data);
+            writer.Write(PhraseLost.Data);
             writer.Write(Unknown3);
 
             writer.Flush();
@@ -61,8 +69,18 @@ namespace PkmnFoundations.Structures
                 Party[x] = new BattleTowerPokemon4(data, start + x * 0x38);
             }
             Profile = new BattleTowerProfile4(data, 0xa8 + start);
-            Unknown3 = new byte[0x1a];
-            Array.Copy(data, start + 0xca, Unknown3, 0, 0x1a);
+
+            byte[] trendyPhrase = new byte[8];
+            Array.Copy(data, 0xca + start, trendyPhrase, 0, 8);
+            PhraseChallenged = new TrendyPhrase4(trendyPhrase);
+            trendyPhrase = new byte[8];
+            Array.Copy(data, 0xd2 + start, trendyPhrase, 0, 8);
+            PhraseWon = new TrendyPhrase4(trendyPhrase);
+            trendyPhrase = new byte[8];
+            Array.Copy(data, 0xda + start, trendyPhrase, 0, 8);
+            PhraseLost = new TrendyPhrase4(trendyPhrase);
+
+            Unknown3 = BitConverter.ToUInt16(data, 0xe2 + start);
         }
     }
 }

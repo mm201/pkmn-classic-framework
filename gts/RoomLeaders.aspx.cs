@@ -61,23 +61,13 @@ namespace PkmnFoundations.GTS
             {
                 builder.Append("<li>");
 
-
-                byte[] phrase = new byte[8];
-                System.Buffer.BlockCopy(record.Unknown3, 0, phrase, 0, 8);
-                TrendyPhrase4 tp = new TrendyPhrase4(phrase);
-                builder.Append(tp.Render("<span style=\"color: #0066ff; font-weight: bold;\">{0}</span>"));
+                builder.Append(record.PhraseChallenged.Render("<span style=\"color: #0066ff; font-weight: bold;\">{0}</span>"));
                 builder.Append("<br />");
 
-                phrase = new byte[8];
-                System.Buffer.BlockCopy(record.Unknown3, 8, phrase, 0, 8);
-                tp = new TrendyPhrase4(phrase);
-                builder.Append(tp.Render("<span style=\"color: #0066ff; font-weight: bold;\">{0}</span>"));
+                builder.Append(record.PhraseWon.Render("<span style=\"color: #0066ff; font-weight: bold;\">{0}</span>"));
                 builder.Append("<br />");
 
-                phrase = new byte[8];
-                System.Buffer.BlockCopy(record.Unknown3, 16, phrase, 0, 8);
-                tp = new TrendyPhrase4(phrase);
-                builder.Append(tp.Render("<span style=\"color: #0066ff; font-weight: bold;\">{0}</span>"));
+                builder.Append(record.PhraseLost.Render("<span style=\"color: #0066ff; font-weight: bold;\">{0}</span>"));
 
                 builder.Append("</li>");
             }
