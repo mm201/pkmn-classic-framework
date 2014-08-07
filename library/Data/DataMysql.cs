@@ -1427,7 +1427,7 @@ namespace PkmnFoundations.Data
                 result.Add(new MySqlParameter("@phrase_won", record.PhraseWon.Data));
                 result.Add(new MySqlParameter("@phrase_lost", record.PhraseLost.Data));
                 result.Add(new MySqlParameter("@unknown3", record.Unknown3));
-                result.Add(new MySqlParameter("@unknown4", record.Unknown4));
+                result.Add(new MySqlParameter("@unknown4", record.Unknown4 ?? new byte[5]));
                 result.Add(new MySqlParameter("@unknown5", record.Unknown5));
                 result.Add(new MySqlParameter("@battles_won", record.BattlesWon));
             }
@@ -1567,7 +1567,9 @@ namespace PkmnFoundations.Data
                     MySqlDataReader reader = (MySqlDataReader)tran.ExecuteReader(
                         "SELECT id, pid, Name, " +
                         "Version, Language, Country, Region, TrainerID, " +
-                        "PhraseLeader, Gender, Unknown2, Unknown3, Unknown4, Unknown5 FROM GtsBattleSubway5 " +
+                        "PhraseLeader, Gender, Unknown2, PhraseChallenged, " +
+                        "PhraseWon, PhraseLost, Unknown3, Unknown4, Unknown5 " +
+                        "FROM GtsBattleSubway5 " +
                         "WHERE Rank = @rank AND RoomNum = @room AND pid != @pid " +
                         "ORDER BY Position LIMIT 7",
                         new MySqlParameter("@rank", rank),
@@ -1613,7 +1615,7 @@ namespace PkmnFoundations.Data
             if (reader.FieldCount > 12) result.PhraseWon = new TrendyPhrase5(reader.GetByteArray(12, 8));
             if (reader.FieldCount > 13) result.PhraseLost = new TrendyPhrase5(reader.GetByteArray(13, 8));
             if (reader.FieldCount > 14) result.Unknown3 = reader.GetUInt16(14);
-            if (reader.FieldCount > 15) result.Unknown4 = reader.GetByteArray(15, 5);
+            if (reader.FieldCount > 15 && !reader.IsDBNull(15)) result.Unknown4 = reader.GetByteArray(15, 5);
             if (reader.FieldCount > 16) result.Unknown5 = reader.GetUInt64(16);
 
             BattleSubwayProfile5 profile = new BattleSubwayProfile5();
@@ -1666,7 +1668,7 @@ namespace PkmnFoundations.Data
                     MySqlDataReader reader = (MySqlDataReader)tran.ExecuteReader(
                         "SELECT id, pid, Name, " +
                         "Version, Language, Country, Region, TrainerID, " +
-                        "PhraseLeader, Gender, Unknown2 FROM GtsBattleTowerLeaders4 " +
+                        "PhraseLeader, Gender, Unknown2 FROM GtsBattleSubwayLeaders5 " +
                         "WHERE Rank = @rank AND RoomNum = @room " +
                         "ORDER BY TimeUpdated DESC, id LIMIT 30",
                         new MySqlParameter("@rank", rank),

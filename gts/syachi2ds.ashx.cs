@@ -538,14 +538,14 @@ namespace PkmnFoundations.GTS
                     {
                         manager.Remove(session);
 
-                        if (data.Length != 6)
+                        if (data.Length != 10)
                         {
                             Error400(context);
                             return;
                         }
 
-                        byte rank = data[0x04];
-                        byte roomNum = data[0x05];
+                        byte rank = data[0x08];
+                        byte roomNum = data[0x09];
 
                         BattleSubwayRecord5[] opponents = DataAbstract.Instance.BattleSubwayGetOpponents5(pid, rank, roomNum);
 
@@ -575,7 +575,7 @@ namespace PkmnFoundations.GTS
                     {
                         manager.Remove(session);
 
-                        if (data.Length != 243)
+                        if (data.Length != 396)
                         {
                             Error400(context);
                             return;

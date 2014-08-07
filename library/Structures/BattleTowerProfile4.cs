@@ -41,7 +41,7 @@ namespace PkmnFoundations.Structures
             MemoryStream ms = new MemoryStream(data);
             BinaryWriter writer = new BinaryWriter(ms);
 
-            writer.Write(Name.RawData);
+            writer.Write(Name.RawData, 0, 16);
             writer.Write((byte)Version);
             writer.Write((byte)Language);
             writer.Write(Country);

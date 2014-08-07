@@ -158,6 +158,7 @@ namespace towerRestorer
                                 record.Rank = rank;
                                 record.RoomNum = room;
                                 record.BattlesWon = 7;
+                                record.Unknown4 = new byte[5];
                                 db.BattleSubwayUpdateRecord5(record);
                                 opponentSuccessCount++;
                             }
