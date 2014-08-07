@@ -30,8 +30,7 @@ namespace PkmnFoundations.Structures
         public byte Country;
         public byte Region;
         public uint OT;
-        // todo: TrendyPhrase4 class
-        public ushort[] TrendyPhrase;
+        public TrendyPhrase5 PhraseLeader;
         // Different from GTS, 0 = male, 2 = female, 1 = Plato???? 
         public byte Gender;
         public byte Unknown;
@@ -48,10 +47,7 @@ namespace PkmnFoundations.Structures
             writer.Write(Country);
             writer.Write(Region);
             writer.Write(OT);
-            for (int x = 0; x < 4; x++)
-            {
-                writer.Write(TrendyPhrase[x]);
-            }
+            writer.Write(PhraseLeader.Data, 0, 8);
             writer.Write(Gender);
             writer.Write(Unknown);
 
@@ -70,11 +66,9 @@ namespace PkmnFoundations.Structures
             Country = data[0x12 + start];
             Region = data[0x13 + start];
             OT = BitConverter.ToUInt32(data, 0x14 + start);
-            TrendyPhrase = new ushort[4];
-            for (int x = 0; x < 4; x++)
-            {
-                TrendyPhrase[x] = BitConverter.ToUInt16(data, 0x18 + x * 2 + start);
-            }
+            byte[] trendyPhrase = new byte[8];
+            Array.Copy(data, 0x18 + start, trendyPhrase, 0, 8);
+            PhraseLeader = new TrendyPhrase5(trendyPhrase);
             Gender = data[0x20 + start];
             Unknown = data[0x21 + start];
         }

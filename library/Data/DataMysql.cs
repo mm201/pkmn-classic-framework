@@ -553,11 +553,7 @@ namespace PkmnFoundations.Data
             result.Add(new MySqlParameter("@country", record.Profile.Country));
             result.Add(new MySqlParameter("@region", record.Profile.Region));
             result.Add(new MySqlParameter("@trainer_id", record.Profile.OT));
-
-            byte[] trendy_phrase = new byte[8];
-            Buffer.BlockCopy(record.Profile.TrendyPhrase, 0, trendy_phrase, 0, 8);
-            result.Add(new MySqlParameter("@trendy_phrase", trendy_phrase));
-
+            result.Add(new MySqlParameter("@trendy_phrase", record.Profile.PhraseLeader.Data));
             result.Add(new MySqlParameter("@gender", record.Profile.Gender));
             result.Add(new MySqlParameter("@unknown2", record.Profile.Unknown));
             result.Add(new MySqlParameter("@rank", record.Rank));
@@ -754,12 +750,7 @@ namespace PkmnFoundations.Data
             profile.Country = reader.GetByte(5);
             profile.Region = reader.GetByte(6);
             profile.OT = reader.GetUInt32(7);
-
-            byte[] buffer = reader.GetByteArray(8, 8);
-            ushort[] trendyPhrase = new ushort[4];
-            Buffer.BlockCopy(buffer, 0, trendyPhrase, 0, 8);
-            profile.TrendyPhrase = trendyPhrase;
-
+            profile.PhraseLeader = new TrendyPhrase4(reader.GetByteArray(8, 8));
             profile.Gender = reader.GetByte(9);
             profile.Unknown = reader.GetByte(10);
 
@@ -1408,11 +1399,7 @@ namespace PkmnFoundations.Data
             result.Add(new MySqlParameter("@country", record.Profile.Country));
             result.Add(new MySqlParameter("@region", record.Profile.Region));
             result.Add(new MySqlParameter("@trainer_id", record.Profile.OT));
-
-            byte[] trendy_phrase = new byte[8];
-            Buffer.BlockCopy(record.Profile.TrendyPhrase, 0, trendy_phrase, 0, 8);
-            result.Add(new MySqlParameter("@trendy_phrase", trendy_phrase));
-
+            result.Add(new MySqlParameter("@trendy_phrase", record.Profile.PhraseLeader.Data));
             result.Add(new MySqlParameter("@gender", record.Profile.Gender));
             result.Add(new MySqlParameter("@unknown2", record.Profile.Unknown));
             result.Add(new MySqlParameter("@rank", record.Rank));
@@ -1613,12 +1600,7 @@ namespace PkmnFoundations.Data
             profile.Country = reader.GetByte(5);
             profile.Region = reader.GetByte(6);
             profile.OT = reader.GetUInt32(7);
-
-            byte[] buffer = reader.GetByteArray(8, 8);
-            ushort[] trendyPhrase = new ushort[4];
-            Buffer.BlockCopy(buffer, 0, trendyPhrase, 0, 8);
-            profile.TrendyPhrase = trendyPhrase;
-
+            profile.PhraseLeader = new TrendyPhrase5(reader.GetByteArray(8, 8));
             profile.Gender = reader.GetByte(9);
             profile.Unknown = reader.GetByte(10);
 

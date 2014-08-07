@@ -50,9 +50,7 @@ namespace PkmnFoundations.GTS
             foreach (BattleTowerProfile4 profile in results)
             {
                 builder.Append("<li>");
-                byte[] phrase = new byte[8];
-                System.Buffer.BlockCopy(profile.TrendyPhrase, 0, phrase, 0, 8);
-                TrendyPhrase4 tp = new TrendyPhrase4(phrase);
+                TrendyPhrase4 tp = profile.PhraseLeader;
                 builder.Append(tp.Render("<span style=\"color: #0066ff; font-weight: bold;\">{0}</span>"));
                 builder.Append("</li>");
             }

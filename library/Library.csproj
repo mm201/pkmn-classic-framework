@@ -79,6 +79,7 @@
     <Compile Include="Support\StreamExtender.cs" />
     <Compile Include="Support\StringHelper.cs" />
     <Compile Include="Support\TrendyPhrase4.cs" />
+    <Compile Include="Support\TrendyPhrase5.cs" />
     <Compile Include="Support\TrendyPhraseBase.cs" />
   </ItemGroup>
   <ItemGroup />
