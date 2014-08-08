@@ -195,6 +195,8 @@ namespace PkmnFoundations.GTS
                         {
                             // No pokemon in the system
                             // what do here?
+                            Error400(context);
+                            return;
                         }
                         else
                         {

@@ -179,6 +179,10 @@ namespace PkmnFoundations.GTS
                                 { 0x04, 0x00 }, 0, 2);
                         }
 
+                        // other responses:
+                        // 0-2 causes a BSOD but it flashes siezure. Scary
+                        // 3 causes it to be "checking GTS's status" forever.
+
                     } break;
 
                     // Called after result.asp returns 4 when you check your pokemon's status
@@ -195,6 +199,8 @@ namespace PkmnFoundations.GTS
                         {
                             // No pokemon in the system
                             // what do here?
+                            Error400(context);
+                            return;
                         }
                         else
                         {
