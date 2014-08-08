@@ -135,18 +135,18 @@ namespace PkmnFoundations.Data
             }
         }
 
-        public int GtsGetDepositId4(int pid, MySqlTransaction tran)
+        public ulong GtsGetDepositId4(int pid, MySqlTransaction tran)
         {
             object o = tran.ExecuteScalar("SELECT id FROM GtsPokemon4 WHERE pid = @pid " +
                 "ORDER BY IsExchanged DESC, TimeExchanged, TimeDeposited LIMIT 1",
                 new MySqlParameter("@pid", pid));
             if (o == null || o == DBNull.Value) return 0;
-            return (int)((uint)o);
+            return Convert.ToUInt64(o);
         }
 
         public bool GtsDeletePokemon4(MySqlTransaction tran, int pid)
         {
-            int pkmnId = GtsGetDepositId4(pid, tran);
+            ulong pkmnId = GtsGetDepositId4(pid, tran);
             if (pkmnId == 0) return false;
 
             tran.ExecuteNonQuery("DELETE FROM GtsPokemon4 WHERE id = @id",
@@ -974,18 +974,18 @@ namespace PkmnFoundations.Data
             }
         }
 
-        public int GtsGetDepositId5(int pid, MySqlTransaction tran)
+        public ulong GtsGetDepositId5(int pid, MySqlTransaction tran)
         {
             object o = tran.ExecuteScalar("SELECT id FROM GtsPokemon5 WHERE pid = @pid " +
                 "ORDER BY IsExchanged DESC, TimeExchanged, TimeDeposited LIMIT 1",
                 new MySqlParameter("@pid", pid));
             if (o == null || o == DBNull.Value) return 0;
-            return (int)((uint)o);
+            return Convert.ToUInt64(o);
         }
 
         public bool GtsDeletePokemon5(MySqlTransaction tran, int pid)
         {
-            int pkmnId = GtsGetDepositId5(pid, tran);
+            ulong pkmnId = GtsGetDepositId5(pid, tran);
             if (pkmnId == 0) return false;
 
             tran.ExecuteNonQuery("DELETE FROM GtsPokemon5 WHERE id = @id",
