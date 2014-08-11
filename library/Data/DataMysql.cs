@@ -431,6 +431,12 @@ namespace PkmnFoundations.Data
 
             // Does this player already have a record in this room?
             // Also get primary key if it does. (We need it for updating party)
+            //
+            // The official server doesn't seem to ever replace existing
+            // records. This worked fine for them, but we don't have nearly
+            // as many active players, so doing this will cause too many
+            // duplicates. Instead, we require the trainers in a given room to
+            // be unique by replacing their old record with a new one.
             ulong pkey = FindBattleTowerRecord4(tran, record, false);
 
             if (pkey != 0)
@@ -669,7 +675,7 @@ namespace PkmnFoundations.Data
 
             // Match normally.
             object oPkey = tran.ExecuteScalar("SELECT id FROM " + tblName +
-                " WHERE pid = @pid AND RoomNum = @room" + (leader ? " AND Rank = @rank" : ""), // Only require rank to match if this is the leaderboard.
+                " WHERE pid = @pid AND RoomNum = @room AND Rank = @rank",
                 new MySqlParameter("@pid", record.PID),
                 new MySqlParameter("@rank", record.Rank),
                 new MySqlParameter("@room", record.RoomNum));
@@ -679,7 +685,7 @@ namespace PkmnFoundations.Data
                 // PID isn't found. Try to match one of Pikachu025's saved
                 // records based on unchanging properties of the savegame.
                 oPkey = tran.ExecuteScalar("SELECT id FROM " + tblName +
-                    " WHERE pid = 0 AND RoomNum = @room " + (leader ? " AND Rank = @rank" : "") + // Only require rank to match if this is the leaderboard.
+                    " WHERE pid = 0 AND RoomNum = @room AND Rank = @rank " +
                     "AND Name = @name AND Version = @version " +
                     "AND Language = @language AND TrainerID = @trainer_id",
                     new MySqlParameter("@rank", record.Rank),
@@ -1529,7 +1535,7 @@ namespace PkmnFoundations.Data
 
             // Match normally.
             object oPkey = tran.ExecuteScalar("SELECT id FROM " + tblName +
-                " WHERE pid = @pid AND RoomNum = @room" + (leader ? " AND Rank = @rank" : ""), // Only require rank to match if this is the leaderboard.
+                " WHERE pid = @pid AND RoomNum = @room AND Rank = @rank", // Only require rank to match if this is the leaderboard.
                 new MySqlParameter("@pid", record.PID),
                 new MySqlParameter("@rank", record.Rank),
                 new MySqlParameter("@room", record.RoomNum));
@@ -1539,7 +1545,7 @@ namespace PkmnFoundations.Data
                 // PID isn't found. Try to match one of Pikachu025's saved
                 // records based on unchanging properties of the savegame.
                 oPkey = tran.ExecuteScalar("SELECT id FROM " + tblName +
-                    " WHERE pid = 0 AND RoomNum = @room " + (leader ? " AND Rank = @rank" : "") + // Only require rank to match if this is the leaderboard.
+                    " WHERE pid = 0 AND RoomNum = @room AND Rank = @rank " + // Only require rank to match if this is the leaderboard.
                     "AND Name = @name AND Version = @version " +
                     "AND Language = @language AND TrainerID = @trainer_id",
                     new MySqlParameter("@rank", record.Rank),
