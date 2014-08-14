@@ -67,5 +67,10 @@ namespace PkmnFoundations.GTS
 
             return data3;
         }
+
+        private static int DecryptRNG(int prev)
+        {
+            return (prev * 0x45 + 0x1111) & 0x7fffffff;
+        }
     }
 }

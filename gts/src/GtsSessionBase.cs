@@ -133,11 +133,5 @@ namespace PkmnFoundations.GTS
         {
             return Convert.ToBase64String(data).Replace('+', '-').Replace('/', '_');
         }
-
-        // todo: migrate this RNG code to Foundations library with proper base classes, etc
-        protected static int DecryptRNG(int prev)
-        {
-            return (prev * 0x45 + 0x1111) & 0x7fffffff;
-        }
     }
 }

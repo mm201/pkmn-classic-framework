@@ -58,7 +58,7 @@ namespace PkmnFoundations.GTS.debug
                 foreach (byte b in data)
                     checkedsum += b;
 
-                litGeneration.Text = "Platinum?";
+                litGeneration.Text = "Unknown (raw)";
                 litChecksum.Text = checkedsum.ToString();
                 phChecksum.Visible = true;
             }
