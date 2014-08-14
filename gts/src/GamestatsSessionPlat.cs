@@ -72,5 +72,20 @@ namespace PkmnFoundations.GTS
         {
             return (prev * 0x000244fd + 0x00006015) | 0x10000000;
         }
+
+        public static String ResponseChecksum(byte[] responseArray)
+        {
+            if (m_sha1 == null) m_sha1 = SHA1.Create();
+
+            String toCheck = "uLMOGEiiJogofchScpXb" + ToUrlSafeBase64String(responseArray) + "uLMOGEiiJogofchScpXb";
+
+            byte[] data = new byte[toCheck.Length];
+            MemoryStream stream = new MemoryStream(data);
+            StreamWriter writer = new StreamWriter(stream);
+            writer.Write(toCheck);
+            writer.Flush();
+
+            return m_sha1.ComputeHash(data).ToHexStringLower();
+        }
     }
 }
