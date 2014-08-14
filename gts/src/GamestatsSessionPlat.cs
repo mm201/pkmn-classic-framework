@@ -70,7 +70,7 @@ namespace PkmnFoundations.GTS
 
         private static int DecryptRNG(int prev)
         {
-            return (prev * 0x000244fd + 0x00006015) | 0x10000000;
+            return (prev * 0x000244fd + 0x00006015) & ~0x10000000;
         }
 
         public static String ResponseChecksum(byte[] responseArray)
