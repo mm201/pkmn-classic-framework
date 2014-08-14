@@ -82,8 +82,11 @@ namespace PkmnFoundations.GTS.debug
             {
                 litMessage.Text = "<p class=\"errorMessage\">Data is not formatted correctly.</p>";
             }
+            else
+            {
+                litDecoded.Text = RenderHex(data.ToHexStringLower());
+            }
 
-            litDecoded.Text = RenderHex(data.ToHexStringLower());
             phDecoded.Visible = true;
         }
 
