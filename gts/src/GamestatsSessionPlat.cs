@@ -59,6 +59,8 @@ namespace PkmnFoundations.GTS
                 data3[pos] = (byte)(data2[pos + 4] ^ (byte)(rand >> 16));
             }
 
+            // todo: validate and prune length, as in BW
+
             int checkedsum = 0;
             foreach (byte b in data3)
                 checkedsum += b;

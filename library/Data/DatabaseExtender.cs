@@ -95,6 +95,8 @@ namespace PkmnFoundations.Data
             // hooray DbConnection provides a command factory
             DbCommand cmd = db.CreateCommand();
             cmd.CommandText = sqlstr;
+            // todo: catch "System.ArgumentException: The SqlParameter is already contained 
+            // by another SqlParameterCollection." and add a clone instead
             cmd.Parameters.AddRange(_params);
             return cmd.ExecuteReader();
         }

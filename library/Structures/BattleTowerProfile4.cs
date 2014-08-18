@@ -11,7 +11,25 @@ namespace PkmnFoundations.Structures
     {
         public BattleTowerProfile4()
         {
+        }
 
+        public BattleTowerProfile4(EncodedString4 name, Versions version, 
+            Languages language, byte country, byte region, uint ot,
+            TrendyPhrase4 phrase_leader, byte gender, byte unknown)
+        {
+            if (name == null) throw new ArgumentNullException("name");
+            if (name.Size != 16) throw new ArgumentException("name");
+            if (phrase_leader == null) throw new ArgumentNullException("phrase_leader");
+            
+            Name = name; // todo: clone
+            Version = version;
+            Language = language;
+            Country = country;
+            Region = region;
+            OT = ot;
+            PhraseLeader = phrase_leader; // todo: clone
+            Gender = gender;
+            Unknown = unknown;
         }
 
         public BattleTowerProfile4(byte[] data)
@@ -33,6 +51,23 @@ namespace PkmnFoundations.Structures
         public TrendyPhrase4 PhraseLeader;
         // Different from GTS, 0 = male, 2 = female, 1 = Plato???? 
         public byte Gender;
+
+        // 3: Lass
+        // 6: Bug Catcher
+        // 10: Battle Girl
+        // 14: Black Belt
+        // 18: Cowgirl
+        // 24: Ace Trainer M
+        // 25: Ace Trainer F
+        // 32: Rich Boy
+        // 33: Lady
+        // 35: Socialite F
+        // 36: Beauty
+        // 48: Ruin Maniac
+        // 49: Psychic M
+        // 57: Roughneck
+        // 60: School Kid M
+        // 85: Idol
         public byte Unknown;
 
         public byte[] Save()

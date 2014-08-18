@@ -13,6 +13,31 @@ namespace PkmnFoundations.Structures
         {
         }
 
+        public BattleTowerPokemon4(ushort species, ushort held_item, ushort[] moveset,
+            uint ot, uint personality, uint ivs, byte[] evs, byte unknown1,
+            Languages language, byte ability, byte happiness, EncodedString4 nickname)
+        {
+            if (moveset == null) throw new ArgumentNullException("moveset");
+            if (moveset.Length != 4) throw new ArgumentException("moveset");
+            if (evs == null) throw new ArgumentNullException("evs");
+            if (evs.Length != 6) throw new ArgumentException("evs");
+            if (nickname == null) throw new ArgumentNullException("nickname");
+            if (nickname.Size != 22) throw new ArgumentException("nickname");
+
+            Species = species;
+            HeldItem = held_item;
+            Moveset = moveset.ToArray();
+            OT = ot;
+            Personality = personality;
+            IVs = ivs;
+            EVs = evs.ToArray();
+            Unknown1 = unknown1;
+            Language = language;
+            Ability = ability;
+            Happiness = happiness;
+            Nickname = nickname; // todo: clone
+        }
+
         public BattleTowerPokemon4(byte[] data)
         {
             Load(data, 0);
@@ -124,6 +149,17 @@ namespace PkmnFoundations.Structures
         {
             int shift = (int)stat * 5 - 5;
             return (byte)(ivs << shift & 0x1f);
+        }
+
+        // todo: Move to IVs class
+        public static uint PackIVs(byte HP, byte Attack, byte Defense, byte Speed, byte SpAttack, byte SpDefense)
+        {
+            return (uint)((HP & 31) |
+                ((Attack & 31) << 5) |
+                ((Defense & 31) << 10) |
+                ((Speed & 31) << 15) |
+                ((SpAttack & 31) << 20) |
+                ((SpDefense & 31) << 25));
         }
     }
 }
