@@ -151,6 +151,7 @@
     <Compile Include="admin\AddDressup.aspx.designer.cs">
       <DependentUpon>AddDressup.aspx</DependentUpon>
     </Compile>
+    <Compile Include="src\FakeOpponentGenerator4.cs" />
     <Compile Include="test\BoxUp.aspx.cs">
       <DependentUpon>BoxUp.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>

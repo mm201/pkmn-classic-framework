@@ -555,22 +555,20 @@ namespace PkmnFoundations.GTS
                         byte rank = data[0x04];
                         byte roomNum = data[0x05];
 
-                        BattleTowerRecord4[] opponents = DataAbstract.Instance.BattleTowerGetOpponents4(pid, rank, roomNum);
-
-                        if (opponents.Length != 7)
-                        {
-                            // todo: Instead of failing, add fake trainers
-                            // to pad the results up to 7.
-                            response.Write(new byte[] { 0x00, 0x00 }, 0, 2);
-                            break;
-                        }
-
+                        //BattleTowerRecord4[] opponents = DataAbstract.Instance.BattleTowerGetOpponents4(pid, rank, roomNum);
                         BattleTowerProfile4[] leaders = DataAbstract.Instance.BattleTowerGetLeaders4(rank, roomNum);
+                        BattleTowerRecord4[] fakeOpponents = FakeOpponentGenerator4.GenerateFakeOpponents(7);
 
-                        foreach (BattleTowerRecord4 record in opponents)
+                        foreach (BattleTowerRecord4 record in fakeOpponents)
                         {
                             response.Write(record.Save(), 0, 228);
                         }
+
+                        /*
+                        foreach (BattleTowerRecord4 record in opponents)
+                        {
+                            response.Write(record.Save(), 0, 228);
+                        }*/
 
                         foreach (BattleTowerProfile4 leader in leaders)
                         {
@@ -621,7 +619,6 @@ namespace PkmnFoundations.GTS
                 // wrong number of querystring arguments
                 Error400(context);
         }
-
         private void Error400(HttpContext context)
         {
             context.Response.StatusCode = 400;
