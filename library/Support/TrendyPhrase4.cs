@@ -72,115 +72,115 @@ namespace PkmnFoundations.Support
         // msg.narc/395 through /399
         private static String[,] PHRASES = new String[,]
         {
-            {
-                "Please!\n{0}!",
-                "Go! {0}!",
-                "I’ll battle with\n{0}!",
-                "It’s {0}!",
-                "{0}, I’m going\nwith {1}!",
-                "Look at {0}!",
-                "I’ll show you {0}!",
-                "Now!\n{0}!",
-                "I’ll show you my\n{0} strategy!",
-                "I’ll {0}!",
-                "I’ll shock you with\n{0}!",
-                "This is the beginning\nof {0}!",
-                "This battle is\n{0}!",
-                "I don’t think I’ll\never lose at {0}!",
-                "Team {0} is here!",
-                "You think you can beat\n{0}?",
-                "{0}!\n{1} power!",
-                "This is the {0}\nPokémon!",
-                "{0} won’t lose!",
-                "Please {0}!\n{1}!"
+            {   // Mood 0: Start of battle                      
+                "Please!\n{0}!",                                //  0
+                "Go! {0}!",                                     //  1
+                "I’ll battle with\n{0}!",                       //  2
+                "It’s {0}!",                                    //  3
+                "{0}, I’m going\nwith {1}!",                    //  4
+                "Look at {0}!",                                 //  5
+                "I’ll show you {0}!",                           //  6
+                "Now!\n{0}!",                                   //  7
+                "I’ll show you my\n{0} strategy!",              //  8
+                "I’ll {0}!",                                    //  9
+                "I’ll shock you with\n{0}!",                    // 10
+                "This is the beginning\nof {0}!",               // 11
+                "This battle is\n{0}!",                         // 12
+                "I don’t think I’ll\never lose at {0}!",        // 13
+                "Team {0} is here!",                            // 14
+                "You think you can beat\n{0}?",                 // 15
+                "{0}!\n{1} power!",                             // 16
+                "This is the {0}\nPokémon!",                    // 17
+                "{0} won’t lose!",                              // 18
+                "Please {0}!\n{1}!"                             // 19
             },
-            {
-                "I win!\n{0}!",
-                "I won!\nI won with {0}!",
-                "{0} is strong,\nisn’t it?",
-                "It’s {0}\n{1} after all!",
-                "{0}, yay!",
-                "Yay, {0}!\n{1}!",
-                "Sorry, it’s {0}\n{1}.",
-                "{0}!\nThank you!",
-                "The way I feel now is\n{0}!",
-                "I wanted people to look at\nmy {0}!",
-                "It’s all thanks to\n{0}.",
-                "I might have won with\n{0}!",
-                "I get the happiest with\n{0}!",
-                "{0} secured\nthe victory!",
-                "This {0}\nwas really good!",
-                "{0}\nwas fun, wasn’t it?",
-                "Huh?\n{0}?!",
-                "{0} is the toughest!",
-                "Happy!\n{0} happy!",
-                "How’s that?!\n{0}!"
+            {   // Mood 1: Victory
+                "I win!\n{0}!",                                 //  0
+                "I won!\nI won with {0}!",                      //  1
+                "{0} is strong,\nisn’t it?",                    //  2
+                "It’s {0}\n{1} after all!",                     //  3
+                "{0}, yay!",                                    //  4
+                "Yay, {0}!\n{1}!",                              //  5
+                "Sorry, it’s {0}\n{1}.",                        //  6
+                "{0}!\nThank you!",                             //  7
+                "The way I feel now is\n{0}!",                  //  8
+                "I wanted people to look at\nmy {0}!",          //  9
+                "It’s all thanks to\n{0}.",                     // 10
+                "I might have won with\n{0}!",                  // 11
+                "I get the happiest with\n{0}!",                // 12
+                "{0} secured\nthe victory!",                    // 13
+                "This {0}\nwas really good!",                   // 14
+                "{0}\nwas fun, wasn’t it?",                     // 15
+                "Huh?\n{0}?!",                                  // 16
+                "{0} is the toughest!",                         // 17
+                "Happy!\n{0} happy!",                           // 18
+                "How’s that?!\n{0}!"                            // 19
             },
-            {
-                "You win...\n{0}",
-                "{0} was the one\nthing I wanted to avoid...",
-                "Waaah!\n{0}!",
-                "I want to go home with\n{0}...",
-                "{0}!\n{1}!",
-                "Could it be...?\n{0}...?",
-                "{0}!\nHow awful!",
-                "I was confident about\n{0}, too.",
-                "You're {0},\naren’t you?",
-                "{0}!\nCan’t be anything else but.",
-                "I feel so helplessly angry...\nIt’s {0}!",
-                "{0} makes me sad...",
-                "I feel sorry for\n{0}!",
-                "The way I feel now is\n{0}...",
-                "I lost, but I won at\n{0}!",
-                "I would’ve won if this\nwere {0}...",
-                "My head’s filled with only\n{0} now!",
-                "The way I lost...\nIt’s like {0}...",
-                "Isn’t {0}\n{1}?",
-                "Aww... That’s really\n{0}..."
+            {   // Mood 2: Defeat
+                "You win...\n{0}",                              //  0
+                "{0} was the one\nthing I wanted to avoid...",  //  1
+                "Waaah!\n{0}!",                                 //  2
+                "I want to go home with\n{0}...",               //  3
+                "{0}!\n{1}!",                                   //  4
+                "Could it be...?\n{0}...?",                     //  5
+                "{0}!\nHow awful!",                             //  6
+                "I was confident about\n{0}, too.",             //  7
+                "You're {0},\naren’t you?",                     //  8
+                "{0}!\nCan’t be anything else but.",            //  9
+                "I feel so helplessly angry...\nIt’s {0}!",     // 10
+                "{0} makes me sad...",                          // 11
+                "I feel sorry for\n{0}!",                       // 12
+                "The way I feel now is\n{0}...",                // 13
+                "I lost, but I won at\n{0}!",                   // 14
+                "I would’ve won if this\nwere {0}...",          // 15
+                "My head’s filled with only\n{0} now!",         // 16
+                "The way I lost...\nIt’s like {0}...",          // 17
+                "Isn’t {0}\n{1}?",                              // 18
+                "Aww... That’s really\n{0}..."                  // 19
             },
-            {
-                "Hello!\n{0}!",
-                "I love {0}!",
-                "I love {0}!\nI love {1}, too!",
-                "This {0} is\n{1}, isn’t it?",
-                "I can do anything for\n{0}!",
-                "This {0} is\n{1}!",
-                "{0} is the real\n{1}!",
-                "It might be {0}...",
-                "There’s only {0}\nleft!",
-                "It’s {0}!\nIt’s {1}!",
-                "I prefer {0}\nafter all!",
-                "Is {0}\n{1}?",
-                "Do you like {0}?",
-                "What do you think of\n{0}?",
-                "{0} is so\n{1}!",
-                "{0} are\n{1}!",
-                "{0}, right?",
-                "Did you know {0}?\nIt’s {1}!",
-                "Excuse me...\nIt’s {0}!",
-                "{0}, right?\n{1}!"
+            {   // Mood 3: Other
+                "Hello!\n{0}!",                                 //  0
+                "I love {0}!",                                  //  1
+                "I love {0}!\nI love {1}, too!",                //  2
+                "This {0} is\n{1}, isn’t it?",                  //  3
+                "I can do anything for\n{0}!",                  //  4
+                "This {0} is\n{1}!",                            //  5
+                "{0} is the real\n{1}!",                        //  6
+                "It might be {0}...",                           //  7
+                "There’s only {0}\nleft!",                      //  8
+                "It’s {0}!\nIt’s {1}!",                         //  9
+                "I prefer {0}\nafter all!",                     // 10
+                "Is {0}\n{1}?",                                 // 11
+                "Do you like {0}?",                             // 12
+                "What do you think of\n{0}?",                   // 13
+                "{0} is so\n{1}!",                              // 14
+                "{0} are\n{1}!",                                // 15
+                "{0}, right?",                                  // 16
+                "Did you know {0}?\nIt’s {1}!",                 // 17
+                "Excuse me...\nIt’s {0}!",                      // 18
+                "{0}, right?\n{1}!"                             // 19
             },
-            {
-                "{0}!\nHello!",
-                "Glad to meet you!\nI love {0}!",
-                "I’m a {0} Trainer!\nPlease battle me!",
-                "Please trade!\nI’m offering {0}!",
-                "Please trade!\nI want a {0}!",
-                "I’ve entered the Union Room.",
-                "Let’s draw! I want to draw\n{0}!",
-                "I’ve got to go!\n{0}!",
-                "Please leave me alone...",
-                "Anyone want to\n{0}?",
-                "Let’s {0}!",
-                "Want to {0}?",
-                "I want to {0}!",
-                "OK!",
-                "I don’t want to\n{0}.",
-                "I’ll go wait at the Colosseum\nnow.",
-                "Please talk to me!",
-                "Do you know where I am?",
-                "I want to trade my {0}.\nPlease talk to me.",
-                "I want a {0} battle!\nPlease talk to me!"
+            {   // Mood 4: Multiplay
+                "{0}!\nHello!",                                 //  0
+                "Glad to meet you!\nI love {0}!",               //  1
+                "I’m a {0} Trainer!\nPlease battle me!",        //  2
+                "Please trade!\nI’m offering {0}!",             //  3
+                "Please trade!\nI want a {0}!",                 //  4
+                "I’ve entered the Union Room.",                 //  5
+                "Let’s draw! I want to draw\n{0}!",             //  6
+                "I’ve got to go!\n{0}!",                        //  7
+                "Please leave me alone...",                     //  8
+                "Anyone want to\n{0}?",                         //  9
+                "Let’s {0}!",                                   // 10
+                "Want to {0}?",                                 // 11
+                "I want to {0}!",                               // 12
+                "OK!",                                          // 13
+                "I don’t want to\n{0}.",                        // 14
+                "I’ll go wait at the Colosseum\nnow.",          // 15
+                "Please talk to me!",                           // 16
+                "Do you know where I am?",                      // 17
+                "I want to trade my {0}.\nPlease talk to me.",  // 18
+                "I want a {0} battle!\nPlease talk to me!"      // 19
             }
         };
 
@@ -197,7 +197,7 @@ namespace PkmnFoundations.Support
         // 1472-1494: msg.narc/394 "Union"
         private static String[] WORDS_POKEMON = new String[]
         {
-            "-----","BULBASAUR","IVYSAUR","VENUSAUR",
+            "-----","BULBASAUR","IVYSAUR","VENUSAUR",           // 0
             "CHARMANDER","CHARMELEON","CHARIZARD","SQUIRTLE",
             "WARTORTLE","BLASTOISE","CATERPIE","METAPOD",
             "BUTTERFREE","WEEDLE","KAKUNA","BEEDRILL",
@@ -325,7 +325,7 @@ namespace PkmnFoundations.Support
 
         private static String[] WORDS_MOVES = new String[]
         {
-            "-","POUND","KARATE CHOP","DOUBLESLAP",
+            "-","POUND","KARATE CHOP","DOUBLESLAP",             // 496
             "COMET PUNCH","MEGA PUNCH","PAY DAY","FIRE PUNCH",
             "ICE PUNCH","THUNDERPUNCH","SCRATCH","VICEGRIP",
             "GUILLOTINE","RAZOR WIND","SWORDS DANCE","CUT",
@@ -446,7 +446,7 @@ namespace PkmnFoundations.Support
 
         private static String[] WORDS_TYPES = new String[]
         {
-            "NORMAL","FIGHTING","FLYING","POISON",
+            "NORMAL","FIGHTING","FLYING","POISON",              // 964
             "GROUND","ROCK","BUG","GHOST",
             "STEEL","???","FIRE","WATER",
             "GRASS","ELECTRIC","PSYCHIC","ICE",
@@ -455,7 +455,7 @@ namespace PkmnFoundations.Support
 
         private static String[] WORDS_ABILITIES = new String[]
         {
-            "-","STENCH","DRIZZLE","SPEED BOOST",
+            "-","STENCH","DRIZZLE","SPEED BOOST",               // 982
             "BATTLE ARMOR","STURDY","DAMP","LIMBER",
             "SAND VEIL","STATIC","VOLT ABSORB","WATER ABSORB",
             "OBLIVIOUS","CLOUD NINE","COMPOUNDEYES","INSOMNIA",
@@ -490,7 +490,7 @@ namespace PkmnFoundations.Support
 
         private static String[] WORDS_TRAINER = new String[]
         {
-            "MATCH UP","NO. 1","PREPARATION","WINS",
+            "MATCH UP","NO. 1","PREPARATION","WINS",            // 1106
             "NO MATCH","SPIRIT","ACE CARD","COME ON",
             "ATTACK","SURRENDER","COURAGE","TALENT",
             "STRATEGY","MATCH","VICTORY","SENSE",
@@ -504,7 +504,7 @@ namespace PkmnFoundations.Support
 
         private static String[] WORDS_PEOPLE = new String[]
         {
-            "OPPONENT","I","YOU","MOTHER",
+            "OPPONENT","I","YOU","MOTHER",                      // 1144
             "GRANDFATHER","UNCLE","FATHER","BOY",
             "ADULT","BROTHER","SISTER","GRANDMOTHER",
             "AUNT","PARENT","OLD MAN","ME",
@@ -518,7 +518,7 @@ namespace PkmnFoundations.Support
 
         private static String[] WORDS_GREETINGS = new String[]
         {
-            "KONNICHIWA","HELLO","BONJOUR","CIAO",
+            "KONNICHIWA","HELLO","BONJOUR","CIAO",              // 1182
             "HALLO","HOLA","OH WELL","AAH",
             "AHAHA","HUH","THANKS","NO PROBLEM",
             "NOPE","YES","HERE GOES","LET’S GO",
@@ -549,7 +549,7 @@ namespace PkmnFoundations.Support
 
         private static String[] WORDS_LIFESTYLE = new String[]
         {
-            "IDOL","TOMORROW","PLAYING","ANIME",
+            "IDOL","TOMORROW","PLAYING","ANIME",                // 1289
             "JOB","SONG","HOME","MOVIE",
             "SWEETS","MONEY","POCKET MONEY","CHIT-CHAT",
             "TALK","BATH","PLAY HOUSE","TOYS",
@@ -579,7 +579,7 @@ namespace PkmnFoundations.Support
 
         private static String[] WORDS_FEELINGS = new String[]
         {
-            "BEAUTY","DELIGHT","STRANGENESS","CLEVERNESS",
+            "BEAUTY","DELIGHT","STRANGENESS","CLEVERNESS",      // 1393
             "DISAPPOINTED","COOLNESS","SADNESS","CUTENESS",
             "ANGER","HEALTHY","REGRET","HAPPINESS",
             "DEPRESSED","INCREDIBLE","LIKES","DISLIKE",
@@ -595,7 +595,7 @@ namespace PkmnFoundations.Support
 
         private static String[] WORDS_TOUGH = new String[]
         {
-            "EARTH TONES","IMPLANT","GOLDEN RATIO","OMNIBUS",
+            "EARTH TONES","IMPLANT","GOLDEN RATIO","OMNIBUS",   // 1440
             "STARBOARD","MONEY RATE","RESOLUTION","CADENZA",
             "EDUCATION","CUBISM","CROSS-STITCH","ARTERY",
             "BONE DENSITY","GOMMAGE","STREAMING","CONDUCTIVITY",
@@ -607,7 +607,7 @@ namespace PkmnFoundations.Support
 
         private static String[] WORDS_UNION = new String[]
         {
-            "SINGLE","DOUBLE","MIX BATTLE","MULTI BATTLE",
+            "SINGLE","DOUBLE","MIX BATTLE","MULTI BATTLE",      // 1472
             "LEVEL 50","LEVEL 100","COLOSSEUM","POKéMON",
             "DRAWING","RECORD","GOTCHA","CHAT",
             "FRIEND CODE","CONNECTION","VOICE CHAT","WI-FI",
