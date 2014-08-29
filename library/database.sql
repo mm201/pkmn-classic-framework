@@ -7,7 +7,7 @@
 #
 # Host: 127.0.0.1 (MySQL 5.5.27)
 # Database: gts
-# Generation Time: 2014-08-07 22:36:38 +0000
+# Generation Time: 2014-08-29 23:13:12 +0000
 # ************************************************************
 
 
@@ -83,16 +83,34 @@ CREATE TABLE `BattleVideoSearchHistory5` (
 
 
 
+# Dump of table FoundationsAbilities
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `FoundationsAbilities`;
+
+CREATE TABLE `FoundationsAbilities` (
+  `Value` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `Name` varchar(30) DEFAULT NULL,
+  PRIMARY KEY (`Value`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+
 # Dump of table FoundationsCountries
 # ------------------------------------------------------------
 
 DROP TABLE IF EXISTS `FoundationsCountries`;
 
 CREATE TABLE `FoundationsCountries` (
-  `Value` tinyint(3) unsigned NOT NULL DEFAULT '0',
+  `id` int(20) unsigned NOT NULL DEFAULT '0',
+  `Value4` tinyint(3) unsigned DEFAULT '0',
+  `Value5` tinyint(3) unsigned DEFAULT NULL,
   `Name` varchar(30) DEFAULT NULL,
-  PRIMARY KEY (`Value`),
-  KEY `Name` (`Name`)
+  `iso-3166-1` char(2) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `Name` (`Name`),
+  KEY `Value4` (`Value4`),
+  KEY `Value5` (`Value5`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
@@ -103,12 +121,17 @@ CREATE TABLE `FoundationsCountries` (
 DROP TABLE IF EXISTS `FoundationsCountryRegions`;
 
 CREATE TABLE `FoundationsCountryRegions` (
-  `country_id` tinyint(3) unsigned NOT NULL DEFAULT '0',
-  `Value` tinyint(3) unsigned NOT NULL DEFAULT '0',
+  `id` int(11) unsigned NOT NULL DEFAULT '0',
+  `country_id` int(11) unsigned NOT NULL DEFAULT '0',
+  `Value4` tinyint(3) unsigned NOT NULL DEFAULT '0',
+  `Value5` tinyint(3) unsigned DEFAULT NULL,
   `Name` varchar(30) DEFAULT NULL,
-  PRIMARY KEY (`country_id`,`Value`),
-  KEY `Country_ID` (`country_id`),
-  KEY `Country_ID_2` (`country_id`,`Name`)
+  `iso-3166-2` varchar(4) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `country_id` (`country_id`),
+  KEY `country_id_2` (`country_id`,`Value4`),
+  KEY `country_id_3` (`country_id`,`Value5`),
+  CONSTRAINT `foundationscountryregions_ibfk_1` FOREIGN KEY (`country_id`) REFERENCES `FoundationsCountries` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
@@ -201,10 +224,10 @@ CREATE TABLE `FoundationsPokemonStats2` (
 DROP TABLE IF EXISTS `FoundationsTypes`;
 
 CREATE TABLE `FoundationsTypes` (
-  `Value` int(11) NOT NULL,
+  `id` int(11) NOT NULL,
   `Name` varchar(30) NOT NULL DEFAULT '',
   `DamageClass` tinyint(3) unsigned DEFAULT NULL,
-  PRIMARY KEY (`Value`)
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
@@ -404,6 +427,7 @@ DROP TABLE IF EXISTS `GtsHistory4`;
 
 CREATE TABLE `GtsHistory4` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `trade_id` bigint(20) unsigned DEFAULT NULL,
   `Data` blob NOT NULL,
   `Species` smallint(5) unsigned NOT NULL,
   `Gender` tinyint(3) unsigned NOT NULL,
