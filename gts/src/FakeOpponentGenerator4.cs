@@ -15,7 +15,7 @@ namespace PkmnFoundations.GTS
     /// </summary>
     public static class FakeOpponentGenerator4
     {
-        const int FAKE_OPPONENTS_COUNT = 4;
+        const int FAKE_OPPONENTS_COUNT = 7;
 
         /// <summary>
         /// Randomly selects some fake opponents without repeats (if possible)
@@ -219,7 +219,7 @@ namespace PkmnFoundations.GTS
                             104, // Double team
                             329 // Sheer cold
                         },
-                        0x02030405, 5, // Bold
+                        5, 5, // Bold
                         BattleTowerPokemon4.PackIVs(31, 10, 20, 31, 10, 31),
                         new byte[] { 252, 0, 0, 252, 0, 6 },
                         0, Languages.English, 47, // Thick fat
@@ -227,7 +227,7 @@ namespace PkmnFoundations.GTS
                     );
 
                     record.Profile = new BattleTowerProfile4(
-                        new EncodedString4("Boss", 16),
+                        new EncodedString4("Dennis", 16),
                         Versions.Platinum, Languages.English,
                         0, 0, 0x02030405,
                         new TrendyPhrase4(1, 12, 1147, 65535), // I get the happiest with MOTHER
@@ -249,7 +249,7 @@ namespace PkmnFoundations.GTS
                             89, // EQ
                             444 // Stone edge
                         },
-                        0x03040506, 13, // Jolly
+                        13, 13, // Jolly
                         BattleTowerPokemon4.PackIVs(31, 31, 20, 31, 10, 20),
                         new byte[] { 6, 252, 0, 252, 0, 0 },
                         0, Languages.English, 45, // Sand stream
@@ -290,7 +290,7 @@ namespace PkmnFoundations.GTS
                     );
 
                     record.Profile = new BattleTowerProfile4(
-                        new EncodedString4("Indiana", 16),
+                        new EncodedString4("Dusty", 16),
                         Versions.Platinum, Languages.English,
                         0, 0, 0x03040506,
                         new TrendyPhrase4(3, 4, 1342, 65535), // I can do anything for TREASURE
@@ -302,59 +302,193 @@ namespace PkmnFoundations.GTS
                     record.PhraseLost = new TrendyPhrase4(3, 10, 1389, 65535); // I prefer VACATION after all
                     break;
 
+                case 4:
+                    record.Party[0] = new BattleTowerPokemon4(
+                        460, // Abomasnow
+                        287, // Scarf
+                        new ushort[] { 
+                            59, // Blizzard
+                            452, // Wood hammer
+                            237, // Hidden power
+                            89 // EQ
+                        },
+                        0x04050607, 11, // Hasty
+                        BattleTowerPokemon4.PackIVs(19, 31, 18, 30, 28, 19), // HP:fire base 59
+                        // Original EVs: 228Spe/164Atk/116SAtk
+                        // Adjusted for Hidden Power IVs, sacrificing some Attack
+                        new byte[] { 0, 148, 0, 234, 128, 0 },
+                        0, Languages.English, 117, // Snow warning
+                        255, new EncodedString4("Abomasnow", 22)
+                    );
 
+                    record.Party[1] = new BattleTowerPokemon4(
+                        471, // Glaceon
+                        246, // Nevermeltice
+                        new ushort[] { 
+                            59, // Blizzard
+                            247, // Shadow ball
+                            273, // Wish
+                            182 // Protect
+                        },
+                        15, 15, // Modest, shiny
+                        BattleTowerPokemon4.PackIVs(31, 10, 20, 31, 31, 20),
+                        new byte[] { 6, 0, 0, 252, 252, 0 },
+                        0, Languages.English, 81, // Snow cloak
+                        255, new EncodedString4("Glaceon", 22)
+                    );
 
-                /*
+                    record.Party[2] = new BattleTowerPokemon4(
+                        461, // Weavile
+                        275, // Focus sash
+                        new ushort[] { 
+                            14, // Swords dance
+                            400, // Night slash
+                            8, // Ice punch
+                            67 // Low kick
+                        },
+                        13, 13, // Jolly
+                        BattleTowerPokemon4.PackIVs(31, 31, 20, 31, 10, 20),
+                        new byte[] { 40, 252, 0, 218, 0, 0 },
+                        0, Languages.English, 46, // Pressure
+                        255, new EncodedString4("Weavile", 22)
+                    );
 
-#5: Hail team
+                    record.Profile = new BattleTowerProfile4(
+                        new EncodedString4("Frosty", 16),
+                        Versions.Platinum, Languages.English,
+                        0, 0, 0x04050607,
+                        new TrendyPhrase4(3, 3, 677, 1438), // This POWDER SNOW is NICE, isn't it?
+                        2, 35 // Socialite
+                        );
 
-Abomasnow@Choice Scarf: Hasty, 228Spe/164Atk/116SAtk
-Snow Warning
-Blizzard
-Wood Hammer
-HP:Fire
-EQ
+                    record.PhraseChallenged = new TrendyPhrase4(3, 3, 677, 1438);
+                    record.PhraseWon = new TrendyPhrase4(1, 14, 797, 65535); // This ICE BALL was really good
+                    record.PhraseLost = new TrendyPhrase4(2, 5, 752, 65535); // Could it be? HEAT WAVE
+                    break;
 
-Glaceon@Nevermeltice: Modest, 252SAtk/252Spe/4HP
-Snow Cloak
-Blizzard
-Shadow Ball
-Wish
-Protect
+                case 5:
+                    record.Party[0] = new BattleTowerPokemon4(
+                        437, // Bronzong
+                        234, // Leftovers
+                        new ushort[] { 
+                            433, // Trick room
+                            360, // Gyro ball
+                            95, // Hypnosis
+                            153 // Explosion
+                        },
+                        22, 22, // Sassy
+                        BattleTowerPokemon4.PackIVs(31, 20, 31, 0, 10, 20),
+                        new byte[] { 252, 0, 252, 0, 0, 6 },
+                        0, Languages.English, 26, // Levitate
+                        255, new EncodedString4("Bronzong", 22)
+                    );
 
-Weavile@Expert Belt: Jolly, 252Atk/216Spe/40HP
-Pursuit
-Swords Dance
-Night Slash
-Ice Punch
-Low Kick
+                    record.Party[1] = new BattleTowerPokemon4(
+                        464, // Rhyperior
+                        270, // Life orb
+                        new ushort[] { 
+                            89, // EQ
+                            444, // Stone edge
+                            401, // Aqua tail
+                            224 // Megahorn
+                        },
+                        0x05060708, 2, // Brave
+                        BattleTowerPokemon4.PackIVs(31, 31, 31, 10, 10, 20),
+                        new byte[] { 248, 252, 10, 0, 0, 0 },
+                        0, Languages.English, 116, // Solid rock
+                        255, new EncodedString4("Rhyperior", 22)
+                    );
 
-                 */
-                /*
+                    record.Party[2] = new BattleTowerPokemon4(
+                        462, // Magnezone
+                        268, // Expert belt
+                        new ushort[] { 
+                            237, // Hidden power
+                            430, // Flash cannon
+                            85, // Thunderbolt
+                            393 // Magnet rise
+                        },
+                        0x05060708, 17, // Quiet
+                        BattleTowerPokemon4.PackIVs(31, 10, 31, 10, 31, 20),
+                        new byte[] { 252, 0, 6, 0, 252, 0 },
+                        0, Languages.English, 42, // Magnet pull
+                        255, new EncodedString4("Magnezone", 22)
+                    );
 
-#6: Trick Room
+                    record.Profile = new BattleTowerProfile4(
+                        new EncodedString4("Cassie", 16),
+                        Versions.Platinum, Languages.English,
+                        0, 0, 0x05060708,
+                        new TrendyPhrase4(2, 3, 1146, 65535), // I want to go home with YOU...
+                        2, 85 // Idol
+                        );
 
-Bronzong@Leftovers: Sassy, 252HP/252Def
-Levitate
-Trick Room
-Gyro Ball
-Hypnosis
-Explosion
+                    record.PhraseChallenged = new TrendyPhrase4(2, 3, 1146, 65535);
+                    record.PhraseWon = new TrendyPhrase4(4, 10, 1245, 65535); // Let's GO AHEAD!
+                    record.PhraseLost = new TrendyPhrase4(4, 11, 1348, 65535); // Want to DATE?
+                    break;
 
-Rhyperior@Life Orb: Brave, 252Atk/248HP/8Def
-EQ
-Stone Edge
-Aqua tail
-Megahorn
+                case 6:
+                    record.Party[0] = new BattleTowerPokemon4(
+                        65, // Alakazam
+                        275, // Focus sash
+                        new ushort[] { 
+                            269, // Taunt
+                            94, // Psychic
+                            411, // Focus blast
+                            324 // Signal beam
+                        },
+                        15, 15, // Modest
+                        BattleTowerPokemon4.PackIVs(31, 10, 20, 31, 31, 20),
+                        new byte[] { 6, 0, 0, 252, 252, 6 },
+                        0, Languages.English, 39, // Inner focus
+                        255, new EncodedString4("Alakazam", 22)
+                    );
 
-Magnezone@Expert Belt: Quiet, 252SpAtk/252HP/4Def
-HP:Grass
-Flash Cannon
-Thunderbolt
-Magnet Rise
+                    record.Party[1] = new BattleTowerPokemon4(
+                        445, // Garchomp
+                        270, // Life orb
+                        new ushort[] { 
+                            14, // Swords dance
+                            89, // EQ
+                            200, // Outrage
+                            424 // Fire fang
+                        },
+                        0x06070809, 13, // Jolly
+                        BattleTowerPokemon4.PackIVs(31, 31, 20, 31, 10, 20),
+                        new byte[] { 6, 252, 0, 252, 0, 0 },
+                        0, Languages.English, 8, // Sand veil
+                        255, new EncodedString4("Garchomp", 22)
+                    );
 
+                    record.Party[2] = new BattleTowerPokemon4(
+                        242, // Blissey
+                        234, // Leftovers
+                        new ushort[] { 
+                            135, // Softboiled
+                            104, // Double team
+                            92, // Toxic
+                            69 // Seismic toss
+                        },
+                        0x06070809, 5, // Bold
+                        BattleTowerPokemon4.PackIVs(31, 10, 31, 31, 20, 20),
+                        new byte[] { 252, 0, 252, 6, 0, 0 },
+                        0, Languages.English, 30, // Natural cure
+                        255, new EncodedString4("Blissey", 22)
+                    );
 
-             */
+                    record.Profile = new BattleTowerProfile4(
+                        new EncodedString4("Evan", 16),
+                        Versions.Platinum, Languages.English,
+                        0, 0, 0x06070809,
+                        new TrendyPhrase4(0, 2, 566, 65535), // I'll battle with STRENGTH!
+                        0, 24 // Ace trainer M
+                        );
+
+                    record.PhraseChallenged = new TrendyPhrase4(0, 2, 566, 65535);
+                    record.PhraseWon = new TrendyPhrase4(1, 1, 1418, 65535); // I won! I won with SKILLFUL!
+                    record.PhraseLost = new TrendyPhrase4(2, 17, 1428, 65535); // The way I lost... It's like RARE...
+                    break;
             }
 
             return record;
