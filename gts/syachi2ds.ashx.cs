@@ -553,10 +553,9 @@ namespace PkmnFoundations.GTS
 
                         if (opponents.Length != 7)
                         {
-                            // todo: Instead of failing, add fake trainers
-                            // to pad the results up to 7.
-                            response.Write(new byte[] { 0x00, 0x00 }, 0, 2);
-                            break;
+                            // todo: Implement fake trainers on Gen5 too.
+                            Error400(context);
+                            return;
                         }
 
                         BattleSubwayProfile5[] leaders = DataAbstract.Instance.BattleSubwayGetLeaders5(rank, roomNum);
