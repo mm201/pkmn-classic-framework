@@ -97,5 +97,27 @@ namespace PkmnFoundations.GTS
             for (int x = 5; x < message.Length; x++)
                 message[x] ^= m_pad[(x + padOffset) & 0xff];
         }
+
+        #region File extensions
+        public static String GetExtension(String filename)
+        {
+            int Dot = filename.LastIndexOf('.') + 1;
+            if (Dot < 1) return null;
+            return filename.Substring(Dot, filename.Length - Dot).ToLowerInvariant();
+        }
+
+        public static String GetExtension(String filename, out String namepart)
+        {
+            int Dot = filename.LastIndexOf('.') + 1;
+            if (Dot < 1)
+            {
+                namepart = filename;
+                return null;
+            }
+            namepart = filename.Substring(0, Dot - 1);
+            return filename.Substring(Dot, filename.Length - Dot).ToLowerInvariant();
+        }
+
+        #endregion
     }
 }

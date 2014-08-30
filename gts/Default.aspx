@@ -5,6 +5,10 @@
 
 <asp:Content ID="Content2" ContentPlaceHolderID="cpMain" runat="server">
 
+    <h1>Update - August 29:</h1>
+    <p>Wi-fi Battle Tower and Battle Subway are now available!
+    </p>
+
     <h1>Update - July 11:</h1>
     <p>The battle video server is up and running! View any of the
         thousands of battle videos from Nintendo WFC 

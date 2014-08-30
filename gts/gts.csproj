@@ -42,6 +42,17 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <PublishDatabaseSettings>
+      <Objects>
+        <ObjectGroup Name="pkmnFoundationsConnectionString-Deployment" Order="1">
+          <Destination Path="Server=localhost%3bDatabase=gts%3bUser ID=gts%3bPassword=gts%3bPooling=true%3b" />
+          <Object Type="DbFullSql" Enabled="False">
+            <PreSource Path="Server=10.211.55.2%3bDatabase=gts%3bUser ID=gts%3bPassword=gts%3bPooling=true%3b" ScriptSchema="True" ScriptData="False" CopyAllFullTextCatalogs="False" DriDefaults="True" />
+            <Source Path="obj\Release\AutoScripts\pkmnFoundationsConnectionString-Deployment_SchemaOnly.sql" Transacted="True" />
+          </Object>
+        </ObjectGroup>
+      </Objects>
+    </PublishDatabaseSettings>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
@@ -71,8 +82,11 @@
     <Content Include="AllPokemon.aspx" />
     <Content Include="BattleVideo.aspx" />
     <Content Include="css\main.css" />
+    <Content Include="css\main_old.css" />
     <Content Include="admin\AddDressup.aspx" />
     <Content Include="RoomLeaders.aspx" />
+    <Content Include="script\jquery-1.11.1.min.js" />
+    <Content Include="script\retina.js" />
     <Content Include="test\BoxUp.aspx" />
     <Content Include="test\NameDecode.aspx" />
     <Content Include="test\Decode.aspx" />
@@ -89,12 +103,12 @@
       <SubType>Designer</SubType>
     </Content>
     <Content Include="test\VideoId.aspx" />
-    <Content Include="Web.Debug.config">
+    <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
-    </Content>
-    <Content Include="Web.Release.config">
+    </None>
+    <None Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
-    </Content>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="admin\AddBoxes.aspx.cs">
@@ -152,6 +166,8 @@
       <DependentUpon>AddDressup.aspx</DependentUpon>
     </Compile>
     <Compile Include="src\FakeOpponentGenerator4.cs" />
+    <Compile Include="src\RetinaImage.cs" />
+    <Compile Include="src\RetinaImageBase.cs" />
     <Compile Include="test\BoxUp.aspx.cs">
       <DependentUpon>BoxUp.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>

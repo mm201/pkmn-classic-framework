@@ -6,56 +6,89 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
     <title></title>
-    <pf:HeaderColour ID="HeaderColour1" CssClass="gts" runat="server" />
+    <pf:HeaderColour ID="HeaderColour1" CssClass="home" runat="server" />
     <asp:ContentPlaceHolder ID="cpHead" runat="server" />
     <link rel="stylesheet" href="~/css/main.css" type="text/css" />
+    <script type="text/javascript" src="<%= ResolveUrl("~/script/jquery-1.11.1.min.js") %>"></script>
+    <script type="text/javascript" src="<%= ResolveUrl("~/script/retina.js") %>"></script>
 </head>
 <body class="<%= HeaderCssClass %>">
-    <div id="gtsHeader">
     <asp:Literal ID="litHeaderCssClassKeep" Visible="false" runat="server" />
+    <div id="gtsHeader" class="gtsHeader">
         <div class="setWidth">
-            <h1>
-            <asp:HyperLink ID="hlHome" NavigateUrl="~/" runat="server">Foundations GTS</asp:HyperLink>
-            </h1>
-            <p>Fan-operated GTS for Pokémon Generations IV and V, by mm201</p>
-            <div class="right">
-                <div class="dns">
-                <div class="dnsHeading">altwfc DNS:</div>
-                <div class="dnsIp">75.127.5.215</div>
-                </div>
-            <div class="stats">
-                <asp:Literal ID="litPokemon" runat="server" />
-                Pokémon available for offer.<br />
-                <asp:HyperLink ID="hlAllPokemon" NavigateUrl="~/AllPokemon.aspx" runat="server">Details</asp:HyperLink>
+            <div id="gtsLogo" class="gtsLogo">
+                <asp:HyperLink ID="hlLogl" NavigateUrl="~" runat="server">
+                <pf:RetinaImage ID="imgLogo" ImageUrl="~/images/headinglogo.png"
+                    Width="368" Height="128"
+                    AlternateSizes="2,3" runat="server" />
+                    </asp:HyperLink>
+                <br />
+                Bringing back Pokémon internet services to the DS
             </div>
+
+            <div id="gtsHeadMain">
+            <ul style="list-style-type: circle; margin-top: 16px;">
+                <li>DNS: <strong>75.127.5.215</strong></li>
+                <li><asp:Literal ID="litPokemon" runat="server" />
+                Pokémon available for offer.</li>
+            </ul>
             </div>
+
+            <div id="gtsLogin" class="gtsLogin">
+                login
+            </div>
+            
+
+            <div class="clear"></div>
+
+            <ul id="gtsNav" class="gtsNav">
+                <li class="home">
+                    <asp:HyperLink ID="hlHome" Text="Home" NavigateUrl="~/" runat="server" />
+                </li>
+                <li class="gts">
+                    <asp:HyperLink ID="hlGts" Text="GTS" NavigateUrl="~/AllPokemon.aspx" runat="server" />
+                </li>
+                <li class="bv">
+                    <asp:HyperLink ID="hlBattleVideos" Text="Battle Videos" NavigateUrl="~/BattleVideo.aspx" runat="server" />
+                </li>
+                <%-- 
+                <li class="dw">
+                    <asp:HyperLink ID="hlDreamWorld" Text="Dream World" NavigateUrl="#" runat="server" />
+                </li>
+                <li class="dex">
+                    <asp:HyperLink ID="hlPokedex" Text="Pokédex" NavigateUrl="#" runat="server" />
+                </li>
+                    --%>
+            </ul>
+
         </div>
-        <div class="github-contain">
-        <a class="github" href="https://github.com/mm201/pkmnFoundations" target="_blank">Fork me on GitHub!</a>
-        </div>
-        <div class="hideShadow"></div>
+        <div id="gtsHeaderBorder"></div>
+
     </div>
-    <nav id="gtsTabsBar">
-        <div class="setWidth">
-        <ul>
-            <li><asp:HyperLink ID="hlGts" CssClass="gts" NavigateUrl="~/" Text="GTS" runat="server" /></li>
-            <li><asp:HyperLink ID="hlBattleVideos" CssClass="bv" NavigateUrl="~/BattleVideo.aspx" Text="Battle Videos" runat="server" /></li>
-        </ul>
-        <div class="clear"></div>
-        </div>
-    </nav>
+
     <div id="gtsMain">
-    <div class="setWidth">
+        <div class="setWidth">
     <asp:ContentPlaceHolder ID="cpMain" runat="server" />
+        </div>
     </div>
+
+    <div id="gtsFooter">
+        <div class="setWidth">
+            <div id="gtsFooterLeft">
+                left
+            </div>
+            <div id="gtsFooterRight">
+                right
+            </div>
+            <div class="clear"></div>
+
+            <div id="gtsFooterBottom">
+            Pokémon is © 1995-2014 Nintendo / Creatures / GAME FREAK.
+            This service is not affiliated with Nintendo or GAME FREAK in any way.<br />
+            This service is provided ‘as is’ without warranty of any kind.
+            </div>
+        </div>
     </div>
-    <div id="gtsCopyright">
-    <div class="setWidth">
-    Pokémon is © 1995-<%= DateTime.Now.Year.ToString() %> Nintendo / Creatures / GAME FREAK.
-    This service is not affiliated with Nintendo or GAME FREAK in any way.<br />
-    This service is provided ‘as is’ without warranty of any kind. Use at your own risk.<br />
-    <a href="https://github.com/mm201/pkmnFoundations/issues?state=open">Report an issue</a>
-    </div>
-    </div>
+
 </body>
 </html>

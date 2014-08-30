@@ -40,13 +40,22 @@ namespace PkmnFoundations.GTS {
         protected global::System.Web.UI.WebControls.Literal litHeaderCssClassKeep;
         
         /// <summary>
-        /// hlHome control.
+        /// hlLogl control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.HyperLink hlHome;
+        protected global::System.Web.UI.WebControls.HyperLink hlLogl;
+        
+        /// <summary>
+        /// imgLogo control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::PkmnFoundations.GTS.RetinaImage imgLogo;
         
         /// <summary>
         /// litPokemon control.
@@ -58,13 +67,13 @@ namespace PkmnFoundations.GTS {
         protected global::System.Web.UI.WebControls.Literal litPokemon;
         
         /// <summary>
-        /// hlAllPokemon control.
+        /// hlHome control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.HyperLink hlAllPokemon;
+        protected global::System.Web.UI.WebControls.HyperLink hlHome;
         
         /// <summary>
         /// hlGts control.
