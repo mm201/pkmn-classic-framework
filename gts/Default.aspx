@@ -5,10 +5,7 @@
 
 <asp:Content ID="Content2" ContentPlaceHolderID="cpMain" runat="server">
 
-<div class="gtsColumn gtsLeftColumn">
-Left
-</div>
-<div class="gtsMainColumn gtsMainColumnThree">
+<div>
 
     <h1>Update - August 29:</h1>
     <p>Wi-fi Battle Tower and Battle Subway are now available!
@@ -57,10 +54,5 @@ above link.</p>
 
     
 </div>
-<div class="gtsColumn gtsRightColumn">
-Right
-</div>
-<div class="clear"></div>
-
 
 </asp:Content>

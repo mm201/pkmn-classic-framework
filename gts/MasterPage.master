@@ -91,21 +91,6 @@
     <div id="gtsSubNav">
         <div class="setWidth">
             <ul class="gtsNav">
-                <li><a href="#">
-                    <span class="inner">
-                    Item 1
-                        </span>
-                    </a></li>
-                <li><a href="#">
-                    <span class="inner">
-                    Item 2
-                        </span>
-                    </a></li>
-                <li><a href="#">
-                    <span class="inner">
-                    Item 3
-                        </span>
-                    </a></li>
             </ul>
         <div class="clear"></div>
         </div>
@@ -121,10 +106,15 @@
         <div id="gtsFooterBkg">
             <div class="setWidth">
                 <div id="gtsFooterLeft">
-                    left
+                    <ul class="gtsFooterNav">
+                        <li><asp:HyperLink ID="hlFooterHome" Text="Home" NavigateUrl="~/" runat="server" /></li>
+                        <li><asp:HyperLink ID="hlFooterAllPokemon" Text="All Pokémon" NavigateUrl="~/AllPokemon.aspx" runat="server" /></li>
+                    </ul>
                 </div>
                 <div id="gtsFooterRight">
-                    right
+                    <ul class="gtsFooterNav">
+                        <li><asp:HyperLink ID="hlFooterGithub" Text="GitHub" NavigateUrl="https://github.com/mm201/pkmnFoundations" runat="server" /></li>
+                    </ul>
                 </div>
                 <div class="clear"></div>
 
