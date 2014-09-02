@@ -46,7 +46,7 @@ h1, h2, h3, h4, strong
 #gtsHeader
 {
     padding-top: 16px;
-    background-color: #82D2e0;
+    background-color: #ff8063;
     color: white;
     background-image: url('../images/heading-backdrop.png');
     background-size: 32px 8px;
@@ -137,10 +137,10 @@ h1, h2, h3, h4, strong
     background-color: #fcfcfc;
 }
 
-.home #gtsHeader .gtsNav li.home a {z-index: 2; top: 0; background-color: #fcfcfc;}
-.gts #gtsHeader .gtsNav li.gts a {z-index: 2; top: 0; background-color: #fcfcfc;}
-.bv #gtsHeader .gtsNav li.bv a {z-index: 2; top: 0; background-color: #fcfcfc;}
-.dw #gtsHeader .gtsNav li.dw a {z-index: 2; top: 0; background-color: #fcfcfc;}
+.home #gtsHeader .gtsNav li.home a,
+.gts #gtsHeader .gtsNav li.gts a,
+.bv #gtsHeader .gtsNav li.bv a,
+.dw #gtsHeader .gtsNav li.dw a,
 .dex #gtsHeader .gtsNav li.dw a {z-index: 2; top: 0; background-color: #fcfcfc;}
 
 #gtsHeader .gtsNav li.home a, .home #gtsSubMenu.bv, .home .gtsNav li a {color: #ff8063;}
@@ -149,11 +149,11 @@ h1, h2, h3, h4, strong
 #gtsHeader .gtsNav li.dw a, .dw #gtsSubMenu, .dw .gtsNav li a {color: #fa79d4;}
 #gtsHeader .gtsNav li.dex a, .dex #gtsSubMenu, .dex .gtsNav li a {color: #2dd350;}
 
-.home #gtsSubNav .gtsNav li a:hover .inner {background-color: #ff8063;}
-.gts #gtsSubNav .gtsNav li a:hover .inner {background-color: #43c4ff;}
-.bv #gtsSubNav .gtsNav li a:hover .inner {background-color: #9761e9;}
-.dw #gtsSubNav .gtsNav li a:hover .inner {background-color: #fa79d4;}
-.dex #gtsSubNav .gtsNav li a:hover .inner {background-color: #2dd350;}
+.home #gtsHeader, .home #gtsSubNav .gtsNav li a:hover .inner {background-color: #ff8063;}
+.gts #gtsHeader, .gts #gtsSubNav .gtsNav li a:hover .inner {background-color: #43c4ff;}
+.bv #gtsHeader, .bv #gtsSubNav .gtsNav li a:hover .inner {background-color: #9761e9;}
+.dw #gtsHeader, .dw #gtsSubNav .gtsNav li a:hover .inner {background-color: #fa79d4;}
+.dex #gtsHeader, .dex #gtsSubNav .gtsNav li a:hover .inner {background-color: #2dd350;}
 
 #gtsMain
 {
