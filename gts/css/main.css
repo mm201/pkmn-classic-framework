@@ -1,7 +1,17 @@
-﻿body
+﻿@import url(http://fonts.googleapis.com/css?family=Lato:400,700,400italic&subset=latin,latin-ext);
+
+body
 {
     margin: 0; padding: 0;
-    font-family: Arial,sans-serif;
+    font-family: Lato,Candara,'Meiryo UI',Arial,sans-serif;
+    font-size: 10pt;
+    font-weight: 400;
+    background-color: #666666;
+}
+
+h1, h2, h3, h4, strong
+{
+    font-weight: 700;
 }
 
 .setWidth
@@ -23,10 +33,14 @@
     margin: 0; padding: 0;
 }
 
+.gtsNav li
+{
+    float: left;
+}
+
 .gtsNav li a
 {
     display: block;
-    float: left;
 }
 
 #gtsHeader
@@ -37,27 +51,31 @@
     background-image: url('../images/heading-backdrop.png');
     background-size: 32px 8px;
     overflow: hidden;
+    font-size: 12pt;
+    position: relative;
 }
 
 #gtsHeader #gtsLogo
 {
-    width: 368px;
+    width: 276px;
     margin-right: 16px;
     float: left;
     text-shadow: 0 1px 1px rgba(0,0,0,0.2);
+    text-align: center;
 }
 
 #gtsHeader #gtsHeadMain
 {
-    width: 340px;
+    width: 400px;
     float: left;
     margin-right: 16px;
+    margin-top: 9px;
     text-shadow: 0 1px 1px rgba(0,0,0,0.2);
 }
 
 #gtsHeader #gtsLogin
 {
-    width: 208px;
+    width: 240px;
     float: left;
     color: black;
     background-color: #eeeeee;
@@ -67,10 +85,19 @@
     box-shadow: 0 4px 8px 2px rgba(0,0,0,0.2);
 }
 
+#gtsHeader .gtsHeadContent
+{
+    list-style-type: circle;
+    margin-top: 0;
+    margin-left: 16px;
+    padding-left: 0;
+}
+
 #gtsHeader .gtsNav
 {
     height: 32px;
     margin: 16px 0 0 0; padding: 0;
+    font-size: 12pt;
 }
 
 #gtsHeader .gtsNav li
@@ -82,73 +109,181 @@
 #gtsHeader .gtsNav li a
 {
     width: 158px;
-    height: 16px;
-    margin-right: 12px;
-    padding-top: 16px;
+    height: 18px;
+    margin-right: 8px;
+    padding-top: 14px;
     padding-left: 8px;
     border: 1px solid #cccccc;
-    border-width: 1px 1px 0 1px;
+    border-style: solid;
+    border-color: #cccccc #bbbbbb #aaaaaa #bbbbbb;
+    border-bottom: none;
     box-shadow: 0 -2px 12px -4px rgba(0,0,0,0.5);
     border-radius: 6px 6px 0 0;
-    background-color: white;
+    background-color: #f8f8f8;
     color: black;
     text-decoration: none;
-    font-size: 14pt;
     font-weight: bold;
     line-height: 0;
     vertical-align: middle;
     position: relative;
     z-index: 0;
+    top: 2px;
+    transition: top 0.1s ease-out, background-color 0.1s ease-out;
 }
 
-.home #gtsHeader .gtsNav li.home a {z-index: 2;}
-.gts #gtsHeader .gtsNav li.gts a {z-index: 2;}
-.bv #gtsHeader .gtsNav li.bv a {z-index: 2;}
-.dw #gtsHeader .gtsNav li.dw a {z-index: 2;}
-.dex #gtsHeader .gtsNav li.dw a {z-index: 2;}
-
-#gtsHeader .gtsNav li.home a, .home #gtsSubMenu {color: #ff8063;}
-#gtsHeader .gtsNav li.gts a, .home #gtsSubMenu {color: #43c4ff;}
-#gtsHeader .gtsNav li.bv a, .bv #gtsSubMenu {color: #9761e9;}
-#gtsHeader .gtsNav li.dw a, .dw #gtsSubMenu {color: #fa79d4;}
-#gtsHeader .gtsNav li.dex a, .dex #gtsSubMenu {color: #2dd350;}
-
-.home #gtsSubMenu {border-color: #ff8063;}
-.gts #gtsSubMenu {border-color: #43c4ff;}
-.bv #gtsSubMenu {border-color: #9761e9;}
-.dw #gtsSubMenu {border-color: #fa79d4;}
-.dex #gtsSubMenu {border-color: #2dd350;}
-
-#gtsHeader #gtsHeaderBorder
+#gtsHeader .gtsNav li a:hover
 {
-    border-top: 1px solid rgba(0,0,0,0.25);
-    box-shadow: 0 -12px 12px -12px rgba(0,0,0,0.5);
-    position: relative;
-    z-index: 1;
-    height: 32px;
-    margin-bottom: -32px;
+    top: 0;
+    background-color: #fcfcfc;
 }
+
+.home #gtsHeader .gtsNav li.home a {z-index: 2; top: 0; background-color: #fcfcfc;}
+.gts #gtsHeader .gtsNav li.gts a {z-index: 2; top: 0; background-color: #fcfcfc;}
+.bv #gtsHeader .gtsNav li.bv a {z-index: 2; top: 0; background-color: #fcfcfc;}
+.dw #gtsHeader .gtsNav li.dw a {z-index: 2; top: 0; background-color: #fcfcfc;}
+.dex #gtsHeader .gtsNav li.dw a {z-index: 2; top: 0; background-color: #fcfcfc;}
+
+#gtsHeader .gtsNav li.home a, .home #gtsSubMenu.bv, .home .gtsNav li a {color: #ff8063;}
+#gtsHeader .gtsNav li.gts a, .gts #gtsSubMenu, .gts .gtsNav li a {color: #43c4ff;}
+#gtsHeader .gtsNav li.bv a, .bv #gtsSubMenu, .bv .gtsNav li a {color: #9761e9;}
+#gtsHeader .gtsNav li.dw a, .dw #gtsSubMenu, .dw .gtsNav li a {color: #fa79d4;}
+#gtsHeader .gtsNav li.dex a, .dex #gtsSubMenu, .dex .gtsNav li a {color: #2dd350;}
+
+.home #gtsSubNav .gtsNav li a:hover .inner {background-color: #ff8063;}
+.gts #gtsSubNav .gtsNav li a:hover .inner {background-color: #43c4ff;}
+.bv #gtsSubNav .gtsNav li a:hover .inner {background-color: #9761e9;}
+.dw #gtsSubNav .gtsNav li a:hover .inner {background-color: #fa79d4;}
+.dex #gtsSubNav .gtsNav li a:hover .inner {background-color: #2dd350;}
 
 #gtsMain
 {
     background-color: white;
+    margin: 0;
+    padding: 16px 0;
 }
 
-#gtsSubMenu
+#gtsMain *:first-child *
 {
-    background-color: white;
+    margin-top: 0;
+}
+
+#gtsMain .gtsColumn
+{
+    width: 236px;
+}
+
+#gtsMain .gtsLeftColumn
+{
+    float: left;
+    margin-right: 16px;
+}
+
+#gtsMain .gtsRightColumn
+{
+    float: right;
+}
+
+#gtsMain .gtsMainColumn
+{
+    float: left;
+}
+
+#gtsMain .gtsMainColumnThree
+{
+    width: 476px;
+}
+
+#gtsMain .gtsMainColumnTwo
+{
+    width: 728px;
+}
+
+#gtsSubNav
+{
+    border: 1px solid #cccccc;
+    border-width: 1px 0;
+    box-shadow: 0 -12px 12px -12px rgba(0,0,0,0.5), 0 3px 8px 0 rgba(0,0,0,0.05), 0 -4px 3px -3px rgba(0,0,0,0.1) inset;
+    background-color: #f8f8f8;
     color: #ff8063;
-    height: 16px;
-    padding: 8px 0;
+    height: 32px;
+    padding: 0;
+    position: relative;
+    z-index: 1;
+    margin-top: -1px;
+    background-image: -moz-linear-gradient(top, #fcfcfc 0%, #f8f8f8 100%); /* FF3.6+ */
+    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#fcfcfc), color-stop(100%,#f8f8f8)); /* Chrome,Safari4+ */
+    background-image: -webkit-linear-gradient(top, #fcfcfc 0%,#f8f8f8 100%); /* Chrome10+,Safari5.1+ */
+    background-image: -o-linear-gradient(top, #fcfcfc 0%,#f8f8f8 100%); /* Opera 11.10+ */
+    background-image: -ms-linear-gradient(top, #fcfcfc 0%,#f8f8f8 100%); /* IE10+ */
+    background-image: linear-gradient(to bottom, #fcfcfc 0%,#f8f8f8 100%); /* W3C */
+    background-size: 100%;
+}
+
+#gtsSubNav .gtsNav
+{
+    margin: 0; padding: 6px 0;
+    margin-left: 0;
+    font-size: 12pt;
+}
+
+#gtsSubNav .gtsNav li
+{
+    height: 20px;
+    display: block;
+    margin: 0; padding: 0;
+    border-left: 1px solid #cccccc;
+}
+
+#gtsSubNav .gtsNav li a
+{
+    height: 24px;
+    padding: 0 12px;
+    margin: 0;
+    text-decoration: none;
+    font-weight: bold;
+    line-height: 0;
+    vertical-align: middle;
+    position: relative;
+    top: -2px;
+    z-index: 0;
+}
+
+#gtsSubNav .gtsNav li a .inner
+{
+    display: block;
+    line-height: 0;
+    height: 12px;
+    padding: 12px 6px 0 6px;
+    border-radius: 12px;
+}
+
+#gtsSubNav .gtsNav li a:hover
+{
+    color: white;
+    text-shadow: 0 2px 2px rgba(0,0,0,0.2);
+}
+
+#gtsSubNav .gtsNav li a:hover .inner
+{
+    box-shadow: 0 2px 2px 0 rgba(0,0,0,0.2) inset;
+}
+
+#gtsSubNav .gtsNav li:first-child
+{
+    border-left: none;
+}
+
+#gtsSubNav .gtsNav li:first-child a
+{
+    padding-left: 3px;
 }
 
 #gtsFooter
 {
-    background-color: #666666;
     color: white;
     font-size: 9pt;
     padding: 16px 0;
-    text-shadow: 0 1px 1px rgba(0,0,0,0.2);
+    text-shadow: 0 1px 1px rgba(0,0,0,0.5);
     box-shadow: 0 12px 12px -12px rgba(0,0,0,0.5) inset;
 }
 

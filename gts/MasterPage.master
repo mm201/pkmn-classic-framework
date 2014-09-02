@@ -19,15 +19,15 @@
             <div id="gtsLogo" class="gtsLogo">
                 <asp:HyperLink ID="hlLogl" NavigateUrl="~" runat="server">
                 <pf:RetinaImage ID="imgLogo" ImageUrl="~/images/headinglogo.png"
-                    Width="368" Height="128"
+                    Width="276" Height="96"
                     AlternateSizes="2,3" runat="server" />
                     </asp:HyperLink>
                 <br />
-                Bringing back Pokémon internet services to the DS
+                Custom servers for classic Pokémon
             </div>
 
             <div id="gtsHeadMain">
-            <ul style="list-style-type: circle; margin-top: 16px;">
+            <ul class="gtsHeadContent">
                 <li>DNS: <strong>75.127.5.215</strong></li>
                 <li><asp:Literal ID="litPokemon" runat="server" />
                 Pokémon available for offer.</li>
@@ -43,27 +43,70 @@
 
             <ul id="gtsNav" class="gtsNav">
                 <li class="home">
-                    <asp:HyperLink ID="hlHome" Text="Home" NavigateUrl="~/" runat="server" />
+                    <asp:HyperLink ID="hlHome" NavigateUrl="~/" runat="server">
+                        <span class="inner">
+                        Home
+                        </span>
+                    </asp:HyperLink>
                 </li>
                 <li class="gts">
-                    <asp:HyperLink ID="hlGts" Text="GTS" NavigateUrl="~/AllPokemon.aspx" runat="server" />
+                    <asp:HyperLink ID="hlGts" NavigateUrl="~/AllPokemon.aspx" runat="server">
+                        <span class="inner">
+                        GTS
+                        </span>
+                    </asp:HyperLink>
                 </li>
                 <li class="bv">
-                    <asp:HyperLink ID="hlBattleVideos" Text="Battle Videos" NavigateUrl="~/BattleVideo.aspx" runat="server" />
+                    <asp:HyperLink ID="hlBattleVideos" NavigateUrl="~/BattleVideo.aspx" runat="server">
+                        <span class="inner">
+                        Battle Videos
+                        </span>
+                    </asp:HyperLink>
                 </li>
-                <%-- 
+
                 <li class="dw">
-                    <asp:HyperLink ID="hlDreamWorld" Text="Dream World" NavigateUrl="#" runat="server" />
+                    <asp:HyperLink ID="hlDreamWorld" NavigateUrl="#" runat="server">
+                        <span class="inner">
+                        Dream World
+                        </span>
+                    </asp:HyperLink>
                 </li>
                 <li class="dex">
-                    <asp:HyperLink ID="hlPokedex" Text="Pokédex" NavigateUrl="#" runat="server" />
+                    <asp:HyperLink ID="hlPokedex" NavigateUrl="#" runat="server">
+                        <span class="inner">
+                        Pokédex
+                        </span>
+                    </asp:HyperLink>
                 </li>
-                    --%>
+
             </ul>
 
         </div>
         <div id="gtsHeaderBorder"></div>
 
+    </div>
+
+    <div id="gtsSubNav">
+        <div class="setWidth">
+            <ul class="gtsNav">
+                <li><a href="#">
+                    <span class="inner">
+                    Item 1
+                        </span>
+                    </a></li>
+                <li><a href="#">
+                    <span class="inner">
+                    Item 2
+                        </span>
+                    </a></li>
+                <li><a href="#">
+                    <span class="inner">
+                    Item 3
+                        </span>
+                    </a></li>
+            </ul>
+        <div class="clear"></div>
+        </div>
     </div>
 
     <div id="gtsMain">
@@ -73,19 +116,19 @@
     </div>
 
     <div id="gtsFooter">
-        <div class="setWidth">
-            <div id="gtsFooterLeft">
-                left
-            </div>
-            <div id="gtsFooterRight">
-                right
-            </div>
-            <div class="clear"></div>
+        <div id="gtsFooterBkg">
+            <div class="setWidth">
+                <div id="gtsFooterLeft">
+                    left
+                </div>
+                <div id="gtsFooterRight">
+                    right
+                </div>
+                <div class="clear"></div>
 
-            <div id="gtsFooterBottom">
-            Pokémon is © 1995-2014 Nintendo / Creatures / GAME FREAK.
-            This service is not affiliated with Nintendo or GAME FREAK in any way.<br />
-            This service is provided ‘as is’ without warranty of any kind.
+                <div id="gtsFooterBottom">
+                Pokémon is © 1995-2014 Nintendo / Creatures / GAME FREAK.
+                This service is not affiliated with Nintendo or GAME FREAK in any way.               </div>
             </div>
         </div>
     </div>

@@ -5,6 +5,11 @@
 
 <asp:Content ID="Content2" ContentPlaceHolderID="cpMain" runat="server">
 
+<div class="gtsColumn gtsLeftColumn">
+Left
+</div>
+<div class="gtsMainColumn gtsMainColumnThree">
+
     <h1>Update - August 29:</h1>
     <p>Wi-fi Battle Tower and Battle Subway are now available!
     </p>
@@ -49,4 +54,13 @@ above link.</p>
 <p class="code">191.236.98.208</p>
 <p>Please note that using this DNS server may interfere with the operation of some other
     titles besides Pokémon.</p>
+
+    
+</div>
+<div class="gtsColumn gtsRightColumn">
+Right
+</div>
+<div class="clear"></div>
+
+
 </asp:Content>
