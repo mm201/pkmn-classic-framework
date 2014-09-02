@@ -28,6 +28,31 @@ h1, h2, h3, h4, strong
     overflow: hidden;
 }
 
+.github-contain
+{
+    position: absolute;
+    overflow: hidden;
+    top: 0; right: 0;
+    width: 160px; height: 160px;
+}
+
+.github
+{
+    width: 300px;
+    height: 20px;
+    color: white;
+    background-color: black;
+    position: absolute;
+    top: 60px;
+    right: -80px;
+    text-align: center;
+    display: block;
+    margin: 0; padding: 0;
+    text-decoration: none;
+    transform: rotate(45deg);
+    -webkit-transform: rotate(45deg);
+}
+
 .gtsNav, .gtsNav ul, .gtsNav li
 {
     margin: 0; padding: 0;

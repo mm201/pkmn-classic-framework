@@ -84,7 +84,10 @@
             </ul>
 
         </div>
-        <div id="gtsHeaderBorder"></div>
+
+        <div class="github-contain">
+        <a class="github" href="https://github.com/mm201/pkmnFoundations" target="_blank">Fork me on GitHub!</a>
+        </div>
 
     </div>
 
