@@ -31,6 +31,8 @@
                 <li>DNS: <strong>75.127.5.215</strong></li>
                 <li><asp:Literal ID="litPokemon" runat="server" />
                 Pokémon available for offer.</li>
+                <li><asp:Literal ID="litVideos" runat="server" />
+                battle videos.</li>
             </ul>
             </div>
 

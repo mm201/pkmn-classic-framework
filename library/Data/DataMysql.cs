@@ -2113,6 +2113,15 @@ namespace PkmnFoundations.Data
 
             return new BattleVideoRecord4(header.PID, header.SerialNumber, header, data);
         }
+
+        public override ulong BattleVideoCount4()
+        {
+            using (MySqlConnection db = CreateConnection())
+            {
+                db.Open();
+                return Convert.ToUInt64(db.ExecuteScalar("SELECT Count(*) FROM TerminalBattleVideos4"));
+            }
+        }
         #endregion
 
         #region Global Terminal 5
@@ -2462,6 +2471,15 @@ namespace PkmnFoundations.Data
             BattleVideoHeader5 header = BattleVideoHeader5FromReader(reader);
 
             return new BattleVideoRecord5(header.PID, header.SerialNumber, header, data);
+        }
+
+        public override ulong BattleVideoCount5()
+        {
+            using (MySqlConnection db = CreateConnection())
+            {
+                db.Open();
+                return Convert.ToUInt64(db.ExecuteScalar("SELECT Count(*) FROM TerminalBattleVideos5"));
+            }
         }
         #endregion
     }
