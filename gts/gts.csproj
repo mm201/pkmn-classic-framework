@@ -83,6 +83,13 @@
     <Content Include="battlevideo\Default.aspx" />
     <Content Include="css\main.css" />
     <Content Include="admin\AddDressup.aspx" />
+    <Content Include="images\heading-backdrop%402x.png" />
+    <Content Include="images\heading-backdrop%403x.png" />
+    <Content Include="images\heading-backdrop.png" />
+    <Content Include="images\headinglogo%402x.png" />
+    <Content Include="images\headinglogo%403x.png" />
+    <Content Include="images\headinglogo.png" />
+    <Content Include="images\instructions.png" />
     <Content Include="RoomLeaders.aspx" />
     <Content Include="script\jquery-1.11.1.min.js" />
     <Content Include="script\retina.js" />
@@ -227,7 +234,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="images\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="MasterPage.master" />
