@@ -1,6 +1,8 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/MasterPage.master" AutoEventWireup="true" CodeBehind="Decode.aspx.cs" Inherits="PkmnFoundations.GTS.debug.Decode" %>
+<%@ Register TagPrefix="pf" Namespace="PkmnFoundations.GTS" Assembly="PkmnFoundations.GTS" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="cpHead" runat="server">
+    <pf:HeaderColour ID="HeaderColour1" CssClass="test" runat="server" />
 </asp:Content>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="cpMain" runat="server">

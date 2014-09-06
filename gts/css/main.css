@@ -53,6 +53,12 @@ h1, h2, h3, h4, strong
     -webkit-transform: rotate(45deg);
 }
 
+.rightFloat
+{
+    float: right;
+    margin-left: 16px;
+}
+
 .gtsNav, .gtsNav ul, .gtsNav li
 {
     margin: 0; padding: 0;
@@ -123,6 +129,7 @@ h1, h2, h3, h4, strong
     height: 32px;
     margin: 16px 0 0 0; padding: 0;
     font-size: 12pt;
+    width: 1000px;
 }
 
 #gtsHeader .gtsNav li
@@ -133,7 +140,7 @@ h1, h2, h3, h4, strong
 
 #gtsHeader .gtsNav li a
 {
-    width: 158px;
+    width: 148px;
     height: 18px;
     margin-right: 8px;
     padding-top: 14px;
@@ -166,19 +173,26 @@ h1, h2, h3, h4, strong
 .gts #gtsHeader .gtsNav li.gts a,
 .bv #gtsHeader .gtsNav li.bv a,
 .dw #gtsHeader .gtsNav li.dw a,
-.dex #gtsHeader .gtsNav li.dw a {z-index: 2; top: 0; background-color: #fcfcfc;}
+.dex #gtsHeader .gtsNav li.dex a,
+.stat #gtsHeader .gtsNav li.stat a {z-index: 2; top: 0; background-color: #fcfcfc;}
 
 #gtsHeader .gtsNav li.home a, .home #gtsSubMenu.bv, .home .gtsNav li a {color: #ff8063;}
 #gtsHeader .gtsNav li.gts a, .gts #gtsSubMenu, .gts .gtsNav li a {color: #43c4ff;}
 #gtsHeader .gtsNav li.bv a, .bv #gtsSubMenu, .bv .gtsNav li a {color: #9761e9;}
 #gtsHeader .gtsNav li.dw a, .dw #gtsSubMenu, .dw .gtsNav li a {color: #fa79d4;}
 #gtsHeader .gtsNav li.dex a, .dex #gtsSubMenu, .dex .gtsNav li a {color: #2dd350;}
+#gtsHeader .gtsNav li.stat a, .stat #gtsSubMenu, .stat .gtsNav li a {color: #ffc321;}
+#gtsHeader .gtsNav li.test a, .test #gtsSubMenu, .test .gtsNav li a {color: #82d2e0;}
+#gtsHeader .gtsNav li.admin a, .admin #gtsSubMenu, .admin .gtsNav li a {color: #555555;}
 
 .home #gtsHeader, .home #gtsSubNav .gtsNav li a:hover .inner {background-color: #ff8063;}
 .gts #gtsHeader, .gts #gtsSubNav .gtsNav li a:hover .inner {background-color: #43c4ff;}
 .bv #gtsHeader, .bv #gtsSubNav .gtsNav li a:hover .inner {background-color: #9761e9;}
 .dw #gtsHeader, .dw #gtsSubNav .gtsNav li a:hover .inner {background-color: #fa79d4;}
 .dex #gtsHeader, .dex #gtsSubNav .gtsNav li a:hover .inner {background-color: #2dd350;}
+.stat #gtsHeader, .stat #gtsSubNav .gtsNav li a:hover .inner {background-color: #ffc321;}
+.test #gtsHeader, .test #gtsSubNav .gtsNav li a:hover .inner {background-color: #82d2e0;}
+.admin #gtsHeader, .admin #gtsSubNav .gtsNav li a:hover .inner {background-color: #555555;}
 
 #gtsMain
 {
@@ -364,6 +378,22 @@ h1, h2, h3, h4, strong
     }
 }
 
+@media (min--moz-device-pixel-ratio: 2), (-o-min-device-pixel-ratio: 2/1), 
+       (-webkit-min-device-pixel-ratio: 2), (min-device-pixel-ratio: 2), 
+       (min-resolution: 192dpi)
+{
+    .sprite
+    {
+        image-rendering: optimizeSpeed;
+        image-rendering: -moz-crisp-edges;
+        image-rendering: -o-crisp-edges;
+        image-rendering: -webkit-optimize-contrast;
+        image-rendering: -webkit-crisp-edges;
+        image-rendering: crisp-edges;
+        -ms-interpolation-mode: bicubic;
+    }
+}
+
 @media (print), (min--moz-device-pixel-ratio: 2.01), (-o-min-device-pixel-ratio: 193/96), 
        (-webkit-min-device-pixel-ratio: 2.01), (min-device-pixel-ratio: 2.01), 
        (min-resolution: 193dpi)
@@ -371,6 +401,27 @@ h1, h2, h3, h4, strong
     #gtsHeader
     {
         background-image: url('../images/heading-backdrop@3x.png');
+    }
+
+    .sprite
+    {
+        image-rendering: optimizeQuality;
+    }
+}
+
+@media (min--moz-device-pixel-ratio: 3), (-o-min-device-pixel-ratio: 3/1), 
+       (-webkit-min-device-pixel-ratio: 3), (min-device-pixel-ratio: 3), 
+       (min-resolution: 288dpi)
+{
+    .sprite
+    {
+        image-rendering: optimizeSpeed;
+        image-rendering: -moz-crisp-edges;
+        image-rendering: -o-crisp-edges;
+        image-rendering: -webkit-optimize-contrast;
+        image-rendering: -webkit-crisp-edges;
+        image-rendering: crisp-edges;
+        -ms-interpolation-mode: bicubic;
     }
 }
 

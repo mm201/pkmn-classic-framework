@@ -76,13 +76,13 @@ namespace PkmnFoundations.GTS {
         protected global::System.Web.UI.WebControls.Literal litVideos;
         
         /// <summary>
-        /// hlHome control.
+        /// hlMain control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.HyperLink hlHome;
+        protected global::System.Web.UI.WebControls.HyperLink hlMain;
         
         /// <summary>
         /// hlGts control.
@@ -119,6 +119,24 @@ namespace PkmnFoundations.GTS {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.HyperLink hlPokedex;
+        
+        /// <summary>
+        /// hlStat control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HyperLink hlStat;
+        
+        /// <summary>
+        /// hlMain_Home control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HyperLink hlMain_Home;
         
         /// <summary>
         /// cpMain control.

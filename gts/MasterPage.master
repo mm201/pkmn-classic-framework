@@ -45,21 +45,21 @@
 
             <ul id="gtsNav" class="gtsNav">
                 <li class="home">
-                    <asp:HyperLink ID="hlHome" NavigateUrl="~/" runat="server">
+                    <asp:HyperLink ID="hlMain" NavigateUrl="~/" runat="server">
                         <span class="inner">
-                        Home
+                        Main
                         </span>
                     </asp:HyperLink>
                 </li>
                 <li class="gts">
-                    <asp:HyperLink ID="hlGts" NavigateUrl="~/AllPokemon.aspx" runat="server">
+                    <asp:HyperLink ID="hlGts" NavigateUrl="~/gts/" runat="server">
                         <span class="inner">
                         GTS
                         </span>
                     </asp:HyperLink>
                 </li>
                 <li class="bv">
-                    <asp:HyperLink ID="hlBattleVideos" NavigateUrl="~/BattleVideo.aspx" runat="server">
+                    <asp:HyperLink ID="hlBattleVideos" NavigateUrl="~/battlevideo/" runat="server">
                         <span class="inner">
                         Battle Videos
                         </span>
@@ -67,20 +67,26 @@
                 </li>
 
                 <li class="dw">
-                    <asp:HyperLink ID="hlDreamWorld" NavigateUrl="#" runat="server">
+                    <asp:HyperLink ID="hlDreamWorld" NavigateUrl="~/dreamworld/" runat="server">
                         <span class="inner">
                         Dream World
                         </span>
                     </asp:HyperLink>
                 </li>
                 <li class="dex">
-                    <asp:HyperLink ID="hlPokedex" NavigateUrl="#" runat="server">
+                    <asp:HyperLink ID="hlPokedex" NavigateUrl="~/pokedex/" runat="server">
                         <span class="inner">
                         Pokédex
                         </span>
                     </asp:HyperLink>
                 </li>
-
+                <li class="stat">
+                    <asp:HyperLink ID="hlStat" NavigateUrl="~/profile/" runat="server">
+                        <span class="inner">
+                        My Profile
+                        </span>
+                    </asp:HyperLink>
+                </li>
             </ul>
 
         </div>
@@ -93,8 +99,40 @@
 
     <div id="gtsSubNav">
         <div class="setWidth">
-            <ul class="gtsNav">
-            </ul>
+            <% switch (HeaderCssClass)
+               {
+                   case "home": %>
+                <ul class="gtsNav">
+                    <li>
+                        <asp:HyperLink ID="hlMain_Home" NavigateUrl="~" runat="server">
+                            <span class="inner">
+                                Home
+                            </span>
+                        </asp:HyperLink>
+                    </li>
+                    <%-- 
+                    <li>
+                        <asp:HyperLink ID="hlMain_Instructions" NavigateUrl="~/Instructions.aspx" runat="server">
+                            <span class="inner">
+                                How to connect
+                            </span>
+                        </asp:HyperLink>
+                    </li>
+                    <li>
+                        <asp:HyperLink ID="hlMain_Status" NavigateUrl="~/Status.aspx" runat="server">
+                            <span class="inner">
+                                Server status
+                            </span>
+                        </asp:HyperLink>
+                    </li>
+                    --%>
+                </ul>
+
+            <% break;
+                   case "gts": %>
+
+            <% break;
+               } %>
         <div class="clear"></div>
         </div>
     </div>
@@ -110,8 +148,8 @@
             <div class="setWidth">
                 <div id="gtsFooterLeft">
                     <ul class="gtsFooterNav">
-                        <li><asp:HyperLink ID="hlFooterHome" Text="Home" NavigateUrl="~/" runat="server" /></li>
-                        <li><asp:HyperLink ID="hlFooterAllPokemon" Text="All Pokémon" NavigateUrl="~/AllPokemon.aspx" runat="server" /></li>
+                        <li><asp:HyperLink ID="hlFooterHome" Text="Main" NavigateUrl="~/" runat="server" /></li>
+                        <li><asp:HyperLink ID="hlFooterAllPokemon" Text="GTS" NavigateUrl="~/gts/" runat="server" /></li>
                     </ul>
                 </div>
                 <div id="gtsFooterRight">

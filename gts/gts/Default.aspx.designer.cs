@@ -7,10 +7,10 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace PkmnFoundations.GTS.admin {
+namespace PkmnFoundations.GTS {
     
     
-    public partial class Sessions {
+    public partial class AllPokemon {
         
         /// <summary>
         /// HeaderColour1 control.
@@ -22,12 +22,21 @@ namespace PkmnFoundations.GTS.admin {
         protected global::PkmnFoundations.GTS.HeaderColour HeaderColour1;
         
         /// <summary>
-        /// litDebug control.
+        /// rptPokemon4 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Literal litDebug;
+        protected global::System.Web.UI.WebControls.Repeater rptPokemon4;
+        
+        /// <summary>
+        /// rptPokemon5 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Repeater rptPokemon5;
     }
 }

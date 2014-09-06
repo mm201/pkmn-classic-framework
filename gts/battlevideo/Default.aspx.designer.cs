@@ -7,10 +7,10 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace PkmnFoundations.GTS.test {
+namespace PkmnFoundations.GTS {
     
     
-    public partial class VideoId {
+    public partial class BattleVideo {
         
         /// <summary>
         /// HeaderColour1 control.
@@ -31,39 +31,75 @@ namespace PkmnFoundations.GTS.test {
         protected global::System.Web.UI.HtmlControls.HtmlForm theForm;
         
         /// <summary>
-        /// txtBattleVideo control.
+        /// txtBattleVideo4 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtBattleVideo;
+        protected global::System.Web.UI.WebControls.TextBox txtBattleVideo4;
         
         /// <summary>
-        /// btnToSerial control.
+        /// btnSend4 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnToSerial;
+        protected global::System.Web.UI.WebControls.Button btnSend4;
         
         /// <summary>
-        /// btnToVideo control.
+        /// litMessage4 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnToVideo;
+        protected global::System.Web.UI.WebControls.Literal litMessage4;
         
         /// <summary>
-        /// txtSerial control.
+        /// litTotal4 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtSerial;
+        protected global::System.Web.UI.WebControls.Literal litTotal4;
+        
+        /// <summary>
+        /// txtBattleVideo5 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtBattleVideo5;
+        
+        /// <summary>
+        /// btnSend5 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnSend5;
+        
+        /// <summary>
+        /// litMessage5 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal litMessage5;
+        
+        /// <summary>
+        /// litTotal5 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal litTotal5;
     }
 }

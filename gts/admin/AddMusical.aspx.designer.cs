@@ -13,6 +13,15 @@ namespace PkmnFoundations.GTS.admin {
     public partial class AddMusical {
         
         /// <summary>
+        /// HeaderColour1 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::PkmnFoundations.GTS.HeaderColour HeaderColour1;
+        
+        /// <summary>
         /// theForm control.
         /// </summary>
         /// <remarks>

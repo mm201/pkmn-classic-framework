@@ -79,10 +79,9 @@
     <Content Include="admin\AddBoxes.aspx" />
     <Content Include="admin\AddMusical.aspx" />
     <Content Include="admin\Sessions.aspx" />
-    <Content Include="AllPokemon.aspx" />
-    <Content Include="BattleVideo.aspx" />
+    <Content Include="gts\Default.aspx" />
+    <Content Include="battlevideo\Default.aspx" />
     <Content Include="css\main.css" />
-    <Content Include="css\main_old.css" />
     <Content Include="admin\AddDressup.aspx" />
     <Content Include="RoomLeaders.aspx" />
     <Content Include="script\jquery-1.11.1.min.js" />
@@ -132,19 +131,19 @@
     <Compile Include="admin\Sessions.aspx.designer.cs">
       <DependentUpon>Sessions.aspx</DependentUpon>
     </Compile>
-    <Compile Include="AllPokemon.aspx.cs">
-      <DependentUpon>AllPokemon.aspx</DependentUpon>
+    <Compile Include="gts\Default.aspx.cs">
+      <DependentUpon>Default.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="AllPokemon.aspx.designer.cs">
-      <DependentUpon>AllPokemon.aspx</DependentUpon>
+    <Compile Include="gts\Default.aspx.designer.cs">
+      <DependentUpon>Default.aspx</DependentUpon>
     </Compile>
-    <Compile Include="BattleVideo.aspx.cs">
-      <DependentUpon>BattleVideo.aspx</DependentUpon>
+    <Compile Include="battlevideo\Default.aspx.cs">
+      <DependentUpon>Default.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="BattleVideo.aspx.designer.cs">
-      <DependentUpon>BattleVideo.aspx</DependentUpon>
+    <Compile Include="battlevideo\Default.aspx.designer.cs">
+      <DependentUpon>Default.aspx</DependentUpon>
     </Compile>
     <Compile Include="pkvldtprod.ashx.cs">
       <DependentUpon>pkvldtprod.ashx</DependentUpon>

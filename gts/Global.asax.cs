@@ -77,6 +77,7 @@ namespace PkmnFoundations.GTS
             }
 
             // todo: optimize and extend url pattern matching
+            // fixme: this doesn't work if the application isn't mounted at root
             String[] split = path.Split('/');
             if (split[0].Length > 0) return null;
 
