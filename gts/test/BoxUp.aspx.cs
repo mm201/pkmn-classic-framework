@@ -6,6 +6,7 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Text;
 using System.IO;
+using GamestatsBase;
 
 namespace PkmnFoundations.GTS.debug
 {

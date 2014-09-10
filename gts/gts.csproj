@@ -99,6 +99,7 @@
     <Content Include="Default.aspx" />
     <Content Include="Global.asax" />
     <Content Include="admin\Web.config" />
+    <Content Include="gsbtest.ashx" />
     <None Include="pad.bin">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -137,6 +138,9 @@
     </Compile>
     <Compile Include="admin\Sessions.aspx.designer.cs">
       <DependentUpon>Sessions.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="gsbtest.ashx.cs">
+      <DependentUpon>gsbtest.ashx</DependentUpon>
     </Compile>
     <Compile Include="gts\Default.aspx.cs">
       <DependentUpon>Default.aspx</DependentUpon>
@@ -242,6 +246,10 @@
     <Content Include="pokemondpds.ashx" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\GamestatsBase\GamestatsBase\GamestatsBase.csproj">
+      <Project>{2d667f5b-f10d-44e2-93f6-dd555d9ee7df}</Project>
+      <Name>GamestatsBase</Name>
+    </ProjectReference>
     <ProjectReference Include="..\library\Library.csproj">
       <Project>{408EFC7E-C6B0-4160-8628-2679E34385CE}</Project>
       <Name>Library</Name>

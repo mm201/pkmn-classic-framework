@@ -5,6 +5,7 @@ using System.Text;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using GamestatsBase;
 
 namespace PkmnFoundations.GTS.admin
 {
@@ -15,7 +16,7 @@ namespace PkmnFoundations.GTS.admin
             GtsSessionManager manager = GtsSessionManager.FromContext(Context);
 
             StringBuilder builder = new StringBuilder();
-            builder.Append("Active sessions (");
+            builder.Append("Active GenIV sessions (");
             builder.Append(manager.Sessions4.Count);
             builder.Append("):<br />");
             foreach (KeyValuePair<String, GtsSession4> session in manager.Sessions4)
@@ -51,33 +52,29 @@ namespace PkmnFoundations.GTS.admin
                 builder.Append("<br /><br />");
             }
 
-            if (Request.QueryString["data"] != null)
+            GamestatsSessionManager gsm = GamestatsSessionManager.FromContext(Context);
+            builder.Append("Active GSM sessions (");
+            builder.Append(gsm.Sessions.Count);
+            builder.Append("):<br />");
+            foreach (KeyValuePair<String, GamestatsSession> session in gsm.Sessions)
             {
-                byte[] data = GtsSession4.DecryptData(Request.QueryString["data"]);
-                builder.Append("Data:<br />");
-                builder.Append(RenderHex(data.ToHexStringLower()));
-                builder.Append("<br />");
+                builder.Append("PID: ");
+                builder.Append(session.Value.PID);
+                builder.Append("<br />Token: ");
+                builder.Append(session.Value.Token);
+                builder.Append("<br />Hash: ");
+                builder.Append(session.Value.Hash);
+                builder.Append("<br />URL: ");
+                builder.Append(session.Value.URL);
+                builder.Append("<br />Expires: ");
+                builder.Append(session.Value.ExpiryDate);
+                builder.Append("<br />Game ID: ");
+                builder.Append(session.Value.GameId);
+                builder.Append("<br /><br />");
             }
-            if (Request.QueryString["data5"] != null)
-            {
-                byte[] data = GtsSession5.DecryptData(Request.QueryString["data5"]);
-                builder.Append("Data:<br />");
-                builder.Append(RenderHex(data.ToHexStringLower()));
-                builder.Append("<br />");
-            }
+
 
             litDebug.Text = builder.ToString();
-        }
-
-        private String RenderHex(String hex)
-        {
-            StringBuilder builder = new StringBuilder();
-            for (int x = 0; x < hex.Length; x += 16)
-            {
-                builder.Append(hex.Substring(x, Math.Min(16, hex.Length - x)));
-                builder.Append("<br />");
-            }
-            return builder.ToString();
         }
     }
 }

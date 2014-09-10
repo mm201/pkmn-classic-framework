@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using PkmnFoundations.Support;
+using GamestatsBase;
 
 namespace PkmnFoundations.GTS.test
 {
@@ -17,7 +18,7 @@ namespace PkmnFoundations.GTS.test
 
         protected void btnSubmit_Click(object sender, EventArgs e)
         {
-            byte[] data = Common.FromHexString(txtName.Text.Replace(" ", ""));
+            byte[] data = GamestatsBase.Common.FromHexString(txtName.Text.Replace(" ", ""));
             litName.Text = Common.HtmlEncode(EncodedString4.DecodeString(data));
         }
     }

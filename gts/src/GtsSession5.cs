@@ -5,6 +5,7 @@ using System.Web;
 using System.Security.Cryptography;
 using System.IO;
 using System.Net;
+using GamestatsBase;
 
 namespace PkmnFoundations.GTS
 {
