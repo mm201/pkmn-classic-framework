@@ -58,7 +58,9 @@ namespace PkmnFoundations.GTS.admin
             builder.Append("):<br />");
             foreach (KeyValuePair<String, GamestatsSession> session in gsm.Sessions)
             {
-                builder.Append("PID: ");
+                builder.Append("Game ID: ");
+                builder.Append(session.Value.GameId);
+                builder.Append("<br />PID: ");
                 builder.Append(session.Value.PID);
                 builder.Append("<br />Token: ");
                 builder.Append(session.Value.Token);
@@ -68,8 +70,6 @@ namespace PkmnFoundations.GTS.admin
                 builder.Append(session.Value.URL);
                 builder.Append("<br />Expires: ");
                 builder.Append(session.Value.ExpiryDate);
-                builder.Append("<br />Game ID: ");
-                builder.Append(session.Value.GameId);
                 builder.Append("<br /><br />");
             }
 
