@@ -2114,6 +2114,20 @@ namespace PkmnFoundations.Data
             return new BattleVideoRecord4(header.PID, header.SerialNumber, header, data);
         }
 
+        public override bool BattleVideoFlagSaved4(ulong serial)
+        {
+            using (MySqlConnection db = CreateConnection())
+            {
+                db.Open();
+                int results = db.ExecuteNonQuery("UPDATE TerminalBattleVideos4 " +
+                    "SET Saves = Saves + 1 WHERE SerialNumber = @serial", 
+                    new MySqlParameter("@serial", serial));
+                db.Close();
+
+                return results > 0;
+            }
+        }
+
         public override ulong BattleVideoCount4()
         {
             using (MySqlConnection db = CreateConnection())
@@ -2471,6 +2485,20 @@ namespace PkmnFoundations.Data
             BattleVideoHeader5 header = BattleVideoHeader5FromReader(reader);
 
             return new BattleVideoRecord5(header.PID, header.SerialNumber, header, data);
+        }
+
+        public override bool BattleVideoFlagSaved5(ulong serial)
+        {
+            using (MySqlConnection db = CreateConnection())
+            {
+                db.Open();
+                int results = db.ExecuteNonQuery("UPDATE TerminalBattleVideos5 " +
+                    "SET Saves = Saves + 1 WHERE SerialNumber = @serial",
+                    new MySqlParameter("@serial", serial));
+                db.Close();
+
+                return results > 0;
+            }
         }
 
         public override ulong BattleVideoCount5()

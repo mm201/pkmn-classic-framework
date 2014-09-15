@@ -70,6 +70,7 @@ namespace PkmnFoundations.GlobalTerminalService
 
                 switch (requestType)
                 {
+                    #region Box upload
                     case RequestTypes4.BoxUpload:
                     {
                         if (data.Length != 0x360)
@@ -130,6 +131,9 @@ namespace PkmnFoundations.GlobalTerminalService
                         logEntry.AppendLine();
 
                     } break;
+                    #endregion
+
+                    #region Dressup
                     case RequestTypes4.DressupUpload:
                     {
                         if (data.Length != 0x220)
@@ -187,6 +191,9 @@ namespace PkmnFoundations.GlobalTerminalService
                         logEntry.AppendLine();
 
                     } break;
+                    #endregion
+
+                    #region Battle videos
                     case RequestTypes4.BattleVideoUpload:
                     {
                         if (data.Length != 0x1e8c)
@@ -291,6 +298,35 @@ namespace PkmnFoundations.GlobalTerminalService
                         logEntry.AppendLine();
 
                     } break;
+                    case RequestTypes4.BattleVideoSaved:
+                    {
+                        if (data.Length != 0x148)
+                        {
+                            logEntry.AppendLine("Length did not validate.");
+                            type = EventLogEntryType.FailureAudit;
+                            response.Write(new byte[] { 0x02, 0x00 }, 0, 2);
+                            break;
+                        }
+
+                        ulong serial = BitConverter.ToUInt64(data, 0x140);
+
+                        if (DataAbstract.Instance.BattleVideoFlagSaved4(serial))
+                        {
+                            response.Write(new byte[] { 0x00, 0x00 }, 0, 2); // result code (0 for OK)
+                            logEntry.AppendFormat("Battle video {0} flagged saved.", BattleVideoHeader4.FormatSerial(serial));
+                            logEntry.AppendLine();
+                        }
+                        else
+                        {
+                            response.Write(new byte[] { 0x02, 0x00 }, 0, 2);
+                            logEntry.AppendFormat("Requested battle video {0} was missing.", BattleVideoHeader4.FormatSerial(serial));
+                            logEntry.AppendLine();
+                        }
+                    } break;
+                    #endregion
+
+                    // todo: A mysterious 0xdb request type is appearing in my logs. Implement.
+
                     default:
                         logEntry.AppendLine("Unrecognized request type.");
                         response.Write(new byte[] { 0x02, 0x00 }, 0, 2);
@@ -337,6 +373,7 @@ namespace PkmnFoundations.GlobalTerminalService
                 case RequestTypes4.BattleVideoUpload:
                 case RequestTypes4.BattleVideoSearch:
                 case RequestTypes4.BattleVideoWatch:
+                case RequestTypes4.BattleVideoSaved:
                     return 0x59;
                 case RequestTypes4.TopTrainersHead:
                 case RequestTypes4.TopTrainersSearch:
@@ -368,6 +405,7 @@ namespace PkmnFoundations.GlobalTerminalService
         BattleVideoUpload = 0xd8,
         BattleVideoSearch = 0xd9,
         BattleVideoWatch = 0xda,
+        BattleVideoSaved = 0xdb,
 
         TopTrainersHead = 0xf0,
         TopTrainersSearch = 0xf1

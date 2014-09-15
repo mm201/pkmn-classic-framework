@@ -118,6 +118,7 @@ namespace PkmnFoundations.Data
         public abstract ulong BattleVideoUpload4(BattleVideoRecord4 record);
         public abstract BattleVideoHeader4[] BattleVideoSearch4(ushort species, BattleVideoRankings4 ranking, BattleVideoMetagames4 metagame, byte country, byte region, int count);
         public abstract BattleVideoRecord4 BattleVideoGet4(ulong serial, bool incrementViews = false);
+        public abstract bool BattleVideoFlagSaved4(ulong serial);
 
         public abstract ulong BattleVideoCount4();
         #endregion
@@ -132,6 +133,7 @@ namespace PkmnFoundations.Data
         public abstract ulong BattleVideoUpload5(BattleVideoRecord5 record);
         public abstract BattleVideoHeader5[] BattleVideoSearch5(ushort species, BattleVideoRankings5 ranking, BattleVideoMetagames5 metagame, byte country, byte region, int count);
         public abstract BattleVideoRecord5 BattleVideoGet5(ulong serial, bool incrementViews = false);
+        public abstract bool BattleVideoFlagSaved5(ulong serial);
 
         public abstract ulong BattleVideoCount5();
         #endregion

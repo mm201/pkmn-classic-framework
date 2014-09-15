@@ -7,7 +7,7 @@
 #
 # Host: 127.0.0.1 (MySQL 5.5.27)
 # Database: gts
-# Generation Time: 2014-08-29 23:13:12 +0000
+# Generation Time: 2014-09-15 16:20:29 +0000
 # ************************************************************
 
 
@@ -681,6 +681,7 @@ CREATE TABLE `TerminalBattleVideos4` (
   `Country` tinyint(3) unsigned NOT NULL,
   `Region` tinyint(3) unsigned NOT NULL,
   `Views` int(10) unsigned NOT NULL DEFAULT '0',
+  `Saves` int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `SerialNumber` (`SerialNumber`),
   KEY `TimeAdded` (`TimeAdded`),
@@ -712,6 +713,7 @@ CREATE TABLE `TerminalBattleVideos5` (
   `Country` tinyint(3) unsigned NOT NULL,
   `Region` tinyint(3) unsigned NOT NULL,
   `Views` int(10) unsigned NOT NULL DEFAULT '0',
+  `Saves` int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `SerialNumber` (`SerialNumber`),
   KEY `TimeAdded` (`TimeAdded`),

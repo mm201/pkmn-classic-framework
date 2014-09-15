@@ -69,6 +69,7 @@ namespace PkmnFoundations.GlobalTerminalService
 
                 switch (requestType)
                 {
+                    #region Musicals
                     case RequestTypes5.MusicalUpload:
                     {
                         if (data.Length != 0x370)
@@ -123,11 +124,13 @@ namespace PkmnFoundations.GlobalTerminalService
                             response.Write(BitConverter.GetBytes(result.SerialNumber), 0, 8);
                             response.Write(result.Data, 0, 0x230);
                         }
-                        logEntry.AppendFormat("Retrieved {0} dressup results.", results.Length);
+                        logEntry.AppendFormat("Retrieved {0} musical results.", results.Length);
                         logEntry.AppendLine();
 
                     } break;
+                    #endregion
 
+                    #region Battle videos
                     case RequestTypes5.BattleVideoUpload:
                     {
                         if (data.Length != 0x1ae8)
@@ -249,8 +252,32 @@ namespace PkmnFoundations.GlobalTerminalService
                         logEntry.AppendLine();
 
                     } break;
+                    case RequestTypes5.BattleVideoSaved:
+                    {
+                        if (data.Length != 0x148)
+                        {
+                            logEntry.AppendLine("Length did not validate.");
+                            type = EventLogEntryType.FailureAudit;
+                            response.Write(new byte[] { 0x02, 0x00 }, 0, 2);
+                            break;
+                        }
 
-                    // todo: A mysterious 0xf3 request type is appearing in my logs. Implement.
+                        ulong serial = BitConverter.ToUInt64(data, 0x140);
+
+                        if (DataAbstract.Instance.BattleVideoFlagSaved5(serial))
+                        {
+                            response.Write(new byte[] { 0x00, 0x00 }, 0, 2); // result code (0 for OK)
+                            logEntry.AppendFormat("Battle video {0} flagged saved.", BattleVideoHeader4.FormatSerial(serial));
+                            logEntry.AppendLine();
+                        }
+                        else
+                        {
+                            response.Write(new byte[] { 0x02, 0x00 }, 0, 2);
+                            logEntry.AppendFormat("Requested battle video {0} was missing.", BattleVideoHeader4.FormatSerial(serial));
+                            logEntry.AppendLine();
+                        }
+                    } break;
+                    #endregion
 
                     default:
                         logEntry.AppendLine("Unrecognized request type.");
