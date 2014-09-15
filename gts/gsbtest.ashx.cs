@@ -17,7 +17,7 @@ namespace PkmnFoundations.GTS
 
         }
 
-        public override void ProcessGamestatsRequest(byte[] request, MemoryStream response, String url, int pid, HttpContext context)
+        public override void ProcessGamestatsRequest(byte[] data, MemoryStream response, string url, int pid, HttpContext context, GamestatsSession session)
         {
             
         }
