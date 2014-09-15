@@ -33,8 +33,8 @@ namespace PkmnFoundations.GTS
                     SessionManager.Remove(session);
 
                     // unrecognized page url
-                        ShowError(context, 404);
-                        return;
+                    ShowError(context, 404);
+                    return;
 
                 #region Common
                 // Called during startup. Seems to contain trainer profile stats.
@@ -83,13 +83,13 @@ namespace PkmnFoundations.GTS
                     SessionManager.Remove(session);
 
                     /* After the above step(s) or performing any of 
-                        * the tasks below other than searching, the game 
-                        * makes a request to /pokemondpds/worldexchange/result.asp. 
-                        * If the game has had a Pokémon sent to it via a trade, 
-                        * the server responds with the entire encrypted Pokémon 
-                        * save struct. Otherwise, if there is a Pokémon deposited 
-                        * in the GTS, it responds with 0x0004; if not, it responds 
-                        * with 0x0005. */
+                    * the tasks below other than searching, the game 
+                    * makes a request to /pokemondpds/worldexchange/result.asp.
+                    * If the game has had a Pokémon sent to it via a trade, 
+                    * the server responds with the entire encrypted Pokémon 
+                    * save struct. Otherwise, if there is a Pokémon deposited 
+                    * in the GTS, it responds with 0x0004; if not, it responds 
+                    * with 0x0005. */
 
                     GtsRecord4 record = DataAbstract.Instance.GtsDataForUser4(pid);
 
