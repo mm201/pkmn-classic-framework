@@ -254,6 +254,16 @@ namespace PkmnFoundations.GlobalTerminalService
                         }
                         logEntry.AppendLine(".");
 
+                        if ((byte)meta == 254)
+                        {
+                            // todo: Figure out how to make the game perform this search!
+                            // Then implement
+                            logEntry.AppendLine("Search type not implemented.");
+                            type = EventLogEntryType.FailureAudit;
+                            response.Write(new byte[] { 0x02, 0x00 }, 0, 2);
+                            break;
+                        }
+
                         BattleVideoHeader4[] results = DataAbstract.Instance.BattleVideoSearch4(species, ranking, meta, country, region, 30);
                         response.Write(new byte[] { 0x00, 0x00 }, 0, 2); // result code (0 for OK)
                         response.Write(BitConverter.GetBytes(results.Length), 0, 4);
@@ -324,8 +334,6 @@ namespace PkmnFoundations.GlobalTerminalService
                         }
                     } break;
                     #endregion
-
-                    // todo: A mysterious 0xdb request type is appearing in my logs. Implement.
 
                     default:
                         logEntry.AppendLine("Unrecognized request type.");
