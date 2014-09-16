@@ -38,7 +38,7 @@ namespace PkmnFoundations.GTS
 
                 #region Common
                 // Called during startup. Seems to contain trainer profile stats.
-                case "/common/setProfile.asp":
+                case "/syachi2ds/web/common/setProfile.asp":
                     SessionManager.Remove(session);
 
                     if (request.Length != 100)
