@@ -99,7 +99,6 @@
     <Content Include="Default.aspx" />
     <Content Include="Global.asax" />
     <Content Include="admin\Web.config" />
-    <Content Include="gsbtest.ashx" />
     <None Include="pad.bin">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -138,9 +137,6 @@
     </Compile>
     <Compile Include="admin\Sessions.aspx.designer.cs">
       <DependentUpon>Sessions.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="gsbtest.ashx.cs">
-      <DependentUpon>gsbtest.ashx</DependentUpon>
     </Compile>
     <Compile Include="gts\Default.aspx.cs">
       <DependentUpon>Default.aspx</DependentUpon>
