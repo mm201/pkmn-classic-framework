@@ -275,7 +275,7 @@ namespace PkmnFoundations.GTS
                     // at offset 0. Find out what this is supposed to do and how to validate it.
 
                     // find a matching session which contains our record
-                    GamestatsSession prevSession = SessionManager.FindSession(pid, "/worldexchange/post.asp");
+                    GamestatsSession prevSession = SessionManager.FindSession(pid, "/pokemondpds/worldexchange/post.asp");
                     if (prevSession == null)
                     {
                         response.Write(new byte[] { 0x00, 0x00 }, 0, 2);
@@ -413,7 +413,7 @@ namespace PkmnFoundations.GTS
                     }
 
                     // find a matching session which contains our record
-                    GamestatsSession prevSession = SessionManager.FindSession(pid, "/worldexchange/exchange.asp");
+                    GamestatsSession prevSession = SessionManager.FindSession(pid, "/pokemondpds/worldexchange/exchange.asp");
                     if (prevSession == null)
                     {
                         response.Write(new byte[] { 0x00, 0x00 }, 0, 2);

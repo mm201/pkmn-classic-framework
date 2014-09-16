@@ -68,7 +68,7 @@ namespace PkmnFoundations.GTS
 
                 #region GTS
                 // Called during startup. Unknown purpose.
-                case "/worldexchange/info.asp":
+                case "/syachi2ds/web/worldexchange/info.asp":
                     SessionManager.Remove(session);
 
                     // todo: find out the meaning of this request.
@@ -77,7 +77,7 @@ namespace PkmnFoundations.GTS
                     break;
 
                 // Called during startup and when you check your pokemon's status.
-                case "/worldexchange/result.asp":
+                case "/syachi2ds/web/worldexchange/result.asp":
                 {
                     SessionManager.Remove(session);
 
@@ -106,7 +106,7 @@ namespace PkmnFoundations.GTS
                 } break;
 
                 // Called after result.asp returns 4 when you check your pokemon's status
-                case "/worldexchange/get.asp":
+                case "/syachi2ds/web/worldexchange/get.asp":
                 {
                     SessionManager.Remove(session);
 
@@ -131,7 +131,7 @@ namespace PkmnFoundations.GTS
                 } break;
 
                 // Called after result.asp returns an inbound pokemon record to delete it
-                case "/worldexchange/delete.asp":
+                case "/syachi2ds/web/worldexchange/delete.asp":
                 {
                     SessionManager.Remove(session);
 
@@ -177,7 +177,7 @@ namespace PkmnFoundations.GTS
                 } break;
 
                 // called to delete your own pokemon after taking it back
-                case "/worldexchange/return.asp":
+                case "/syachi2ds/web/worldexchange/return.asp":
                 {
                     SessionManager.Remove(session);
 
@@ -210,7 +210,7 @@ namespace PkmnFoundations.GTS
                 } break;
 
                 // Called when you deposit a pokemon into the system.
-                case "/worldexchange/post.asp":
+                case "/syachi2ds/web/worldexchange/post.asp":
                 {
                     if (request.Length != 432)
                     {
@@ -260,7 +260,7 @@ namespace PkmnFoundations.GTS
 
                 } break;
 
-                case "/worldexchange/post_finish.asp":
+                case "/syachi2ds/web/worldexchange/post_finish.asp":
                 {
                     SessionManager.Remove(session);
 
@@ -271,7 +271,7 @@ namespace PkmnFoundations.GTS
                     }
 
                     // find a matching session which contains our record
-                    GamestatsSession prevSession = SessionManager.FindSession(pid, "/worldexchange/post.asp");
+                    GamestatsSession prevSession = SessionManager.FindSession(pid, "/syachi2ds/web/worldexchange/post.asp");
                     if (prevSession == null)
                     {
                         response.Write(new byte[] { 0x00, 0x00 }, 0, 2);
@@ -300,7 +300,7 @@ namespace PkmnFoundations.GTS
 
                 // the search request has a funny bit string request of search terms
                 // and just returns a chunk of records end to end.
-                case "/worldexchange/search.asp":
+                case "/syachi2ds/web/worldexchange/search.asp":
                 {
                     SessionManager.Remove(session);
 
@@ -341,7 +341,7 @@ namespace PkmnFoundations.GTS
 
                 // the exchange request uploads a record of the exchangee pokemon
                 // plus the desired PID to trade for at the very end.
-                case "/worldexchange/exchange.asp":
+                case "/syachi2ds/web/worldexchange/exchange.asp":
                 {
                     if (request.Length != 432)
                     {
@@ -397,7 +397,7 @@ namespace PkmnFoundations.GTS
 
                 } break;
 
-                case "/worldexchange/exchange_finish.asp":
+                case "/syachi2ds/web/worldexchange/exchange_finish.asp":
                 {
                     SessionManager.Remove(session);
 
@@ -408,7 +408,7 @@ namespace PkmnFoundations.GTS
                     }
 
                     // find a matching session which contains our record
-                    GamestatsSession prevSession = SessionManager.FindSession(pid, "/worldexchange/exchange.asp");
+                    GamestatsSession prevSession = SessionManager.FindSession(pid, "/syachi2ds/web/worldexchange/exchange.asp");
                     if (prevSession == null)
                     {
                         response.Write(new byte[] { 0x00, 0x00 }, 0, 2);
@@ -450,7 +450,7 @@ namespace PkmnFoundations.GTS
                 #endregion
 
                 #region Battle Subway
-                case "/battletower/info.asp":
+                case "/syachi2ds/web/battletower/info.asp":
                     SessionManager.Remove(session);
 
                     // Probably an availability/status code.
@@ -458,14 +458,14 @@ namespace PkmnFoundations.GTS
                     response.Write(new byte[] { 0x01, 0x00 }, 0, 2);
                     break;
 
-                case "/battletower/roomnum.asp":
+                case "/syachi2ds/web/battletower/roomnum.asp":
                     SessionManager.Remove(session);
 
                     //byte rank = data[0x05];
                     response.Write(new byte[] { 0x32, 0x00 }, 0, 2);
                     break;
 
-                case "/battletower/download.asp":
+                case "/syachi2ds/web/battletower/download.asp":
                 {
                     SessionManager.Remove(session);
 
@@ -501,7 +501,7 @@ namespace PkmnFoundations.GTS
 
                 } break;
 
-                case "/battletower/upload.asp":
+                case "/syachi2ds/web/battletower/upload.asp":
                 {
                     SessionManager.Remove(session);
 
