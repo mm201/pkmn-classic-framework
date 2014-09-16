@@ -74,6 +74,10 @@ namespace PkmnFoundations.GTS
 
                     // todo: find out the meaning of this request.
                     // is it simply done to check whether the GTS is online?
+
+                    // todo: add a mostly null record to GtsProfiles4 if the
+                    // player is on D/P. We can still track last visit times
+                    // and gather trainer profile data from GTS activity.
                     response.Write(new byte[] { 0x01, 0x00 }, 0, 2);
                     break;
 
