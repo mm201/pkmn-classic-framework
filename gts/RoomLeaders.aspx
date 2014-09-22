@@ -14,6 +14,13 @@
         Room number:
         <asp:TextBox ID="txtRoom" runat="server" />
     </div>
+        <div>
+            Generation:
+            <asp:RadioButtonList ID="rbGeneration" RepeatLayout="Flow" runat="server">
+                <asp:ListItem Text="4" Value="4" Selected="True" />
+                <asp:ListItem Text="5" Value="5" />
+            </asp:RadioButtonList>
+        </div>
     <div>
         <asp:Button ID="btnGet" Text="Get" OnClick="btnGet_Click" runat="server" />
     </div>

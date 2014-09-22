@@ -42,36 +42,75 @@ namespace PkmnFoundations.GTS
             rank--;
             room--;
 
-            BattleTowerProfile4[] results = DataAbstract.Instance.BattleTowerGetLeaders4(rank, room);
-
-            StringBuilder builder = new StringBuilder();
-
-            builder.Append("<p>Leaders:</p><ul>");
-            foreach (BattleTowerProfile4 profile in results)
+            switch (rbGeneration.SelectedValue)
             {
-                builder.Append("<li>");
-                TrendyPhrase4 tp = profile.PhraseLeader;
-                builder.Append(tp.Render("<span style=\"color: #0066ff; font-weight: bold;\">{0}</span>"));
-                builder.Append("</li>");
+                case "4":
+                {
+                    BattleTowerProfile4[] results = DataAbstract.Instance.BattleTowerGetLeaders4(rank, room);
+
+                    StringBuilder builder = new StringBuilder();
+
+                    builder.Append("<p>Leaders:</p><ul>");
+                    foreach (BattleTowerProfile4 profile in results)
+                    {
+                        builder.Append("<li>");
+                        TrendyPhrase4 tp = profile.PhraseLeader;
+                        builder.Append(tp.Render("<span style=\"color: #0066ff; font-weight: bold;\">{0}</span>"));
+                        builder.Append("</li>");
+                    }
+                    builder.Append("</ul><p>Opponents:</p><ul>");
+
+                    BattleTowerRecord4[] opponents = DataAbstract.Instance.BattleTowerGetOpponents4(-1, rank, room);
+                    foreach (BattleTowerRecord4 record in opponents)
+                    {
+                        builder.Append("<li>");
+
+                        builder.Append(record.PhraseChallenged.Render("<span style=\"color: #0066ff; font-weight: bold;\">{0}</span>"));
+                        builder.Append("<br />");
+
+                        builder.Append(record.PhraseWon.Render("<span style=\"color: #0066ff; font-weight: bold;\">{0}</span>"));
+                        builder.Append("<br />");
+
+                        builder.Append(record.PhraseLost.Render("<span style=\"color: #0066ff; font-weight: bold;\">{0}</span>"));
+
+                        builder.Append("</li>");
+                    }
+                    litResults.Text = builder.ToString();
+                } break;
+                case "5":
+                    {
+                        BattleSubwayProfile5[] results = DataAbstract.Instance.BattleSubwayGetLeaders5(rank, room);
+
+                        StringBuilder builder = new StringBuilder();
+
+                        builder.Append("<p>Leaders:</p><ul>");
+                        foreach (BattleSubwayProfile5 profile in results)
+                        {
+                            builder.Append("<li>");
+                            TrendyPhrase5 tp = profile.PhraseLeader;
+                            builder.Append(tp.Render("<span style=\"color: #0066ff; font-weight: bold;\">{0}</span>"));
+                            builder.Append("</li>");
+                        }
+                        builder.Append("</ul><p>Opponents:</p><ul>");
+
+                        BattleSubwayRecord5[] opponents = DataAbstract.Instance.BattleSubwayGetOpponents5(-1, rank, room);
+                        foreach (BattleSubwayRecord5 record in opponents)
+                        {
+                            builder.Append("<li>");
+
+                            builder.Append(record.PhraseChallenged.Render("<span style=\"color: #0066ff; font-weight: bold;\">{0}</span>"));
+                            builder.Append("<br />");
+
+                            builder.Append(record.PhraseWon.Render("<span style=\"color: #0066ff; font-weight: bold;\">{0}</span>"));
+                            builder.Append("<br />");
+
+                            builder.Append(record.PhraseLost.Render("<span style=\"color: #0066ff; font-weight: bold;\">{0}</span>"));
+
+                            builder.Append("</li>");
+                        }
+                        litResults.Text = builder.ToString();
+                    } break;
             }
-            builder.Append("</ul><p>Opponents:</p><ul>");
-
-            BattleTowerRecord4[] opponents = DataAbstract.Instance.BattleTowerGetOpponents4(-1, rank, room);
-            foreach (BattleTowerRecord4 record in opponents)
-            {
-                builder.Append("<li>");
-
-                builder.Append(record.PhraseChallenged.Render("<span style=\"color: #0066ff; font-weight: bold;\">{0}</span>"));
-                builder.Append("<br />");
-
-                builder.Append(record.PhraseWon.Render("<span style=\"color: #0066ff; font-weight: bold;\">{0}</span>"));
-                builder.Append("<br />");
-
-                builder.Append(record.PhraseLost.Render("<span style=\"color: #0066ff; font-weight: bold;\">{0}</span>"));
-
-                builder.Append("</li>");
-            }
-            litResults.Text = builder.ToString();
         }
     }
 }

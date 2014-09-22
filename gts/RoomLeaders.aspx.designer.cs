@@ -40,6 +40,15 @@ namespace PkmnFoundations.GTS {
         protected global::System.Web.UI.WebControls.TextBox txtRoom;
         
         /// <summary>
+        /// rbGeneration control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RadioButtonList rbGeneration;
+        
+        /// <summary>
         /// btnGet control.
         /// </summary>
         /// <remarks>
