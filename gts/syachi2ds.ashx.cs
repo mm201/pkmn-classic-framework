@@ -461,7 +461,7 @@ namespace PkmnFoundations.GTS
                 case "/syachi2ds/web/battletower/roomnum.asp":
                     SessionManager.Remove(session);
 
-                    //byte rank = data[0x05];
+                    //byte rank = data[0x00];
                     response.Write(new byte[] { 0x32, 0x00 }, 0, 2);
                     break;
 
@@ -478,7 +478,14 @@ namespace PkmnFoundations.GTS
                     byte rank = request[0];
                     byte roomNum = request[1];
 
+                    if (rank > 9 || roomNum > 49)
+                    {
+                        ShowError(context, 400);
+                        return;
+                    }
+
                     BattleSubwayRecord5[] opponents = DataAbstract.Instance.BattleSubwayGetOpponents5(pid, rank, roomNum);
+                    BattleSubwayProfile5[] leaders = DataAbstract.Instance.BattleSubwayGetLeaders5(rank, roomNum);
 
                     if (opponents.Length != 7)
                     {
@@ -486,8 +493,6 @@ namespace PkmnFoundations.GTS
                         ShowError(context, 400);
                         return;
                     }
-
-                    BattleSubwayProfile5[] leaders = DataAbstract.Instance.BattleSubwayGetLeaders5(rank, roomNum);
 
                     foreach (BattleSubwayRecord5 record in opponents)
                     {

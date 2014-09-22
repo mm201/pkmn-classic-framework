@@ -466,7 +466,7 @@ namespace PkmnFoundations.GTS
                 case "/pokemondpds/battletower/roomnum.asp":
                     SessionManager.Remove(session);
 
-                    //byte rank = data[0x05];
+                    //byte rank = data[0x00];
                     response.Write(new byte[] { 0x32, 0x00 }, 0, 2);
                     break;
 
@@ -482,6 +482,12 @@ namespace PkmnFoundations.GTS
 
                     byte rank = data[0x00];
                     byte roomNum = data[0x01];
+
+                    if (rank > 9 || roomNum > 49)
+                    {
+                        ShowError(context, 400);
+                        return;
+                    }
 
                     BattleTowerRecord4[] opponents = DataAbstract.Instance.BattleTowerGetOpponents4(pid, rank, roomNum);
                     BattleTowerProfile4[] leaders = DataAbstract.Instance.BattleTowerGetLeaders4(rank, roomNum);
