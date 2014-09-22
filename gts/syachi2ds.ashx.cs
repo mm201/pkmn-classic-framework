@@ -490,7 +490,7 @@ namespace PkmnFoundations.GTS
                     if (opponents.Length != 7)
                     {
                         // todo: Implement fake trainers on Gen5 too.
-                        ShowError(context, 400);
+                        ShowError(context, 500);
                         return;
                     }
 

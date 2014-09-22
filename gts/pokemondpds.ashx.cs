@@ -491,7 +491,7 @@ namespace PkmnFoundations.GTS
 
                     BattleTowerRecord4[] opponents = DataAbstract.Instance.BattleTowerGetOpponents4(pid, rank, roomNum);
                     BattleTowerProfile4[] leaders = DataAbstract.Instance.BattleTowerGetLeaders4(rank, roomNum);
-                    BattleTowerRecord4[] fakeOpponents = FakeOpponentGenerator4.GenerateFakeOpponents(7);
+                    BattleTowerRecord4[] fakeOpponents = FakeOpponentGenerator4.GenerateFakeOpponents(7 - opponents.Length);
 
                     foreach (BattleTowerRecord4 record in fakeOpponents)
                     {
