@@ -99,6 +99,12 @@
     <Content Include="Default.aspx" />
     <Content Include="Global.asax" />
     <Content Include="admin\Web.config" />
+    <None Include="admin\Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+    <None Include="admin\Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
     <None Include="pad.bin">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
