@@ -21,6 +21,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "towerRestorer", "towerResto
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GamestatsBase", "GamestatsBase\GamestatsBase\GamestatsBase.csproj", "{2D667F5B-F10D-44E2-93F6-DD555D9EE7DF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VeekunImport", "VeekunImport\VeekunImport.csproj", "{2A761C4F-00C2-45D5-B4CA-C41558CEB2DF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -121,6 +123,16 @@ Global
 		{2D667F5B-F10D-44E2-93F6-DD555D9EE7DF}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{2D667F5B-F10D-44E2-93F6-DD555D9EE7DF}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{2D667F5B-F10D-44E2-93F6-DD555D9EE7DF}.Release|x86.ActiveCfg = Release|Any CPU
+		{2A761C4F-00C2-45D5-B4CA-C41558CEB2DF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2A761C4F-00C2-45D5-B4CA-C41558CEB2DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2A761C4F-00C2-45D5-B4CA-C41558CEB2DF}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{2A761C4F-00C2-45D5-B4CA-C41558CEB2DF}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{2A761C4F-00C2-45D5-B4CA-C41558CEB2DF}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{2A761C4F-00C2-45D5-B4CA-C41558CEB2DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2A761C4F-00C2-45D5-B4CA-C41558CEB2DF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2A761C4F-00C2-45D5-B4CA-C41558CEB2DF}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{2A761C4F-00C2-45D5-B4CA-C41558CEB2DF}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{2A761C4F-00C2-45D5-B4CA-C41558CEB2DF}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
