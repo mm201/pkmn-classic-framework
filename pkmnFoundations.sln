@@ -5,8 +5,6 @@ VisualStudioVersion = 12.0.30723.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Library", "library\Library.csproj", "{408EFC7E-C6B0-4160-8628-2679E34385CE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pokedex", "pokedex\Pokedex.csproj", "{483C628E-5A5A-4BD6-97CB-9A9FB1F82CF2}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "gts", "gts\gts.csproj", "{2EEAF2A8-68B7-4DB5-8818-36285D5CF9B3}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "bvCrawler4", "bvCrawler4\bvCrawler4.csproj", "{04E4EB3B-166B-4D8B-86AA-2178F2A927D5}"
@@ -45,16 +43,6 @@ Global
 		{408EFC7E-C6B0-4160-8628-2679E34385CE}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{408EFC7E-C6B0-4160-8628-2679E34385CE}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{408EFC7E-C6B0-4160-8628-2679E34385CE}.Release|x86.ActiveCfg = Release|Any CPU
-		{483C628E-5A5A-4BD6-97CB-9A9FB1F82CF2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{483C628E-5A5A-4BD6-97CB-9A9FB1F82CF2}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{483C628E-5A5A-4BD6-97CB-9A9FB1F82CF2}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{483C628E-5A5A-4BD6-97CB-9A9FB1F82CF2}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{483C628E-5A5A-4BD6-97CB-9A9FB1F82CF2}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{483C628E-5A5A-4BD6-97CB-9A9FB1F82CF2}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{483C628E-5A5A-4BD6-97CB-9A9FB1F82CF2}.Release|Any CPU.Build.0 = Release|Any CPU
-		{483C628E-5A5A-4BD6-97CB-9A9FB1F82CF2}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{483C628E-5A5A-4BD6-97CB-9A9FB1F82CF2}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{483C628E-5A5A-4BD6-97CB-9A9FB1F82CF2}.Release|x86.ActiveCfg = Release|Any CPU
 		{2EEAF2A8-68B7-4DB5-8818-36285D5CF9B3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{2EEAF2A8-68B7-4DB5-8818-36285D5CF9B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2EEAF2A8-68B7-4DB5-8818-36285D5CF9B3}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
