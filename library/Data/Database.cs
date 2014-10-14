@@ -26,20 +26,33 @@ namespace PkmnFoundations.Data
             }
         }
 
-        private static Database CreateInstance()
+        public static Database CreateInstance()
         {
             ConnectionStringSettings connStr = ConfigurationManager.ConnectionStrings["pkmnFoundationsConnectionString"];
-            if (connStr != null)
+            if (connStr == null) throw new NotSupportedException("No database connection string provided. Please add one in web.config or app.config.");
+
+            return CreateInstance(connStr);
+        }
+
+        public static Database CreateInstance(ConnectionStringSettings connStr)
+        {
+            if (connStr == null) throw new ArgumentNullException("connStr");
+
+            return CreateInstance(connStr.ConnectionString, connStr.ProviderName);
+        }
+
+        public static Database CreateInstance(String connStr, String provider)
+        {
+            if (connStr == null) throw new ArgumentNullException("connStr");
+            if (provider == null) throw new ArgumentNullException("provider");
+
+            switch (provider)
             {
-                switch (connStr.ProviderName)
-                {
-                    case "MySql.Data.MySqlClient":
-                        return new DataMysql(connStr.ConnectionString);
-                    default:
-                        throw new NotSupportedException("Database provider not supported.");
-                }
+                case "MySql.Data.MySqlClient":
+                    return new DataMysql(connStr);
+                default:
+                    throw new NotSupportedException("Database provider not supported.");
             }
-            else throw new NotSupportedException("No database connection string provided. Please add one in web.config or app.config.");
         }
         #endregion
 
