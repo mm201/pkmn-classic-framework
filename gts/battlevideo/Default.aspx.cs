@@ -19,8 +19,8 @@ namespace PkmnFoundations.GTS
             if (Cache["BattleVideoCount4"] == null ||
                 Cache["BattleVideoCount5"] == null)
             {
-                bvCount4 = DataAbstract.Instance.BattleVideoCount4();
-                bvCount5 = DataAbstract.Instance.BattleVideoCount5();
+                bvCount4 = Database.Instance.BattleVideoCount4();
+                bvCount5 = Database.Instance.BattleVideoCount5();
                 Cache.Insert("BattleVideoCount4", bvCount4, null,
                     DateTime.Now.AddMinutes(1),
                     System.Web.Caching.Cache.NoSlidingExpiration);

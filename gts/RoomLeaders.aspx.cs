@@ -46,7 +46,7 @@ namespace PkmnFoundations.GTS
             {
                 case "4":
                 {
-                    BattleTowerProfile4[] results = DataAbstract.Instance.BattleTowerGetLeaders4(rank, room);
+                    BattleTowerProfile4[] results = Database.Instance.BattleTowerGetLeaders4(rank, room);
 
                     StringBuilder builder = new StringBuilder();
 
@@ -60,7 +60,7 @@ namespace PkmnFoundations.GTS
                     }
                     builder.Append("</ul><p>Opponents:</p><ul>");
 
-                    BattleTowerRecord4[] opponents = DataAbstract.Instance.BattleTowerGetOpponents4(-1, rank, room);
+                    BattleTowerRecord4[] opponents = Database.Instance.BattleTowerGetOpponents4(-1, rank, room);
                     foreach (BattleTowerRecord4 record in opponents)
                     {
                         builder.Append("<li>");
@@ -79,7 +79,7 @@ namespace PkmnFoundations.GTS
                 } break;
                 case "5":
                     {
-                        BattleSubwayProfile5[] results = DataAbstract.Instance.BattleSubwayGetLeaders5(rank, room);
+                        BattleSubwayProfile5[] results = Database.Instance.BattleSubwayGetLeaders5(rank, room);
 
                         StringBuilder builder = new StringBuilder();
 
@@ -93,7 +93,7 @@ namespace PkmnFoundations.GTS
                         }
                         builder.Append("</ul><p>Opponents:</p><ul>");
 
-                        BattleSubwayRecord5[] opponents = DataAbstract.Instance.BattleSubwayGetOpponents5(-1, rank, room);
+                        BattleSubwayRecord5[] opponents = Database.Instance.BattleSubwayGetOpponents5(-1, rank, room);
                         foreach (BattleSubwayRecord5 record in opponents)
                         {
                             builder.Append("<li>");

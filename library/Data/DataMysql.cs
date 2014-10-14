@@ -10,7 +10,7 @@ using System.Security.Cryptography;
 
 namespace PkmnFoundations.Data
 {
-    public class DataMysql : DataAbstract
+    public class DataMysql : Database
     {
         #region Initialization
         public DataMysql(String connString)

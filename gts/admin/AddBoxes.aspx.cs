@@ -57,7 +57,7 @@ namespace PkmnFoundations.GTS.admin
                 Array.Copy(data, 28 + 556 * x, result, 0, 540);
 
                 BoxRecord4 record = new BoxRecord4(pid, label, serial, result);
-                if (DataAbstract.Instance.BoxUpload4(record) != 0) added++;
+                if (Database.Instance.BoxUpload4(record) != 0) added++;
             }
 
             litMessage.Text = "Added " + added.ToString() + " boxes to the database.";

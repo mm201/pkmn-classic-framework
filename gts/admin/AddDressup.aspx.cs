@@ -57,7 +57,7 @@ namespace PkmnFoundations.GTS.test
                 Array.Copy(data, 24 + 236 * x, result, 0, 224);
 
                 DressupRecord4 record = new DressupRecord4(pid, serial, result);
-                if (DataAbstract.Instance.DressupUpload4(record) != 0) added++;
+                if (Database.Instance.DressupUpload4(record) != 0) added++;
             }
 
             litMessage.Text = "Added " + added.ToString() + " dressup photos to the database.";

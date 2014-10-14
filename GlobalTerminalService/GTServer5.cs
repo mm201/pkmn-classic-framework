@@ -83,7 +83,7 @@ namespace PkmnFoundations.GlobalTerminalService
                         byte[] musicalData = new byte[0x230];
                         Array.Copy(data, 0x140, musicalData, 0, 0x230);
                         MusicalRecord5 record = new MusicalRecord5(pid, 0, musicalData);
-                        ulong serial = DataAbstract.Instance.MusicalUpload5(record);
+                        ulong serial = Database.Instance.MusicalUpload5(record);
 
                         if (serial == 0)
                         {
@@ -114,7 +114,7 @@ namespace PkmnFoundations.GlobalTerminalService
                         logEntry.AppendFormat("Searching for musical photos of species {0}.", species);
                         logEntry.AppendLine();
 
-                        MusicalRecord5[] results = DataAbstract.Instance.MusicalSearch5(species, 5);
+                        MusicalRecord5[] results = Database.Instance.MusicalSearch5(species, 5);
                         response.Write(new byte[] { 0x00, 0x00 }, 0, 2); // result code (0 for OK)
                         response.Write(BitConverter.GetBytes(results.Length), 0, 4);
 
@@ -155,7 +155,7 @@ namespace PkmnFoundations.GlobalTerminalService
                         Array.Copy(data, 0x19e8, vldtSignature, 0, sigLength);
                         // todo: validate signature.
 
-                        ulong serial = DataAbstract.Instance.BattleVideoUpload5(record);
+                        ulong serial = Database.Instance.BattleVideoUpload5(record);
 
                         if (serial == 0)
                         {
@@ -208,7 +208,7 @@ namespace PkmnFoundations.GlobalTerminalService
                         }
                         logEntry.AppendLine(".");
 
-                        BattleVideoHeader5[] results = DataAbstract.Instance.BattleVideoSearch5(species, ranking, meta, country, region, 30);
+                        BattleVideoHeader5[] results = Database.Instance.BattleVideoSearch5(species, ranking, meta, country, region, 30);
                         response.Write(new byte[] { 0x00, 0x00 }, 0, 2); // result code (0 for OK)
                         response.Write(BitConverter.GetBytes(results.Length), 0, 4);
 
@@ -233,7 +233,7 @@ namespace PkmnFoundations.GlobalTerminalService
                         }
 
                         ulong serial = BitConverter.ToUInt64(data, 0x140);
-                        BattleVideoRecord5 record = DataAbstract.Instance.BattleVideoGet5(serial, true);
+                        BattleVideoRecord5 record = Database.Instance.BattleVideoGet5(serial, true);
                         if (record == null)
                         {
                             response.Write(new byte[] { 0x02, 0x00 }, 0, 2);
@@ -264,7 +264,7 @@ namespace PkmnFoundations.GlobalTerminalService
 
                         ulong serial = BitConverter.ToUInt64(data, 0x140);
 
-                        if (DataAbstract.Instance.BattleVideoFlagSaved5(serial))
+                        if (Database.Instance.BattleVideoFlagSaved5(serial))
                         {
                             response.Write(new byte[] { 0x00, 0x00 }, 0, 2); // result code (0 for OK)
                             logEntry.AppendFormat("Battle video {0} flagged saved.", BattleVideoHeader4.FormatSerial(serial));

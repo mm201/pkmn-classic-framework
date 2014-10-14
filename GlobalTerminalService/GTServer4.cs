@@ -85,7 +85,7 @@ namespace PkmnFoundations.GlobalTerminalService
                         byte[] boxData = new byte[0x21c];
                         Array.Copy(data, 0x144, boxData, 0, 0x21c);
                         BoxRecord4 record = new BoxRecord4(pid, label, 0, boxData);
-                        ulong serial = DataAbstract.Instance.BoxUpload4(record);
+                        ulong serial = Database.Instance.BoxUpload4(record);
 
                         if (serial == 0)
                         {
@@ -116,7 +116,7 @@ namespace PkmnFoundations.GlobalTerminalService
                         logEntry.AppendFormat("Searching for {0} boxes.", label);
                         logEntry.AppendLine();
 
-                        BoxRecord4[] results = DataAbstract.Instance.BoxSearch4(label, 20);
+                        BoxRecord4[] results = Database.Instance.BoxSearch4(label, 20);
                         response.Write(new byte[] { 0x00, 0x00 }, 0, 2); // result code (0 for OK)
                         response.Write(BitConverter.GetBytes(results.Length), 0, 4);
 
@@ -147,7 +147,7 @@ namespace PkmnFoundations.GlobalTerminalService
                         byte[] dressupData = new byte[0xe0];
                         Array.Copy(data, 0x140, dressupData, 0, 0xe0);
                         DressupRecord4 record = new DressupRecord4(pid, 0, dressupData);
-                        ulong serial = DataAbstract.Instance.DressupUpload4(record);
+                        ulong serial = Database.Instance.DressupUpload4(record);
 
                         if (serial == 0)
                         {
@@ -177,7 +177,7 @@ namespace PkmnFoundations.GlobalTerminalService
                         logEntry.AppendFormat("Searching for dressups of species {0}.", species);
                         logEntry.AppendLine();
 
-                        DressupRecord4[] results = DataAbstract.Instance.DressupSearch4(species, 10);
+                        DressupRecord4[] results = Database.Instance.DressupSearch4(species, 10);
                         response.Write(new byte[] { 0x00, 0x00 }, 0, 2); // result code (0 for OK)
                         response.Write(BitConverter.GetBytes(results.Length), 0, 4);
 
@@ -207,7 +207,7 @@ namespace PkmnFoundations.GlobalTerminalService
                         byte[] battlevidData = new byte[0x1d4c];
                         Array.Copy(data, 0x140, battlevidData, 0, 0x1d4c);
                         BattleVideoRecord4 record = new BattleVideoRecord4(pid, 0, battlevidData);
-                        ulong serial = DataAbstract.Instance.BattleVideoUpload4(record);
+                        ulong serial = Database.Instance.BattleVideoUpload4(record);
 
                         if (serial == 0)
                         {
@@ -264,7 +264,7 @@ namespace PkmnFoundations.GlobalTerminalService
                             break;
                         }
 
-                        BattleVideoHeader4[] results = DataAbstract.Instance.BattleVideoSearch4(species, ranking, meta, country, region, 30);
+                        BattleVideoHeader4[] results = Database.Instance.BattleVideoSearch4(species, ranking, meta, country, region, 30);
                         response.Write(new byte[] { 0x00, 0x00 }, 0, 2); // result code (0 for OK)
                         response.Write(BitConverter.GetBytes(results.Length), 0, 4);
 
@@ -289,7 +289,7 @@ namespace PkmnFoundations.GlobalTerminalService
                         }
 
                         ulong serial = BitConverter.ToUInt64(data, 0x140);
-                        BattleVideoRecord4 record = DataAbstract.Instance.BattleVideoGet4(serial, true);
+                        BattleVideoRecord4 record = Database.Instance.BattleVideoGet4(serial, true);
                         if (record == null)
                         {
                             response.Write(new byte[] { 0x02, 0x00 }, 0, 2);
@@ -320,7 +320,7 @@ namespace PkmnFoundations.GlobalTerminalService
 
                         ulong serial = BitConverter.ToUInt64(data, 0x140);
 
-                        if (DataAbstract.Instance.BattleVideoFlagSaved4(serial))
+                        if (Database.Instance.BattleVideoFlagSaved4(serial))
                         {
                             response.Write(new byte[] { 0x00, 0x00 }, 0, 2); // result code (0 for OK)
                             logEntry.AppendFormat("Battle video {0} flagged saved.", BattleVideoHeader4.FormatSerial(serial));

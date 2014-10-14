@@ -13,11 +13,11 @@ namespace PkmnFoundations.GTS
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            GtsRecord4[] records4 = DataAbstract.Instance.GtsSearch4(0, 0, Genders.Either, 0, 0, 0, -1);
+            GtsRecord4[] records4 = Database.Instance.GtsSearch4(0, 0, Genders.Either, 0, 0, 0, -1);
             rptPokemon4.DataSource = records4;
             rptPokemon4.DataBind();
 
-            GtsRecord5[] records5 = DataAbstract.Instance.GtsSearch5(0, 0, Genders.Either, 0, 0, 0, -1);
+            GtsRecord5[] records5 = Database.Instance.GtsSearch5(0, 0, Genders.Either, 0, 0, 0, -1);
             rptPokemon5.DataSource = records5;
             rptPokemon5.DataBind();
         }

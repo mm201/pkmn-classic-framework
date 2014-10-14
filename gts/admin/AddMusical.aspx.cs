@@ -55,7 +55,7 @@ namespace PkmnFoundations.GTS.admin
                 Array.Copy(data, 24 + 572 * x, result, 0, 560);
 
                 MusicalRecord5 record = new MusicalRecord5(pid, serial, result);
-                if (DataAbstract.Instance.MusicalUpload5(record) != 0) added++;
+                if (Database.Instance.MusicalUpload5(record) != 0) added++;
             }
 
             litMessage.Text = "Added " + added.ToString() + " musical photos to the database.";

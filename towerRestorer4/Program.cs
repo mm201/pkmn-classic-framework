@@ -25,7 +25,7 @@ namespace towerRestorer
                 return;
             }
 
-            DataAbstract db = DataAbstract.Instance;
+            Database db = Database.Instance;
 
             String[] filenames = Directory.GetFiles(args[0]);
             int successCount = 0;

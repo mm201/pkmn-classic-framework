@@ -63,7 +63,7 @@ namespace bvRestorer5
 
                 BattleVideoRecord5 record = new BattleVideoRecord5(pid, serial, mainData);
 
-                DataAbstract.Instance.BattleVideoUpload5(record);
+                Database.Instance.BattleVideoUpload5(record);
 
                 Console.WriteLine("Video {0} added successfully.", BattleVideoHeader4.FormatSerial(serial));
                 successCount++;

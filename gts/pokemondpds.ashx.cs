@@ -56,7 +56,7 @@ namespace PkmnFoundations.GTS
                         byte[] profileBinary = new byte[100];
                         Array.Copy(data, 0, profileBinary, 0, 100);
                         TrainerProfile4 profile = new TrainerProfile4(pid, profileBinary);
-                        DataAbstract.Instance.GamestatsSetProfile4(profile);
+                        Database.Instance.GamestatsSetProfile4(profile);
 #if !DEBUG
                     }
                     catch { }
@@ -95,7 +95,7 @@ namespace PkmnFoundations.GTS
                     * in the GTS, it responds with 0x0004; if not, it responds 
                     * with 0x0005. */
 
-                    GtsRecord4 record = DataAbstract.Instance.GtsDataForUser4(pid);
+                    GtsRecord4 record = Database.Instance.GtsDataForUser4(pid);
 
                     if (record == null)
                     {
@@ -127,7 +127,7 @@ namespace PkmnFoundations.GTS
                     // this is only called if result.asp returned 4.
                     // todo: what does this do if the contained pokemon is traded??
 
-                    GtsRecord4 record = DataAbstract.Instance.GtsDataForUser4(pid);
+                    GtsRecord4 record = Database.Instance.GtsDataForUser4(pid);
 
                     if (record == null)
                     {
@@ -148,7 +148,7 @@ namespace PkmnFoundations.GTS
                 {
                     SessionManager.Remove(session);
 
-                    GtsRecord4 record = DataAbstract.Instance.GtsDataForUser4(pid);
+                    GtsRecord4 record = Database.Instance.GtsDataForUser4(pid);
                     if (record == null)
                     {
                         response.Write(new byte[] { 0x00, 0x00 }, 0, 2);
@@ -159,14 +159,14 @@ namespace PkmnFoundations.GTS
                         // todo: add transactions
                         // todo: log the successful trade?
                         // (either here or when the trade is done)
-                        bool success = DataAbstract.Instance.GtsDeletePokemon4(pid);
+                        bool success = Database.Instance.GtsDeletePokemon4(pid);
                         if (success)
                         {
 #if !DEBUG
                             try
                             {
 #endif
-                                DataAbstract.Instance.GtsLogTrade4(record, DateTime.UtcNow);
+                                Database.Instance.GtsLogTrade4(record, DateTime.UtcNow);
 #if !DEBUG
                             }
                             catch { }
@@ -190,7 +190,7 @@ namespace PkmnFoundations.GTS
                 {
                     SessionManager.Remove(session);
 
-                    GtsRecord4 record = DataAbstract.Instance.GtsDataForUser4(pid);
+                    GtsRecord4 record = Database.Instance.GtsDataForUser4(pid);
                     if (record == null)
                     {
                         response.Write(new byte[] { 0x00, 0x00 }, 0, 2);
@@ -204,7 +204,7 @@ namespace PkmnFoundations.GTS
                     {
                         // delete own pokemon
                         // todo: add transactions
-                        bool success = DataAbstract.Instance.GtsDeletePokemon4(pid);
+                        bool success = Database.Instance.GtsDeletePokemon4(pid);
                         if (success)
                         {
                             response.Write(new byte[] { 0x01, 0x00 }, 0, 2);
@@ -227,7 +227,7 @@ namespace PkmnFoundations.GTS
                     }
 
                     // todo: add transaction
-                    if (DataAbstract.Instance.GtsDataForUser4(pid) != null)
+                    if (Database.Instance.GtsDataForUser4(pid) != null)
                     {
                         // there's already a pokemon inside
                         SessionManager.Remove(session);
@@ -291,7 +291,7 @@ namespace PkmnFoundations.GTS
                     AssertHelper.Assert(prevSession.Tag is GtsRecord4);
                     GtsRecord4 record = (GtsRecord4)prevSession.Tag;
 
-                    if (DataAbstract.Instance.GtsDepositPokemon4(record))
+                    if (Database.Instance.GtsDepositPokemon4(record))
                     {
                         response.Write(new byte[] { 0x01, 0x00 }, 0, 2);
                     }
@@ -330,7 +330,7 @@ namespace PkmnFoundations.GTS
                     if (data.Length > 7) country = data[7];
 
                     if (resultsCount > 7) resultsCount = 7; // stop DDOS
-                    GtsRecord4[] records = DataAbstract.Instance.GtsSearch4(pid, species, gender, minLevel, maxLevel, country, resultsCount);
+                    GtsRecord4[] records = Database.Instance.GtsSearch4(pid, species, gender, minLevel, maxLevel, country, resultsCount);
                     foreach (GtsRecord4 record in records)
                     {
                         response.Write(record.Save(), 0, 292);
@@ -354,7 +354,7 @@ namespace PkmnFoundations.GTS
                     GtsRecord4 upload = new GtsRecord4(uploadData);
                     upload.IsExchanged = 0;
                     int targetPid = BitConverter.ToInt32(data, 292);
-                    GtsRecord4 result = DataAbstract.Instance.GtsDataForUser4(targetPid);
+                    GtsRecord4 result = Database.Instance.GtsDataForUser4(targetPid);
 
                     if (result == null || result.IsExchanged != 0)
                     {
@@ -435,13 +435,13 @@ namespace PkmnFoundations.GTS
                     GtsRecord4 upload = (GtsRecord4)tag[0];
                     GtsRecord4 result = (GtsRecord4)tag[1];
 
-                    if (DataAbstract.Instance.GtsTradePokemon4(upload, result))
+                    if (Database.Instance.GtsTradePokemon4(upload, result))
                     {
 #if !DEBUG
                         try
                         {
 #endif
-                            DataAbstract.Instance.GtsLogTrade4(result, null);
+                            Database.Instance.GtsLogTrade4(result, null);
 #if !DEBUG
                         }
                         catch { }
@@ -489,8 +489,8 @@ namespace PkmnFoundations.GTS
                         return;
                     }
 
-                    BattleTowerRecord4[] opponents = DataAbstract.Instance.BattleTowerGetOpponents4(pid, rank, roomNum);
-                    BattleTowerProfile4[] leaders = DataAbstract.Instance.BattleTowerGetLeaders4(rank, roomNum);
+                    BattleTowerRecord4[] opponents = Database.Instance.BattleTowerGetOpponents4(pid, rank, roomNum);
+                    BattleTowerProfile4[] leaders = Database.Instance.BattleTowerGetLeaders4(rank, roomNum);
                     BattleTowerRecord4[] fakeOpponents = FakeOpponentGenerator4.GenerateFakeOpponents(7 - opponents.Length);
 
                     foreach (BattleTowerRecord4 record in fakeOpponents)
@@ -537,9 +537,9 @@ namespace PkmnFoundations.GTS
 
                     // todo: Do we want to store their record anyway if they lost the first round?
                     if (record.BattlesWon > 0)
-                        DataAbstract.Instance.BattleTowerUpdateRecord4(record);
+                        Database.Instance.BattleTowerUpdateRecord4(record);
                     if (record.BattlesWon == 7)
-                        DataAbstract.Instance.BattleTowerAddLeader4(record);
+                        Database.Instance.BattleTowerAddLeader4(record);
 
                     response.Write(new byte[] { 0x01, 0x00 }, 0, 2);
 

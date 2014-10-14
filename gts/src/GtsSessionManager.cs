@@ -145,8 +145,8 @@ namespace PkmnFoundations.GTS
 
         public void RefreshStats()
         {
-            AvailablePokemon4 = DataAbstract.Instance.GtsAvailablePokemon4();
-            AvailablePokemon5 = DataAbstract.Instance.GtsAvailablePokemon5();
+            AvailablePokemon4 = Database.Instance.GtsAvailablePokemon4();
+            AvailablePokemon5 = Database.Instance.GtsAvailablePokemon5();
         }
 
         public int AvailablePokemon4
