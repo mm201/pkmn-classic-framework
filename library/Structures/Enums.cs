@@ -48,6 +48,11 @@ namespace PkmnFoundations.Structures
         Black = 0x15,
         White2 = 0x16,
         Black2 = 0x17,
+
+        X = 0x18,
+        Y = 0x19,
+        AlphaSapphire = 0x1a,
+        OmegaRuby = 0x1b,
     }
 
     public enum Languages : byte
