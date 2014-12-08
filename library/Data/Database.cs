@@ -5,6 +5,7 @@ using System.Text;
 using System.Data;
 using PkmnFoundations.Structures;
 using System.Configuration;
+using PkmnFoundations.Pokedex;
 
 namespace PkmnFoundations.Data
 {
@@ -149,6 +150,19 @@ namespace PkmnFoundations.Data
         public abstract bool BattleVideoFlagSaved5(ulong serial);
 
         public abstract ulong BattleVideoCount5();
+        #endregion
+
+        #region Pokedex
+        public abstract void PokedexInsertSpecies(Species s);
+        public abstract void PokedexInsertForm(Form f);
+        public abstract void PokedexInsertFamily(Family f);
+        public abstract void PokedexInsertEvolution(Evolution f);
+
+        public abstract void PokedexInsertType(PkmnFoundations.Pokedex.Type t);
+        public abstract void PokedexInsertItem(Item i);
+        public abstract void PokedexInsertMove(Move m);
+        public abstract void PokedexInsertAbility(Ability a);
+
         #endregion
     }
 }

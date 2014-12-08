@@ -93,6 +93,7 @@ namespace PkmnFoundations.Structures
 
     public enum DamageClass
     {
+        None = 0,
         Physical = 1,
         Special = 2,
         Support = 3
@@ -131,5 +132,45 @@ namespace PkmnFoundations.Structures
         Heart = 0x08,
         Star = 0x10,
         Diamond = 0x20
+    }
+
+    public enum EggGroups : byte
+    {
+        None = 0,
+        Monster = 1,
+        Water1 = 2,
+        Bug = 3,
+        Flying = 4,
+        Ground = 5,
+        Fairy = 6,
+        Plant = 7,
+        HumanShape = 8,
+        Water3 = 9,
+        Mineral = 10,
+        Indeterminate = 11,
+        Water2 = 12,
+        Ditto = 13,
+        Dragon = 14,
+        NoEggs = 15
+    }
+
+    public enum BattleTargets : byte
+    {
+        // Pasted straight from veekun.
+        // todo: Review and maybe clarify these names
+        SpecificMove = 1,
+        SelectedPokemonMeFirst = 2,
+        Ally = 3,
+        UsersField = 4,
+        UserOrAlly = 5,
+        OpponentsField = 6,
+        User = 7,
+        RandomOpponent = 8,
+        AllOtherPokemon = 9,
+        SelectedPokemon = 10,
+        AllOpponents = 11,
+        EntireField = 12,
+        UserAndAllies = 13,
+        AllPokemon = 14
     }
 }

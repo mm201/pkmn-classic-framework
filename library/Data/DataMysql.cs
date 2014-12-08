@@ -7,6 +7,7 @@ using MySql.Data.MySqlClient;
 using PkmnFoundations.Structures;
 using PkmnFoundations.Support;
 using System.Security.Cryptography;
+using PkmnFoundations.Pokedex;
 
 namespace PkmnFoundations.Data
 {
@@ -2510,5 +2511,49 @@ namespace PkmnFoundations.Data
             }
         }
         #endregion
+
+        #region Pokedex
+        public override void PokedexInsertSpecies(Species s)
+        {
+            //throw new NotImplementedException();
+        }
+
+        public override void PokedexInsertForm(Form f)
+        {
+            //throw new NotImplementedException();
+        }
+
+        public override void PokedexInsertFamily(Family f)
+        {
+            //throw new NotImplementedException();
+        }
+
+        public override void PokedexInsertEvolution(Evolution f)
+        {
+            //throw new NotImplementedException();
+        }
+
+        public override void PokedexInsertType(Pokedex.Type t)
+        {
+            //throw new NotImplementedException();
+        }
+
+        public override void PokedexInsertItem(Item i)
+        {
+            //throw new NotImplementedException();
+        }
+
+        public override void PokedexInsertMove(Move m)
+        {
+            //throw new NotImplementedException();
+        }
+
+        public override void PokedexInsertAbility(Ability a)
+        {
+            //throw new NotImplementedException();
+        }
+
+        #endregion
+
     }
 }

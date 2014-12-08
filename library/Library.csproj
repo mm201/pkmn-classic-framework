@@ -52,6 +52,15 @@
     <Compile Include="Data\DatabaseExtender.cs" />
     <Compile Include="Data\DataMysql.cs" />
     <Compile Include="Data\DataSqlite.cs" />
+    <Compile Include="Pokedex\Ability.cs" />
+    <Compile Include="Pokedex\Evolution.cs" />
+    <Compile Include="Pokedex\Item.cs" />
+    <Compile Include="Pokedex\Move.cs" />
+    <Compile Include="Pokedex\Pokedex.cs" />
+    <Compile Include="Pokedex\Species.cs" />
+    <Compile Include="Pokedex\Family.cs" />
+    <Compile Include="Pokedex\Form.cs" />
+    <Compile Include="Pokedex\Type.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Structures\BattleSubwayPokemon5.cs" />
     <Compile Include="Structures\BattleSubwayProfile5.cs" />
@@ -75,6 +84,7 @@
     <Compile Include="Support\AssertHelper.cs" />
     <Compile Include="Support\EncodedString4.cs" />
     <Compile Include="Support\EncodedString5.cs" />
+    <Compile Include="Support\LocalizedString.cs" />
     <Compile Include="Support\LogHelper.cs" />
     <Compile Include="Support\StreamExtender.cs" />
     <Compile Include="Support\StringHelper.cs" />
