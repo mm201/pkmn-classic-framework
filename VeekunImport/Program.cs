@@ -51,6 +51,93 @@ namespace VeekunImport
                 // 2. foreach DataRow, instance a class from the PkmnFoundations.Pokedex namespace.
                 // 3. call Database.AddToPokedex on that object.
 
+                // pkmncf_pokedex_pokemon_families
+                // Obtain the families map. We will use it in a few places.
+                Dictionary<int, int> familyMap = new Dictionary<int, int>();
+                List<int[]> familyList = new List<int[]>();
+                using (FileStream fs = File.Open("families_map.txt", FileMode.Open))
+                {
+                    StreamReader sr = new StreamReader(fs, Encoding.UTF8);
+                    int lineNumber = 0;
+                    String line;
+                    while ((line = sr.ReadLine()) != null)
+                    {
+                        lineNumber++;
+                        String[] fields = line.Split('\t');
+                        // todo: allow and reject blank lines at the end.
+                        if (fields.Length == 0) throw new Exception("families_map.txt has a blank line.");
+                        int[] fieldsInt = fields.Select(s => Convert.ToInt32(s)).ToArray();
+                        familyList.Add(fieldsInt);
+                        foreach (int x in fieldsInt)
+                        {
+                            // lineNumber is one-based, unlike familyList index.
+                            // species is the key, family ID is the value.
+                            // If any species is repeated in family_map.txt, this ought to fail.
+                            familyMap.Add(x, lineNumber);
+                        }
+                    }
+                }
+
+                // families from families.txt override default behaviour.
+                List<Family> overrideFamilies = new List<Family>();
+                using (FileStream fs = File.Open("families.txt", FileMode.Open))
+                {
+                    StreamReader sr = new StreamReader(fs, Encoding.UTF8);
+                    String line;
+                    while ((line = sr.ReadLine()) != null)
+                    {
+                        String[] fields = line.Split('\t');
+                        overrideFamilies.Add(new Family(null,
+                            Convert.ToInt32(fields[0]),
+                            Convert.ToInt32(fields[1]),
+                            Convert.ToInt32(fields[2]),
+                            Convert.ToInt32(fields[3]),
+                            Convert.ToInt32(fields[4]),
+                            Convert.ToInt32(fields[5]),
+                            Convert.ToByte(fields[6])
+                            ));
+                    }
+                }
+                // already sorted
+                //someFamilies.Sort((f, other) => f.ID.CompareTo(other.ID));
+
+                int familyCount = familyList.Count;
+                int nextOverrideIndex = 0;
+                for (int familyId = 1; familyId <= familyCount; familyId++)
+                {
+                    int basicSpeciesId = familyList[familyId - 1][0];
+                    Family f;
+                    if (nextOverrideIndex < overrideFamilies.Count && overrideFamilies[nextOverrideIndex].ID == familyId)
+                    {
+                        // An override exists in the table; use it.
+                        f = overrideFamilies[nextOverrideIndex];
+                        nextOverrideIndex++;
+                    }
+                    else
+                    {
+                        // No override exists so go with default:
+                        // Basic male/female are the same species which is the one listed first.
+                        // There is no baby species nor incense
+                        // (Non-incense babies are considered basic in this system anyway.)
+                        // Gender ratio comes from the basic species.
+                        byte genderRatio = (byte)Convert.ToInt32(connVeekun.ExecuteScalar("SELECT gender_rate FROM pokemon_species WHERE id = @id", new SQLiteParameter("@id", basicSpeciesId)));
+                        f = new Family(null, familyId, basicSpeciesId, basicSpeciesId, 0, 0, 0, genderRatio);
+                    }
+                    db.PokedexInsertFamily(f);
+                    String basic = (f.BasicMaleID != f.BasicFemaleID) ? 
+                        String.Format(" {0}/{1}", f.BasicMaleID, f.BasicFemaleID) :
+                        String.Format(" {0}", f.BasicMaleID);
+                    String baby;
+                    if (f.BabyMaleID != f.BabyFemaleID)
+                        baby = String.Format(" {0}/{1} incense {2}", f.BabyMaleID, f.BabyFemaleID, f.IncenseID);
+                    else
+                        baby = (f.BabyMaleID == 0) ? "" :
+                            String.Format(" {0} incense {1}", f.BabyMaleID, f.IncenseID);
+                    String gender = (f.GenderRatio == 255) ? "genderless" :
+                        String.Format("{0}% female", (float)f.GenderRatio * 12.5f);
+                    Console.WriteLine("Inserted family {0}{1}{2} {3}", f.ID, basic, baby, gender);
+                }
+
                 // pkmncf_pokedex_pokemon
                 SQLiteDataReader rdPokemon = (SQLiteDataReader)connVeekun.ExecuteReader("SELECT " +
                     "pokemon_species.id, " +
@@ -81,6 +168,7 @@ namespace VeekunImport
 
                     // todo: Family ID
                     Species s = new Species(null, id, 
+                        familyMap[id],
                         GetLocalizedString(rdPokemon, "name_"),
                         (GrowthRates)growth_rate_id,
                         (byte)gender_rate,
@@ -139,8 +227,10 @@ namespace VeekunImport
                 }
                 rdForms.Close();
 
-                // pkmncf_pokedex_pokemon_families
-                // pkmncf_pokedex_pokemon_evolutions
+                // todo: pkmncf_pokedex_pokemon_form_stats_x
+                // todo: pkmncf_pokedex_pokemon_families
+                // todo: pkmncf_pokedex_pokemon_evolutions
+
                 // pkmncf_pokedex_types
                 SQLiteDataReader rdTypes = (SQLiteDataReader)connVeekun.ExecuteReader("SELECT id, damage_class_id, " +
                     "(SELECT name FROM type_names WHERE type_names.type_id = types.id AND local_language_id = 1) AS name_ja, " +
@@ -167,6 +257,7 @@ namespace VeekunImport
                 }
                 rdTypes.Close();
 
+                // pkmncf_pokedex_moves
                 SQLiteDataReader rdMoves = (SQLiteDataReader)connVeekun.ExecuteReader("SELECT id, type_id, " +
                     "(SELECT name FROM move_names WHERE move_names.move_id = moves.id AND local_language_id = 1) AS name_ja, " +
                     "(SELECT name FROM move_names WHERE move_names.move_id = moves.id AND local_language_id = 9) AS name_en, " +
@@ -204,6 +295,7 @@ namespace VeekunImport
                     Console.WriteLine("Inserted {0} {1}", m.ID, m.Name.ToString());
                 }
 
+                // pkmncf_pokedex_abilities
                 SQLiteDataReader rdAbilities = (SQLiteDataReader)connVeekun.ExecuteReader("SELECT id, " +
                     "(SELECT name FROM ability_names WHERE ability_names.ability_id = abilities.id AND local_language_id = 1) AS name_ja, " +
                     "(SELECT name FROM ability_names WHERE ability_names.ability_id = abilities.id AND local_language_id = 9) AS name_en, " +
@@ -226,9 +318,10 @@ namespace VeekunImport
                 }
                 rdAbilities.Close();
 
+                // pkmncf_pokedex_items
                 Dictionary<int, ItemLoading> items = new Dictionary<int, ItemLoading>();
 
-                for (int generation = 3; generation < 7; generation++)
+                for (int generation = 3; generation < 6; generation++)
                 {
                     String filename = String.Format("items{0}.txt", generation);
                     if (!File.Exists(filename))

@@ -9,12 +9,13 @@ namespace PkmnFoundations.Pokedex
 {
     public class Species
     {
-        public Species(Pokedex pokedex, int national_dex, LocalizedString name, 
+        public Species(Pokedex pokedex, int national_dex, int family_id, LocalizedString name, 
             GrowthRates growth_rate, byte gender_ratio, EggGroups egg_group_1, 
             EggGroups egg_group_2, int egg_steps, bool gender_variations)
         {
             m_pokedex = pokedex;
             NationalDex = national_dex;
+            FamilyID = family_id;
             Name = name;
             GrowthRate = growth_rate;
             GenderRatio = gender_ratio;
@@ -58,6 +59,7 @@ namespace PkmnFoundations.Pokedex
         private Pokedex m_pokedex;
 
         public int NationalDex { get; private set; }
+        public int FamilyID { get; private set; }
         public LocalizedString Name { get; private set; }
         public GrowthRates GrowthRate { get; private set; }
         public byte GenderRatio { get; private set; }
