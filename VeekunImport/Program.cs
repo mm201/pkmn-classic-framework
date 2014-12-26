@@ -51,6 +51,8 @@ namespace VeekunImport
                 // 2. foreach DataRow, instance a class from the PkmnFoundations.Pokedex namespace.
                 // 3. call Database.AddToPokedex on that object.
 
+                // todo: We need a way to rebuild specific tables
+
                 // pkmncf_pokedex_pokemon_families
                 // Obtain the families map. We will use it in a few places.
                 Dictionary<int, int> familyMap = new Dictionary<int, int>();
@@ -394,8 +396,10 @@ namespace VeekunImport
                     .Where(i => i.Value.Value6 != null && i.Value.NameLocalized == null)
                     .ToDictionary(i => (int)i.Value.Value6, i => i.Value);
 
+                // veekun has incorrect Gen3 indices for Helix/Dome fossil.
+                // (Or they disagree with Bulbapedia which is my primary source)
                 SQLiteDataReader rdItems = (SQLiteDataReader)connVeekun.ExecuteReader("SELECT id, cost, " +
-                    "(SELECT game_index FROM item_game_indices WHERE item_id = items.id AND generation_id = 3) AS value3, " +
+                    "(SELECT game_index FROM item_game_indices WHERE item_id = items.id AND generation_id = 3 AND NOT item_id IN (101, 102)) AS value3, " +
                     "(SELECT game_index FROM item_game_indices WHERE item_id = items.id AND generation_id = 4) AS value4, " +
                     "(SELECT game_index FROM item_game_indices WHERE item_id = items.id AND generation_id = 5) AS value5, " +
                     "(SELECT game_index FROM item_game_indices WHERE item_id = items.id AND generation_id = 6) AS value6, " +
