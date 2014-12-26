@@ -13,6 +13,7 @@ namespace PkmnFoundations.Pokedex
             m_pokedex = pokedex;
             Value = value;
             Name = name;
+            // todo: Nice description text
         }
 
         private Pokedex m_pokedex;

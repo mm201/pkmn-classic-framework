@@ -13,6 +13,8 @@ namespace PkmnFoundations.Pokedex
             m_pokedex = pokedex;
 
             ID = id;
+            // todo: Since ID numbers stopped moving around in Gen 4 -> 5, we
+            // only need to store value3, value4 and a minGenerationRequired field
             Value3 = value3;
             Value4 = value4;
             Value5 = value5;

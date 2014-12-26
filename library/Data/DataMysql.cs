@@ -11,6 +11,8 @@ using PkmnFoundations.Pokedex;
 
 namespace PkmnFoundations.Data
 {
+    // todo: This class is getting quite large. We should move some things with
+    // limited usefulness (eg. database creation) into separate classes.
     public class DataMysql : Database
     {
         #region Initialization
@@ -2512,45 +2514,189 @@ namespace PkmnFoundations.Data
         }
         #endregion
 
-        #region Pokedex
+        #region Pokedex creation
+        private const String INSERT_COLUMNS = "Name_JA, Name_EN, Name_FR, Name_IT, Name_DE, Name_ES, Name_KO";
+        private const String INSERT_VALUES = "@name_ja, @name_en, @name_fr, @name_it, @name_de, @name_es, @name_ko";
+
+        private void CreateLocalizedStringQueryPieces(LocalizedString s, List<MySqlParameter> insertParams)
+        {
+            String[] langs = new String[] { "JA", "EN", "FR", "IT", "DE", "ES", "KO" };
+            foreach (String lang in langs)
+            {
+                MySqlParameter param = new MySqlParameter("@name_" + lang.ToLowerInvariant(), s.ContainsKey(lang) ? s[lang] : (object)DBNull.Value);
+                insertParams.Add(param);
+            }
+        }
+
         public override void PokedexInsertSpecies(Species s)
         {
-            //throw new NotImplementedException();
+            using (MySqlConnection db = CreateConnection())
+            {
+                db.Open();
+
+                List<MySqlParameter> insertParams = new List<MySqlParameter>();
+                insertParams.Add(new MySqlParameter("@national_dex", s.NationalDex));
+                insertParams.Add(new MySqlParameter("@family_id", s.FamilyID));
+                insertParams.Add(new MySqlParameter("@growth_rate", (int)s.GrowthRate));
+                insertParams.Add(new MySqlParameter("@gender_ratio", s.GenderRatio));
+                insertParams.Add(new MySqlParameter("@egg_group_1", (byte)s.EggGroup1));
+                insertParams.Add(new MySqlParameter("@egg_group_2", (byte)s.EggGroup2));
+                insertParams.Add(new MySqlParameter("@egg_steps", s.EggSteps));
+                insertParams.Add(new MySqlParameter("@gender_variations", s.GenderVariations));
+                CreateLocalizedStringQueryPieces(s.Name, insertParams);
+
+                db.ExecuteNonQuery("INSERT INTO pkmncf_pokedex_pokemon (NationalDex, family_id, " +
+                    INSERT_COLUMNS + ", GrowthRate, GenderRatio, EggGroup1, EggGroup2, EggSteps, " +
+                    "GenderVariations) VALUES (@national_dex, @family_id, " +
+                    INSERT_VALUES + ", @growth_rate, @gender_ratio, @egg_group_1, @egg_group_2, " +
+                    "@egg_steps, @gender_variations)", insertParams.ToArray());
+
+                db.Close();
+            }
         }
 
         public override void PokedexInsertForm(Form f)
         {
-            //throw new NotImplementedException();
+            using (MySqlConnection db = CreateConnection())
+            {
+                db.Open();
+
+                List<MySqlParameter> insertParams = new List<MySqlParameter>();
+                insertParams.Add(new MySqlParameter("@id", f.ID));
+                insertParams.Add(new MySqlParameter("@national_dex", f.NationalDex));
+                insertParams.Add(new MySqlParameter("@form_value", f.Value));
+                insertParams.Add(new MySqlParameter("@form_suffix", f.Suffix));
+                insertParams.Add(new MySqlParameter("@height", f.Height));
+                insertParams.Add(new MySqlParameter("@weight", f.Weight));
+                insertParams.Add(new MySqlParameter("@experience", f.Experience));
+                CreateLocalizedStringQueryPieces(f.Name, insertParams);
+
+                db.ExecuteNonQuery("INSERT INTO pkmncf_pokedex_pokemon_forms (id, NationalDex, " +
+                    "FormValue, " +
+                    INSERT_COLUMNS + ", FormSuffix, Height, Weight, Experience) VALUES (" +
+                    "@id, @national_dex, @form_value, " +
+                    INSERT_VALUES + ", @form_suffix, @height, @weight, @experience)", insertParams.ToArray());
+
+                db.Close();
+            }
         }
 
         public override void PokedexInsertFamily(Family f)
         {
-            //throw new NotImplementedException();
+            using (MySqlConnection db = CreateConnection())
+            {
+                db.Open();
+
+                db.ExecuteNonQuery("INSERT INTO pkmncf_pokedex_pokemon_families " +
+                    "(id, BasicMale, BasicFemale, BabyMale, BabyFemale, " +
+                    "Incense, GenderRatio) VALUES (@id, @basic_male, " +
+                    "@basic_female, @baby_male, @baby_female, @incense, " +
+                    "@gender_ratio)",
+                    // todo: collapse 0 to null sometimes
+                    new MySqlParameter("@id", f.ID),
+                    new MySqlParameter("@basic_male", f.BasicMaleID),
+                    new MySqlParameter("@basic_female", f.BasicFemaleID),
+                    new MySqlParameter("@baby_male", f.BabyMaleID),
+                    new MySqlParameter("@baby_female", f.BabyFemaleID),
+                    new MySqlParameter("@incense", f.IncenseID),
+                    new MySqlParameter("@gender_ratio", f.GenderRatio)
+                    );
+
+                db.Close();
+            }
         }
 
         public override void PokedexInsertEvolution(Evolution f)
         {
-            //throw new NotImplementedException();
+            throw new NotImplementedException();
         }
 
         public override void PokedexInsertType(Pokedex.Type t)
         {
-            //throw new NotImplementedException();
+            using (MySqlConnection db = CreateConnection())
+            {
+                db.Open();
+
+                List<MySqlParameter> insertParams = new List<MySqlParameter>();
+                insertParams.Add(new MySqlParameter("@id", t.ID));
+                insertParams.Add(new MySqlParameter("@damage_class", (byte)t.DamageClass));
+                CreateLocalizedStringQueryPieces(t.Name, insertParams);
+
+                db.ExecuteNonQuery("INSERT INTO pkmncf_pokedex_types (id, " +
+                    INSERT_COLUMNS + ", DamageClass) VALUES (@id, " +
+                    INSERT_VALUES + ", @damage_class)", insertParams.ToArray());
+
+                db.Close();
+            }
         }
 
         public override void PokedexInsertItem(Item i)
         {
-            //throw new NotImplementedException();
+            using (MySqlConnection db = CreateConnection())
+            {
+                db.Open();
+
+                List<MySqlParameter> insertParams = new List<MySqlParameter>();
+                insertParams.Add(new MySqlParameter("@id", i.ID));
+                insertParams.Add(new MySqlParameter("@value3", i.Value3));
+                insertParams.Add(new MySqlParameter("@value4", i.Value4));
+                insertParams.Add(new MySqlParameter("@value5", i.Value5));
+                insertParams.Add(new MySqlParameter("@value6", i.Value6));
+                insertParams.Add(new MySqlParameter("@price", i.Price));
+                CreateLocalizedStringQueryPieces(i.Name, insertParams);
+
+                db.ExecuteNonQuery("INSERT INTO pkmncf_pokedex_items (id, Value3, " +
+                    "Value4, Value5, Value6, " + INSERT_COLUMNS + ", Price) VALUES (" +
+                    "@id, @value3, @value4, @value5, @value6, " + INSERT_VALUES +
+                    ", @price)", insertParams.ToArray());
+
+                db.Close();
+            }
         }
 
         public override void PokedexInsertMove(Move m)
         {
-            //throw new NotImplementedException();
+            using (MySqlConnection db = CreateConnection())
+            {
+                db.Open();
+
+                List<MySqlParameter> insertParams = new List<MySqlParameter>();
+                insertParams.Add(new MySqlParameter("@value", m.ID));
+                insertParams.Add(new MySqlParameter("@type_id", m.TypeID));
+                insertParams.Add(new MySqlParameter("@damage_class", (int)m.DamageClass));
+                insertParams.Add(new MySqlParameter("@damage", m.Damage));
+                insertParams.Add(new MySqlParameter("@pp", m.PP));
+                insertParams.Add(new MySqlParameter("@accuracy", m.Accuracy));
+                insertParams.Add(new MySqlParameter("@priority", m.Priority));
+                insertParams.Add(new MySqlParameter("@target", (int)m.Target));
+                CreateLocalizedStringQueryPieces(m.Name, insertParams);
+
+                db.ExecuteNonQuery("INSERT INTO pkmncf_pokedex_moves (Value, type_id, " +
+                    "DamageClass, " + INSERT_COLUMNS + ", Damage, PP, Accuracy, " +
+                    "Priority, Target) VALUES (@value, @type_id, @damage_class, " + 
+                    INSERT_VALUES + ", @damage, @pp, " +
+                    "@accuracy, @priority, @target)", insertParams.ToArray());
+
+                db.Close();
+            }
         }
 
         public override void PokedexInsertAbility(Ability a)
         {
-            //throw new NotImplementedException();
+            using (MySqlConnection db = CreateConnection())
+            {
+                db.Open();
+
+                List<MySqlParameter> insertParams = new List<MySqlParameter>();
+                insertParams.Add(new MySqlParameter("@value", a.Value));
+                CreateLocalizedStringQueryPieces(a.Name, insertParams);
+
+                db.ExecuteNonQuery("INSERT INTO pkmncf_pokedex_abilities (Value, " +
+                    INSERT_COLUMNS + ") VALUES (@value, " + INSERT_VALUES + ")",
+                    insertParams.ToArray());
+
+                db.Close();
+            }
         }
 
         #endregion

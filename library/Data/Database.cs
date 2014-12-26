@@ -152,7 +152,7 @@ namespace PkmnFoundations.Data
         public abstract ulong BattleVideoCount5();
         #endregion
 
-        #region Pokedex
+        #region Pokedex creation
         public abstract void PokedexInsertSpecies(Species s);
         public abstract void PokedexInsertForm(Form f);
         public abstract void PokedexInsertFamily(Family f);

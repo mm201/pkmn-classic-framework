@@ -228,7 +228,6 @@ namespace VeekunImport
                 rdForms.Close();
 
                 // todo: pkmncf_pokedex_pokemon_form_stats_x
-                // todo: pkmncf_pokedex_pokemon_families
                 // todo: pkmncf_pokedex_pokemon_evolutions
 
                 // pkmncf_pokedex_types
@@ -362,6 +361,8 @@ namespace VeekunImport
                             switch (generation)
                             {
                                 // todo: maybe use an array or dictionary for these fields.
+                                // todo: this can be a lambda declared outside of this inner loop
+                                // which executes here.
                                 case 3:
                                     theItem.Value3 = thisGenId;
                                     break;

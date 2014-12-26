@@ -23,6 +23,7 @@ namespace PkmnFoundations.Pokedex
             Accuracy = accuracy;
             Priority = priority;
             Target = target;
+            // todo: Nice description text
         }
 
         private Pokedex m_pokedex;
