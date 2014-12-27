@@ -3607,9 +3607,7 @@
       <DependentUpon>VideoId.aspx</DependentUpon>
     </Compile>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="App_Data\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="MasterPage.master" />
   </ItemGroup>
