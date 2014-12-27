@@ -5,9 +5,9 @@
 # http://www.sequelpro.com/
 # http://code.google.com/p/sequel-pro/
 #
-# Host: 127.0.0.1 (MySQL 5.5.27)
+# Host: 127.0.0.1 (MySQL 5.5.40)
 # Database: gts
-# Generation Time: 2014-09-15 16:20:29 +0000
+# Generation Time: 2014-12-27 08:18:18 +0000
 # ************************************************************
 
 
@@ -78,155 +78,6 @@ CREATE TABLE `BattleVideoSearchHistory5` (
   `Country` int(11) DEFAULT NULL,
   `Region` int(11) DEFAULT NULL,
   `Special` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-
-
-# Dump of table FoundationsAbilities
-# ------------------------------------------------------------
-
-DROP TABLE IF EXISTS `FoundationsAbilities`;
-
-CREATE TABLE `FoundationsAbilities` (
-  `Value` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `Name` varchar(30) DEFAULT NULL,
-  PRIMARY KEY (`Value`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-
-
-# Dump of table FoundationsCountries
-# ------------------------------------------------------------
-
-DROP TABLE IF EXISTS `FoundationsCountries`;
-
-CREATE TABLE `FoundationsCountries` (
-  `id` int(20) unsigned NOT NULL DEFAULT '0',
-  `Value4` tinyint(3) unsigned DEFAULT '0',
-  `Value5` tinyint(3) unsigned DEFAULT NULL,
-  `Name` varchar(30) DEFAULT NULL,
-  `iso-3166-1` char(2) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `Name` (`Name`),
-  KEY `Value4` (`Value4`),
-  KEY `Value5` (`Value5`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-
-
-# Dump of table FoundationsCountryRegions
-# ------------------------------------------------------------
-
-DROP TABLE IF EXISTS `FoundationsCountryRegions`;
-
-CREATE TABLE `FoundationsCountryRegions` (
-  `id` int(11) unsigned NOT NULL DEFAULT '0',
-  `country_id` int(11) unsigned NOT NULL DEFAULT '0',
-  `Value4` tinyint(3) unsigned NOT NULL DEFAULT '0',
-  `Value5` tinyint(3) unsigned DEFAULT NULL,
-  `Name` varchar(30) DEFAULT NULL,
-  `iso-3166-2` varchar(4) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `country_id` (`country_id`),
-  KEY `country_id_2` (`country_id`,`Value4`),
-  KEY `country_id_3` (`country_id`,`Value5`),
-  CONSTRAINT `foundationscountryregions_ibfk_1` FOREIGN KEY (`country_id`) REFERENCES `FoundationsCountries` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-
-
-# Dump of table FoundationsItems
-# ------------------------------------------------------------
-
-DROP TABLE IF EXISTS `FoundationsItems`;
-
-CREATE TABLE `FoundationsItems` (
-  `Value` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `Name` varchar(30) DEFAULT NULL,
-  PRIMARY KEY (`Value`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-
-
-# Dump of table FoundationsMoves
-# ------------------------------------------------------------
-
-DROP TABLE IF EXISTS `FoundationsMoves`;
-
-CREATE TABLE `FoundationsMoves` (
-  `Value` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `Name` varchar(30) DEFAULT NULL,
-  `Type` int(11) DEFAULT NULL,
-  `DamageClass` tinyint(3) unsigned NOT NULL,
-  PRIMARY KEY (`Value`),
-  KEY `Type` (`Type`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-
-
-# Dump of table FoundationsPokemon
-# ------------------------------------------------------------
-
-DROP TABLE IF EXISTS `FoundationsPokemon`;
-
-CREATE TABLE `FoundationsPokemon` (
-  `NationalDex` int(11) unsigned NOT NULL,
-  `Name` varchar(36) NOT NULL DEFAULT '',
-  `Experience` int(11) NOT NULL,
-  PRIMARY KEY (`NationalDex`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-
-
-# Dump of table FoundationsPokemonForms
-# ------------------------------------------------------------
-
-DROP TABLE IF EXISTS `FoundationsPokemonForms`;
-
-CREATE TABLE `FoundationsPokemonForms` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `NationalDex` int(11) unsigned NOT NULL,
-  `GenderRatio` tinyint(3) unsigned DEFAULT NULL,
-  `FormValue` tinyint(3) unsigned NOT NULL,
-  `FormName` varchar(30) DEFAULT NULL,
-  `FormSuffix` varchar(30) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `NationalDex` (`NationalDex`),
-  CONSTRAINT `foundationspokemonforms_ibfk_1` FOREIGN KEY (`NationalDex`) REFERENCES `FoundationsPokemon` (`NationalDex`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-
-
-# Dump of table FoundationsPokemonStats2
-# ------------------------------------------------------------
-
-DROP TABLE IF EXISTS `FoundationsPokemonStats2`;
-
-CREATE TABLE `FoundationsPokemonStats2` (
-  `form_id` int(11) unsigned NOT NULL,
-  `Type1` int(11) DEFAULT NULL,
-  `Type2` int(11) DEFAULT NULL,
-  `BaseHP` int(11) DEFAULT NULL,
-  `BaseAttack` int(11) DEFAULT NULL,
-  `BaseDefense` int(11) DEFAULT NULL,
-  `BaseSpeed` int(11) DEFAULT NULL,
-  `BaseSpAttack` int(11) DEFAULT NULL,
-  `BaseSpDefense` int(11) DEFAULT NULL,
-  PRIMARY KEY (`form_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-
-
-# Dump of table FoundationsTypes
-# ------------------------------------------------------------
-
-DROP TABLE IF EXISTS `FoundationsTypes`;
-
-CREATE TABLE `FoundationsTypes` (
-  `id` int(11) NOT NULL,
-  `Name` varchar(30) NOT NULL DEFAULT '',
-  `DamageClass` tinyint(3) unsigned DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -625,6 +476,254 @@ CREATE TABLE `GtsProfiles5` (
   `TimeAdded` datetime DEFAULT NULL,
   `TimeUpdated` datetime DEFAULT NULL,
   PRIMARY KEY (`pid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+
+# Dump of table pkmncf_pokedex_abilities
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `pkmncf_pokedex_abilities`;
+
+CREATE TABLE `pkmncf_pokedex_abilities` (
+  `Value` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `Name_JA` varchar(30) DEFAULT '',
+  `Name_EN` varchar(30) DEFAULT NULL,
+  `Name_FR` varchar(30) DEFAULT NULL,
+  `Name_IT` varchar(30) DEFAULT NULL,
+  `Name_DE` varchar(30) DEFAULT NULL,
+  `Name_ES` varchar(30) DEFAULT NULL,
+  `Name_KO` varchar(30) DEFAULT NULL,
+  PRIMARY KEY (`Value`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+
+# Dump of table pkmncf_pokedex_countries
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `pkmncf_pokedex_countries`;
+
+CREATE TABLE `pkmncf_pokedex_countries` (
+  `id` int(10) unsigned NOT NULL DEFAULT '0',
+  `Value4` tinyint(3) unsigned DEFAULT '0',
+  `Value5` tinyint(3) unsigned DEFAULT NULL,
+  `iso-3166-1` char(2) DEFAULT NULL,
+  `Name_JA` varchar(30) DEFAULT '',
+  `Name_EN` varchar(30) DEFAULT NULL,
+  `Name_FR` varchar(30) DEFAULT NULL,
+  `Name_IT` varchar(30) DEFAULT NULL,
+  `Name_DE` varchar(30) DEFAULT NULL,
+  `Name_ES` varchar(30) DEFAULT NULL,
+  `Name_KO` varchar(30) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `Name` (`Name_JA`),
+  KEY `Value4` (`Value4`),
+  KEY `Value5` (`Value5`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+
+# Dump of table pkmncf_pokedex_country_regions
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `pkmncf_pokedex_country_regions`;
+
+CREATE TABLE `pkmncf_pokedex_country_regions` (
+  `id` int(10) unsigned NOT NULL DEFAULT '0',
+  `country_id` int(10) unsigned NOT NULL DEFAULT '0',
+  `Value4` tinyint(3) unsigned NOT NULL DEFAULT '0',
+  `Value5` tinyint(3) unsigned DEFAULT NULL,
+  `iso-3166-2` varchar(4) DEFAULT NULL,
+  `Name_JA` varchar(30) DEFAULT '',
+  `Name_EN` varchar(30) DEFAULT NULL,
+  `Name_FR` varchar(30) DEFAULT NULL,
+  `Name_IT` varchar(30) DEFAULT NULL,
+  `Name_DE` varchar(30) DEFAULT NULL,
+  `Name_ES` varchar(30) DEFAULT NULL,
+  `Name_KO` varchar(30) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `country_id` (`country_id`),
+  KEY `country_id_2` (`country_id`,`Value4`),
+  KEY `country_id_3` (`country_id`,`Value5`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+
+# Dump of table pkmncf_pokedex_items
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `pkmncf_pokedex_items`;
+
+CREATE TABLE `pkmncf_pokedex_items` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `Value3` int(10) unsigned DEFAULT NULL,
+  `Value4` int(10) unsigned DEFAULT NULL,
+  `Value5` int(10) unsigned DEFAULT NULL,
+  `Value6` int(10) unsigned DEFAULT NULL,
+  `Name_JA` varchar(30) DEFAULT '',
+  `Name_EN` varchar(30) DEFAULT NULL,
+  `Name_FR` varchar(30) DEFAULT NULL,
+  `Name_IT` varchar(30) DEFAULT NULL,
+  `Name_DE` varchar(30) DEFAULT NULL,
+  `Name_ES` varchar(30) DEFAULT NULL,
+  `Name_KO` varchar(30) DEFAULT NULL,
+  `Price` int(10) unsigned DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `Value3` (`Value3`),
+  KEY `Value4` (`Value4`),
+  KEY `Value5` (`Value5`),
+  KEY `Value6` (`Value6`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+
+# Dump of table pkmncf_pokedex_moves
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `pkmncf_pokedex_moves`;
+
+CREATE TABLE `pkmncf_pokedex_moves` (
+  `Value` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `type_id` int(10) unsigned DEFAULT NULL,
+  `DamageClass` tinyint(3) unsigned NOT NULL,
+  `Name_JA` varchar(30) DEFAULT '',
+  `Name_EN` varchar(30) DEFAULT NULL,
+  `Name_FR` varchar(30) DEFAULT NULL,
+  `Name_IT` varchar(30) DEFAULT NULL,
+  `Name_DE` varchar(30) DEFAULT NULL,
+  `Name_ES` varchar(30) DEFAULT NULL,
+  `Name_KO` varchar(30) DEFAULT NULL,
+  `Damage` int(11) DEFAULT NULL,
+  `PP` int(11) DEFAULT NULL,
+  `Accuracy` int(11) DEFAULT NULL,
+  `Priority` int(11) DEFAULT NULL,
+  `Target` int(11) DEFAULT NULL,
+  PRIMARY KEY (`Value`),
+  KEY `Type` (`type_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+
+# Dump of table pkmncf_pokedex_pokemon
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `pkmncf_pokedex_pokemon`;
+
+CREATE TABLE `pkmncf_pokedex_pokemon` (
+  `NationalDex` int(10) unsigned NOT NULL,
+  `family_id` int(10) unsigned NOT NULL,
+  `Name_JA` varchar(36) DEFAULT '',
+  `Name_EN` varchar(36) DEFAULT NULL,
+  `Name_FR` varchar(36) DEFAULT NULL,
+  `Name_IT` varchar(36) DEFAULT NULL,
+  `Name_DE` varchar(36) DEFAULT NULL,
+  `Name_ES` varchar(36) DEFAULT NULL,
+  `Name_KO` varchar(36) DEFAULT NULL,
+  `GrowthRate` int(10) unsigned NOT NULL,
+  `GenderRatio` tinyint(3) unsigned NOT NULL,
+  `EggGroup1` tinyint(3) unsigned DEFAULT NULL,
+  `EggGroup2` tinyint(3) unsigned DEFAULT NULL,
+  `EggSteps` int(10) unsigned DEFAULT NULL,
+  `GenderVariations` bit(1) DEFAULT NULL,
+  PRIMARY KEY (`NationalDex`),
+  KEY `family_id` (`family_id`),
+  KEY `EggGroup1` (`EggGroup1`),
+  KEY `EggGroup2` (`EggGroup2`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+
+# Dump of table pkmncf_pokedex_pokemon_families
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `pkmncf_pokedex_pokemon_families`;
+
+CREATE TABLE `pkmncf_pokedex_pokemon_families` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `BasicMale` int(10) unsigned NOT NULL,
+  `BasicFemale` int(10) unsigned NOT NULL,
+  `BabyMale` int(10) unsigned DEFAULT NULL,
+  `BabyFemale` int(10) unsigned DEFAULT NULL,
+  `Incense` int(10) unsigned DEFAULT NULL,
+  `GenderRatio` tinyint(3) unsigned NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+
+# Dump of table pkmncf_pokedex_pokemon_form_stats
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `pkmncf_pokedex_pokemon_form_stats`;
+
+CREATE TABLE `pkmncf_pokedex_pokemon_form_stats` (
+  `form_id` int(10) unsigned NOT NULL,
+  `MinGeneration` int(11) unsigned NOT NULL,
+  `Type1` int(10) unsigned DEFAULT NULL,
+  `Type2` int(10) unsigned DEFAULT NULL,
+  `BaseHP` int(11) DEFAULT NULL,
+  `BaseAttack` int(11) DEFAULT NULL,
+  `BaseDefense` int(11) DEFAULT NULL,
+  `BaseSpeed` int(11) DEFAULT NULL,
+  `BaseSpAttack` int(11) DEFAULT NULL,
+  `BaseSpDefense` int(11) DEFAULT NULL,
+  `RewardHP` tinyint(3) unsigned DEFAULT NULL,
+  `RewardAttack` tinyint(3) unsigned DEFAULT NULL,
+  `RewardDefense` tinyint(3) unsigned DEFAULT NULL,
+  `RewardSpeed` tinyint(3) unsigned DEFAULT NULL,
+  `RewardSpAttack` tinyint(3) unsigned DEFAULT NULL,
+  `RewardSpDefense` tinyint(3) unsigned DEFAULT NULL,
+  KEY `form_id` (`form_id`,`MinGeneration`),
+  KEY `Type1` (`Type1`),
+  KEY `Type2` (`Type2`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+
+# Dump of table pkmncf_pokedex_pokemon_forms
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `pkmncf_pokedex_pokemon_forms`;
+
+CREATE TABLE `pkmncf_pokedex_pokemon_forms` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `NationalDex` int(11) unsigned NOT NULL,
+  `FormValue` tinyint(3) unsigned NOT NULL,
+  `Name_JA` varchar(30) DEFAULT NULL,
+  `Name_EN` varchar(30) DEFAULT NULL,
+  `Name_FR` varchar(30) DEFAULT NULL,
+  `Name_IT` varchar(30) DEFAULT NULL,
+  `Name_DE` varchar(30) DEFAULT NULL,
+  `Name_ES` varchar(30) DEFAULT NULL,
+  `Name_KO` varchar(30) DEFAULT NULL,
+  `FormSuffix` varchar(30) DEFAULT NULL,
+  `Height` int(10) unsigned DEFAULT NULL,
+  `Weight` int(10) unsigned DEFAULT NULL,
+  `Experience` int(10) unsigned DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `NationalDex` (`NationalDex`),
+  KEY `FormValue` (`FormValue`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+
+# Dump of table pkmncf_pokedex_types
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `pkmncf_pokedex_types`;
+
+CREATE TABLE `pkmncf_pokedex_types` (
+  `id` int(10) unsigned NOT NULL,
+  `Name_JA` varchar(30) DEFAULT '',
+  `Name_EN` varchar(30) DEFAULT NULL,
+  `Name_FR` varchar(30) DEFAULT NULL,
+  `Name_IT` varchar(30) DEFAULT NULL,
+  `Name_DE` varchar(30) DEFAULT NULL,
+  `Name_ES` varchar(30) DEFAULT NULL,
+  `Name_KO` varchar(30) DEFAULT NULL,
+  `DamageClass` tinyint(3) unsigned DEFAULT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
