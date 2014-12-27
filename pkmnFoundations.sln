@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.30723.0
+VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Library", "library\Library.csproj", "{408EFC7E-C6B0-4160-8628-2679E34385CE}"
 EndProject
@@ -22,6 +22,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GamestatsBase", "GamestatsBase\GamestatsBase\GamestatsBase.csproj", "{2D667F5B-F10D-44E2-93F6-DD555D9EE7DF}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VeekunImport", "VeekunImport\VeekunImport.csproj", "{2A761C4F-00C2-45D5-B4CA-C41558CEB2DF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MakeBaseStatTables", "MakeBaseStatTables\MakeBaseStatTables.csproj", "{99FCBB1C-D94F-458D-ABD2-8800FBDC65DA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -133,6 +135,16 @@ Global
 		{2A761C4F-00C2-45D5-B4CA-C41558CEB2DF}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{2A761C4F-00C2-45D5-B4CA-C41558CEB2DF}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{2A761C4F-00C2-45D5-B4CA-C41558CEB2DF}.Release|x86.ActiveCfg = Release|Any CPU
+		{99FCBB1C-D94F-458D-ABD2-8800FBDC65DA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{99FCBB1C-D94F-458D-ABD2-8800FBDC65DA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{99FCBB1C-D94F-458D-ABD2-8800FBDC65DA}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{99FCBB1C-D94F-458D-ABD2-8800FBDC65DA}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{99FCBB1C-D94F-458D-ABD2-8800FBDC65DA}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{99FCBB1C-D94F-458D-ABD2-8800FBDC65DA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{99FCBB1C-D94F-458D-ABD2-8800FBDC65DA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{99FCBB1C-D94F-458D-ABD2-8800FBDC65DA}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{99FCBB1C-D94F-458D-ABD2-8800FBDC65DA}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{99FCBB1C-D94F-458D-ABD2-8800FBDC65DA}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
