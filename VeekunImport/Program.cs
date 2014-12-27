@@ -17,6 +17,8 @@ namespace VeekunImport
 {
     class Program
     {
+        const int GENERATIONS = 6;
+
         static void Main(string[] args)
         {
             String veekunFilename;
@@ -229,7 +231,46 @@ namespace VeekunImport
                 }
                 rdForms.Close();
 
-                // todo: pkmncf_pokedex_pokemon_form_stats_x
+                // pkmncf_pokedex_pokemon_form_stats
+                for (int generation = 1; generation <= GENERATIONS; generation++)
+                {
+                    String filename = String.Format("form_stats{0}.txt", generation);
+                    if (!File.Exists(filename))
+                    {
+                        Console.WriteLine("File {0} not found, skipped.", filename);
+                        continue;
+                    }
+                    using (FileStream fs = File.Open(filename, FileMode.Open))
+                    {
+                        StreamReader sr = new StreamReader(fs, Encoding.UTF8);
+                        String line;
+                        while ((line = sr.ReadLine()) != null)
+                        {
+                            String[] fields = line.Split('\t');
+                            if (fields.Length <= 1) continue;
+                            if (fields.Length != 15) throw new Exception(filename + " has a line with unexpected number of tabs.");
+
+                            int[] fieldsInt = fields.Select(s => Convert.ToInt32(s)).ToArray();
+                            FormStats f = new FormStats(null, fieldsInt[0], (Generations)generation, fieldsInt[1], fieldsInt[2],
+                                new StatValues(fieldsInt[3],
+                                    fieldsInt[4],
+                                    fieldsInt[5],
+                                    fieldsInt[6],
+                                    fieldsInt[7],
+                                    fieldsInt[8]),
+                                new StatValues(fieldsInt[9],
+                                    fieldsInt[10],
+                                    fieldsInt[11],
+                                    fieldsInt[12],
+                                    fieldsInt[13],
+                                    fieldsInt[14])
+                                );
+
+                            db.PokedexInsertFormStats(f);
+                        }
+                    }
+                }
+
                 // todo: pkmncf_pokedex_pokemon_evolutions
 
                 // pkmncf_pokedex_types
@@ -322,7 +363,7 @@ namespace VeekunImport
                 // pkmncf_pokedex_items
                 Dictionary<int, ItemLoading> items = new Dictionary<int, ItemLoading>();
 
-                for (int generation = 3; generation < 6; generation++)
+                for (int generation = 3; generation <= GENERATIONS; generation++)
                 {
                     String filename = String.Format("items{0}.txt", generation);
                     if (!File.Exists(filename))
@@ -418,7 +459,7 @@ namespace VeekunImport
                 {
                     List<ItemLoading> toProcess = new List<ItemLoading>(4);
 
-                    for (int generation = 3; generation < 7; generation++)
+                    for (int generation = 3; generation <= GENERATIONS; generation++)
                     {
                         String col = String.Format("value{0}", generation);
                         if (!(rdItems[col] is DBNull))

@@ -155,6 +155,7 @@ namespace PkmnFoundations.Data
         #region Pokedex creation
         public abstract void PokedexInsertSpecies(Species s);
         public abstract void PokedexInsertForm(Form f);
+        public abstract void PokedexInsertFormStats(FormStats f);
         public abstract void PokedexInsertFamily(Family f);
         public abstract void PokedexInsertEvolution(Evolution f);
 

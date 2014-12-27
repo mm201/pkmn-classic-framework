@@ -2581,6 +2581,41 @@ namespace PkmnFoundations.Data
             }
         }
 
+        public override void PokedexInsertFormStats(FormStats f)
+        {
+            using (MySqlConnection db = CreateConnection())
+            {
+                db.Open();
+
+                db.ExecuteNonQuery("INSERT INTO pkmncf_pokedex_pokemon_form_stats " +
+                    "(form_id, MinGeneration, Type1, Type2, " +
+                    "BaseHP, BaseAttack, BaseDefense, BaseSpeed, BaseSpAttack, BaseSpDefense, " +
+                    "RewardHP, RewardAttack, RewardDefense, RewardSpeed, RewardSpAttack, RewardSpDefense) " +
+                    "VALUES (@form_id, @min_generation, @type1, @type2, " +
+                    "@base_hp, @base_attack, @base_defense, @base_speed, @base_sp_attack, @base_sp_defense, " +
+                    "@reward_hp, @reward_attack, @reward_defense, @reward_speed, @reward_sp_attack, @reward_sp_defense)",
+                    new MySqlParameter("@form_id", f.FormID),
+                    new MySqlParameter("@min_generation", (int)f.MinGeneration),
+                    new MySqlParameter("@type1", f.Type1),
+                    new MySqlParameter("@type2", f.Type2),
+                    new MySqlParameter("@base_hp", f.BaseStats.Hp),
+                    new MySqlParameter("@base_attack", f.BaseStats.Attack),
+                    new MySqlParameter("@base_defense", f.BaseStats.Defense),
+                    new MySqlParameter("@base_speed", f.BaseStats.Speed),
+                    new MySqlParameter("@base_sp_attack", f.BaseStats.SpecialAttack),
+                    new MySqlParameter("@base_sp_defense", f.BaseStats.SpecialDefense),
+                    new MySqlParameter("@reward_hp", (byte)f.RewardEvs.Hp),
+                    new MySqlParameter("@reward_attack", (byte)f.RewardEvs.Attack),
+                    new MySqlParameter("@reward_defense", (byte)f.RewardEvs.Defense),
+                    new MySqlParameter("@reward_speed", (byte)f.RewardEvs.Speed),
+                    new MySqlParameter("@reward_sp_attack", (byte)f.RewardEvs.SpecialAttack),
+                    new MySqlParameter("@reward_sp_defense", (byte)f.RewardEvs.SpecialDefense)
+                );
+
+                db.Close();
+            }
+        }
+
         public override void PokedexInsertFamily(Family f)
         {
             using (MySqlConnection db = CreateConnection())

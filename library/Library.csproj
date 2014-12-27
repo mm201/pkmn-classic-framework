@@ -54,6 +54,7 @@
     <Compile Include="Data\DataSqlite.cs" />
     <Compile Include="Pokedex\Ability.cs" />
     <Compile Include="Pokedex\Evolution.cs" />
+    <Compile Include="Pokedex\FormStats.cs" />
     <Compile Include="Pokedex\Item.cs" />
     <Compile Include="Pokedex\Move.cs" />
     <Compile Include="Pokedex\Pokedex.cs" />
@@ -79,6 +80,7 @@
     <Compile Include="Structures\Enums.cs" />
     <Compile Include="Structures\GtsRecord4.cs" />
     <Compile Include="Structures\MusicalRecord5.cs" />
+    <Compile Include="Structures\StatValues.cs" />
     <Compile Include="Structures\TrainerProfile4.cs" />
     <Compile Include="Structures\TrainerProfile5.cs" />
     <Compile Include="Support\AssertHelper.cs" />
