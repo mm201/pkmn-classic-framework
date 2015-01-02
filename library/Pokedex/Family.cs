@@ -12,26 +12,24 @@ namespace PkmnFoundations.Pokedex
             int baby_male_id, int baby_female_id, int incense_id, byte gender_ratio)
             : base(pokedex)
         {
-            ID = id;
-            GenderRatio = gender_ratio;
-
             m_basic_male_pair = new LazyKeyValuePair<int, Species>(k => k == 0 ? null : m_pokedex.Species(k), v => v.NationalDex);
             m_basic_female_pair = new LazyKeyValuePair<int, Species>(k => k == 0 ? null : m_pokedex.Species(k), v => v.NationalDex);
             m_baby_male_pair = new LazyKeyValuePair<int, Species>(k => k == 0 ? null : m_pokedex.Species(k), v => v.NationalDex);
             m_baby_female_pair = new LazyKeyValuePair<int, Species>(k => k == 0 ? null : m_pokedex.Species(k), v => v.NationalDex);
             m_incense_pair = new LazyKeyValuePair<int, Item>(k => k == 0 ? null : m_pokedex.Items(k), v => v.ID);
-
             m_lazy_pairs.Add(m_basic_male_pair);
             m_lazy_pairs.Add(m_basic_female_pair);
             m_lazy_pairs.Add(m_baby_male_pair);
             m_lazy_pairs.Add(m_baby_female_pair);
             m_lazy_pairs.Add(m_incense_pair);
 
+            ID = id;
             m_basic_male_pair.Key = basic_male_id;
             m_basic_female_pair.Key = basic_female_id;
             m_baby_male_pair.Key = baby_male_id;
             m_baby_female_pair.Key = baby_female_id;
             m_incense_pair.Key = incense_id;
+            GenderRatio = gender_ratio;
         }
 
         public int ID { get; private set; }

@@ -12,7 +12,11 @@ namespace PkmnFoundations.Pokedex
             LocalizedString name, String suffix, int height, int weight, int experience)
             : base(pokedex)
         {
+            m_species_pair = new LazyKeyValuePair<int, Species>(k => k == 0 ? null : m_pokedex.Species(k), v => v.NationalDex);
+            m_lazy_pairs.Add(m_species_pair);
+
             ID = id;
+            m_species_pair.Key = species_id;
             Value = value;
             Name = name;
             Suffix = suffix;
@@ -20,9 +24,6 @@ namespace PkmnFoundations.Pokedex
             Weight = weight;
             Experience = experience;
 
-            m_species_pair = new LazyKeyValuePair<int, Species>(k => k == 0 ? null : m_pokedex.Species(k), v => v.NationalDex);
-            m_lazy_pairs.Add(m_species_pair);
-            m_species_pair.Key = species_id;
         }
 
         public int ID { get; private set; }
@@ -34,6 +35,7 @@ namespace PkmnFoundations.Pokedex
         public int Experience { get; private set; }
 
         private LazyKeyValuePair<int, Species> m_species_pair;
+
         public int SpeciesID
         {
             get { return m_species_pair.Key; }

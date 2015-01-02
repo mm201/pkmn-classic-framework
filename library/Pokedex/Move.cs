@@ -14,8 +14,11 @@ namespace PkmnFoundations.Pokedex
             BattleTargets target)
             : base(pokedex)
         {
+            m_type_pair = new LazyKeyValuePair<int, PkmnFoundations.Pokedex.Type>(k => k == 0 ? null : m_pokedex.Types(k), v => v.ID);
+            m_lazy_pairs.Add(m_type_pair);
+
             ID = id;
-            TypeID = type_id;
+            m_type_pair.Key = type_id;
             Name = name;
             DamageClass = damage_class;
             Damage = damage;
@@ -27,9 +30,6 @@ namespace PkmnFoundations.Pokedex
         }
 
         public int ID { get; private set; }
-        // todo: this field should be private and only dealt with during construction.
-        // Instead, an actual Type object should be exposed and its ID number can be retrieved if necessary.
-        public int TypeID { get; private set; }
         public LocalizedString Name { get; private set; }
         public DamageClass DamageClass { get; private set; }
         public int Damage { get; private set; }
@@ -37,5 +37,16 @@ namespace PkmnFoundations.Pokedex
         public int Accuracy { get; private set; }
         public int Priority { get; private set; }
         public BattleTargets Target { get; private set; }
+
+        private LazyKeyValuePair<int, PkmnFoundations.Pokedex.Type> m_type_pair;
+
+        public int TypeID 
+        {
+            get { return m_type_pair.Key; }
+        }
+        public PkmnFoundations.Pokedex.Type Type
+        {
+            get { return m_type_pair.Value; }
+        }
     }
 }

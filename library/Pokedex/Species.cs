@@ -14,7 +14,11 @@ namespace PkmnFoundations.Pokedex
             EggGroups egg_group_2, int egg_steps, bool gender_variations)
             : base(pokedex)
         {
+            m_family_pair = new LazyKeyValuePair<int, Family>(k => k == 0 ? null : m_pokedex.Families(k), v => v.ID);
+            m_lazy_pairs.Add(m_family_pair);
+
             NationalDex = national_dex;
+            m_family_pair.Key = family_id;
             Name = name;
             GrowthRate = growth_rate;
             GenderRatio = gender_ratio;
@@ -22,11 +26,6 @@ namespace PkmnFoundations.Pokedex
             EggGroup2 = egg_group_2;
             EggSteps = egg_steps;
             GenderVariations = gender_variations;
-
-            m_family_pair = new LazyKeyValuePair<int, Family>(k => k == 0 ? null : m_pokedex.Families(k), v => v.ID);
-            m_lazy_pairs.Add(m_family_pair);
-
-            m_family_pair.Key = family_id;
         }
 
         // todo: Implement IEquitable and compare against NationalDex
@@ -42,6 +41,7 @@ namespace PkmnFoundations.Pokedex
         public bool GenderVariations { get; private set; }
 
         private LazyKeyValuePair<int, Family> m_family_pair;
+
         public int FamilyID 
         { 
             get { return m_family_pair.Key; }
@@ -50,6 +50,5 @@ namespace PkmnFoundations.Pokedex
         {
             get { return m_family_pair.Value; }
         }
-
     }
 }
