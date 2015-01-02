@@ -2563,7 +2563,7 @@ namespace PkmnFoundations.Data
 
                 List<MySqlParameter> insertParams = new List<MySqlParameter>();
                 insertParams.Add(new MySqlParameter("@id", f.ID));
-                insertParams.Add(new MySqlParameter("@national_dex", f.NationalDex));
+                insertParams.Add(new MySqlParameter("@national_dex", f.SpeciesID));
                 insertParams.Add(new MySqlParameter("@form_value", f.Value));
                 insertParams.Add(new MySqlParameter("@form_suffix", f.Suffix));
                 insertParams.Add(new MySqlParameter("@height", f.Height));
@@ -2734,6 +2734,53 @@ namespace PkmnFoundations.Data
             }
         }
 
+        #endregion
+
+        #region Pokedex retrieval
+        public override Species[] PokedexGetAllSpecies(Pokedex.Pokedex p)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override Form[] PokedexGetAllForms(Pokedex.Pokedex p)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override FormStats[] PokedexGetAllFormStats(Pokedex.Pokedex p)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override Family[] PokedexGetAllFamilies(Pokedex.Pokedex p)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override Evolution[] PokedexGetAllEvolutions(Pokedex.Pokedex p)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override Pokedex.Type[] PokedexGetAllTypes(Pokedex.Pokedex p)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override Item[] PokedexGetAllItems(Pokedex.Pokedex p)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override Move[] PokedexGetAllMoves(Pokedex.Pokedex p)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override Ability[] PokedexGetAllAbilities(Pokedex.Pokedex p)
+        {
+            throw new NotImplementedException();
+        }
         #endregion
 
     }

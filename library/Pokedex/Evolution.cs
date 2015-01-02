@@ -5,7 +5,7 @@ using System.Text;
 
 namespace PkmnFoundations.Pokedex
 {
-    public class Evolution
+    public class Evolution //: PokedexRecordBase
     {
     }
 }

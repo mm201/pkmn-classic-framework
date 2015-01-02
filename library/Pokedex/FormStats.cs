@@ -6,11 +6,12 @@ using PkmnFoundations.Structures;
 
 namespace PkmnFoundations.Pokedex
 {
-    public class FormStats
+    public class FormStats : PokedexRecordBase
     {
-        public FormStats(Pokedex pokedex, int form_id, Generations min_generation, int type1, int type2, StatValues base_stats, StatValues reward_evs)
+        public FormStats(Pokedex pokedex, int form_id, Generations min_generation, 
+            int type1, int type2, StatValues base_stats, StatValues reward_evs)
+            : base(pokedex)
         {
-            m_pokedex = pokedex;
             FormID = form_id;
             MinGeneration = min_generation;
             Type1 = type1;
@@ -18,8 +19,6 @@ namespace PkmnFoundations.Pokedex
             BaseStats = base_stats;
             RewardEvs = reward_evs;
         }
-
-        private Pokedex m_pokedex;
 
         public int FormID { get; private set; }
         public Generations MinGeneration { get; private set; }

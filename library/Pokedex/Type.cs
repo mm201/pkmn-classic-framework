@@ -7,17 +7,15 @@ using PkmnFoundations.Support;
 
 namespace PkmnFoundations.Pokedex
 {
-    public class Type
+    public class Type : PokedexRecordBase
     {
         public Type(Pokedex pokedex, int id, LocalizedString name, DamageClass damage_class)
+            : base(pokedex)
         {
-            m_pokedex = pokedex;
             ID = id;
             Name = name;
             DamageClass = damage_class;
         }
-
-        private Pokedex m_pokedex;
 
         public int ID { get; private set; }
         public LocalizedString Name { get; private set; }

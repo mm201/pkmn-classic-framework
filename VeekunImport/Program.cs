@@ -226,7 +226,7 @@ namespace VeekunImport
 
                     db.PokedexInsertForm(f);
                     Console.WriteLine("Inserted {0} {1} {2} {3} {4} {5:0.0}m {6:0.0}kg {7}",
-                        f.ID, f.NationalDex, f.Value, f.Name.ToString(),
+                        f.ID, f.SpeciesID, f.Value, f.Name.ToString(),
                         f.Suffix, f.Height * 0.1f, f.Weight * 0.1f, f.Experience);
                 }
                 rdForms.Close();

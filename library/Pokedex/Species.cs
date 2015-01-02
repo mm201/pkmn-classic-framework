@@ -7,15 +7,14 @@ using PkmnFoundations.Support;
 
 namespace PkmnFoundations.Pokedex
 {
-    public class Species
+    public class Species : PokedexRecordBase
     {
         public Species(Pokedex pokedex, int national_dex, int family_id, LocalizedString name, 
             GrowthRates growth_rate, byte gender_ratio, EggGroups egg_group_1, 
             EggGroups egg_group_2, int egg_steps, bool gender_variations)
+            : base(pokedex)
         {
-            m_pokedex = pokedex;
             NationalDex = national_dex;
-            FamilyID = family_id;
             Name = name;
             GrowthRate = growth_rate;
             GenderRatio = gender_ratio;
@@ -24,42 +23,16 @@ namespace PkmnFoundations.Pokedex
             EggSteps = egg_steps;
             GenderVariations = gender_variations;
 
-            //if (pokedex != null && pokedex.Eager)
-            {
-                // Retrieve foreign information like Family and Formes.
-                // Otherwise, this information will be lazily evaluated
-                // from the Pokedex instance.
-                // If pokedex is null, this information is unavailable.
+            m_family_pair = new LazyKeyValuePair<int, Family>(k => k == 0 ? null : m_pokedex.Families(k), v => v.ID);
+            m_lazy_pairs.Add(m_family_pair);
 
-                // todo: database ownership/lazy stuff can go in a base class.
-            }
+            m_family_pair.Key = family_id;
         }
-
-        /*
-         *                     Species s = new Species(null, Convert.ToInt32(row["id"]), 
-                        new LocalizedString(){{"JA", row["name_ja"].ToString()},
-                                              {"EN", row["name_en"].ToString()},
-                                              {"FR", row["name_fr"].ToString()},
-                                              {"IT", row["name_it"].ToString()},
-                                              {"DE", row["name_de"].ToString()},
-                                              {"ES", row["name_es"].ToString()},
-                                              {"KO", row["name_ko"].ToString()}
-                        },
-                        (GrowthRates)(Convert.ToByte(row["growth_rate_id"])),
-                        (byte)Convert.ToInt32(row["gender_rate"]),
-                        (byte)Convert.ToInt32(row["hatch_counter"]),
-                        Convert.ToByte(row["has_gender_differences"]) != 0
-                        );
-
-         * */
 
         // todo: Implement IEquitable and compare against NationalDex
         // Same goes for all these pokedex classes.
 
-        private Pokedex m_pokedex;
-
         public int NationalDex { get; private set; }
-        public int FamilyID { get; private set; }
         public LocalizedString Name { get; private set; }
         public GrowthRates GrowthRate { get; private set; }
         public byte GenderRatio { get; private set; }
@@ -67,5 +40,16 @@ namespace PkmnFoundations.Pokedex
         public EggGroups EggGroup2 { get; private set; }
         public int EggSteps { get; private set; }
         public bool GenderVariations { get; private set; }
+
+        private LazyKeyValuePair<int, Family> m_family_pair;
+        public int FamilyID 
+        { 
+            get { return m_family_pair.Key; }
+        }
+        public Family Family
+        {
+            get { return m_family_pair.Value; }
+        }
+
     }
 }

@@ -165,5 +165,18 @@ namespace PkmnFoundations.Data
         public abstract void PokedexInsertAbility(Ability a);
 
         #endregion
+
+        #region Pokedex retrieval
+        public abstract Species[] PokedexGetAllSpecies(PkmnFoundations.Pokedex.Pokedex p);
+        public abstract Form[] PokedexGetAllForms(PkmnFoundations.Pokedex.Pokedex p);
+        public abstract FormStats[] PokedexGetAllFormStats(PkmnFoundations.Pokedex.Pokedex p);
+        public abstract Family[] PokedexGetAllFamilies(PkmnFoundations.Pokedex.Pokedex p);
+        public abstract Evolution[] PokedexGetAllEvolutions(PkmnFoundations.Pokedex.Pokedex p);
+
+        public abstract PkmnFoundations.Pokedex.Type[] PokedexGetAllTypes(PkmnFoundations.Pokedex.Pokedex p);
+        public abstract Item[] PokedexGetAllItems(PkmnFoundations.Pokedex.Pokedex p);
+        public abstract Move[] PokedexGetAllMoves(PkmnFoundations.Pokedex.Pokedex p);
+        public abstract Ability[] PokedexGetAllAbilities(PkmnFoundations.Pokedex.Pokedex p);
+        #endregion
     }
 }

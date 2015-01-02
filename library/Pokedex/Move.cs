@@ -7,13 +7,13 @@ using PkmnFoundations.Support;
 
 namespace PkmnFoundations.Pokedex
 {
-    public class Move
+    public class Move : PokedexRecordBase
     {
         public Move(Pokedex pokedex, int id, int type_id, LocalizedString name,
             DamageClass damage_class, int damage, int pp, int accuracy, int priority,
             BattleTargets target)
+            : base(pokedex)
         {
-            m_pokedex = pokedex;
             ID = id;
             TypeID = type_id;
             Name = name;
@@ -25,8 +25,6 @@ namespace PkmnFoundations.Pokedex
             Target = target;
             // todo: Nice description text
         }
-
-        private Pokedex m_pokedex;
 
         public int ID { get; private set; }
         // todo: this field should be private and only dealt with during construction.
