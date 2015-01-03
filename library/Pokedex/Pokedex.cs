@@ -55,7 +55,24 @@ namespace PkmnFoundations.Pokedex
 
         private void BuildAdditionalIndexes()
         {
+            Dictionary<int, Item> items3 = new Dictionary<int,Item>();
+            Dictionary<int, Item> items4 = new Dictionary<int,Item>();
+            Dictionary<int, Item> items5 = new Dictionary<int,Item>();
+            Dictionary<int, Item> items6 = new Dictionary<int,Item>();
+            m_items_generations = new Dictionary<Generations, Dictionary<int, Item>>();
+            m_items_generations.Add(Generations.Generation3, items3);
+            m_items_generations.Add(Generations.Generation4, items4);
+            m_items_generations.Add(Generations.Generation5, items5);
+            m_items_generations.Add(Generations.Generation6, items6);
 
+            foreach (var pair in m_items)
+            {
+                Item i = pair.Value;
+                if (i.Value3 != null) items3.Add((int)i.Value3, i);
+                if (i.Value4 != null) items4.Add((int)i.Value4, i);
+                if (i.Value5 != null) items5.Add((int)i.Value5, i);
+                if (i.Value6 != null) items6.Add((int)i.Value6, i);
+            }
         }
 
         private void PrefetchRelations()
@@ -96,6 +113,8 @@ namespace PkmnFoundations.Pokedex
         private Dictionary<int, PkmnFoundations.Pokedex.Type> m_types;
         private Dictionary<int, Ability> m_abilities;
 
+        private Dictionary<Generations, Dictionary<int, Item>> m_items_generations;
+
         public Species Species(int national_dex)
         {
             return m_species[national_dex];
@@ -119,6 +138,11 @@ namespace PkmnFoundations.Pokedex
         public Item Items(int id)
         {
             return m_items[id];
+        }
+
+        public Item Items(Generations generation, int value)
+        {
+            return m_items_generations[generation][value];
         }
 
         public Move Moves(int value)
