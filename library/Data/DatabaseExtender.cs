@@ -95,7 +95,7 @@ namespace PkmnFoundations.Data
             // hooray DbConnection provides a command factory
             DbCommand cmd = db.CreateCommand();
             cmd.CommandText = sqlstr;
-            // todo: catch "System.ArgumentException: The SqlParameter is already contained 
+            // fixme: catch "System.ArgumentException: The SqlParameter is already contained 
             // by another SqlParameterCollection." and add a clone instead
             cmd.Parameters.AddRange(_params);
             return cmd.ExecuteReader();
@@ -484,6 +484,11 @@ namespace PkmnFoundations.Data
         public static byte[] GetByteArray(this IDataReader reader, String column, int length)
         {
             return GetByteArray(reader, reader.GetOrdinal(column), length);
+        }
+
+        public static bool IsDBNull(this IDataReader reader, String column)
+        {
+            return reader.IsDBNull(reader.GetOrdinal(column));
         }
         #endregion
 

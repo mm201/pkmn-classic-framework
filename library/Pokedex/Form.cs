@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using PkmnFoundations.Support;
@@ -24,6 +25,21 @@ namespace PkmnFoundations.Pokedex
             Weight = weight;
             Experience = experience;
 
+        }
+
+        public Form(Pokedex pokedex, IDataReader reader)
+            : this(
+                pokedex,
+                Convert.ToInt32(reader["id"]),
+                Convert.ToInt32(reader["NationalDex"]),
+                Convert.ToByte(reader["FormValue"]),
+                LocalizedStringFromReader(reader, "Name_"),
+                reader["FormSuffix"].ToString(),
+                Convert.ToInt32(reader["Height"]),
+                Convert.ToInt32(reader["Weight"]),
+                Convert.ToInt32(reader["Experience"])
+                )
+        {
         }
 
         public int ID { get; private set; }

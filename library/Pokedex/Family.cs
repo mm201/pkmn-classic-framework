@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using PkmnFoundations.Support;
@@ -30,6 +31,20 @@ namespace PkmnFoundations.Pokedex
             m_baby_female_pair.Key = baby_female_id;
             m_incense_pair.Key = incense_id;
             GenderRatio = gender_ratio;
+        }
+
+        public Family(Pokedex pokedex, IDataReader reader)
+            : this(
+                pokedex,
+                Convert.ToInt32(reader["id"]),
+                Convert.ToInt32(reader["BasicMale"]),
+                Convert.ToInt32(reader["BasicFemale"]),
+                Convert.ToInt32(reader["BabyMale"]),
+                Convert.ToInt32(reader["BabyFemale"]),
+                Convert.ToInt32(reader["Incense"]),
+                Convert.ToByte(reader["GenderRatio"])
+            )
+        {
         }
 
         public int ID { get; private set; }

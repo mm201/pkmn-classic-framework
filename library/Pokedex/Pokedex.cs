@@ -29,8 +29,8 @@ namespace PkmnFoundations.Pokedex
             m_types = db.PokedexGetAllTypes(this).ToDictionary(t => t.ID, t => t);
             m_abilities = db.PokedexGetAllAbilities(this).ToDictionary(a => a.Value, a => a);
 
-            FormStats[] form_stats = db.PokedexGetAllFormStats(this);
-            Array.Sort(form_stats, delegate(FormStats f, FormStats other) 
+            List<FormStats> form_stats = db.PokedexGetAllFormStats(this);
+            form_stats.Sort(delegate(FormStats f, FormStats other) 
             { 
                 if (f.FormID != other.FormID) return f.FormID.CompareTo(other.FormID); 
                 return f.MinGeneration.CompareTo(other.MinGeneration); 
@@ -60,7 +60,7 @@ namespace PkmnFoundations.Pokedex
 
         private void PrefetchRelations()
         {
-            // todo: clean this up
+            // xxx: clean this up
             // todo: reflect these classes to decide whether or not prefetching
             // is even needed
             foreach (var k in m_species)

@@ -167,16 +167,16 @@ namespace PkmnFoundations.Data
         #endregion
 
         #region Pokedex retrieval
-        public abstract Species[] PokedexGetAllSpecies(PkmnFoundations.Pokedex.Pokedex p);
-        public abstract Form[] PokedexGetAllForms(PkmnFoundations.Pokedex.Pokedex p);
-        public abstract FormStats[] PokedexGetAllFormStats(PkmnFoundations.Pokedex.Pokedex p);
-        public abstract Family[] PokedexGetAllFamilies(PkmnFoundations.Pokedex.Pokedex p);
-        public abstract Evolution[] PokedexGetAllEvolutions(PkmnFoundations.Pokedex.Pokedex p);
+        public abstract List<Species> PokedexGetAllSpecies(Pokedex.Pokedex pokedex);
+        public abstract List<Form> PokedexGetAllForms(Pokedex.Pokedex pokedex);
+        public abstract List<FormStats> PokedexGetAllFormStats(Pokedex.Pokedex pokedex);
+        public abstract List<Family> PokedexGetAllFamilies(Pokedex.Pokedex pokedex);
+        public abstract List<Evolution> PokedexGetAllEvolutions(Pokedex.Pokedex pokedex);
 
-        public abstract PkmnFoundations.Pokedex.Type[] PokedexGetAllTypes(PkmnFoundations.Pokedex.Pokedex p);
-        public abstract Item[] PokedexGetAllItems(PkmnFoundations.Pokedex.Pokedex p);
-        public abstract Move[] PokedexGetAllMoves(PkmnFoundations.Pokedex.Pokedex p);
-        public abstract Ability[] PokedexGetAllAbilities(PkmnFoundations.Pokedex.Pokedex p);
+        public abstract List<Pokedex.Type> PokedexGetAllTypes(Pokedex.Pokedex pokedex);
+        public abstract List<Item> PokedexGetAllItems(Pokedex.Pokedex pokedex);
+        public abstract List<Move> PokedexGetAllMoves(Pokedex.Pokedex pokedex);
+        public abstract List<Ability> PokedexGetAllAbilities(Pokedex.Pokedex pokedex);
         #endregion
     }
 }

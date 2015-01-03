@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using PkmnFoundations.Support;
@@ -21,6 +22,20 @@ namespace PkmnFoundations.Pokedex
             Value6 = value6;
             Price = price;
             Name = name;
+        }
+
+        public Item(Pokedex pokedex, IDataReader reader)
+            : this(
+                pokedex,
+                Convert.ToInt32(reader["id"]),
+                reader["Value3"] is DBNull ? null : (int?)Convert.ToInt32(reader["Value3"]),
+                reader["Value4"] is DBNull ? null : (int?)Convert.ToInt32(reader["Value4"]),
+                reader["Value5"] is DBNull ? null : (int?)Convert.ToInt32(reader["Value5"]),
+                reader["Value6"] is DBNull ? null : (int?)Convert.ToInt32(reader["Value6"]),
+                Convert.ToInt32(reader["Price"]),
+                LocalizedStringFromReader(reader, "Name_")
+            )
+        {
         }
 
         public int ID { get; private set; }

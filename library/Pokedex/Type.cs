@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using PkmnFoundations.Structures;
@@ -15,6 +16,16 @@ namespace PkmnFoundations.Pokedex
             ID = id;
             Name = name;
             DamageClass = damage_class;
+        }
+
+        public Type(Pokedex pokedex, IDataReader reader)
+            : this(
+                pokedex,
+                Convert.ToInt32(reader["id"]),
+                LocalizedStringFromReader(reader, "Name_"),
+                (DamageClass)Convert.ToInt32(reader["DamageClass"])
+            )
+        {
         }
 
         public int ID { get; private set; }

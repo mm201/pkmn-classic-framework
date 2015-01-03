@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using PkmnFoundations.Structures;
@@ -26,6 +27,33 @@ namespace PkmnFoundations.Pokedex
             m_type2_pair.Key = type2;
             BaseStats = base_stats;
             RewardEvs = reward_evs;
+        }
+
+        public FormStats(Pokedex pokedex, IDataReader reader)
+            : this(
+                pokedex,
+            Convert.ToInt32(reader["form_id"]),
+            (Generations)Convert.ToInt32(reader["MinGeneration"]),
+            Convert.ToInt32(reader["Type1"]),
+            Convert.ToInt32(reader["Type2"]),
+            new StatValues(
+                Convert.ToInt32(reader["BaseHP"]),
+                Convert.ToInt32(reader["BaseAttack"]),
+                Convert.ToInt32(reader["BaseDefense"]),
+                Convert.ToInt32(reader["BaseSpeed"]),
+                Convert.ToInt32(reader["BaseSpAttack"]),
+                Convert.ToInt32(reader["BaseSpDefense"])
+                ),
+            new StatValues(
+                Convert.ToInt32(reader["RewardHP"]),
+                Convert.ToInt32(reader["RewardAttack"]),
+                Convert.ToInt32(reader["RewardDefense"]),
+                Convert.ToInt32(reader["RewardSpeed"]),
+                Convert.ToInt32(reader["RewardSpAttack"]),
+                Convert.ToInt32(reader["RewardSpDefense"])
+                )
+            )
+        {
         }
 
         public Generations MinGeneration { get; private set; }

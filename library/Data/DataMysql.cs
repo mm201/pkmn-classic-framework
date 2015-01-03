@@ -2737,49 +2737,157 @@ namespace PkmnFoundations.Data
         #endregion
 
         #region Pokedex retrieval
-        public override Species[] PokedexGetAllSpecies(Pokedex.Pokedex p)
+        private List<T> ReaderToList<T>(MySqlDataReader reader, Pokedex.Pokedex pokedex, Func<T> ctor) 
+            where T : PokedexRecordBase
         {
-            throw new NotImplementedException();
+            List<T> result = new List<T>();
+            while (reader.Read())
+            {
+                result.Add(ctor());
+            }
+            return result;
         }
 
-        public override Form[] PokedexGetAllForms(Pokedex.Pokedex p)
+        public override List<Species> PokedexGetAllSpecies(Pokedex.Pokedex pokedex)
         {
-            throw new NotImplementedException();
+            using (MySqlConnection db = CreateConnection())
+            {
+                db.Open();
+
+                using (MySqlDataReader reader = (MySqlDataReader)db.ExecuteReader("SELECT " +
+                    "NationalDex, family_id, " + INSERT_COLUMNS + ", GrowthRate, " +
+                    "GenderRatio, EggGroup1, EggGroup2, EggSteps, GenderVariations " +
+                    "FROM pkmncf_pokedex_pokemon"))
+                {
+                    return ReaderToList(reader, pokedex, () => new Species(pokedex, reader));
+                }
+            }
         }
 
-        public override FormStats[] PokedexGetAllFormStats(Pokedex.Pokedex p)
+        public override List<Form> PokedexGetAllForms(Pokedex.Pokedex pokedex)
         {
-            throw new NotImplementedException();
+            using (MySqlConnection db = CreateConnection())
+            {
+                db.Open();
+
+                using (MySqlDataReader reader = (MySqlDataReader)db.ExecuteReader("SELECT " +
+                    "id, NationalDex, FormValue, " + INSERT_COLUMNS + ", FormSuffix, " +
+                    "Height, Weight, Experience " +
+                    "FROM pkmncf_pokedex_pokemon_forms"))
+                {
+                    return ReaderToList(reader, pokedex, () => new Form(pokedex, reader));
+                }
+            }
         }
 
-        public override Family[] PokedexGetAllFamilies(Pokedex.Pokedex p)
+        public override List<FormStats> PokedexGetAllFormStats(Pokedex.Pokedex pokedex)
         {
-            throw new NotImplementedException();
+            using (MySqlConnection db = CreateConnection())
+            {
+                db.Open();
+
+                using (MySqlDataReader reader = (MySqlDataReader)db.ExecuteReader("SELECT " +
+                    "form_id, MinGeneration, Type1, Type2, BaseHP, BaseAttack, " +
+                    "BaseDefense, BaseSpeed, BaseSpAttack, BaseSpDefense, RewardHP, " +
+                    "RewardAttack, RewardDefense, RewardSpeed, RewardSpAttack, RewardSpDefense " +
+                    "FROM pkmncf_pokedex_pokemon_form_Stats"))
+                {
+                    return ReaderToList(reader, pokedex, () => new FormStats(pokedex, reader));
+                }
+            }
         }
 
-        public override Evolution[] PokedexGetAllEvolutions(Pokedex.Pokedex p)
+        public override List<Family> PokedexGetAllFamilies(Pokedex.Pokedex pokedex)
         {
-            throw new NotImplementedException();
+            using (MySqlConnection db = CreateConnection())
+            {
+                db.Open();
+
+                using (MySqlDataReader reader = (MySqlDataReader)db.ExecuteReader("SELECT " +
+                    "id, BasicMale, BasicFemale, BabyMale, BabyFemale, Incense, GenderRatio " +
+                    "FROM pkmncf_pokedex_pokemon_families"))
+                {
+                    return ReaderToList(reader, pokedex, () => new Family(pokedex, reader));
+                }
+            }
         }
 
-        public override Pokedex.Type[] PokedexGetAllTypes(Pokedex.Pokedex p)
+        public override List<Evolution> PokedexGetAllEvolutions(Pokedex.Pokedex pokedex)
         {
             throw new NotImplementedException();
+            using (MySqlConnection db = CreateConnection())
+            {
+                db.Open();
+
+                using (MySqlDataReader reader = (MySqlDataReader)db.ExecuteReader("SELECT " +
+                    "id " +
+                    "FROM pkmncf_pokedex_pokemon_evolutions"))
+                {
+                    //return ReaderToList(reader, pokedex, () => new Evolution(pokedex, reader));
+                }
+            }
         }
 
-        public override Item[] PokedexGetAllItems(Pokedex.Pokedex p)
+        public override List<Pokedex.Type> PokedexGetAllTypes(Pokedex.Pokedex pokedex)
         {
-            throw new NotImplementedException();
+            using (MySqlConnection db = CreateConnection())
+            {
+                db.Open();
+
+                using (MySqlDataReader reader = (MySqlDataReader)db.ExecuteReader("SELECT " +
+                    "id, " + INSERT_COLUMNS + ", DamageClass " +
+                    "FROM pkmncf_pokedex_types"))
+                {
+                    return ReaderToList(reader, pokedex, () => new Pokedex.Type(pokedex, reader));
+                }
+            }
         }
 
-        public override Move[] PokedexGetAllMoves(Pokedex.Pokedex p)
+        public override List<Item> PokedexGetAllItems(Pokedex.Pokedex pokedex)
         {
-            throw new NotImplementedException();
+            using (MySqlConnection db = CreateConnection())
+            {
+                db.Open();
+
+                using (MySqlDataReader reader = (MySqlDataReader)db.ExecuteReader("SELECT " +
+                    "id, Value3, Value4, Value5, Value6, " + INSERT_COLUMNS +
+                    ", Price " +
+                    "FROM pkmncf_pokedex_items"))
+                {
+                    return ReaderToList(reader, pokedex, () => new Item(pokedex, reader));
+                }
+            }
         }
 
-        public override Ability[] PokedexGetAllAbilities(Pokedex.Pokedex p)
+        public override List<Move> PokedexGetAllMoves(Pokedex.Pokedex pokedex)
         {
-            throw new NotImplementedException();
+            using (MySqlConnection db = CreateConnection())
+            {
+                db.Open();
+
+                using (MySqlDataReader reader = (MySqlDataReader)db.ExecuteReader("SELECT " +
+                    "Value, type_id, DamageClass, " + INSERT_COLUMNS + ", Damage, " +
+                    "PP, Accuracy, Priority, Target " +
+                    "FROM pkmncf_pokedex_moves"))
+                {
+                    return ReaderToList(reader, pokedex, () => new Move(pokedex, reader));
+                }
+            }
+        }
+
+        public override List<Ability> PokedexGetAllAbilities(Pokedex.Pokedex pokedex)
+        {
+            using (MySqlConnection db = CreateConnection())
+            {
+                db.Open();
+
+                using (MySqlDataReader reader = (MySqlDataReader)db.ExecuteReader("SELECT " +
+                    "Value, " + INSERT_COLUMNS + 
+                    " FROM pkmncf_pokedex_abilities"))
+                {
+                    return ReaderToList(reader, pokedex, () => new Ability(pokedex, reader));
+                }
+            }
         }
         #endregion
 

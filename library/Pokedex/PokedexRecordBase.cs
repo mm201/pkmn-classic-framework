@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using PkmnFoundations.Support;
@@ -21,6 +22,27 @@ namespace PkmnFoundations.Pokedex
         {
             foreach (ILazyKeyValuePair<int, object> p in m_lazy_pairs)
                 p.Evaluate();
+        }
+
+        public static LocalizedString LocalizedStringFromReader(IDataReader reader, String prefix)
+        {
+            // fixme: share this field with CreateLocalizedStringQueryPieces
+            String[] langs = new String[] { "JA", "EN", "FR", "IT", "DE", "ES", "KO" };
+            LocalizedString result = new LocalizedString();
+            foreach (String lang in langs)
+            {
+                try
+                {
+                    int ordinal = reader.GetOrdinal(prefix + lang);
+                    if (reader.IsDBNull(ordinal)) continue;
+                    result.Add(lang, reader.GetString(ordinal));
+                }
+                catch (IndexOutOfRangeException)
+                {
+                    continue;
+                }
+            }
+            return result;
         }
     }
 }

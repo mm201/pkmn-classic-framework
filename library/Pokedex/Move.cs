@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using PkmnFoundations.Structures;
@@ -27,6 +28,22 @@ namespace PkmnFoundations.Pokedex
             Priority = priority;
             Target = target;
             // todo: Nice description text
+        }
+
+        public Move(Pokedex pokedex, IDataReader reader)
+            : this(
+            pokedex,
+            Convert.ToInt32(reader["id"]),
+            Convert.ToInt32(reader["type_id"]),
+            LocalizedStringFromReader(reader, "Name_"),
+            (DamageClass)Convert.ToInt32(reader["DamageClass"]),
+            Convert.ToInt32(reader["Damage"]),
+            Convert.ToInt32(reader["PP"]),
+            Convert.ToInt32(reader["Accuracy"]),
+            Convert.ToInt32(reader["Priority"]),
+            (BattleTargets)Convert.ToInt32(reader["Target"])
+            )
+        {
         }
 
         public int ID { get; private set; }

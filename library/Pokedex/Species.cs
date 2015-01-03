@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using PkmnFoundations.Structures;
@@ -26,6 +27,22 @@ namespace PkmnFoundations.Pokedex
             EggGroup2 = egg_group_2;
             EggSteps = egg_steps;
             GenderVariations = gender_variations;
+        }
+
+        public Species(Pokedex pokedex, IDataReader reader)
+            : this(
+                pokedex,
+                Convert.ToInt32(reader["NationalDex"]),
+                Convert.ToInt32(reader["family_id"]),
+                LocalizedStringFromReader(reader, "Name_"),
+                (GrowthRates)Convert.ToInt32(reader["GrowthRate"]),
+                Convert.ToByte(reader["GenderRatio"]),
+                (EggGroups)Convert.ToByte(reader["EggGroup1"]),
+                (EggGroups)Convert.ToByte(reader["EggGroup2"]),
+                Convert.ToInt32(reader["EggSteps"]),
+                Convert.ToBoolean(reader["GenderVariations"])
+            )
+        {
         }
 
         // todo: Implement IEquitable and compare against NationalDex
