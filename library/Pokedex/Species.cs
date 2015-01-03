@@ -29,6 +29,8 @@ namespace PkmnFoundations.Pokedex
             GenderVariations = gender_variations;
         }
 
+        // xxx: We shouldn't have column names hardcoded like this since they might change.
+        // there should be const strings instead and they should be reused by the Database classes.
         public Species(Pokedex pokedex, IDataReader reader)
             : this(
                 pokedex,

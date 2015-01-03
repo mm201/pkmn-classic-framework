@@ -48,6 +48,7 @@ namespace PkmnFoundations.Pokedex
                     currFormStats = new SortedDictionary<Generations, FormStats>();
                 }
                 currFormStats.Add(f.MinGeneration, f);
+                currFormId = f.FormID;
             }
             if (currFormStats != null) resultFormStats.Add(currFormId, currFormStats);
             m_form_stats = resultFormStats;

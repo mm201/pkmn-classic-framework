@@ -33,7 +33,7 @@ namespace PkmnFoundations.Pokedex
         public Move(Pokedex pokedex, IDataReader reader)
             : this(
             pokedex,
-            Convert.ToInt32(reader["id"]),
+            Convert.ToInt32(reader["Value"]),
             Convert.ToInt32(reader["type_id"]),
             LocalizedStringFromReader(reader, "Name_"),
             (DamageClass)Convert.ToInt32(reader["DamageClass"]),
