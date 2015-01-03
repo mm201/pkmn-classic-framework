@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Security;
 using System.Web.SessionState;
+using PkmnFoundations.Data;
 
 namespace PkmnFoundations.GTS
 {
@@ -12,7 +13,7 @@ namespace PkmnFoundations.GTS
         void Application_Start(object sender, EventArgs e)
         {
             // Code that runs on application startup
-
+            Application["pkmncfPokedex"] = new Pokedex.Pokedex(Database.Instance, false);
         }
 
         void Application_End(object sender, EventArgs e)

@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using PkmnFoundations.Data;
+using PkmnFoundations.Pokedex;
 using PkmnFoundations.Structures;
 
 namespace PkmnFoundations.GTS
@@ -13,6 +14,8 @@ namespace PkmnFoundations.GTS
     {
         protected void Page_Load(object sender, EventArgs e)
         {
+            m_pokedex = (Pokedex.Pokedex)Application["pkmncfPokedex"];
+
             GtsRecord4[] records4 = Database.Instance.GtsSearch4(0, 0, Genders.Either, 0, 0, 0, -1);
             rptPokemon4.DataSource = records4;
             rptPokemon4.DataBind();
@@ -21,6 +24,8 @@ namespace PkmnFoundations.GTS
             rptPokemon5.DataSource = records5;
             rptPokemon5.DataBind();
         }
+
+        private Pokedex.Pokedex m_pokedex;
 
         private String FormatLevels(byte min, byte max)
         {
@@ -45,13 +50,21 @@ namespace PkmnFoundations.GTS
         protected String CreateOffer4(object DataItem)
         {
             GtsRecord4 record = (GtsRecord4)DataItem;
-            return String.Format("Species: {0}<br />Gender: {1}<br />Level: {2}", record.Species, record.Gender, record.Level);
+            return String.Format("Species: {3} (#{0})<br />Gender: {1}<br />Level: {2}", 
+                record.Species, 
+                record.Gender, 
+                record.Level, 
+                m_pokedex.Species(record.Species).Name);
         }
 
         protected String CreateWanted4(object DataItem)
         {
             GtsRecord4 record = (GtsRecord4)DataItem;
-            return String.Format("Species: {0}<br />Gender: {1}<br />Level: {2}", record.RequestedSpecies, record.RequestedGender, FormatLevels(record.RequestedMinLevel, record.RequestedMaxLevel));
+            return String.Format("Species: {3} (#{0})<br />Gender: {1}<br />Level: {2}", 
+                record.RequestedSpecies, 
+                record.RequestedGender, 
+                FormatLevels(record.RequestedMinLevel, record.RequestedMaxLevel),
+                m_pokedex.Species(record.RequestedSpecies).Name);
         }
 
         protected String CreateTrainer4(object DataItem)
@@ -63,13 +76,21 @@ namespace PkmnFoundations.GTS
         protected String CreateOffer5(object DataItem)
         {
             GtsRecord5 record = (GtsRecord5)DataItem;
-            return String.Format("Species: {0}<br />Gender: {1}<br />Level: {2}", record.Species, record.Gender, record.Level);
+            return String.Format("Species: {3} (#{0})<br />Gender: {1}<br />Level: {2}", 
+                record.Species, 
+                record.Gender, 
+                record.Level,
+                m_pokedex.Species(record.Species).Name);
         }
 
         protected String CreateWanted5(object DataItem)
         {
             GtsRecord5 record = (GtsRecord5)DataItem;
-            return String.Format("Species: {0}<br />Gender: {1}<br />Level: {2}", record.RequestedSpecies, record.RequestedGender, FormatLevels(record.RequestedMinLevel, record.RequestedMaxLevel));
+            return String.Format("Species: {3} (#{0})<br />Gender: {1}<br />Level: {2}", 
+                record.RequestedSpecies, 
+                record.RequestedGender, 
+                FormatLevels(record.RequestedMinLevel, record.RequestedMaxLevel),
+                m_pokedex.Species(record.RequestedSpecies).Name);
         }
 
         protected String CreateTrainer5(object DataItem)
