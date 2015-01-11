@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/MasterPage.master" AutoEventWireup="true" CodeBehind="AddMusical.aspx.cs" Inherits="PkmnFoundations.GTS.admin.AddMusical" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/masters/MasterPage.master" AutoEventWireup="true" CodeBehind="AddMusical.aspx.cs" Inherits="PkmnFoundations.GTS.admin.AddMusical" %>
 <%@ Register TagPrefix="pf" Namespace="PkmnFoundations.GTS" Assembly="PkmnFoundations.GTS" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="cpHead" runat="server">

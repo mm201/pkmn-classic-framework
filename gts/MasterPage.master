@@ -5,7 +5,7 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
-    <title></title>
+    <title>Pokémon Classic Network</title>
     <pf:HeaderColour ID="HeaderColour1" CssClass="home" runat="server" />
     <asp:ContentPlaceHolder ID="cpHead" runat="server" />
     <link rel="stylesheet" href="~/css/main.css" type="text/css" />
@@ -19,17 +19,22 @@
         <div class="setWidth">
             <div id="gtsLogo" class="gtsLogo">
                 <asp:HyperLink ID="hlLogl" NavigateUrl="~" runat="server">
-                <pf:RetinaImage ID="imgLogo" ImageUrl="~/images/headinglogo.png"
-                    Width="276" Height="96"
+                <pf:RetinaImage ID="imgLogo" CssClass="gtsLogoImage" ImageUrl="~/images/heading-icon.png"
+                    Width="96" Height="96"
                     AlternateSizes="2,3" runat="server" />
-                    </asp:HyperLink>
-                <br />
+                <span class="gtsLogoWords">
+                <span class="gtsLogoWord">Pokémon</span>
+                <span class="gtsLogoWord">Classic</span>
+                <span class="gtsLogoWord">Network</span>
+                </span>
+                </asp:HyperLink>
+                <div class="clear"></div>
                 Custom servers for classic Pokémon
             </div>
 
             <div id="gtsHeadMain">
             <ul class="gtsHeadContent">
-                <li>DNS: <strong>75.127.5.215</strong></li>
+                <li>DNS: <strong>104.131.93.87</strong></li>
                 <li><asp:Literal ID="litPokemon" runat="server" />
                 Pokémon available for offer.</li>
                 <li><asp:Literal ID="litVideos" runat="server" />

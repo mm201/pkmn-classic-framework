@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/MasterPage.master" AutoEventWireup="true" CodeBehind="AddBoxes.aspx.cs" Inherits="PkmnFoundations.GTS.admin.AddBoxes" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/masters/MasterPage.master" AutoEventWireup="true" CodeBehind="AddBoxes.aspx.cs" Inherits="PkmnFoundations.GTS.admin.AddBoxes" %>
 <%@ Register TagPrefix="pf" Namespace="PkmnFoundations.GTS" Assembly="PkmnFoundations.GTS" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="cpHead" runat="server">

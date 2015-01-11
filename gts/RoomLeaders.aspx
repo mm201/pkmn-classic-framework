@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/MasterPage.master" AutoEventWireup="true" CodeBehind="RoomLeaders.aspx.cs" Inherits="PkmnFoundations.GTS.RoomLeaders" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/masters/MasterPage.master" AutoEventWireup="true" CodeBehind="RoomLeaders.aspx.cs" Inherits="PkmnFoundations.GTS.RoomLeaders" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="cpHead" runat="server">
 </asp:Content>

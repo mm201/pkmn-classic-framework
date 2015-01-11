@@ -86,9 +86,9 @@
     <Content Include="images\heading-backdrop%402x.png" />
     <Content Include="images\heading-backdrop%403x.png" />
     <Content Include="images\heading-backdrop.png" />
-    <Content Include="images\headinglogo%402x.png" />
-    <Content Include="images\headinglogo%403x.png" />
-    <Content Include="images\headinglogo.png" />
+    <Content Include="images\heading-icon%402x.png" />
+    <Content Include="images\heading-icon%403x.png" />
+    <Content Include="images\heading-icon.png" />
     <Content Include="images\instructions.png" />
     <Content Include="images\item-sm\0000.png" />
     <Content Include="images\item-sm\3001.png" />
@@ -3480,6 +3480,7 @@
     <Content Include="pkvldtprod.ashx" />
     <None Include="Properties\PublishProfiles\Azure.pubxml" />
     <None Include="Properties\PublishProfiles\Local IIS.pubxml" />
+    <Content Include="ThreeColumn.master" />
     <None Include="Web.config">
       <SubType>Designer</SubType>
     </None>
@@ -3605,6 +3606,13 @@
     </Compile>
     <Compile Include="test\VideoId.aspx.designer.cs">
       <DependentUpon>VideoId.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ThreeColumn.master.cs">
+      <DependentUpon>ThreeColumn.master</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ThreeColumn.master.designer.cs">
+      <DependentUpon>ThreeColumn.master</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup />

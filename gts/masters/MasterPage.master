@@ -1,0 +1,176 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="MasterPage.master.cs" Inherits="PkmnFoundations.GTS.MasterPage" %>
+<%@ Register TagPrefix="pf" Namespace="PkmnFoundations.GTS" Assembly="PkmnFoundations.GTS" %>
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title>Pokémon Classic Network</title>
+    <pf:HeaderColour ID="HeaderColour1" CssClass="home" runat="server" />
+    <asp:ContentPlaceHolder ID="cpHead" runat="server" />
+    <link rel="stylesheet" href="~/css/main.css" type="text/css" />
+    <link rel="shortcut icon" href="~/favicon.ico?1" type="image/vnd.microsoft.icon" />
+    <script type="text/javascript" src="<%= ResolveUrl("~/script/jquery-1.11.1.min.js") %>"></script>
+    <script type="text/javascript" src="<%= ResolveUrl("~/script/retina.js") %>"></script>
+</head>
+<body class="<%= HeaderCssClass %>">
+    <asp:Literal ID="litHeaderCssClassKeep" Visible="false" runat="server" />
+    <div id="gtsHeader" class="gtsHeader">
+        <div class="setWidth">
+            <div id="gtsLogo" class="gtsLogo">
+                <asp:HyperLink ID="hlLogl" NavigateUrl="~" runat="server">
+                <pf:RetinaImage ID="imgLogo" CssClass="gtsLogoImage" ImageUrl="~/images/heading-icon.png"
+                    Width="96" Height="96"
+                    AlternateSizes="2,3" runat="server" />
+                <span class="gtsLogoWords">
+                <span class="gtsLogoWord">Pokémon</span>
+                <span class="gtsLogoWord">Classic</span>
+                <span class="gtsLogoWord">Network</span>
+                </span>
+                </asp:HyperLink>
+                <div class="clear"></div>
+                Custom servers for classic Pokémon
+            </div>
+
+            <div id="gtsHeadMain">
+            <ul class="gtsHeadContent">
+                <li>DNS: <strong>104.131.93.87</strong></li>
+                <li><asp:Literal ID="litPokemon" runat="server" />
+                Pokémon available for offer.</li>
+                <li><asp:Literal ID="litVideos" runat="server" />
+                battle videos.</li>
+            </ul>
+            </div>
+
+            <div id="gtsLogin" class="gtsLogin">
+                login
+            </div>
+            
+
+            <div class="clear"></div>
+
+            <ul id="gtsNav" class="gtsNav">
+                <li class="home">
+                    <asp:HyperLink ID="hlMain" NavigateUrl="~/" runat="server">
+                        <span class="inner">
+                        Main
+                        </span>
+                    </asp:HyperLink>
+                </li>
+                <li class="gts">
+                    <asp:HyperLink ID="hlGts" NavigateUrl="~/gts/" runat="server">
+                        <span class="inner">
+                        GTS
+                        </span>
+                    </asp:HyperLink>
+                </li>
+                <li class="bv">
+                    <asp:HyperLink ID="hlBattleVideos" NavigateUrl="~/battlevideo/" runat="server">
+                        <span class="inner">
+                        Battle Videos
+                        </span>
+                    </asp:HyperLink>
+                </li>
+
+                <li class="dw">
+                    <asp:HyperLink ID="hlDreamWorld" NavigateUrl="~/dreamworld/" runat="server">
+                        <span class="inner">
+                        Dream World
+                        </span>
+                    </asp:HyperLink>
+                </li>
+                <li class="dex">
+                    <asp:HyperLink ID="hlPokedex" NavigateUrl="~/pokedex/" runat="server">
+                        <span class="inner">
+                        Pokédex
+                        </span>
+                    </asp:HyperLink>
+                </li>
+                <li class="stat">
+                    <asp:HyperLink ID="hlStat" NavigateUrl="~/profile/" runat="server">
+                        <span class="inner">
+                        My Profile
+                        </span>
+                    </asp:HyperLink>
+                </li>
+            </ul>
+
+        </div>
+
+        <div class="github-contain">
+        <a class="github" href="https://github.com/mm201/pkmnFoundations" target="_blank">Fork me on GitHub!</a>
+        </div>
+
+    </div>
+
+    <div id="gtsSubNav">
+        <div class="setWidth">
+            <% switch (HeaderCssClass)
+               {
+                   case "home": %>
+                <ul class="gtsNav">
+                    <li>
+                        <asp:HyperLink ID="hlMain_Home" NavigateUrl="~" runat="server">
+                            <span class="inner">
+                                Home
+                            </span>
+                        </asp:HyperLink>
+                    </li>
+                    <%-- 
+                    <li>
+                        <asp:HyperLink ID="hlMain_Instructions" NavigateUrl="~/Instructions.aspx" runat="server">
+                            <span class="inner">
+                                How to connect
+                            </span>
+                        </asp:HyperLink>
+                    </li>
+                    <li>
+                        <asp:HyperLink ID="hlMain_Status" NavigateUrl="~/Status.aspx" runat="server">
+                            <span class="inner">
+                                Server status
+                            </span>
+                        </asp:HyperLink>
+                    </li>
+                    --%>
+                </ul>
+
+            <% break;
+                   case "gts": %>
+
+            <% break;
+               } %>
+        <div class="clear"></div>
+        </div>
+    </div>
+
+    <div id="gtsMain">
+        <div class="setWidth">
+    <asp:ContentPlaceHolder ID="cpMain" runat="server" />
+        </div>
+    </div>
+
+    <div id="gtsFooter">
+        <div id="gtsFooterBkg">
+            <div class="setWidth">
+                <div id="gtsFooterLeft">
+                    <ul class="gtsFooterNav">
+                        <li><asp:HyperLink ID="hlFooterHome" Text="Main" NavigateUrl="~/" runat="server" /></li>
+                        <li><asp:HyperLink ID="hlFooterAllPokemon" Text="GTS" NavigateUrl="~/gts/" runat="server" /></li>
+                    </ul>
+                </div>
+                <div id="gtsFooterRight">
+                    <ul class="gtsFooterNav">
+                        <li><asp:HyperLink ID="hlFooterGithub" Text="GitHub" NavigateUrl="https://github.com/mm201/pkmnFoundations" runat="server" /></li>
+                    </ul>
+                </div>
+                <div class="clear"></div>
+
+                <div id="gtsFooterBottom">
+                Pokémon is © 1995-2014 Nintendo / Creatures / GAME FREAK.
+                This service is not affiliated with Nintendo or GAME FREAK in any way.               </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
