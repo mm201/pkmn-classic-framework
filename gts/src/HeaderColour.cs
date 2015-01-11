@@ -15,10 +15,21 @@ namespace PkmnFoundations.GTS
 
         private void HeaderColour_PreRender(object sender, EventArgs e)
         {
-            PkmnFoundations.GTS.MasterPage master = Page.Master as PkmnFoundations.GTS.MasterPage;
-            if (master == null) return;
+            SetHeaderCssClass(Page.Master);
+        }
 
-            master.HeaderCssClass = CssClass;
+        private void SetHeaderCssClass(System.Web.UI.MasterPage master)
+        {
+            // recursively find the TOP master and set its HeaderCssClass if available.
+            if (master == null) return;
+            PkmnFoundations.GTS.MasterPage gtsMaster = master as PkmnFoundations.GTS.MasterPage;
+            if (gtsMaster == null)
+            {
+                SetHeaderCssClass(master.Master);
+                return;
+            }
+
+            gtsMaster.HeaderCssClass = CssClass;
         }
 
         protected override void LoadViewState(object savedState)

@@ -79,6 +79,7 @@
     <Content Include="admin\AddBoxes.aspx" />
     <Content Include="admin\AddMusical.aspx" />
     <Content Include="admin\Sessions.aspx" />
+    <Content Include="favicon.ico" />
     <Content Include="gts\Default.aspx" />
     <Content Include="battlevideo\Default.aspx" />
     <Content Include="css\main.css" />
@@ -3480,7 +3481,7 @@
     <Content Include="pkvldtprod.ashx" />
     <None Include="Properties\PublishProfiles\Azure.pubxml" />
     <None Include="Properties\PublishProfiles\Local IIS.pubxml" />
-    <Content Include="ThreeColumn.master" />
+    <Content Include="masters\ThreeColumn.master" />
     <None Include="Web.config">
       <SubType>Designer</SubType>
     </None>
@@ -3591,11 +3592,11 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="MasterPage.master.cs">
+    <Compile Include="masters\MasterPage.master.cs">
       <DependentUpon>MasterPage.master</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="MasterPage.master.designer.cs">
+    <Compile Include="masters\MasterPage.master.designer.cs">
       <DependentUpon>MasterPage.master</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -3607,17 +3608,17 @@
     <Compile Include="test\VideoId.aspx.designer.cs">
       <DependentUpon>VideoId.aspx</DependentUpon>
     </Compile>
-    <Compile Include="ThreeColumn.master.cs">
+    <Compile Include="masters\ThreeColumn.master.cs">
       <DependentUpon>ThreeColumn.master</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="ThreeColumn.master.designer.cs">
+    <Compile Include="masters\ThreeColumn.master.designer.cs">
       <DependentUpon>ThreeColumn.master</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <Content Include="MasterPage.master" />
+    <Content Include="masters\MasterPage.master" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="pokemondpds.ashx" />

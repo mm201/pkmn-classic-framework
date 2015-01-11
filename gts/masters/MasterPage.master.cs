@@ -54,7 +54,5 @@ namespace PkmnFoundations.GTS
                 litHeaderCssClassKeep.Text = value;
             }
         }
-
-
     }
 }
