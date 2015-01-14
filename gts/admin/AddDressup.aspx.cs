@@ -7,6 +7,7 @@ using System.Web.UI.WebControls;
 using System.IO;
 using PkmnFoundations.Structures;
 using PkmnFoundations.Data;
+using PkmnFoundations.Web;
 
 namespace PkmnFoundations.GTS.test
 {

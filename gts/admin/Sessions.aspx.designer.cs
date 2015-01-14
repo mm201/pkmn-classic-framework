@@ -19,7 +19,7 @@ namespace PkmnFoundations.GTS.admin {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::PkmnFoundations.GTS.HeaderColour HeaderColour1;
+        protected global::PkmnFoundations.Web.HeaderColour HeaderColour1;
         
         /// <summary>
         /// litDebug control.

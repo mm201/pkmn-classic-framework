@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace PkmnFoundations.GTS
+namespace PkmnFoundations.Web
 {
     public class HeaderColour : System.Web.UI.Control
     {

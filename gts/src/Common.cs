@@ -4,7 +4,7 @@ using System.Linq;
 using System.Web;
 using System.IO;
 
-namespace PkmnFoundations.GTS
+namespace PkmnFoundations.Web
 {
     public static class Common
     {

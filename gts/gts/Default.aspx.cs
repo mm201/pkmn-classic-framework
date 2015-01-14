@@ -7,6 +7,7 @@ using System.Web.UI.WebControls;
 using PkmnFoundations.Data;
 using PkmnFoundations.Pokedex;
 using PkmnFoundations.Structures;
+using PkmnFoundations.Web;
 
 namespace PkmnFoundations.GTS
 {

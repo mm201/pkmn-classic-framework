@@ -6,6 +6,7 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using PkmnFoundations.Structures;
 using PkmnFoundations.Data;
+using PkmnFoundations.Web;
 
 namespace PkmnFoundations.GTS.admin
 {

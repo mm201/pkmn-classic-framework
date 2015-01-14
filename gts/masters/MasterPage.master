@@ -1,5 +1,5 @@
 ﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="MasterPage.master.cs" Inherits="PkmnFoundations.GTS.MasterPage" %>
-<%@ Register TagPrefix="pf" Namespace="PkmnFoundations.GTS" Assembly="PkmnFoundations.GTS" %>
+<%@ Register TagPrefix="pf" Namespace="PkmnFoundations.Web" Assembly="PkmnFoundations.GTS" %>
 
 <!DOCTYPE html>
 

@@ -1,5 +1,5 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/masters/MasterPage.master" AutoEventWireup="true" CodeBehind="Default.aspx.cs" Inherits="PkmnFoundations.GTS.BattleVideo" %>
-<%@ Register TagPrefix="pf" Namespace="PkmnFoundations.GTS" Assembly="PkmnFoundations.GTS" %>
+<%@ Register TagPrefix="pf" Namespace="PkmnFoundations.Web" Assembly="PkmnFoundations.GTS" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="cpHead" runat="server">
     <pf:HeaderColour ID="HeaderColour1" CssClass="bv" runat="server" />

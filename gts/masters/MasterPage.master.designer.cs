@@ -19,7 +19,7 @@ namespace PkmnFoundations.GTS {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::PkmnFoundations.GTS.HeaderColour HeaderColour1;
+        protected global::PkmnFoundations.Web.HeaderColour HeaderColour1;
         
         /// <summary>
         /// cpHead control.
@@ -55,7 +55,7 @@ namespace PkmnFoundations.GTS {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::PkmnFoundations.GTS.RetinaImage imgLogo;
+        protected global::PkmnFoundations.Web.RetinaImage imgLogo;
         
         /// <summary>
         /// litPokemon control.

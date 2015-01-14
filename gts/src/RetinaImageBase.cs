@@ -6,7 +6,7 @@ using System.Globalization;
 using System.Web.UI;
 
 
-namespace PkmnFoundations.GTS
+namespace PkmnFoundations.Web
 {
     /// <summary>
     /// asp:Image with retina substitution capabilities

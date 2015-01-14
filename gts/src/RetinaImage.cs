@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Globalization;
 
-namespace PkmnFoundations.GTS
+namespace PkmnFoundations.Web
 {
     public class RetinaImage : RetinaImageBase
     {
