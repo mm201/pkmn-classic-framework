@@ -3549,6 +3549,7 @@
       <DependentUpon>AddDressup.aspx</DependentUpon>
     </Compile>
     <Compile Include="src\FakeOpponentGenerator4.cs" />
+    <Compile Include="src\OnceTemplate.cs" />
     <Compile Include="src\RetinaImage.cs" />
     <Compile Include="src\RetinaImageBase.cs" />
     <Compile Include="test\BoxUp.aspx.cs">
