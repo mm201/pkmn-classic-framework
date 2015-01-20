@@ -371,42 +371,54 @@ namespace PkmnFoundations.Data
             }
         }
 
-        public override void GtsLogTrade4(GtsRecord4 record, DateTime ? timeWithdrawn)
+        public override void GtsLogTrade4(GtsRecord4 record, DateTime ? timeWithdrawn, int ? partner_pid)
         {
             using (MySqlConnection db = CreateConnection())
             {
                 db.Open();
                 using (MySqlTransaction tran = db.BeginTransaction())
                 {
-                    GtsLogTrade4(tran, record, timeWithdrawn);
+                    GtsLogTrade4(tran, record, timeWithdrawn, partner_pid);
                     tran.Commit();
                 }
             }
         }
 
-        public void GtsLogTrade4(MySqlTransaction tran, GtsRecord4 record, DateTime ? timeWithdrawn)
+        public void GtsLogTrade4(MySqlTransaction tran, GtsRecord4 record, DateTime? timeWithdrawn, int ? partner_pid)
         {
             if (record.Data.Length != 236) throw new FormatException("pkm data must be 236 bytes.");
             if (record.TrainerName.RawData.Length != 16) throw new FormatException("Trainer name must be 16 bytes.");
             // note that IsTraded being true in the record is not an error condition
             // since it might have use later on. You should check for this in the upload handler.
 
+            int trade_id = (int)tran.ExecuteScalar("SELECT id FROM GtsPokemon4 WHERE pid = @pid",
+                new MySqlParameter("@pid", record.PID));
+
+            // when calling delete.asp, the partner pid can't be told from the request alone,
+            // so obtain it from the database instead.
+            if (record.IsExchanged != 0)
+                partner_pid = (int ?)tran.ExecuteScalar("SELECT partner_pid FROM GtsHistory4 " +
+                    "WHERE trade_id = @trade_id AND IsExchanged = 0", new MySqlParameter("@trade_id", trade_id));
+
             MySqlParameter[] _params = ParamsFromRecord4(record);
-            MySqlParameter[] _params2 = new MySqlParameter[23];
+            MySqlParameter[] _params2 = new MySqlParameter[25];
             Array.Copy(_params, _params2, 22);
             _params2[22] = new MySqlParameter("@TimeWithdrawn", timeWithdrawn);
+            _params2[23] = new MySqlParameter("@trade_id", trade_id);
+            _params2[24] = new MySqlParameter("@partner_pid", partner_pid);
 
             tran.ExecuteNonQuery("INSERT INTO GtsHistory4 " +
                 "(Data, Species, Gender, Level, RequestedSpecies, RequestedGender, " +
                 "RequestedMinLevel, RequestedMaxLevel, Unknown1, TrainerGender, " +
                 "Unknown2, TimeDeposited, TimeExchanged, pid, TrainerName, TrainerOT, " +
                 "TrainerCountry, TrainerRegion, TrainerClass, IsExchanged, TrainerVersion, " +
-                "TrainerLanguage, TimeWithdrawn) " +
+                "TrainerLanguage, TimeWithdrawn, trade_id, partner_pid) " +
                 "VALUES (@Data, @Species, @Gender, @Level, @RequestedSpecies, " +
                 "@RequestedGender, @RequestedMinLevel, @RequestedMaxLevel, @Unknown1, " +
                 "@TrainerGender, @Unknown2, @TimeDeposited, @TimeExchanged, @pid, " +
                 "@TrainerName, @TrainerOT, @TrainerCountry, @TrainerRegion, @TrainerClass, " +
-                "@IsExchanged, @TrainerVersion, @TrainerLanguage, @TimeWithdrawn)",
+                "@IsExchanged, @TrainerVersion, @TrainerLanguage, @TimeWithdrawn, " +
+                "@trade_id, @partner_pid)",
                 _params2);
         }
         #endregion
@@ -1228,20 +1240,20 @@ namespace PkmnFoundations.Data
             }
         }
 
-        public override void GtsLogTrade5(GtsRecord5 record, DateTime ? timeWithdrawn)
+        public override void GtsLogTrade5(GtsRecord5 record, DateTime ? timeWithdrawn, int ? partner_pid)
         {
             using (MySqlConnection db = CreateConnection())
             {
                 db.Open();
                 using (MySqlTransaction tran = db.BeginTransaction())
                 {
-                    GtsLogTrade5(tran, record, timeWithdrawn);
+                    GtsLogTrade5(tran, record, timeWithdrawn, partner_pid);
                     tran.Commit();
                 }
             }
         }
 
-        public void GtsLogTrade5(MySqlTransaction tran, GtsRecord5 record, DateTime ? timeWithdrawn)
+        public void GtsLogTrade5(MySqlTransaction tran, GtsRecord5 record, DateTime ? timeWithdrawn, int ? partner_pid)
         {
             // todo: Bring these out into a ValidateRecord5 method
             if (record == null) throw new ArgumentNullException("record");
@@ -1251,23 +1263,35 @@ namespace PkmnFoundations.Data
             // note that IsTraded being true in the record is not an error condition
             // since it might have use later on. You should check for this in the upload handler.
 
+            int trade_id = (int)tran.ExecuteScalar("SELECT id FROM GtsPokemon5 WHERE pid = @pid",
+                new MySqlParameter("@pid", record.PID));
+
+            // when calling delete.asp, the partner pid can't be told from the request alone,
+            // so obtain it from the database instead.
+            if (record.IsExchanged != 0)
+                partner_pid = (int ?)tran.ExecuteScalar("SELECT partner_pid FROM GtsHistory5 " +
+                    "WHERE trade_id = @trade_id AND IsExchanged = 0", new MySqlParameter("@trade_id", trade_id));
+
             MySqlParameter[] _params = ParamsFromRecord5(record);
-            MySqlParameter[] _params2 = new MySqlParameter[26];
+            MySqlParameter[] _params2 = new MySqlParameter[28];
             Array.Copy(_params, _params2, 25);
             _params2[25] = new MySqlParameter("@TimeWithdrawn", timeWithdrawn);
+            _params2[26] = new MySqlParameter("@trade_id", trade_id);
+            _params2[27] = new MySqlParameter("@partner_pid", partner_pid);
 
             tran.ExecuteNonQuery("INSERT INTO GtsHistory5 " +
                 "(Data, Unknown0, Species, Gender, Level, RequestedSpecies, RequestedGender, " +
                 "RequestedMinLevel, RequestedMaxLevel, Unknown1, TrainerGender, " +
                 "Unknown2, TimeDeposited, TimeExchanged, pid, TrainerOT, TrainerName, " +
                 "TrainerCountry, TrainerRegion, TrainerClass, IsExchanged, TrainerVersion, " +
-                "TrainerLanguage, TrainerBadges, TrainerUnityTower, TimeWithdrawn) " +
+                "TrainerLanguage, TrainerBadges, TrainerUnityTower, TimeWithdrawn, " +
+                "trade_id, partner_pid) " +
                 "VALUES (@Data, @Unknown0, @Species, @Gender, @Level, @RequestedSpecies, " +
                 "@RequestedGender, @RequestedMinLevel, @RequestedMaxLevel, @Unknown1, " +
                 "@TrainerGender, @Unknown2, @TimeDeposited, @TimeExchanged, @pid, " +
                 "@TrainerOT, @TrainerName, @TrainerCountry, @TrainerRegion, @TrainerClass, " +
                 "@IsExchanged, @TrainerVersion, @TrainerLanguage, @TrainerBadges, " +
-                "@TrainerUnityTower, @TimeWithdrawn)",
+                "@TrainerUnityTower, @TimeWithdrawn, @trade_id, @partner_pid)",
                 _params2);
         }
 

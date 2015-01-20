@@ -166,7 +166,7 @@ namespace PkmnFoundations.GTS
                             try
                             {
 #endif
-                                Database.Instance.GtsLogTrade4(record, DateTime.UtcNow);
+                                Database.Instance.GtsLogTrade4(record, DateTime.UtcNow, null);
 #if !DEBUG
                             }
                             catch { }
@@ -441,7 +441,7 @@ namespace PkmnFoundations.GTS
                         try
                         {
 #endif
-                            Database.Instance.GtsLogTrade4(result, null);
+                            Database.Instance.GtsLogTrade4(result, null, pid);
 #if !DEBUG
                         }
                         catch { }

@@ -7,6 +7,7 @@ using System.Data.SQLite;
 
 namespace PkmnFoundations.Data
 {
+    // todo
     public class DataSqlite// : DataAbstract
     {
         public SQLiteConnection CreateConnection()

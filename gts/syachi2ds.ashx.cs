@@ -155,7 +155,7 @@ namespace PkmnFoundations.GTS
                             try
                             {
 #endif
-                                Database.Instance.GtsLogTrade5(record, DateTime.UtcNow);
+                                Database.Instance.GtsLogTrade5(record, DateTime.UtcNow, null);
                                 // todo: invalidate cache.
                                 //manager.RefreshStats();
 #if !DEBUG
@@ -434,7 +434,7 @@ namespace PkmnFoundations.GTS
                         try
                         {
 #endif
-                            Database.Instance.GtsLogTrade5(result, null);
+                            Database.Instance.GtsLogTrade5(result, null, pid);
                             // todo: invalidate cache
                             //manager.RefreshStats();
 #if !DEBUG
