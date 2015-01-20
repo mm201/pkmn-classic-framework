@@ -20,7 +20,7 @@ namespace PkmnFoundations.GTS
         public pokemondpds()
             : base("sAdeqWo3voLeC5r16DYv", 
             0x45, 0x1111, 0x80000000, 0x4a3b2c1d, "pokemondpds", 
-            GamestatsRequestVersions.Version2, GamestatsResponseVersions.Version1)
+            GamestatsRequestVersions.Version2, GamestatsResponseVersions.Version1, true)
         {
 
         }

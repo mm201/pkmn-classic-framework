@@ -17,12 +17,10 @@ namespace PkmnFoundations.GTS
     public class syachi2ds : GamestatsHandler
     {
         public syachi2ds()
-            : base("HZEdGCzcGGLvguqUEKQN", 0, 0, 0, 0x2db842b2, "syachi2ds", 
-            GamestatsRequestVersions.Version3, GamestatsResponseVersions.Version2)
+            : base("HZEdGCzcGGLvguqUEKQN0001d93500002dd5000000082db842b2syachi2ds", 
+            GamestatsRequestVersions.Version3, GamestatsResponseVersions.Version2, false)
         {
-            // HZEdGCzcGGLvguqUEKQN0001d93500002dd5000000082db842b2syachi2ds
-            // Strangely, there are RNG constants in the init string even
-            // though BW's requests are unencrypted.
+
         }
 
         public override void ProcessGamestatsRequest(byte[] request, MemoryStream response, string url, int pid, HttpContext context, GamestatsSession session)
