@@ -10,8 +10,9 @@
     <asp:ContentPlaceHolder ID="cpHead" runat="server" />
     <link rel="stylesheet" href="~/css/main.css" type="text/css" />
     <link rel="shortcut icon" href="~/favicon.ico?1" type="image/vnd.microsoft.icon" />
-    <script type="text/javascript" src="<%= ResolveUrl("~/script/jquery-1.11.1.min.js") %>"></script>
-    <script type="text/javascript" src="<%= ResolveUrl("~/script/retina.js") %>"></script>
+
+    <pf:RequireScript Key="jquery" ScriptUrl="~/script/jquery-1.11.1.min.js" runat="server" />
+    <pf:RequireScript Key="retina" After="jquery" ScriptUrl="~/script/retina.js" runat="server" />
 </head>
 <body class="<%= HeaderCssClass %>">
     <asp:Literal ID="litHeaderCssClassKeep" Visible="false" runat="server" />
