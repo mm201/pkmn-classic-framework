@@ -6,13 +6,13 @@
 
 <asp:Content ID="Content2" ContentPlaceHolderID="cpMain" runat="server">
     <div class="gtsColumn gtsLeftColumn">
-        Left
+<asp:ContentPlaceHolder ID="cpLeft" runat="server" />
     </div>
     <div class="gtsColumn gtsMainColumn gtsMainColumnThree">
 <asp:ContentPlaceHolder ID="cpMain" runat="server" />
     </div>
     <div class="gtsColumn gtsRightColumn">
-        Right
+<asp:ContentPlaceHolder ID="cpRight" runat="server" />
     </div>
     <div class="clear"></div>
 </asp:Content>

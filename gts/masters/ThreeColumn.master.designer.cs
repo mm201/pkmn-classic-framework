@@ -22,6 +22,15 @@ namespace PkmnFoundations.GTS {
         protected global::System.Web.UI.WebControls.ContentPlaceHolder cpHead;
         
         /// <summary>
+        /// cpLeft control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.ContentPlaceHolder cpLeft;
+        
+        /// <summary>
         /// cpMain control.
         /// </summary>
         /// <remarks>
@@ -29,5 +38,14 @@ namespace PkmnFoundations.GTS {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.ContentPlaceHolder cpMain;
+        
+        /// <summary>
+        /// cpRight control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.ContentPlaceHolder cpRight;
     }
 }
