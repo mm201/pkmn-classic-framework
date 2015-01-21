@@ -3539,6 +3539,7 @@
     <Compile Include="RoomLeaders.aspx.designer.cs">
       <DependentUpon>RoomLeaders.aspx</DependentUpon>
     </Compile>
+    <Compile Include="src\DependencyNode.cs" />
     <Compile Include="src\GamestatsSessionPlat.cs" />
     <Compile Include="src\HeaderColour.cs" />
     <Compile Include="admin\AddDressup.aspx.cs">
@@ -3550,6 +3551,7 @@
     </Compile>
     <Compile Include="src\FakeOpponentGenerator4.cs" />
     <Compile Include="src\OnceTemplate.cs" />
+    <Compile Include="src\RequireLinkBase.cs" />
     <Compile Include="src\RetinaImage.cs" />
     <Compile Include="src\RetinaImageBase.cs" />
     <Compile Include="test\BoxUp.aspx.cs">
