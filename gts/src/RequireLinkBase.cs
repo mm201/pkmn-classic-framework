@@ -34,6 +34,7 @@ namespace PkmnFoundations.Web
             DependencyNode<String, RequireLinkBase> node = new DependencyNode<String, RequireLinkBase>(Key, this, ParseDependencies(After ?? ""));
             if (!graph.Graph.Any(n => n.Key == Key))
                 graph.Graph.Add(node);
+            // todo: merge dependencies if it's a dupe
         }
 
         void Page_PreRender(object sender, EventArgs e)

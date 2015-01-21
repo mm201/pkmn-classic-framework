@@ -3551,6 +3551,7 @@
     </Compile>
     <Compile Include="src\FakeOpponentGenerator4.cs" />
     <Compile Include="src\OnceTemplate.cs" />
+    <Compile Include="src\RequireCss.cs" />
     <Compile Include="src\RequireLinkBase.cs" />
     <Compile Include="src\RequireScript.cs" />
     <Compile Include="src\RetinaImage.cs" />
