@@ -47,7 +47,7 @@ namespace PkmnFoundations.Web
             }
         }
 
-        public String Key { get; set; }
+        public virtual String Key { get; set; }
         public String After { get; set; }
 
         public abstract void RenderHeader(System.Web.UI.HtmlTextWriter writer);

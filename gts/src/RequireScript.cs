@@ -22,5 +22,19 @@ namespace PkmnFoundations.Web
 
         public String ScriptUrl { get; set; }
         public String Type { get; set; }
+
+        public override string Key
+        {
+            get
+            {
+                if (base.Key != null)
+                    return base.Key;
+                return ScriptUrl;
+            }
+            set
+            {
+                base.Key = value;
+            }
+        }
     }
 }

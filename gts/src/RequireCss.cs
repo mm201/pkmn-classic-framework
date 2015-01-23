@@ -22,5 +22,19 @@ namespace PkmnFoundations.Web
         }
 
         public String CssUrl { get; set; }
+
+        public override string Key
+        {
+            get
+            {
+                if (base.Key != null)
+                    return base.Key;
+                return CssUrl;
+            }
+            set
+            {
+                base.Key = value;
+            }
+        }
     }
 }
