@@ -52,6 +52,16 @@ namespace PkmnFoundations.Web
             LinkedList<DependencyNode<TKey, TValue>> nodesList = new LinkedList<DependencyNode<TKey, TValue>>(Graph);
             List<TValue> result = new List<TValue>(nodesList.Count);
 
+            // Remove inexistent keys from dependency lists.
+            // First, obtain a complete set of existent keys.
+            HashSet<TKey> validKeys = new HashSet<TKey>();
+            foreach (DependencyNode<TKey, TValue> node in nodesList)
+                validKeys.Add(node.Key);
+
+            // Then, intersect each dependency list with this validKeys list
+            foreach (DependencyNode<TKey, TValue> node in nodesList)
+                node.Dependencies.IntersectWith(validKeys);
+
             while (nodesList.Count > 0)
             {
                 LinkedListNode<DependencyNode<TKey, TValue>> nodeLinked = nodesList.First;
@@ -77,9 +87,9 @@ namespace PkmnFoundations.Web
                     // Move to the node of the first dependency of this node and add it to the collection.
                     // Repeat until you reach a node which is already in the collection.
                     // Output the collection of nodes, starting at the node which was already found.
-                    throw new Exception("Circular dependency found in your links.\n" +
+                    throw new CircularDependencyException("Circular dependency found in your links.\n" +
                         "Keys:\n" +
-                        String.Join("\n", nodesList.Select(n => n.Key).ToArray()));
+                        String.Join("\n", nodesList.Select(n => n.Key.ToString()).ToArray()));
                 }
 
                 // add this node to output, remove it as a dependency from the remaining nodes
@@ -92,6 +102,14 @@ namespace PkmnFoundations.Web
                 result.Add(nodeOutput.Value);
             }
             return result;
+        }
+    }
+
+    public class CircularDependencyException : Exception
+    {
+        public CircularDependencyException(String message) : base(message)
+        {
+
         }
     }
 }
