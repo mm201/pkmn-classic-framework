@@ -29,6 +29,11 @@ namespace PkmnFoundations.Web
         public TKey Key { get; set; }
         public TValue Value { get; set; }
         public HashSet<TKey> Dependencies { get; private set; }
+
+        public DependencyNode<TKey, TValue> Clone()
+        {
+            return new DependencyNode<TKey, TValue>(Key, Value, new HashSet<TKey>(Dependencies));
+        }
     }
 
     internal class DependencyGraph<TKey, TValue>
@@ -48,8 +53,7 @@ namespace PkmnFoundations.Web
 
         public List<TValue> Resolve()
         {
-            // fixme: we should clone the DependencyNodes so they don't get modified.
-            LinkedList<DependencyNode<TKey, TValue>> nodesList = new LinkedList<DependencyNode<TKey, TValue>>(Graph);
+            LinkedList<DependencyNode<TKey, TValue>> nodesList = new LinkedList<DependencyNode<TKey, TValue>>(Graph.Select(n => n.Clone()));
             List<TValue> result = new List<TValue>(nodesList.Count);
 
             // Remove inexistent keys from dependency lists.
@@ -99,6 +103,7 @@ namespace PkmnFoundations.Web
                 foreach (DependencyNode<TKey, TValue> nodeValue in nodesList)
                     nodeValue.Dependencies.Remove(nodeOutput.Key);
 
+                // fixme: possible issue: the dependencies on the output are all blank.
                 result.Add(nodeOutput.Value);
             }
             return result;
@@ -107,6 +112,7 @@ namespace PkmnFoundations.Web
 
     public class CircularDependencyException : Exception
     {
+        // todo: We can keep a jagged list of all cycles found on this exception.
         public CircularDependencyException(String message) : base(message)
         {
 
