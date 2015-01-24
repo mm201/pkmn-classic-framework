@@ -26,7 +26,11 @@ namespace PkmnFoundations.GTS.debug
 
             try
             {
-                data = GtsSession4.DecryptData(txtData.Text);
+                GamestatsHandler gs4 = new GamestatsHandler("sAdeqWo3voLeC5r16DYv",
+                    0x45, 0x1111, 0x80000000, 0x4a3b2c1d, "pokemondpds",
+                    GamestatsRequestVersions.Version2, GamestatsResponseVersions.Version1, true);
+
+                data = gs4.DecryptData(txtData.Text);
                 litGeneration.Text = "4";
             }
             catch (FormatException)
@@ -35,7 +39,9 @@ namespace PkmnFoundations.GTS.debug
 
             if (data == null) try
             {
-                data = GtsSession5.DecryptData(txtData.Text);
+                GamestatsHandler gs5 = new GamestatsHandler("HZEdGCzcGGLvguqUEKQN0001d93500002dd5000000082db842b2syachi2ds",
+                    GamestatsRequestVersions.Version3, GamestatsResponseVersions.Version2, false);
+                data = gs5.DecryptData(txtData.Text);
                 litGeneration.Text = "5";
             }
             catch (FormatException)
@@ -44,7 +50,9 @@ namespace PkmnFoundations.GTS.debug
 
             if (data == null) try
             {
-                data = GamestatsSessionPlat.DecryptData(txtData.Text);
+                GamestatsHandler gsPlat = new GamestatsHandler("uLMOGEiiJogofchScpXb000244fd00006015100000005b440e7epokemondpds",
+                    GamestatsRequestVersions.Version3, GamestatsResponseVersions.Version2, true);
+                data = gsPlat.DecryptData(txtData.Text);
                 litGeneration.Text = "Platinum";
             }
             catch (FormatException)
@@ -69,7 +77,7 @@ namespace PkmnFoundations.GTS.debug
 
             if (data == null) try
             {
-                data = GtsSessionBase.FromUrlSafeBase64String(txtData.Text);
+                data = GamestatsHandler.FromUrlSafeBase64String(txtData.Text);
 
                 litGeneration.Text = "Unknown (are you sure this is gamestats data?)";
                 litChecksum.Text = "";
@@ -93,7 +101,7 @@ namespace PkmnFoundations.GTS.debug
 
         public static byte[] DecryptData(String data)
         {
-            byte[] data2 = GtsSessionBase.FromUrlSafeBase64String(data);
+            byte[] data2 = GamestatsHandler.FromUrlSafeBase64String(data);
             if (data2.Length < 12) throw new FormatException("Data must contain at least 12 bytes.");
 
             int checksum = BitConverter.ToInt32(data2, 0);

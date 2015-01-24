@@ -12,12 +12,8 @@ namespace PkmnFoundations.GTS
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            // todo: I should store the available pokemon count
-            // on the cache in the same way so the website doesn't
-            // have a dependency on running in the same application
-            // as the gamestats server.
-            GtsSessionManager manager = GtsSessionManager.FromContext(Context);
-            int availTotal = manager.AvailablePokemon4 + manager.AvailablePokemon5;
+            // todo: Cache this
+            int availTotal = Database.Instance.GtsAvailablePokemon4() + Database.Instance.GtsAvailablePokemon5();
             litPokemon.Text = availTotal.ToString();
 
             ulong bvCount4, bvCount5;

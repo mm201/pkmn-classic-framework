@@ -3544,7 +3544,6 @@
       <DependentUpon>RoomLeaders.aspx</DependentUpon>
     </Compile>
     <Compile Include="src\DependencyNode.cs" />
-    <Compile Include="src\GamestatsSessionPlat.cs" />
     <Compile Include="src\HeaderColour.cs" />
     <Compile Include="admin\AddDressup.aspx.cs">
       <DependentUpon>AddDressup.aspx</DependentUpon>
@@ -3588,9 +3587,6 @@
       <DependentUpon>pokemondpds.ashx</DependentUpon>
     </Compile>
     <Compile Include="src\Common.cs" />
-    <Compile Include="src\GtsSession5.cs" />
-    <Compile Include="src\GtsSession4.cs" />
-    <Compile Include="src\GtsSessionBase.cs" />
     <Compile Include="Default.aspx.cs">
       <DependentUpon>Default.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -3609,7 +3605,6 @@
       <DependentUpon>MasterPage.master</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="src\GtsSessionManager.cs" />
     <Compile Include="test\VideoId.aspx.cs">
       <DependentUpon>VideoId.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
