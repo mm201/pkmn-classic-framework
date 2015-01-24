@@ -79,6 +79,8 @@
     <Content Include="admin\AddBoxes.aspx" />
     <Content Include="admin\AddMusical.aspx" />
     <Content Include="admin\Sessions.aspx" />
+    <Content Include="controls\LabelTextBox.ascx" />
+    <Content Include="css\form.css" />
     <Content Include="favicon.ico" />
     <Content Include="gts\Default.aspx" />
     <Content Include="battlevideo\Default.aspx" />
@@ -3462,6 +3464,7 @@
     <Content Include="images\pkmn-sm\99.png" />
     <Content Include="RoomLeaders.aspx" />
     <Content Include="script\jquery-1.11.1.min.js" />
+    <Content Include="script\form.js" />
     <Content Include="script\retina.js" />
     <Content Include="test\BoxUp.aspx" />
     <Content Include="test\NameDecode.aspx" />
@@ -3515,6 +3518,13 @@
     </Compile>
     <Compile Include="admin\Sessions.aspx.designer.cs">
       <DependentUpon>Sessions.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="controls\LabelTextBox.ascx.cs">
+      <DependentUpon>LabelTextBox.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="controls\LabelTextBox.ascx.designer.cs">
+      <DependentUpon>LabelTextBox.ascx</DependentUpon>
     </Compile>
     <Compile Include="gts\Default.aspx.cs">
       <DependentUpon>Default.aspx</DependentUpon>
