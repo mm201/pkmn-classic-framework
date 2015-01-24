@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Security;
 using System.Web.SessionState;
+using GamestatsBase;
 using PkmnFoundations.Data;
 
 namespace PkmnFoundations.GTS
@@ -57,7 +58,7 @@ namespace PkmnFoundations.GTS
         void Application_EndRequest(object sender, EventArgs e)
         {
             // todo: run this less often. Should be a background task like GC
-            GtsSessionManager.FromContext(Context).PruneSessions();
+            GamestatsSessionManager.FromContext(Context).PruneSessions();
         }
 
         public static String RewriteUrl(String url, out String pathInfo, out String query)
