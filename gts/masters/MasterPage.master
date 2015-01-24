@@ -10,7 +10,7 @@
     <asp:ContentPlaceHolder ID="cpHead" runat="server" />
     <link rel="shortcut icon" href="~/favicon.ico?1" type="image/vnd.microsoft.icon" />
 
-    <pf:RequireCss Key="main.css" CssUrl="~/css/main.css" runat="server" />
+    <pf:RequireCss Key="main" CssUrl="~/css/main.css" runat="server" />
     <pf:RequireScript Key="jquery" ScriptUrl="~/script/jquery-1.11.1.min.js" runat="server" />
     <pf:RequireScript Key="retina" After="jquery" ScriptUrl="~/script/retina.js" runat="server" />
 </head>
