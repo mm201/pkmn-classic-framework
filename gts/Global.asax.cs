@@ -57,8 +57,6 @@ namespace PkmnFoundations.GTS
 
         void Application_EndRequest(object sender, EventArgs e)
         {
-            // todo: run this less often. Should be a background task like GC
-            GamestatsSessionManager.FromContext(Context).PruneSessions();
         }
 
         public static String RewriteUrl(String url, out String pathInfo, out String query)
