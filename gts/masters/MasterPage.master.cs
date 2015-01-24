@@ -12,30 +12,51 @@ namespace PkmnFoundations.GTS
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            // todo: Cache this
-            int availTotal = Database.Instance.GtsAvailablePokemon4() + Database.Instance.GtsAvailablePokemon5();
-            litPokemon.Text = availTotal.ToString();
-
+            int avail4, avail5;
             ulong bvCount4, bvCount5;
 
-            if (Cache["BattleVideoCount4"] == null ||
-                Cache["BattleVideoCount5"] == null)
+            // todo: move this to a CacheManager sort of class
+            if (Cache["pkmncfPokemonCount4"] == null)
             {
-                bvCount4 = Database.Instance.BattleVideoCount4();
-                bvCount5 = Database.Instance.BattleVideoCount5();
-                Cache.Insert("BattleVideoCount4", bvCount4, null, 
-                    DateTime.Now.AddMinutes(1), 
-                    System.Web.Caching.Cache.NoSlidingExpiration);
-                Cache.Insert("BattleVideoCount5", bvCount5, null,
+                avail4 = Database.Instance.GtsAvailablePokemon4();
+                Cache.Insert("pkmncfPokemonCount4", avail4, null,
                     DateTime.Now.AddMinutes(1),
                     System.Web.Caching.Cache.NoSlidingExpiration);
             }
             else
-            {
-                bvCount4 = Convert.ToUInt64(Cache["BattleVideoCount4"]);
-                bvCount5 = Convert.ToUInt64(Cache["BattleVideoCount5"]);
-            }
+                avail4 = Convert.ToInt32(Cache["pkmncfPokemonCount4"]);
 
+            if (Cache["pkmncfPokemonCount5"] == null)
+            {
+                avail5 = Database.Instance.GtsAvailablePokemon5();
+                Cache.Insert("pkmncfPokemonCount5", avail5, null,
+                    DateTime.Now.AddMinutes(1),
+                    System.Web.Caching.Cache.NoSlidingExpiration);
+            }
+            else
+                avail5 = Convert.ToInt32(Cache["pkmncfPokemonCount5"]);
+
+            if (Cache["pkmncfBattleVideoCount4"] == null)
+            {
+                bvCount4 = Database.Instance.BattleVideoCount4();
+                Cache.Insert("pkmncfBattleVideoCount4", bvCount4, null,
+                    DateTime.Now.AddMinutes(1),
+                    System.Web.Caching.Cache.NoSlidingExpiration);
+            }
+            else
+                bvCount4 = Convert.ToUInt64(Cache["pkmncfBattleVideoCount4"]);
+
+            if (Cache["pkmncfBattleVideoCount5"] == null)
+            {
+                bvCount5 = Database.Instance.BattleVideoCount5();
+                Cache.Insert("pkmncfBattleVideoCount5", bvCount5, null,
+                    DateTime.Now.AddMinutes(1),
+                    System.Web.Caching.Cache.NoSlidingExpiration);
+            }
+            else
+                bvCount5 = Convert.ToUInt64(Cache["pkmncfBattleVideoCount5"]);
+
+            litPokemon.Text = (avail4 + avail5).ToString();
             litVideos.Text = (bvCount4 + bvCount5).ToString();
         }
 
