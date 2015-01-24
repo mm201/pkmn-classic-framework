@@ -1,7 +1,9 @@
-﻿#Pokémon Foundations
+﻿#Pokémon Classic Framework
 
-Pokémon Foundations is a replacement server and class library for Pokémon
-Generations 4 and 5.
+http://www.pkmnclassic.net/
+
+Pokémon Classic Framework is a replacement server and class library for Pokémon
+Generations 4 and 5. Pokémon Classic Network is the name of the server itself.
 
 ##How to connect
 AltWFC is configured to automatically direct you to my servers. Follow the
@@ -14,21 +16,20 @@ at their wiki to connect.
 * Dressup (PtHGSS)
 * Box uploads (PtHGSS)
 * Musical photos (BW1/2)
+* Wi-Fi Battle Tower/Subway
 
 Direct communications are handled by 
 [AltWFC](https://github.com/polaris-/dwc_network_server_emulator) and are
-outside the scope of this  project. They work at the time of writing but 
+outside the scope of this project. They work at the time of writing but 
 haven't been tested that thoroughly.
 
 ##What doesn't
-* Wi-fi Battle Tower/Subway
 * Top Trainers (PtHGSS)
-* Wi-fi Plaza (PtHGSS)
+* Wi-Fi Plaza (PtHGSS)
 * Game Sync
 * Rating Battles / Competitions
 
 ##What's planned
-* Wi-fi Battle Tower/Subway
 * A much more awesome website
 * Cheat detection
 * Stat checking in a similar manner as Pokécheck
@@ -37,7 +38,23 @@ haven't been tested that thoroughly.
 ##How you can help
 If there's something you want to see, the best thing is to discuss it with me
 and prepare a pull request.
-The most significant way you can help is simply by using it. Its users are
-the GTS. Get on there and start trading!
 
-http://foundations-gts.cloudapp.net/
+The most significant way you can help is simply by using it. The GTS is nothing
+without users. Get on there and start trading!
+
+##Credits
+* [Project Pokémon](http://projectpokemon.org/) for most of the original fake
+GTS reverse engineering efforts and for many ID number tables, including trendy
+phrases
+* [Pipian](http://www.pipian.net/ierukana/) for more reverse engineering help,
+including the Battle Tower and Wi-fi Plaza.
+* [Nagato](https://github.com/polaris-), for help reverse engineering the Game
+Sync protocol
+* Nagato and other contributors to the
+[AltWFC](https://github.com/polaris-/dwc_network_server_emulator) project,
+which I depend on
+* [Veekun](http://veekun.com/) for his Pokédex and large sprites
+* [Bulbapedia](http://bulbapedia.bulbagarden.net/wiki/Main_Page) for most item
+sprites and Generation 3 item/text conversion tables
+* [kaphotics](https://twitter.com/kaphotics) for the Pokémon mini sprite rips
+from ORAS
