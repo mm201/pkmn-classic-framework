@@ -57,6 +57,7 @@ namespace PkmnFoundations.GTS
 
         void Application_EndRequest(object sender, EventArgs e)
         {
+            GamestatsSessionManager.FromContext(Context).PruneSessions();
         }
 
         public static String RewriteUrl(String url, out String pathInfo, out String query)
