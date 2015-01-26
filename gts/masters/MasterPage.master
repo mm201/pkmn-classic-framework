@@ -35,6 +35,7 @@
 
             <div id="gtsHeadMain">
             <ul class="gtsHeadContent">
+                <li>Powered by <a href="http://altwfc.net/">AltWFC</a></li>
                 <li>DNS: <strong>104.131.93.87</strong></li>
                 <li><asp:Literal ID="litPokemon" runat="server" />
                 Pokémon available for offer.</li>

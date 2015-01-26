@@ -1,13 +1,73 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/masters/ThreeColumn.master" AutoEventWireup="true" CodeBehind="Default.aspx.cs" Inherits="PkmnFoundations.GTS.Default" %>
 <%@ Register TagPrefix="pf" Namespace="PkmnFoundations.Web" Assembly="PkmnFoundations.GTS" %>
+<%@ Register TagPrefix="pf" TagName="LabelTextBox" Src="~/controls/LabelTextBox.ascx" %>
 
-<asp:Content ID="Content1" ContentPlaceHolderID="cpHead" runat="server">
+<asp:Content ID="conHead" ContentPlaceHolderID="cpHead" runat="server">
     <pf:HeaderColour ID="HeaderColour1" CssClass="home" runat="server" />
 </asp:Content>
 
-<asp:Content ID="Content2" ContentPlaceHolderID="cpMain" runat="server">
+<asp:Content ID="conLeft" ContentPlaceHolderID="cpLeft" runat="server">
 
-<div>
+    <pf:RequireCss Key="login" CssUrl="~/css/login.css" After="main" runat="server" />
+    <div class="gtsSection gtsLogin">
+    <form id="theForm" runat="server">
+
+        <pf:LabelTextBox ID="txtUsername" Label="Username" runat="server" />
+        <pf:LabelTextBox ID="txtPassword" Label="Password" TextMode="Password" runat="server" />
+        <asp:Button ID="btnSubmit" CssClass="large" Text="Login" runat="server" />
+    </form>
+
+    <asp:HyperLink ID="hlRegister" Text="Create an account" NavigateUrl="#" runat="server" />
+    </div>
+
+    <div class="gtsSection gtsInfo">
+        <p>Maintenance periods are <strong>Thursdays</strong> at
+           <strong>UTC 0500</strong>.</p>
+    </div>
+
+    <div class="gtsSection gtsInfo">
+        <p>Supported games: <strong>Diamond</strong>, <strong>Pearl</strong>,
+           <strong>Platinum</strong>, <strong>Heart Gold</strong>,
+           <strong>Soul Silver</strong>, <strong>Black</strong>,
+           <strong>White</strong>, <strong>Black 2</strong>,
+           <strong>White 2</strong>.</p>
+    </div>
+    <div class="gtsSection gtsInfo">
+        <p>Supported features: <strong>Wi-Fi Club</strong><sup title="Support provided by AltWFC servers">altwfc</sup>,
+           <strong>GTS</strong>, <strong>Battle Videos</strong>,
+           <strong>Random Matchup</strong></p>
+    </div>
+
+    <div class="gtsSection gtsTwitter">
+        <a class="twitter-timeline" data-dnt="true" 
+            href="https://twitter.com/pcnstatus" data-widget-id="559566696667561986"
+            height="400px">Tweets by @pcnstatus</a>
+        <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+    </div>
+
+</asp:Content>
+
+<asp:Content ID="conRight" ContentPlaceHolderID="cpRight" runat="server">
+
+</asp:Content>
+
+<asp:Content ID="conMain" ContentPlaceHolderID="cpMain" runat="server">
+
+    <h1>How to connect</h1>
+    <ol>
+        <li>Obtain an Action Replay code for your game. (complete list coming
+            soon)<br />If you are using an emulator, you can patch your game with
+            <a href="https://github.com/AdmiralCurtiss/WfcPatcher/releases">WfcPatcher</a>.</li>
+        <li>If applicable, enable the code and launch your game.</li>
+        <li>On your DS, set the DNS to <strong>104.131.93.87</strong>.</li>
+        <li>Connect!</li>
+    </ol>
+
+    <p>Complete instructions can be found at
+        <a href="https://github.com/polaris-/dwc_network_server_emulator/wiki#nintendo-dsdsi3ds2ds-configuration">the
+            AltWFC Wiki</a>.</p>
+
+    <hr />
 
     <h1>Update - August 29:</h1>
     <p>Wi-fi Battle Tower and Battle Subway are now available!
@@ -22,39 +82,5 @@
     </p>
     <p>Dressup photos, box uploads, and musical photos are also available.</p>
 
-<h1>What is Foundations GTS?</h1>
-<p>Foundations GTS aims to re-create the same functionality of the original 
-<abbr title="Global Trading Station">GTS</abbr> service found in the games, Pokémon Diamond,
-Pearl, Platinum, Heart Gold, Soul Silver, Black, White, Black 2, and White 2, in an open source
-project.</p>
-<p>The main reason I chose to write my own GTS is because of the 
-<a href="http://www.nintendo.com/whatsnew/detail/vyWpoM6CBIe6FjW8NIY7bvzOrgBURhzw">shutdown 
-    of Nintendo Wi-fi Connection services</a> on May 20. To allow players to
-continue trading, someone would need to make a replacement server, so I decided to help out.</p>
-
-<p><strong style="color: #cc0000;">This is a WORK IN PROGRESS. I make no promises that your
-Pokémon will be safe or that you will get them back. If you find any problems, please
-report them in the
-<asp:HyperLink ID="hlIssueTracker" NavigateUrl="https://github.com/mm201/pkmnFoundations/issues" runat="server">
-issue tracker</asp:HyperLink> with complete replication steps, and Wireshark captures if possible.
-Thanks.
-</strong></p>
-
-<h1>What is Pokémon Foundations?</h1>
-<p>Pokémon Foundations is going to be a collection of utilities dealing with the logic, math,
-and data related to the main series of Pokémon RPG videogames. Planned is a Pokédex, stat calculator,
-damage calculator, and possibly more! (For now, it’s just a GTS.)</p>
-
-<h1>How do I use this GTS?</h1>
-<p>Connections are made through the <a href="https://github.com/polaris-/nintendo_dwc_emulator/wiki">
-DWC Network Server Emulator (altWFC)</a>. Complete instructions on how to patch your game are found at the
-above link.</p>
-<p>To preview the latest features, you can use this alternate DNS:</p>
-<p class="code">191.236.98.208</p>
-<p>Please note that using this DNS server may interfere with the operation of some other
-    titles besides Pokémon.</p>
-
-    
-</div>
 
 </asp:Content>

@@ -81,6 +81,7 @@
     <Content Include="admin\Sessions.aspx" />
     <Content Include="controls\LabelTextBox.ascx" />
     <Content Include="css\form.css" />
+    <Content Include="css\login.css" />
     <Content Include="favicon.ico" />
     <Content Include="gts\Default.aspx" />
     <Content Include="battlevideo\Default.aspx" />

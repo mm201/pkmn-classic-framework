@@ -15,6 +15,38 @@ h1, h2, h3, h4, strong
     font-weight: 700;
 }
 
+hr
+{
+    margin: 16px 0;
+    border: 1px solid #cccccc;
+    border-width: 1px 0 0;
+}
+
+a
+{
+    color: #00749f;
+}
+
+a:hover
+{
+    color: #004a68;
+}
+
+a:visited
+{
+    color: #7e3bd0;
+}
+
+a:visited:hover
+{
+    color: #512489;
+}
+
+li
+{
+    margin: 4px 0;
+}
+
 .setWidth
 {
     width: 980px;
@@ -37,7 +69,7 @@ h1, h2, h3, h4, strong
     width: 160px; height: 160px;
 }
 
-.github
+.github, a.github, a.github:hover
 {
     width: 300px;
     height: 20px;
@@ -80,6 +112,33 @@ h1, h2, h3, h4, strong
     display: block;
 }
 
+.gtsInfo
+{
+    margin-left: 40px;
+    position: relative;
+}
+
+.gtsInfo::before
+{
+    width: 24px;
+    height: 0;
+    padding: 12px 0;
+    position: absolute;
+    left: -40px;
+    top: calc(50% - 16px);
+    content: 'i';
+    border: 4px solid #999999;
+    color: #999999;
+    font-family: Arial,Helvetica,sans-serif;
+    line-height: 0;
+    vertical-align: middle;
+    border-radius: 100%;
+    font-size: 24px;
+    font-weight: bold;
+    text-align: center;
+    display: block;
+}
+
 #gtsHeader
 {
     padding-top: 16px;
@@ -90,6 +149,11 @@ h1, h2, h3, h4, strong
     overflow: hidden;
     font-size: 12pt;
     position: relative;
+}
+
+#gtsHeader a, #gtsHeader a:visited
+{
+    color: white;
 }
 
 #gtsHeader #gtsLogo
@@ -105,7 +169,6 @@ h1, h2, h3, h4, strong
 {
     text-decoration: none;
 }
-
 
 #gtsHeader #gtsLogo .gtsLogoImage, #gtsHeader #gtsLogo .gtsLogoWord
 {
@@ -275,6 +338,11 @@ h1, h2, h3, h4, strong
 #gtsMain .gtsMainColumnTwo
 {
     width: 728px;
+}
+
+#gtsMain .gtsColumn .gtsSection
+{
+    margin-bottom: 16px;
 }
 
 #gtsSubNav

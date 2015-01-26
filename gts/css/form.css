@@ -4,11 +4,13 @@
     border: 1px solid #999999;
     background-color: white;
     box-shadow: 0 1px 2px 0 rgba(0,0,0,0.1) inset;
-    width: 200px;
+    width: 230px;
     height: 14px;
-    padding: 2px;
+    padding: 3px 2px;
     font-size: 10pt;
     font-family: Arial,Helvetica,sans-serif;
+    margin-bottom: 4px;
+    border-radius: 2px;
 }
 
 input[type=text]:focus, input[type=password]:focus, select, textarea:focus,
@@ -17,10 +19,44 @@ input[type=text]:focus, input[type=password]:focus, select, textarea:focus
 
 }
 
+input[type=submit], button
+{
+    height: 28px;
+    margin-bottom: 4px;
+    border-radius: 2px;
+    background-color: #008fc4;
+    background-image: -moz-linear-gradient(top, #008fc4 0%, #00749f 100%); /* FF3.6+ */
+    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#008fc4), color-stop(100%,#00749f)); /* Chrome,Safari4+ */
+    background-image: -webkit-linear-gradient(top, #008fc4 0%,#00749f 100%); /* Chrome10+,Safari5.1+ */
+    background-image: -o-linear-gradient(top, #008fc4 0%,#00749f 100%); /* Opera 11.10+ */
+    background-image: -ms-linear-gradient(top, #008fc4 0%,#00749f 100%); /* IE10+ */
+    background-image: linear-gradient(to bottom, #008fc4 0%,#00749f 100%); /* W3C */
+    background-size: 100%;
+    box-shadow: 0 2px 1px -1px #89b4d5 inset, 0 1px 2px 0 rgba(0,0,0,0.1);
+    border: 1px solid;
+    border-color: #bcd1e4 #00749f #004a68 #89b4d5;
+    color: white;
+    text-shadow: 0 1px 0 #004a68;
+    font-family: Lato,Candara,'Meiryo UI',Arial,sans-serif;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+input[type=submit].large, button.large
+{
+    width: 236px;
+}
+
 .pfLabelTextBox
 {
     position: relative;
-    font-family: Arial,Helvetica,sans-serif
+    background-color: white;
+    font-family: Arial,Helvetica,sans-serif;
+    display: inline-block;
+    margin: 0; padding: 0;
+    margin-bottom: 4px;
+    vertical-align: top;
+    border-radius: 2px;
 }
 
 .pfLabelTextBox label
@@ -29,7 +65,7 @@ input[type=text]:focus, input[type=password]:focus, select, textarea:focus
     height: 0;
     overflow: visible;
     position: relative;
-    top: 2px; left: 3px;
+    top: 3px; left: 3px;
     color: #cccccc;
 }
 
@@ -38,6 +74,7 @@ input[type=text]:focus, input[type=password]:focus, select, textarea:focus
     display: block;
     background-color: transparent;
     position: relative;
+    margin-bottom: 0;
 }
 
 .pfLabelTextBox input:focus, .pfLabelTextBox input.hasContent
