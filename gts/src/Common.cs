@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.IO;
+using MySql.Data.MySqlClient;
+using System.Configuration;
 
 namespace PkmnFoundations.Web
 {
@@ -55,6 +57,11 @@ namespace PkmnFoundations.Web
             }
             namepart = filename.Substring(0, Dot - 1);
             return filename.Substring(Dot, filename.Length - Dot).ToLowerInvariant();
+        }
+
+        public static MySqlConnection CreateConnection()
+        {
+            return new MySqlConnection(ConfigurationManager.ConnectionStrings["pkmnFoundationsConnectionString"].ConnectionString);
         }
 
         #endregion

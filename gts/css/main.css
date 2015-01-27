@@ -116,6 +116,7 @@ li
 {
     margin-left: 40px;
     position: relative;
+    min-height: 32px;
 }
 
 .gtsInfo::before

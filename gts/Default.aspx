@@ -33,7 +33,7 @@
            <strong>White 2</strong>.</p>
     </div>
     <div class="gtsSection gtsInfo">
-        <p>Supported features: <strong>Wi-Fi Club</strong><sup title="Support provided by AltWFC servers">altwfc</sup>,
+        <p>Supported features: <strong>Wi-Fi Club</strong><sup title="Support provided through AltWFC servers">altwfc</sup>,
            <strong>GTS</strong>, <strong>Battle Videos</strong>,
            <strong>Random Matchup</strong></p>
     </div>
