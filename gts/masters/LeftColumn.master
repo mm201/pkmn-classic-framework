@@ -1,0 +1,15 @@
+﻿<%@ Master Language="C#" MasterPageFile="~/masters/MasterPage.master" AutoEventWireup="true" CodeBehind="ThreeColumn.master.cs" Inherits="PkmnFoundations.GTS.ThreeColumn" %>
+
+<asp:Content ID="Content1" ContentPlaceHolderID="cpHead" runat="server">
+<asp:ContentPlaceHolder ID="cpHead" runat="server" />
+</asp:Content>
+
+<asp:Content ID="Content2" ContentPlaceHolderID="cpMain" runat="server">
+    <div class="gtsColumn gtsLeftColumn">
+<asp:ContentPlaceHolder ID="cpLeft" runat="server" />
+    </div>
+    <div class="gtsColumn gtsMainColumn gtsMainColumnTwo">
+<asp:ContentPlaceHolder ID="cpMain" runat="server" />
+    </div>
+    <div class="clear"></div>
+</asp:Content>

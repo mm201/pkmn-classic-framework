@@ -3479,6 +3479,7 @@
     <None Include="admin\Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
+    <Content Include="masters\LeftColumn.master" />
     <None Include="pad.bin">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -3540,6 +3541,13 @@
     </Compile>
     <Compile Include="battlevideo\Default.aspx.designer.cs">
       <DependentUpon>Default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="masters\LeftColumn.master.cs">
+      <DependentUpon>LeftColumn.master</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="masters\LeftColumn.master.designer.cs">
+      <DependentUpon>LeftColumn.master</DependentUpon>
     </Compile>
     <Compile Include="pkvldtprod.ashx.cs">
       <DependentUpon>pkvldtprod.ashx</DependentUpon>
