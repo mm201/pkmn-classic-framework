@@ -11,7 +11,7 @@ namespace PkmnFoundations.Pokedex
     public class FormStats : PokedexRecordBase
     {
         public FormStats(Pokedex pokedex, int form_id, Generations min_generation, 
-            int type1, int type2, StatValues base_stats, StatValues reward_evs)
+            int type1, int type2, IntStatValues base_stats, ByteStatValues reward_evs)
             : base(pokedex)
         {
             m_form_pair = new LazyKeyValuePair<int, Form>(k => k == 0 ? null : m_pokedex.Forms(k), v => v.Value);
@@ -36,7 +36,7 @@ namespace PkmnFoundations.Pokedex
             (Generations)Convert.ToInt32(reader["MinGeneration"]),
             Convert.ToInt32(reader["Type1"]),
             Convert.ToInt32(reader["Type2"]),
-            new StatValues(
+            new IntStatValues(
                 Convert.ToInt32(reader["BaseHP"]),
                 Convert.ToInt32(reader["BaseAttack"]),
                 Convert.ToInt32(reader["BaseDefense"]),
@@ -44,21 +44,21 @@ namespace PkmnFoundations.Pokedex
                 Convert.ToInt32(reader["BaseSpAttack"]),
                 Convert.ToInt32(reader["BaseSpDefense"])
                 ),
-            new StatValues(
-                Convert.ToInt32(reader["RewardHP"]),
-                Convert.ToInt32(reader["RewardAttack"]),
-                Convert.ToInt32(reader["RewardDefense"]),
-                Convert.ToInt32(reader["RewardSpeed"]),
-                Convert.ToInt32(reader["RewardSpAttack"]),
-                Convert.ToInt32(reader["RewardSpDefense"])
+            new ByteStatValues(
+                Convert.ToByte(reader["RewardHP"]),
+                Convert.ToByte(reader["RewardAttack"]),
+                Convert.ToByte(reader["RewardDefense"]),
+                Convert.ToByte(reader["RewardSpeed"]),
+                Convert.ToByte(reader["RewardSpAttack"]),
+                Convert.ToByte(reader["RewardSpDefense"])
                 )
             )
         {
         }
 
         public Generations MinGeneration { get; private set; }
-        public StatValues BaseStats { get; private set; }
-        public StatValues RewardEvs { get; private set; }
+        public IntStatValues BaseStats { get; private set; }
+        public ByteStatValues RewardEvs { get; private set; }
 
         private LazyKeyValuePair<int, Form> m_form_pair;
         private LazyKeyValuePair<int, PkmnFoundations.Pokedex.Type> m_type1_pair;

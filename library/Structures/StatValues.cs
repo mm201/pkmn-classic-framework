@@ -5,83 +5,45 @@ using System.Text;
 
 namespace PkmnFoundations.Structures
 {
-    public struct StatValues
+    public class StatValues<T> : StatValuesBase<T> where T : struct
     {
-        public StatValues(int hp, int attack, int defense, int speed, int special_attack, int special_defense) : this()
+        public StatValues(T hp, T attack, T defense, T speed, T special_attack, T special_defense)
+            : base(hp, attack, defense, speed, special_attack, special_defense)
         {
-            Hp = hp;
-            Attack = attack;
-            Defense = defense;
-            Speed = speed;
-            SpecialAttack = special_attack;
-            SpecialDefense = special_defense;
+
         }
 
-        public int Hp { get; set; }
-        public int Attack { get; set; }
-        public int Defense { get; set; }
-        public int Speed { get; set; }
-        public int SpecialAttack { get; set; }
-        public int SpecialDefense { get; set; }
+        protected StatValues(T[] s) : base(s)
+        {
+            if (s.Length != 6) throw new ArgumentException();
+        }
 
-        public int this[Stats stat]
+        public T Hp { get { return Stats[0]; } set { Stats[0] = value; } }
+        public T Attack { get { return Stats[1]; } set { Stats[1] = value; } }
+        public T Defense { get { return Stats[2]; } set { Stats[2] = value; } }
+        public T Speed { get { return Stats[3]; } set { Stats[3] = value; } }
+        public T SpecialAttack { get { return Stats[4]; } set { Stats[4] = value; } }
+        public T SpecialDefense { get { return Stats[5]; } set { Stats[5] = value; } }
+
+        public static int StatsIndex(Stats stat)
+        {
+            return (int)stat - 1;
+        }
+
+        public virtual T this[Stats stat]
         {
             get
             {
-                switch (stat)
-                {
-                    case Stats.Hp:
-                        return Hp;
-                    case Stats.Attack:
-                        return Attack;
-                    case Stats.Defense:
-                        return Defense;
-                    case Stats.Speed:
-                        return Speed;
-                    case Stats.SpecialAttack:
-                        return SpecialAttack;
-                    case Stats.SpecialDefense:
-                        return SpecialDefense;
-                    default:
-                        throw new ArgumentException();
-                }
+                int index = StatsIndex(stat);
+                if (index < 0 || index >= 6) throw new ArgumentException();
+                return Stats[index];
             }
             set
             {
-                switch (stat)
-                {
-                    case Stats.Hp:
-                        Hp = value;
-                        break;
-                    case Stats.Attack:
-                        Attack = value;
-                        break;
-                    case Stats.Defense:
-                        Defense = value;
-                        break;
-                    case Stats.Speed:
-                        Speed = value;
-                        break;
-                    case Stats.SpecialAttack:
-                        SpecialAttack = value;
-                        break;
-                    case Stats.SpecialDefense:
-                        SpecialDefense = value;
-                        break;
-                    default:
-                        throw new ArgumentException();
-                }
+                int index = StatsIndex(stat);
+                if (index < 0 || index >= 6) throw new ArgumentException();
+                Stats[index] = value;
             }
-        }
-
-        public int[] ToArray()
-        {
-            return new int[] { Hp, Attack, Defense, Speed, SpecialAttack, SpecialDefense };
-        }
-
-        public byte[] ToByteArray()
-        {
-            return new byte[] { (byte)Hp, (byte)Attack, (byte)Defense, (byte)Speed, (byte)SpecialAttack, (byte)SpecialDefense };
         }
     }
 }

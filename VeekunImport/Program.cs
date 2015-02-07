@@ -252,18 +252,18 @@ namespace VeekunImport
 
                             int[] fieldsInt = fields.Select(s => Convert.ToInt32(s)).ToArray();
                             FormStats f = new FormStats(null, fieldsInt[0], (Generations)generation, fieldsInt[1], fieldsInt[2],
-                                new StatValues(fieldsInt[3],
+                                new IntStatValues(fieldsInt[3],
                                     fieldsInt[4],
                                     fieldsInt[5],
                                     fieldsInt[6],
                                     fieldsInt[7],
                                     fieldsInt[8]),
-                                new StatValues(fieldsInt[9],
-                                    fieldsInt[10],
-                                    fieldsInt[11],
-                                    fieldsInt[12],
-                                    fieldsInt[13],
-                                    fieldsInt[14])
+                                new ByteStatValues((byte)fieldsInt[9],
+                                    (byte)fieldsInt[10],
+                                    (byte)fieldsInt[11],
+                                    (byte)fieldsInt[12],
+                                    (byte)fieldsInt[13],
+                                    (byte)fieldsInt[14])
                                 );
 
                             db.PokedexInsertFormStats(f);

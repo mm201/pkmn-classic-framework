@@ -55,7 +55,7 @@ namespace PkmnFoundations.Structures
         public uint Personality;
         public uint IVs;
         public byte[] EVs;
-        public byte Unknown1;
+        public byte Unknown1; // probably a bitmask of applied PP ups
         public Languages Language;
         public byte Ability;
         public byte Happiness;

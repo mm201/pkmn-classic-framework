@@ -12,6 +12,8 @@ namespace PkmnFoundations.Structures
     /// </summary>
     public abstract class BinarySerializableBase : ISerializable
     {
+        // xxx: ISerializable may be useless or even non-idiomatic on this class.
+
         public BinarySerializableBase()
         {
         }
