@@ -47,13 +47,13 @@ namespace PkmnFoundations.Structures
                 for (int pos = 0; pos < 32; pos += 2)
                 {
                     rand = DecryptRNG(rand);
-                    block[pos] ^= (byte)(rand >> 24);
-                    block[pos + 1] ^= (byte)(rand >> 16);
+                    block[pos] ^= (byte)(rand >> 16);
+                    block[pos + 1] ^= (byte)(rand >> 24);
                 }
             }
 
             // shuffle blocks to their correct order
-            List<int> blockSequence = Invert(BlockScramble(Personality));
+            List<int> blockSequence = Invert(BlockScramble((Personality & 0x0003e000) >> 0x0d));
             AssertHelper.Equals(blockSequence.Count, 4);
             {
                 byte[][] blocks2 = new byte[4][];

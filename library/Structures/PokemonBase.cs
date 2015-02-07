@@ -85,7 +85,7 @@ namespace PkmnFoundations.Structures
             int max = arg.Max();
             List<int> result = new List<int>(max);
 
-            for (int x = 0; x < max; x++)
+            for (int x = 0; x <= max; x++)
                 result.Add(arg.IndexOf(x));
 
             return result;
