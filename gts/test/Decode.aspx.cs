@@ -113,6 +113,7 @@ namespace PkmnFoundations.GTS.debug
 
         private String RenderHex(String hex)
         {
+            // todo: this should be moved to a user control
             StringBuilder builder = new StringBuilder();
             for (int x = 0; x < hex.Length; x += 16)
             {

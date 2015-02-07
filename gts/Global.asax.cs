@@ -85,7 +85,7 @@ namespace PkmnFoundations.GTS
             if (split.Length > 2 && split[1] == "pokemondpds" && split[2] == "web")
             {
                 pathInfo = "/" + String.Join("/", split, 3, split.Length - 3);
-                return VirtualPathUtility.ToAbsolute("~/pokemonplatds.ashx");
+                return VirtualPathUtility.ToAbsolute("~/pokemondpds_web.ashx");
             }
             else if (split.Length > 1 && split[1] == "pokemondpds")
             {
