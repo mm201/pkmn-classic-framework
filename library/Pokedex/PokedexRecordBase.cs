@@ -11,6 +11,7 @@ namespace PkmnFoundations.Pokedex
     {
         internal PokedexRecordBase(Pokedex pokedex)
         {
+            if (pokedex == null) throw new ArgumentNullException("pokedex");
             m_pokedex = pokedex;
             m_lazy_pairs = new List<ILazyKeyValuePair<int, object>>();
         }

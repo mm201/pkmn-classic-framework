@@ -47,6 +47,12 @@ namespace PkmnFoundations.Pokedex
         {
         }
 
+        internal override void PrefetchRelations()
+        {
+            base.PrefetchRelations();
+            m_forms = m_pokedex.FormsByValue(NationalDex);
+        }
+
         // todo: Implement IEquitable and compare against NationalDex
         // Same goes for all these pokedex classes.
 
@@ -68,6 +74,14 @@ namespace PkmnFoundations.Pokedex
         public Family Family
         {
             get { return m_family_pair.Value; }
+        }
+
+        private Dictionary<byte, Form> m_forms;
+        public Form Forms(byte value)
+        {
+            if (m_forms == null)
+                m_forms = m_pokedex.FormsByValue(NationalDex);
+            return m_forms[value];
         }
     }
 }

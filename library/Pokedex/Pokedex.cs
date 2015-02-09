@@ -56,6 +56,13 @@ namespace PkmnFoundations.Pokedex
 
         private void BuildAdditionalIndexes()
         {
+            m_forms_by_value = new Dictionary<int, Dictionary<byte, Form>>();
+            foreach (var pair in m_species)
+                m_forms_by_value.Add(pair.Key, new Dictionary<byte, Form>());
+
+            foreach (var pair in m_forms)
+                m_forms_by_value[pair.Value.SpeciesID].Add(pair.Value.Value, pair.Value);
+
             Dictionary<int, Item> items3 = new Dictionary<int,Item>();
             Dictionary<int, Item> items4 = new Dictionary<int,Item>();
             Dictionary<int, Item> items5 = new Dictionary<int,Item>();
@@ -106,6 +113,7 @@ namespace PkmnFoundations.Pokedex
         private Dictionary<int, Species> m_species;
         private Dictionary<int, Family> m_families;
         private Dictionary<int, Form> m_forms;
+        private Dictionary<int, Dictionary<byte, Form>> m_forms_by_value;
         private Dictionary<int, SortedDictionary<Generations, FormStats>> m_form_stats;
         //private Dictionary<int, Evolution> m_evolutions;
 
@@ -116,6 +124,7 @@ namespace PkmnFoundations.Pokedex
 
         private Dictionary<Generations, Dictionary<int, Item>> m_items_generations;
 
+        // todo: add ReadOnlyIndexer1d class, replace these methods with them
         public Species Species(int national_dex)
         {
             return m_species[national_dex];
@@ -129,6 +138,11 @@ namespace PkmnFoundations.Pokedex
         public Form Forms(int id)
         {
             return m_forms[id];
+        }
+
+        internal Dictionary<byte, Form> FormsByValue(int national_dex)
+        {
+            return m_forms_by_value[national_dex];
         }
 
         public SortedDictionary<Generations, FormStats> FormStats(int form_id)
