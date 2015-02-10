@@ -68,8 +68,7 @@ namespace VeekunImport
                     {
                         lineNumber++;
                         String[] fields = line.Split('\t');
-                        // todo: allow and reject blank lines at the end.
-                        if (fields.Length == 0) throw new Exception("families_map.txt has a blank line.");
+                        if (fields.Length == 0) continue;
                         int[] fieldsInt = fields.Select(s => Convert.ToInt32(s)).ToArray();
                         familyList.Add(fieldsInt);
                         foreach (int x in fieldsInt)
@@ -189,6 +188,45 @@ namespace VeekunImport
                 rdPokemon.Close();
 
                 // pkmncf_pokedex_pokemon_forms
+                /*
+                 *                 List<Family> overrideFamilies = new List<Family>();
+                using (FileStream fs = File.Open("families.txt", FileMode.Open))
+                {
+                    StreamReader sr = new StreamReader(fs, Encoding.UTF8);
+                    String line;
+                    while ((line = sr.ReadLine()) != null)
+                    {
+                        String[] fields = line.Split('\t');
+                        overrideFamilies.Add(new Family(null,
+                            Convert.ToInt32(fields[0]),
+                            Convert.ToInt32(fields[1]),
+                            Convert.ToInt32(fields[2]),
+                            Convert.ToInt32(fields[3]),
+                            Convert.ToInt32(fields[4]),
+                            Convert.ToInt32(fields[5]),
+                            Convert.ToByte(fields[6])
+                            ));
+                    }
+                }
+
+                 */
+
+                // xxx: DRY these file parsers up by adding a helper that takes
+                // a filename and a lambda of what to run for each line in the document.
+                Dictionary<int, byte> formValueMap = new Dictionary<int, byte>();
+                using (FileStream fs = File.Open("form_values.txt", FileMode.Open))
+                {
+                    StreamReader sr = new StreamReader(fs, Encoding.UTF8);
+                    String line;
+                    while ((line = sr.ReadLine()) != null)
+                    {
+                        String[] fields = line.Split('\t');
+                        if (fields.Length == 0) continue;
+                        if (fields.Length != 3) throw new Exception("form_values.txt has a line with unexpected number of tabs.");
+                        formValueMap.Add(Convert.ToInt32(fields[1]), Convert.ToByte(fields[2]));
+                    }
+                }
+
                 SQLiteDataReader rdForms = (SQLiteDataReader)connVeekun.ExecuteReader("SELECT id, " +
                     "(SELECT species_id FROM pokemon WHERE id = pokemon_id) AS NationalDex, " +
                     "form_order - 1 AS FormValue, " +
@@ -214,6 +252,8 @@ namespace VeekunImport
                     int height = Convert.ToInt32(rdForms["height"]);
                     int weight = Convert.ToInt32(rdForms["weight"]);
                     int experience = Convert.ToInt32(rdForms["experience"]);
+
+                    if (formValueMap.ContainsKey(id)) FormValue = formValueMap[id];
 
                     Form f = new Form(null, id,
                         NationalDex, FormValue,
