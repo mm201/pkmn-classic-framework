@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
@@ -51,17 +52,30 @@ namespace PkmnFoundations.GTS
         protected String CreateOffer4(object DataItem)
         {
             GtsRecord4 record = (GtsRecord4)DataItem;
-            return String.Format("Species: {3} (#{0})<br />Gender: {1}<br />Level: {2}", 
-                record.Species, 
-                record.Gender, 
-                record.Level, 
-                m_pokedex.Species(record.Species).Name);
+            Pokemon4 pokemon = new Pokemon4(m_pokedex, record.Data);
+
+            StringBuilder builder = new StringBuilder();
+            builder.Append(String.Format("{0} (#{1})", pokemon.Species.Name, pokemon.SpeciesID));
+            builder.Append("<br />");
+            if (pokemon.FormID != 0)
+            {
+                builder.Append(pokemon.Form.Name);
+                builder.Append("<br />");
+            }
+            builder.Append(String.Format("Lv {0}, {1}", record.Level, record.Gender));
+            builder.Append("<br />");
+            builder.Append(String.Format("Nature: {0}", pokemon.Nature.ToString()));
+            builder.Append("<br />");
+            builder.Append(String.Format("Ability: {0}", pokemon.Ability.Name));
+            builder.Append("<br />");
+
+            return builder.ToString();
         }
 
         protected String CreateWanted4(object DataItem)
         {
             GtsRecord4 record = (GtsRecord4)DataItem;
-            return String.Format("Species: {3} (#{0})<br />Gender: {1}<br />Level: {2}", 
+            return String.Format("{3} (#{0})<br />{1}<br />Lv {2}",
                 record.RequestedSpecies, 
                 record.RequestedGender, 
                 FormatLevels(record.RequestedMinLevel, record.RequestedMaxLevel),
@@ -77,7 +91,7 @@ namespace PkmnFoundations.GTS
         protected String CreateOffer5(object DataItem)
         {
             GtsRecord5 record = (GtsRecord5)DataItem;
-            return String.Format("Species: {3} (#{0})<br />Gender: {1}<br />Level: {2}", 
+            return String.Format("{3} (#{0})<br />{1}<br />Lv {2}", 
                 record.Species, 
                 record.Gender, 
                 record.Level,
@@ -87,7 +101,7 @@ namespace PkmnFoundations.GTS
         protected String CreateWanted5(object DataItem)
         {
             GtsRecord5 record = (GtsRecord5)DataItem;
-            return String.Format("Species: {3} (#{0})<br />Gender: {1}<br />Level: {2}", 
+            return String.Format("{3} (#{0})<br />{1}<br />Lv {2}",
                 record.RequestedSpecies, 
                 record.RequestedGender, 
                 FormatLevels(record.RequestedMinLevel, record.RequestedMaxLevel),
