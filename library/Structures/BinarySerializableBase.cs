@@ -18,16 +18,23 @@ namespace PkmnFoundations.Structures
         {
         }
 
+        // xxx: these ctors lead to some dicey order of execution issues
+        // should load() need to access a field initialized in a derived
+        // class's ctor. Instead, all derived ctors should use the () ctor and
+        // call Load() directly.
+        [ObsoleteAttribute("Please use the base() constructor and call Load() by hand.")]
         public BinarySerializableBase(BinaryReader data)
         {
             Load(data);
         }
 
+        [ObsoleteAttribute("Please use the base() constructor and call Load() by hand.")]
         public BinarySerializableBase(byte[] data)
         {
             Load(data);
         }
 
+        [ObsoleteAttribute("Please use the base() constructor and call Load() by hand.")]
         public BinarySerializableBase(byte[] data, int offset)
         {
             Load(data, offset);

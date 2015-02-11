@@ -15,21 +15,24 @@ namespace PkmnFoundations.Structures
         }
 
         public PokemonBase(Pokedex.Pokedex pokedex, BinaryReader data)
-            : base(data)
+            : base()
         {
             m_pokedex = pokedex;
+            Load(data);
         }
 
         public PokemonBase(Pokedex.Pokedex pokedex, byte[] data)
-            : base(data)
+            : base()
         {
             m_pokedex = pokedex;
+            Load(data);
         }
 
         public PokemonBase(Pokedex.Pokedex pokedex, byte[] data, int offset)
-            : base(data, offset)
+            : base()
         {
             m_pokedex = pokedex;
+            Load(data, offset);
         }
 
         protected Pokedex.Pokedex m_pokedex;
