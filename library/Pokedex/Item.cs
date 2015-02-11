@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Text;
+using PkmnFoundations.Structures;
 using PkmnFoundations.Support;
 
 namespace PkmnFoundations.Pokedex
@@ -45,5 +46,24 @@ namespace PkmnFoundations.Pokedex
         public int ? Value6 { get; private set; }
         public int Price { get; private set; }
         public LocalizedString Name { get; private set; }
+
+        public int ? Value(Generations generation)
+        {
+            switch (generation)
+            {
+                case Generations.Generation1:
+                case Generations.Generation2:
+                    throw new NotSupportedException();
+                case Generations.Generation3:
+                    return Value3;
+                case Generations.Generation4:
+                    return Value4;
+                case Generations.Generation5:
+                    return Value5;
+                case Generations.Generation6:
+                default:
+                    return Value6;
+            }
+        }
     }
 }

@@ -48,6 +48,8 @@ namespace PkmnFoundations.Structures
             // eg. LazyKeyValuePair<int, Species> Species.CreatePair()
             m_species_pair = new LazyKeyValuePair<int, Species>(k => k == 0 ? null : m_pokedex.Species(k), v => v.NationalDex);
             m_form_pair = new LazyKeyValuePair<byte, Form>(k => Species.Forms(k), v => v.Value);
+            m_item_pair = new LazyKeyValuePair<int, Item>(k => k == 0 ? null : m_pokedex.Items(Generation, k), v => v.Value(Generation) ?? 0); // xxx: 0 is definitely a bad return value for "not found"
+            m_ability_pair = new LazyKeyValuePair<int, Ability>(k => k == 0 ? null : m_pokedex.Abilities(k), v => v.Value);
         }
 
         protected Pokedex.Pokedex m_pokedex;
@@ -88,14 +90,38 @@ namespace PkmnFoundations.Structures
             set { m_form_pair.Value = value; }
         }
 
-        public int HeldItemID { get; set; }
+        protected abstract Generations Generation { get; }
+
+        private LazyKeyValuePair<int, Item> m_item_pair;
+        public int HeldItemID 
+        {
+            get { return m_item_pair.Key; }
+            set { m_item_pair.Key = value; }
+        }
+        public Item HeldItem
+        {
+            get { return m_item_pair.Value; }
+            set { m_item_pair.Value = value; }
+        }
+
+        private LazyKeyValuePair<int, Ability> m_ability_pair;
+        public int AbilityID
+        {
+            get { return m_ability_pair.Key; }
+            set { m_ability_pair.Key = value; }
+        }
+        public Ability Ability
+        {
+            get { return m_ability_pair.Value; }
+            set { m_ability_pair.Value = value; }
+        }
+
         public MoveSlot[] Moves { get { return m_moves; } }
         public uint TrainerID { get; set; }
         public uint Personality { get; set; }
         public Natures Nature { get { return (Natures)(Personality % 25u); } }
         public byte Level { get; set; }
         public byte Happiness { get; set; }
-        public int AbilityID { get; set; }
         public Languages Language { get; set; }
         public IvStatValues IVs { get; set; }
         public ByteStatValues EVs { get; set; }

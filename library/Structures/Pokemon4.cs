@@ -195,6 +195,11 @@ namespace PkmnFoundations.Structures
             throw new NotImplementedException();
         }
 
+        protected override Generations Generation
+        {
+            get { return Generations.Generation4; }
+        }
+
         public int Experience { get; set; }
         public Markings Markings { get; set; }
         public ConditionValues ContestStats { get; set; }
