@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Text;
+using PkmnFoundations.Structures;
 using PkmnFoundations.Support;
 
 namespace PkmnFoundations.Pokedex
@@ -24,7 +25,6 @@ namespace PkmnFoundations.Pokedex
             Height = height;
             Weight = weight;
             Experience = experience;
-
         }
 
         public Form(Pokedex pokedex, IDataReader reader)
@@ -40,6 +40,12 @@ namespace PkmnFoundations.Pokedex
                 Convert.ToInt32(reader["Experience"])
                 )
         {
+        }
+
+        internal override void PrefetchRelations()
+        {
+            base.PrefetchRelations();
+            m_form_stats = m_pokedex.FormStats(ID);
         }
 
         public int ID { get; private set; }
@@ -59,6 +65,16 @@ namespace PkmnFoundations.Pokedex
         public Species Species
         {
             get { return m_species_pair.Value; }
+        }
+
+        private SortedList<Generations, FormStats> m_form_stats;
+        public FormStats BaseStats(Generations generation)
+        {
+            if (m_form_stats == null) m_form_stats = m_pokedex.FormStats(ID);
+            // xxx: this is O(n) and we can do O(log n) but it requires rolling
+            // our own binary search and YAGNI for a list of at most 6 values.
+            // http://stackoverflow.com/questions/20474896/finding-nearest-value-in-a-sorteddictionary
+            return m_form_stats.Last(pair => (int)(pair.Key) <= (int)generation).Value;
         }
     }
 }

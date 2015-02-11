@@ -36,8 +36,8 @@ namespace PkmnFoundations.Pokedex
                 return f.MinGeneration.CompareTo(other.MinGeneration); 
             });
 
-            Dictionary<int, SortedDictionary<Generations, FormStats>> resultFormStats = new Dictionary<int,SortedDictionary<Generations,FormStats>>();
-            SortedDictionary<Generations, FormStats> currFormStats = null;
+            Dictionary<int, SortedList<Generations, FormStats>> resultFormStats = new Dictionary<int, SortedList<Generations, FormStats>>();
+            SortedList<Generations, FormStats> currFormStats = null;
             int currFormId = 0;
 
             foreach (FormStats f in form_stats)
@@ -45,7 +45,7 @@ namespace PkmnFoundations.Pokedex
                 if (currFormStats == null || currFormId != f.FormID)
                 {
                     if (currFormStats != null) resultFormStats.Add(currFormId, currFormStats);
-                    currFormStats = new SortedDictionary<Generations, FormStats>();
+                    currFormStats = new SortedList<Generations, FormStats>();
                 }
                 currFormStats.Add(f.MinGeneration, f);
                 currFormId = f.FormID;
@@ -61,7 +61,12 @@ namespace PkmnFoundations.Pokedex
                 m_forms_by_value.Add(pair.Key, new Dictionary<byte, Form>());
 
             foreach (var pair in m_forms)
-                m_forms_by_value[pair.Value.SpeciesID].Add(pair.Value.Value, pair.Value);
+            {
+#if !DEBUG
+                if (!m_forms_by_value[pair.Value.SpeciesID].ContainsKey(pair.Value.Value))
+#endif
+                    m_forms_by_value[pair.Value.SpeciesID].Add(pair.Value.Value, pair.Value);
+            }
 
             Dictionary<int, Item> items3 = new Dictionary<int,Item>();
             Dictionary<int, Item> items4 = new Dictionary<int,Item>();
@@ -114,7 +119,7 @@ namespace PkmnFoundations.Pokedex
         private Dictionary<int, Family> m_families;
         private Dictionary<int, Form> m_forms;
         private Dictionary<int, Dictionary<byte, Form>> m_forms_by_value;
-        private Dictionary<int, SortedDictionary<Generations, FormStats>> m_form_stats;
+        private Dictionary<int, SortedList<Generations, FormStats>> m_form_stats;
         //private Dictionary<int, Evolution> m_evolutions;
 
         private Dictionary<int, Item> m_items;
@@ -145,7 +150,7 @@ namespace PkmnFoundations.Pokedex
             return m_forms_by_value[national_dex];
         }
 
-        public SortedDictionary<Generations, FormStats> FormStats(int form_id)
+        internal SortedList<Generations, FormStats> FormStats(int form_id)
         {
             return m_form_stats[form_id];
         }
