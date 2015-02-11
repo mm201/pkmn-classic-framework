@@ -110,7 +110,7 @@ namespace PkmnFoundations.Structures
                 FatefulEncounter = (forme & 0x01) != 0;
                 Female = (forme & 0x02) != 0;
                 Genderless = (forme & 0x04) != 0;
-                FormID = forme >> 3;
+                FormID = (byte)(forme >> 3);
 
                 // todo: parse this in a meaningful way.
                 ShinyLeaves = block[25];

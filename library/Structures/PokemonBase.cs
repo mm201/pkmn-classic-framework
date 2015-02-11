@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using PkmnFoundations.Pokedex;
+using PkmnFoundations.Support;
 
 namespace PkmnFoundations.Structures
 {
@@ -12,12 +14,14 @@ namespace PkmnFoundations.Structures
             : base()
         {
             m_pokedex = pokedex;
+            Initialize();
         }
 
         public PokemonBase(Pokedex.Pokedex pokedex, BinaryReader data)
             : base()
         {
             m_pokedex = pokedex;
+            Initialize();
             Load(data);
         }
 
@@ -25,6 +29,7 @@ namespace PkmnFoundations.Structures
             : base()
         {
             m_pokedex = pokedex;
+            Initialize();
             Load(data);
         }
 
@@ -32,15 +37,57 @@ namespace PkmnFoundations.Structures
             : base()
         {
             m_pokedex = pokedex;
+            Initialize();
             Load(data, offset);
+        }
+
+        private void Initialize()
+        {
+            // todo: These lambdas will always be the same for a given data type, eg. species.
+            // So we can make a helper method to create a given pair,
+            // eg. LazyKeyValuePair<int, Species> Species.CreatePair()
+            m_species_pair = new LazyKeyValuePair<int, Species>(k => k == 0 ? null : m_pokedex.Species(k), v => v.NationalDex);
+            m_form_pair = new LazyKeyValuePair<byte, Form>(k => Species.Forms(k), v => v.Value);
         }
 
         protected Pokedex.Pokedex m_pokedex;
         private MoveSlot[] m_moves = new MoveSlot[4];
 
-        // todo: use LazyKeyValuePairs for the ID fields.
-        public int SpeciesID { get; set; }
-        public int FormID { get; set; }
+        private LazyKeyValuePair<int, Species> m_species_pair;
+        public int SpeciesID
+        { 
+            get { return m_species_pair.Key; }
+            set 
+            {
+                // changing species will cause the looked up Form to be
+                // incorrect so null it out.
+                // xxx: should really observer pattern this.
+                m_species_pair.Key = value;
+                m_form_pair.Invalidate();
+            }
+        }
+        public Species Species
+        {
+            get { return m_species_pair.Value; }
+            set 
+            {
+                m_species_pair.Value = value;
+                m_form_pair.Invalidate();
+            }
+        }
+
+        private LazyKeyValuePair<byte, Form> m_form_pair;
+        public byte FormID
+        {
+            get { return m_form_pair.Key; }
+            set { m_form_pair.Key = value; }
+        }
+        public Form Form
+        {
+            get { return m_form_pair.Value; }
+            set { m_form_pair.Value = value; }
+        }
+
         public int HeldItemID { get; set; }
         public MoveSlot[] Moves { get { return m_moves; } }
         public uint TrainerID { get; set; }

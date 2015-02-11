@@ -60,6 +60,16 @@ namespace PkmnFoundations.Support
             if (!m_has_value) m_value = m_evaluator(m_key);
             m_has_value = true;
         }
+
+        public void InvalidateKey()
+        {
+            m_has_key = false;
+        }
+
+        public void Invalidate()
+        {
+            m_has_value = false;
+        }
     }
 
     public interface ILazyKeyValuePair<out TKey, out TValue>
