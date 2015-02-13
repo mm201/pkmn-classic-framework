@@ -55,18 +55,39 @@ namespace PkmnFoundations.GTS
             Pokemon4 pokemon = new Pokemon4(m_pokedex, record.Data);
 
             StringBuilder builder = new StringBuilder();
-            builder.Append(String.Format("{0} (#{1})", pokemon.Species.Name, pokemon.SpeciesID));
+            try
+            {
+                builder.Append(String.Format("{0} (#{1})", pokemon.Species.Name, pokemon.SpeciesID));
+            }
+            catch (KeyNotFoundException)
+            {
+                builder.Append(String.Format("??? (#{0})", pokemon.SpeciesID));
+            }
             builder.Append("<br />");
             if (pokemon.FormID != 0)
             {
-                builder.Append(pokemon.Form.Name);
+                try
+                {
+                    builder.Append(pokemon.Form.Name);
+                }
+                catch (KeyNotFoundException)
+                {
+                    builder.Append("Unknown form");
+                }
                 builder.Append("<br />");
             }
             builder.Append(String.Format("Lv {0}, {1}", record.Level, record.Gender));
             builder.Append("<br />");
             builder.Append(String.Format("Nature: {0}", pokemon.Nature.ToString()));
             builder.Append("<br />");
-            builder.Append(String.Format("Ability: {0}", pokemon.Ability.Name));
+            try
+            {
+                builder.Append(String.Format("Ability: {0}", pokemon.Ability.Name));
+            }
+            catch (KeyNotFoundException)
+            {
+                builder.Append("Ability: ???");
+            }
             builder.Append("<br />");
 
             return builder.ToString();
