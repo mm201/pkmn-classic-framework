@@ -15,7 +15,7 @@ namespace PkmnFoundations.Pokedex
             EggGroups egg_group_2, int egg_steps, bool gender_variations)
             : base(pokedex)
         {
-            m_family_pair = new LazyKeyValuePair<int, Family>(k => k == 0 ? null : m_pokedex.Families(k), v => v.ID);
+            m_family_pair = Family.CreatePair(m_pokedex);
             m_lazy_pairs.Add(m_family_pair);
 
             NationalDex = national_dex;
@@ -82,6 +82,13 @@ namespace PkmnFoundations.Pokedex
             if (m_forms == null)
                 m_forms = m_pokedex.FormsByValue(NationalDex);
             return m_forms[value];
+        }
+
+        public static LazyKeyValuePair<int, Species> CreatePair(Pokedex pokedex)
+        {
+            return new LazyKeyValuePair<int, Species>(
+                k => k == 0 ? null : (pokedex == null ? null : pokedex.Species(k)),
+                v => v == null ? 0 : v.NationalDex);
         }
     }
 }

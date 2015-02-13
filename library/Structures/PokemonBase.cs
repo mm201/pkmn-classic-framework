@@ -43,13 +43,10 @@ namespace PkmnFoundations.Structures
 
         private void Initialize()
         {
-            // todo: These lambdas will always be the same for a given data type, eg. species.
-            // So we can make a helper method to create a given pair,
-            // eg. LazyKeyValuePair<int, Species> Species.CreatePair()
-            m_species_pair = new LazyKeyValuePair<int, Species>(k => k == 0 ? null : m_pokedex.Species(k), v => v.NationalDex);
-            m_form_pair = new LazyKeyValuePair<byte, Form>(k => Species.Forms(k), v => v.Value);
-            m_item_pair = new LazyKeyValuePair<int, Item>(k => k == 0 ? null : m_pokedex.Items(Generation, k), v => v.Value(Generation) ?? 0); // xxx: 0 is definitely a bad return value for "not found"
-            m_ability_pair = new LazyKeyValuePair<int, Ability>(k => k == 0 ? null : m_pokedex.Abilities(k), v => v.Value);
+            m_species_pair = Species.CreatePair(m_pokedex);
+            m_form_pair = Form.CreatePairForSpecies(m_pokedex, () => Species);
+            m_item_pair = Item.CreatePairForGeneration(m_pokedex, () => Generation);
+            m_ability_pair = Ability.CreatePair(m_pokedex);
         }
 
         protected Pokedex.Pokedex m_pokedex;

@@ -31,5 +31,12 @@ namespace PkmnFoundations.Pokedex
         public int ID { get; private set; }
         public LocalizedString Name { get; private set; }
         public DamageClass DamageClass { get; private set; }
+
+        public static LazyKeyValuePair<int, Type> CreatePair(Pokedex pokedex)
+        {
+            return new LazyKeyValuePair<int, Type>(
+                k => k == 0 ? null : (pokedex == null ? null : pokedex.Types(k)),
+                v => v == null ? 0 : v.ID);
+        }
     }
 }

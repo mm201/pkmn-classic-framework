@@ -15,7 +15,7 @@ namespace PkmnFoundations.Pokedex
             BattleTargets target)
             : base(pokedex)
         {
-            m_type_pair = new LazyKeyValuePair<int, PkmnFoundations.Pokedex.Type>(k => k == 0 ? null : m_pokedex.Types(k), v => v.ID);
+            m_type_pair = Type.CreatePair(m_pokedex);
             m_lazy_pairs.Add(m_type_pair);
 
             ID = id;

@@ -65,5 +65,19 @@ namespace PkmnFoundations.Pokedex
                     return Value6;
             }
         }
+
+        public static LazyKeyValuePair<int, Item> CreatePair(Pokedex pokedex)
+        {
+            return new LazyKeyValuePair<int, Item>(
+                k => k == 0 ? null : (pokedex == null ? null : pokedex.Items(k)), 
+                v => v == null ? 0 : v.ID);
+        }
+
+        public static LazyKeyValuePair<int, Item> CreatePairForGeneration(Pokedex pokedex, Func<Generations> generationGetter)
+        {
+            return new LazyKeyValuePair<int, Item>(
+                k => k == 0 ? null : (pokedex == null ? null : pokedex.Items(generationGetter(), k)),
+                v => v == null ? 0 : (v.Value(generationGetter()) ?? -1));
+        }
     }
 }

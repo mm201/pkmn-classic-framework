@@ -14,9 +14,9 @@ namespace PkmnFoundations.Pokedex
             int type1, int type2, IntStatValues base_stats, ByteStatValues reward_evs)
             : base(pokedex)
         {
-            m_form_pair = new LazyKeyValuePair<int, Form>(k => k == 0 ? null : m_pokedex.Forms(k), v => v.Value);
-            m_type1_pair = new LazyKeyValuePair<int, Type>(k => k == 0 ? null : m_pokedex.Types(k), v => v.ID);
-            m_type2_pair = new LazyKeyValuePair<int, Type>(k => k == 0 ? null : m_pokedex.Types(k), v => v.ID);
+            m_form_pair = Form.CreatePair(m_pokedex);
+            m_type1_pair = Type.CreatePair(m_pokedex);
+            m_type2_pair = Type.CreatePair(m_pokedex);
             m_lazy_pairs.Add(m_form_pair);
             m_lazy_pairs.Add(m_type1_pair);
             m_lazy_pairs.Add(m_type2_pair);

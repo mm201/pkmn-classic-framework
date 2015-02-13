@@ -13,11 +13,11 @@ namespace PkmnFoundations.Pokedex
             int baby_male_id, int baby_female_id, int incense_id, byte gender_ratio)
             : base(pokedex)
         {
-            m_basic_male_pair = new LazyKeyValuePair<int, Species>(k => k == 0 ? null : m_pokedex.Species(k), v => v.NationalDex);
-            m_basic_female_pair = new LazyKeyValuePair<int, Species>(k => k == 0 ? null : m_pokedex.Species(k), v => v.NationalDex);
-            m_baby_male_pair = new LazyKeyValuePair<int, Species>(k => k == 0 ? null : m_pokedex.Species(k), v => v.NationalDex);
-            m_baby_female_pair = new LazyKeyValuePair<int, Species>(k => k == 0 ? null : m_pokedex.Species(k), v => v.NationalDex);
-            m_incense_pair = new LazyKeyValuePair<int, Item>(k => k == 0 ? null : m_pokedex.Items(k), v => v.ID);
+            m_basic_male_pair = Species.CreatePair(m_pokedex);
+            m_basic_female_pair = Species.CreatePair(m_pokedex);
+            m_baby_male_pair = Species.CreatePair(m_pokedex);
+            m_baby_female_pair = Species.CreatePair(m_pokedex);
+            m_incense_pair = Item.CreatePair(m_pokedex);
             m_lazy_pairs.Add(m_basic_male_pair);
             m_lazy_pairs.Add(m_basic_female_pair);
             m_lazy_pairs.Add(m_baby_male_pair);
@@ -99,6 +99,13 @@ namespace PkmnFoundations.Pokedex
         public Item Incense
         {
             get { return m_incense_pair.Value; }
+        }
+
+        public static LazyKeyValuePair<int, Family> CreatePair(Pokedex pokedex)
+        {
+            return new LazyKeyValuePair<int, Family>(
+                k => k == 0 ? null : (pokedex == null ? null : pokedex.Families(k)), 
+                v => v == null ? 0 : v.ID);
         }
     }
 }

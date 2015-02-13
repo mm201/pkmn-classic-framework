@@ -14,7 +14,7 @@ namespace PkmnFoundations.Pokedex
             LocalizedString name, String suffix, int height, int weight, int experience)
             : base(pokedex)
         {
-            m_species_pair = new LazyKeyValuePair<int, Species>(k => k == 0 ? null : m_pokedex.Species(k), v => v.NationalDex);
+            m_species_pair = Species.CreatePair(m_pokedex);
             m_lazy_pairs.Add(m_species_pair);
 
             ID = id;
@@ -75,6 +75,21 @@ namespace PkmnFoundations.Pokedex
             // our own binary search and YAGNI for a list of at most 6 values.
             // http://stackoverflow.com/questions/20474896/finding-nearest-value-in-a-sorteddictionary
             return m_form_stats.Last(pair => (int)(pair.Key) <= (int)generation).Value;
+        }
+
+        public static LazyKeyValuePair<int, Form> CreatePair(Pokedex pokedex)
+        {
+            return new LazyKeyValuePair<int, Form>(
+                k => k == 0 ? null : (pokedex == null ? null : pokedex.Forms(k)),
+                v => v == null ? 0 : v.ID);
+        }
+
+        public static LazyKeyValuePair<byte, Form> CreatePairForSpecies(Pokedex pokedex, Func<Species> speciesGetter)
+        {
+            // 0 is a valid value here--don't map it to null!
+            return new LazyKeyValuePair<byte, Form>(
+                k => speciesGetter().Forms(k), 
+                v => v.Value);
         }
     }
 }
