@@ -87,7 +87,7 @@ namespace PkmnFoundations.Structures
             set { m_form_pair.Value = value; }
         }
 
-        protected abstract Generations Generation { get; }
+        public abstract Generations Generation { get; }
 
         private LazyKeyValuePair<int, Item> m_item_pair;
         public int HeldItemID 

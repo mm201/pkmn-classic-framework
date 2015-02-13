@@ -195,7 +195,7 @@ namespace PkmnFoundations.Structures
             throw new NotImplementedException();
         }
 
-        protected override Generations Generation
+        public override Generations Generation
         {
             get { return Generations.Generation4; }
         }
