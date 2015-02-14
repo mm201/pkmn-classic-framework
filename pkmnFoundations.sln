@@ -25,6 +25,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VeekunImport", "VeekunImpor
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MakeBaseStatTables", "MakeBaseStatTables\MakeBaseStatTables.csproj", "{99FCBB1C-D94F-458D-ABD2-8800FBDC65DA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "web", "web\web.csproj", "{3DE4D97F-57A8-4324-B5B8-164B45E2DF9A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -145,6 +147,16 @@ Global
 		{99FCBB1C-D94F-458D-ABD2-8800FBDC65DA}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{99FCBB1C-D94F-458D-ABD2-8800FBDC65DA}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{99FCBB1C-D94F-458D-ABD2-8800FBDC65DA}.Release|x86.ActiveCfg = Release|Any CPU
+		{3DE4D97F-57A8-4324-B5B8-164B45E2DF9A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3DE4D97F-57A8-4324-B5B8-164B45E2DF9A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3DE4D97F-57A8-4324-B5B8-164B45E2DF9A}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{3DE4D97F-57A8-4324-B5B8-164B45E2DF9A}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{3DE4D97F-57A8-4324-B5B8-164B45E2DF9A}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{3DE4D97F-57A8-4324-B5B8-164B45E2DF9A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3DE4D97F-57A8-4324-B5B8-164B45E2DF9A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3DE4D97F-57A8-4324-B5B8-164B45E2DF9A}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{3DE4D97F-57A8-4324-B5B8-164B45E2DF9A}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{3DE4D97F-57A8-4324-B5B8-164B45E2DF9A}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

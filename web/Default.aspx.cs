@@ -4,14 +4,17 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using PkmnFoundations.GTS;
+using System.Text;
 
-namespace PkmnFoundations.GTS.masters
+namespace PkmnFoundations.GTS
 {
-    public partial class MasterPage : System.Web.UI.MasterPage
+    public partial class Default : System.Web.UI.Page
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-
         }
+
     }
+
 }

@@ -13,15 +13,6 @@ namespace PkmnFoundations.GTS.admin {
     public partial class Sessions {
         
         /// <summary>
-        /// HeaderColour1 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::PkmnFoundations.Web.HeaderColour HeaderColour1;
-        
-        /// <summary>
         /// litDebug control.
         /// </summary>
         /// <remarks>
