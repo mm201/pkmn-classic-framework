@@ -9,6 +9,7 @@
 <asp:Content ID="conLeft" ContentPlaceHolderID="cpLeft" runat="server">
 
     <pf:RequireCss Key="login" CssUrl="~/css/login.css" After="main" runat="server" />
+    <asp:PlaceHolder Visible="false" runat="server">
     <div class="gtsSection gtsLogin">
     <form id="theForm" runat="server">
 
@@ -19,6 +20,7 @@
 
     <asp:HyperLink ID="hlRegister" Text="Create an account" NavigateUrl="#" runat="server" />
     </div>
+    </asp:PlaceHolder>
 
     <div class="gtsSection gtsInfo">
         <p>Maintenance periods are <strong>Thursdays</strong> at
