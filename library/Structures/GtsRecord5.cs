@@ -13,8 +13,10 @@ namespace PkmnFoundations.Structures
     /// Includes a Pokémon box structure and metadata related to the trainer
     /// and request.
     /// </summary>
-    public class GtsRecord5
+    public class GtsRecord5 : IEquatable<GtsRecord5>
     {
+        // todo: We should have a base class for Gen4/5 GTS records.
+
         public GtsRecord5()
         {
         }
@@ -23,6 +25,8 @@ namespace PkmnFoundations.Structures
         {
             Load(data);
         }
+
+        // xxx: Data and Unknown0 should be one field.
 
         /// <summary>
         /// Obfuscated Pokémon (pkm) data. 220 bytes
@@ -217,6 +221,21 @@ namespace PkmnFoundations.Structures
         public static bool operator !=(GtsRecord5 a, GtsRecord5 b)
         {
             return !(a == b);
+        }
+
+        public override bool Equals(object obj)
+        {
+            return this.Equals(obj as GtsRecord5);
+        }
+
+        public bool Equals(GtsRecord5 other)
+        {
+            return this == other;
+        }
+
+        public override int GetHashCode()
+        {
+            return ((int)GtsRecord4.DateToBinary(TimeDeposited) + (int)GtsRecord4.DateToBinary(TimeExchanged)) ^ PID;
         }
     }
 }

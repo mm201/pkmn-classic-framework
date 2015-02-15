@@ -13,8 +13,10 @@ namespace PkmnFoundations.Structures
     /// Includes a Pokémon box structure and metadata related to the trainer
     /// and request.
     /// </summary>
-    public class GtsRecord4
+    public class GtsRecord4 : IEquatable<GtsRecord4>
     {
+        // todo: We should have a base class for Gen4/5 GTS records.
+
         public GtsRecord4()
         {
         }
@@ -237,6 +239,27 @@ namespace PkmnFoundations.Structures
         public static bool operator !=(GtsRecord4 a, GtsRecord4 b)
         {
             return !(a == b);
+        }
+
+        public override bool Equals(object obj)
+        {
+            return this.Equals(obj as GtsRecord4);
+        }
+
+        public bool Equals(GtsRecord4 other)
+        {
+            return this == other;
+        }
+
+        public override int GetHashCode()
+        {
+            return ((int)DateToBinary(TimeDeposited) + (int)DateToBinary(TimeExchanged)) ^ PID;
+        }
+
+        internal static long DateToBinary(DateTime ? dt)
+        {
+            if (dt == null) return 0L;
+            return ((DateTime)dt).ToBinary();
         }
     }
 }

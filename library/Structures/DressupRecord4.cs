@@ -13,24 +13,27 @@ namespace PkmnFoundations.Structures
         }
 
         public DressupRecord4(int pid, ulong serial_number, BinaryReader data)
-            : base(data)
+            : base()
         {
             PID = pid;
             SerialNumber = serial_number;
+            Load(data);
         }
 
         public DressupRecord4(int pid, ulong serial_number, byte[] data)
-            : base(data)
+            : base()
         {
             PID = pid;
             SerialNumber = serial_number;
+            Load(data);
         }
 
         public DressupRecord4(int pid, ulong serial_number, byte[] data, int offset)
-            : base(data, offset)
+            : base()
         {
             PID = pid;
             SerialNumber = serial_number;
+            Load(data, offset);
         }
 
         public int PID { get; set; }

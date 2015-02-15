@@ -13,24 +13,27 @@ namespace PkmnFoundations.Structures
         }
 
         public MusicalRecord5(int pid, ulong serial_number, BinaryReader data)
-            : base(data)
+            : base()
         {
             PID = pid;
             SerialNumber = serial_number;
+            Load(data);
         }
 
         public MusicalRecord5(int pid, ulong serial_number, byte[] data)
-            : base(data)
+            : base()
         {
             PID = pid;
             SerialNumber = serial_number;
+            Load(data);
         }
 
         public MusicalRecord5(int pid, ulong serial_number, byte[] data, int offset)
-            : base(data, offset)
+            : base()
         {
             PID = pid;
             SerialNumber = serial_number;
+            Load(data, offset);
         }
 
         // todo: encapsulate these so calculated fields are always correct
@@ -118,18 +121,21 @@ namespace PkmnFoundations.Structures
         }
 
         public MusicalParticipant5(BinaryReader data)
-            : base(data)
+            : base()
         {
+            Load(data);
         }
 
         public MusicalParticipant5(byte[] data)
-            : base(data)
+            : base()
         {
+            Load(data);
         }
 
         public MusicalParticipant5(byte[] data, int offset)
-            : base(data, offset)
+            : base()
         {
+            Load(data, offset);
         }
 
         private byte[] m_data;

@@ -13,27 +13,30 @@ namespace PkmnFoundations.Structures
         }
 
         public BoxRecord4(int pid, BoxLabels4 label, ulong serial_number, BinaryReader data)
-            : base(data)
+            : base()
         {
             PID = pid;
             Label = label;
             SerialNumber = serial_number;
+            Load(data);
         }
 
         public BoxRecord4(int pid, BoxLabels4 label, ulong serial_number, byte[] data)
-            : base(data)
+            : base()
         {
             PID = pid;
             Label = label;
             SerialNumber = serial_number;
+            Load(data);
         }
 
         public BoxRecord4(int pid, BoxLabels4 label, ulong serial_number, byte[] data, int offset)
-            : base(data, offset)
+            : base()
         {
             PID = pid;
             Label = label;
             SerialNumber = serial_number;
+            Load(data, offset);
         }
 
         public int PID { get; set; }
