@@ -3452,9 +3452,9 @@
     <Content Include="pad.bin">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="script\form.js" />
-    <Content Include="script\jquery-1.11.1.min.js" />
-    <Content Include="script\retina.js" />
+    <Content Include="scripts\form.js" />
+    <Content Include="scripts\jquery-1.11.1.min.js" />
+    <Content Include="scripts\retina.js" />
     <Content Include="test\BoxUp.aspx" />
     <Content Include="test\Decode.aspx" />
     <Content Include="test\NameDecode.aspx" />
