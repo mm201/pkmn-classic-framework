@@ -7,6 +7,7 @@
 [Dd]ebug/
 [Rr]elease/
 [Bb]in/
+[Pp]ackages/
 *.Publish.xml
 .DS_Store
 ._.DS_Store
