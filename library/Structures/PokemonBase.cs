@@ -90,7 +90,7 @@ namespace PkmnFoundations.Structures
         public abstract Generations Generation { get; }
 
         private LazyKeyValuePair<int, Item> m_item_pair;
-        public int HeldItemID 
+        public int HeldItemID
         {
             get { return m_item_pair.Key; }
             set { m_item_pair.Key = value; }
