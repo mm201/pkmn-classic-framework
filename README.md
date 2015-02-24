@@ -16,7 +16,7 @@ at their wiki to connect.
 * Dressup (PtHGSS)
 * Box uploads (PtHGSS)
 * Musical photos (BW1/2)
-* Wi-Fi Battle Tower/Subway
+* Wi-Fi Battle Tower and Subway
 
 Direct communications are handled by 
 [AltWFC](https://github.com/polaris-/dwc_network_server_emulator) and are
@@ -24,7 +24,7 @@ outside the scope of this project. They work at the time of writing but
 haven't been tested that thoroughly.
 
 ##What doesn't
-* Top Trainers (PtHGSS)
+* Trainer Rankings (PtHGSS)
 * Wi-Fi Plaza (PtHGSS)
 * Game Sync
 * Rating Battles / Competitions
@@ -44,17 +44,17 @@ without users. Get on there and start trading!
 
 ##Credits
 * [Project Pokémon](http://projectpokemon.org/) for most of the original fake
-GTS reverse engineering efforts and for many ID number tables, including trendy
-phrases
+GTS reverse engineering work, file format and data structure descriptions, and
+many ID number tables, including items and trendy phrases.
 * [Pipian](http://www.pipian.net/ierukana/) for more reverse engineering help,
 including the Battle Tower and Wi-fi Plaza.
 * [Nagato](https://github.com/polaris-), for help reverse engineering the Game
-Sync protocol
+Sync protocol.
 * Nagato and other contributors to the
 [AltWFC](https://github.com/polaris-/dwc_network_server_emulator) project,
-which I depend on
-* [Veekun](http://veekun.com/) for his Pokédex and large sprites
+which this project depends on for basic Nintendo WiFi fuctionality.
+* [Veekun](http://veekun.com/) for his Pokédex and large sprites.
 * [Bulbapedia](http://bulbapedia.bulbagarden.net/wiki/Main_Page) for most item
-sprites and Generation 3 item/text conversion tables
+sprites and Generation 3 item/text conversion tables.
 * [kaphotics](https://twitter.com/kaphotics) for the Pokémon mini sprite rips
-from ORAS
+from ORAS.
