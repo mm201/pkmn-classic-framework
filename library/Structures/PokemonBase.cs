@@ -122,6 +122,8 @@ namespace PkmnFoundations.Structures
         public Languages Language { get; set; }
         public IvStatValues IVs { get; set; }
         public ByteStatValues EVs { get; set; }
+
+        public abstract Genders Gender { get; set; }
         public abstract String Nickname { get; set; }
 
         protected static List<int> BlockScramble(uint personality)

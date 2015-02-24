@@ -94,6 +94,7 @@
     <Compile Include="Structures\Pokemon4.cs" />
     <Compile Include="Structures\PokemonBase.cs" />
     <Compile Include="Structures\IntStatValues.cs" />
+    <Compile Include="Structures\PokemonPartyBase.cs" />
     <Compile Include="Structures\StatValues.cs" />
     <Compile Include="Structures\StatValuesBase.cs" />
     <Compile Include="Structures\TrainerProfile4.cs" />

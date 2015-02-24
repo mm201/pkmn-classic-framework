@@ -66,6 +66,13 @@ namespace PkmnFoundations.Pokedex
             }
         }
 
+        public int ? PokeballValue
+        {
+            // fixme: this needs to be its own field in the database.
+            // (see full comment at Pokedex.Pokeballs)
+            get { return Value6; }
+        }
+
         public static LazyKeyValuePair<int, Item> CreatePair(Pokedex pokedex)
         {
             return new LazyKeyValuePair<int, Item>(
@@ -78,6 +85,13 @@ namespace PkmnFoundations.Pokedex
             return new LazyKeyValuePair<int, Item>(
                 k => k == 0 ? null : (pokedex == null ? null : pokedex.Items(generationGetter(), k)),
                 v => v == null ? 0 : (v.Value(generationGetter()) ?? -1));
+        }
+
+        public static LazyKeyValuePair<int, Item> CreatePairPokeball(Pokedex pokedex)
+        {
+            return new LazyKeyValuePair<int, Item>(
+                k => k == 0 ? null : (pokedex == null ? null : pokedex.Pokeballs(k)),
+                v => v == null ? 0 : v.ID);
         }
     }
 }

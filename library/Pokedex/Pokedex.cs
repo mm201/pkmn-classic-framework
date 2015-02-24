@@ -165,6 +165,14 @@ namespace PkmnFoundations.Pokedex
             return m_items_generations[generation][value];
         }
 
+        public Item Pokeballs(int value)
+        {
+            // fixme: fact check the values for apricorn pokeballs.
+            // What's used here is most assuredly wrong (and probably quite silly)
+            // todo: add a PokeballValue field to the Items table and a dictionary here
+            return m_items_generations[Generations.Generation6][value];
+        }
+
         public Move Moves(int value)
         {
             return m_moves[value];

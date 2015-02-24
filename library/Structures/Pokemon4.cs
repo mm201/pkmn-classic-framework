@@ -3,30 +3,38 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using PkmnFoundations.Pokedex;
 using PkmnFoundations.Support;
 
 namespace PkmnFoundations.Structures
 {
-    public class Pokemon4 : PokemonBase
+    public class Pokemon4 : PokemonPartyBase
     {
         public Pokemon4(Pokedex.Pokedex pokedex) : base(pokedex)
         {
-
+            Initialize();
         }
 
         public Pokemon4(Pokedex.Pokedex pokedex, BinaryReader data) : base(pokedex)
         {
+            Initialize();
             Load(data);
         }
 
         public Pokemon4(Pokedex.Pokedex pokedex, byte[] data) : base(pokedex)
         {
+            Initialize();
             Load(data);
         }
 
         public Pokemon4(Pokedex.Pokedex pokedex, byte[] data, int offset) : base(pokedex)
         {
+            Initialize();
             Load(data, offset);
+        }
+
+        private void Initialize()
+        {
         }
 
         protected override void Load(BinaryReader reader)
@@ -114,11 +122,11 @@ namespace PkmnFoundations.Structures
 
                 // todo: parse this in a meaningful way.
                 ShinyLeaves = block[25];
-                Unknown1 = BitConverter.ToUInt16(block, 26);
+                Unknown1 = BitConverter.ToUInt16(block, 26); // Probably unused?
 
                 // todo: doing trainer memos the right way is a pretty large task
                 // involving new database work.
-                TrainerMemoExtended = BitConverter.ToInt32(block, 28);
+                TrainerMemoPlatinum = BitConverter.ToInt32(block, 28);
             }
 
             {
@@ -144,14 +152,14 @@ namespace PkmnFoundations.Structures
 
                 TrainerMemo = BitConverter.ToInt32(block, 22);
                 PokerusStatus = block[26];
-                PokeBallID_DP = block[27];
+                PokeBallID = block[27];
 
                 byte encounter_level = block[28];
                 EncounterLevel = (byte)(encounter_level & 0x7f);
                 TrainerFemale = (encounter_level & 0x80) != 0;
 
                 EncounterType = block[29];
-                PokeBallID = block[30];
+                PokeBallID_Hgss = block[30];
                 Unknown4 = block[31];
             }
 
@@ -172,7 +180,7 @@ namespace PkmnFoundations.Structures
                 Level = block[4];
                 CapsuleIndex = block[5];
                 HP = BitConverter.ToUInt16(block, 6);
-                Stats = new IntStatValues(BitConverter.ToUInt16(block, 8),
+                m_stats = new IntStatValues(BitConverter.ToUInt16(block, 8),
                     BitConverter.ToUInt16(block, 10),
                     BitConverter.ToUInt16(block, 12),
                     BitConverter.ToUInt16(block, 14),
@@ -227,22 +235,29 @@ namespace PkmnFoundations.Structures
             get { return Generations.Generation4; }
         }
 
-        // todo: link experience with level
-        public int Experience { get; set; }
-        public Markings Markings { get; set; }
-        public ConditionValues ContestStats { get; set; }
-        public bool IsEgg { get; set; }
-        public bool HasNickname { get; set; }
-        public bool FatefulEncounter { get; set; } // aka. obedience flag
-        // todo: validate gender against PV
-        public bool Female { get; set; } // only part of gender calculations
+        public bool Female { get; set; }
         public bool Genderless { get; set; }
+        public override Genders Gender
+        {
+            get 
+            {
+                if (Genderless) return Genders.None;
+                if (Female) return Genders.Female;
+                return Genders.Male;
+            }
+            set
+            {
+                Female = value == Genders.Female;
+                Genderless = value == Genders.None;
+            }
+        }
+
         // todo: parse shiny leaves data
         public byte ShinyLeaves { get; set; }
         public ushort Unknown1 { get; set; }
-        // todo: parse trainer memos (location, level)
+
         // this will require some database work.
-        public int TrainerMemoExtended { get; set; } // trainer memo for PtHGSS
+        public int TrainerMemoPlatinum { get; set; } // trainer memo for PtHGSS
         public EncodedString4 NicknameEncoded { get; set; }
         public override string Nickname
         {
@@ -258,20 +273,96 @@ namespace PkmnFoundations.Structures
             }
         }
         public byte Unknown2 { get; set; }
-        public Versions Version { get; set; }
         public int Unknown3 { get; set; }
         public EncodedString4 TrainerNameEncoded { get; set; }
+        public override string TrainerName
+        {
+            get
+            {
+                return (TrainerNameEncoded == null) ? null : TrainerNameEncoded.Text;
+            }
+            set
+            {
+                if (TrainerName == value) return;
+                if (TrainerNameEncoded == null) TrainerNameEncoded = new EncodedString4(value, 16);
+                else TrainerNameEncoded.Text = value;
+            }
+        }
         // fixme: use DateTimes for these
-        public byte[] EggDate { get; set; }
-        public byte[] Date { get; set; }
+        public byte[] EggDate { get; set; } // 3 bytes
+        public byte[] Date { get; set; } // 3 bytes
         public int TrainerMemo { get; set; }
+
         // todo: parse pokerus
         public byte PokerusStatus { get; set; }
+
         // todo: need list of values and map them onto items
-        public byte PokeBallID_DP { get; set; }
         public byte PokeBallID { get; set; }
+        public byte PokeBallID_Hgss { get; set; }
+
+        private Item m_pokeball;
+        public override Pokedex.Item Pokeball
+        {
+            get 
+            {
+                if (m_pokeball != null) return m_pokeball;
+                int pokeballId = IsHgss() ? PokeBallID_Hgss : PokeBallID;
+                m_pokeball = m_pokedex.Pokeballs(pokeballId);
+                return m_pokeball;
+            }
+            set 
+            {
+                if (m_pokeball == value) return;
+                if (value == null)
+                {
+                    m_pokeball = null;
+                    return;
+                }
+
+                if (value.PokeballValue == null) throw new ArgumentException("Item is not a valid Pokeball.");
+                if ((int)value.PokeballValue > 255 || (int)value.PokeballValue < 0)
+                    throw new ArgumentOutOfRangeException("Pokeball ID must be within the valid range for a byte.");
+
+                int pokeballId = (int)value.PokeballValue;
+                bool is_hgss = IsHgss();
+                bool is_hgss_pokeball = IsHgssPokeball(pokeballId);
+                if (!is_hgss && is_hgss_pokeball) throw new NotSupportedException("Can't place an HGSS Pokeball on a DPPt Pokémon.");
+
+                // todo: fact check these two values:
+                // 1. a pokemon in an HGSS ball has a DPPt value of 1
+                // 2. any pokemon from DPPt has an HGSS value of 0
+                // (investigating pokemon in the system should be enough)
+                PokeBallID = (byte)(is_hgss_pokeball ? 1 : pokeballId);
+                PokeBallID_Hgss = (byte)(is_hgss ? pokeballId : 0);
+            }
+        }
+
+        private bool IsHgss()
+        {
+            return !(Version == Versions.Diamond || 
+                Version == Versions.Pearl || 
+                Version == Versions.Platinum);
+        }
+
+        private bool IsHgssPokeball(int pokeballId)
+        {
+            return pokeballId > 16;
+        }
+
         public byte EncounterLevel { get; set; }
         public bool TrainerFemale { get; set; }
+        public override TrainerGenders TrainerGender
+        {
+            get
+            {
+                return TrainerFemale ? TrainerGenders.Female : TrainerGenders.Male;
+            }
+            set
+            {
+                TrainerFemale = value == TrainerGenders.Female;
+            }
+        }
+
         // this is the notorious genIV encounter type flag, not used for much besides validation
         public byte EncounterType { get; set; }
         public byte Unknown4 { get; set; }
@@ -280,14 +371,23 @@ namespace PkmnFoundations.Structures
         public int Ribbons2 { get; set; }
         public int Ribbons3 { get; set; }
 
+        // party-only stuff. (todo: put in derived class)
         public byte StatusAffliction { get; set; }
+        // todo: ball seals
         public byte Unknown5 { get; set; }
         public ushort Unknown6 { get; set; }
         public byte CapsuleIndex { get; set; }
         public ushort HP { get; set; }
-        public IntStatValues Stats { get; set; } // cached stats (only refreshes per level on gen4)
+        //public IntStatValues Stats { get; set; } // cached stats (only refreshes per level on gen4)
         public byte[] Unknown7 { get; set; }
         public byte[] Seals { get; set; }
+
+        private IntStatValues m_stats;
+
+        public override IntStatValues Stats
+        {
+            get { return m_stats; }
+        }
 
         private static int DecryptRNG(int prev)
         {
