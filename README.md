@@ -37,7 +37,9 @@ haven't been tested that thoroughly.
 
 ##How you can help
 If there's something you want to see, the best thing is to discuss it with me
-and prepare a pull request.
+and prepare a pull request. You should also check for open issues marked
+[Help Wanted](https://github.com/mm201/pkmnFoundations/labels/help%20wanted).
+Not all of them require programming skill.
 
 The most significant way you can help is simply by using it. The GTS is nothing
 without users. Get on there and start trading!
