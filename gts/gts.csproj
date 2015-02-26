@@ -85,7 +85,7 @@
     <Content Include="pkvldtprod.ashx" />
     <Content Include="pokemondpds_web.ashx" />
     <Content Include="masters\MasterPage.master" />
-    <None Include="Properties\PublishProfiles\Azure.pubxml" />
+    <None Include="Properties\PublishProfiles\pkmnclassic.net.pubxml" />
     <None Include="Properties\PublishProfiles\Local IIS.pubxml" />
     <None Include="Web.config">
       <SubType>Designer</SubType>
