@@ -17,8 +17,8 @@ namespace PkmnFoundations.GTS
     public class syachi2ds : GamestatsHandler
     {
         public syachi2ds()
-            : base("HZEdGCzcGGLvguqUEKQN0001d93500002dd5000000082db842b2syachi2ds", 
-            GamestatsRequestVersions.Version3, GamestatsResponseVersions.Version2, false)
+            : base("HZEdGCzcGGLvguqUEKQN0001d93500002dd5000000082db842b2syachi2ds",
+            GamestatsRequestVersions.Version3, GamestatsResponseVersions.Version2, false, true)
         {
 
         }

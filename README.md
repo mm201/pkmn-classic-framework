@@ -1,6 +1,6 @@
 ﻿#Pokémon Classic Framework
 
-http://www.pkmnclassic.net/
+http://pkmnclassic.net/
 
 Pokémon Classic Framework is a replacement server and class library for Pokémon
 Generations 4 and 5. Pokémon Classic Network is the name of the server itself.

@@ -13,8 +13,8 @@ namespace PkmnFoundations.GTS
     public class pokemondpds_web : GamestatsHandler
     {
         public pokemondpds_web()
-            : base("uLMOGEiiJogofchScpXb000244fd00006015100000005b440e7epokemondpds", 
-            GamestatsRequestVersions.Version3, GamestatsResponseVersions.Version2, true)
+            : base("uLMOGEiiJogofchScpXb000244fd00006015100000005b440e7epokemondpds",
+            GamestatsRequestVersions.Version3, GamestatsResponseVersions.Version2, true, true)
         {
 
         }
