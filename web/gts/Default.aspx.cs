@@ -52,45 +52,88 @@ namespace PkmnFoundations.GTS
         protected String CreateOffer4(object DataItem)
         {
             GtsRecord4 record = (GtsRecord4)DataItem;
-            Pokemon4 pokemon = new Pokemon4(m_pokedex, record.Data);
-
+            Pokemon4 pokemon = null;
             StringBuilder builder = new StringBuilder();
+
             try
             {
-                builder.Append(String.Format("{0} (#{1})", pokemon.Species.Name, pokemon.SpeciesID));
+                pokemon = new Pokemon4(m_pokedex, record.Data);
             }
-            catch (KeyNotFoundException)
+            catch
             {
-                builder.Append(String.Format("??? (#{0})", pokemon.SpeciesID));
+                builder.Append("Failure to parse pokemon data.<br />");
             }
-            builder.Append("<br />");
-            if (pokemon.FormID != 0)
+
+            try
             {
                 try
                 {
-                    builder.Append(pokemon.Form.Name);
+                    builder.Append(String.Format("{0} (#{1})", pokemon.Species.Name, pokemon.SpeciesID));
                 }
                 catch (KeyNotFoundException)
                 {
-                    builder.Append("Unknown form");
+                    builder.Append(String.Format("??? (#{0})", record.Species));
+                }
+                catch (NullReferenceException)
+                {
+                    builder.Append(String.Format("??? (#{0})", record.Species));
                 }
                 builder.Append("<br />");
-            }
-            builder.Append(String.Format("Lv {0}, {1}", record.Level, record.Gender));
-            builder.Append("<br />");
-            builder.Append(String.Format("Nature: {0}", pokemon.Nature.ToString()));
-            builder.Append("<br />");
-            try
-            {
-                builder.Append(String.Format("Ability: {0}", pokemon.Ability.Name));
-            }
-            catch (KeyNotFoundException)
-            {
-                builder.Append("Ability: ???");
-            }
-            builder.Append("<br />");
+                try
+                {
+                    if (pokemon.FormID != 0)
+                    {
+                        try
+                        {
+                            builder.Append(pokemon.Form.Name);
+                        }
+                        catch (KeyNotFoundException)
+                        {
+                            builder.Append("Unknown form");
+                        }
+                        catch (NullReferenceException)
+                        {
+                            builder.Append("Unknown form");
+                        }
+                        builder.Append("<br />");
+                    }
+                }
+                catch (NullReferenceException)
+                {
+                    builder.Append("Unknown form");
+                }
+                builder.Append(String.Format("Lv {0}", record.Level));
+                builder.Append(String.Format(", {0}", record.Gender));
+                builder.Append("<br />");
+                try
+                {
+                    builder.Append(String.Format("Nature: {0}", pokemon.Nature.ToString()));
+                }
+                catch (NullReferenceException)
+                {
+                    builder.Append("Nature: ???");
+                }
+                builder.Append("<br />");
+                try
+                {
+                    builder.Append(String.Format("Ability: {0}", pokemon.Ability.Name));
+                }
+                catch (KeyNotFoundException)
+                {
+                    builder.Append("Ability: ???");
+                }
+                catch (NullReferenceException)
+                {
+                    builder.Append("Ability: ???");
+                }
+                builder.Append("<br />");
 
-            return builder.ToString();
+                return builder.ToString();
+            }
+            catch
+            {
+                return "Encountered an error trying to display this offer.";
+            }
         }
 
         protected String CreateWanted4(object DataItem)
