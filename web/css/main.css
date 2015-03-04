@@ -97,6 +97,23 @@ li
     font-family: Consolas,'Andale Mono',monospace
 }
 
+.gtsBox
+{
+    color: black;
+    box-shadow: 0 3px 8px 0 rgba(0,0,0,0.05), 0 -4px 3px -3px rgba(0,0,0,0.1) inset;
+    background-color: #f8f8f8;
+    background-image: -moz-linear-gradient(top, #fcfcfc 0%, #f8f8f8 100%); /* FF3.6+ */
+    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#fcfcfc), color-stop(100%,#f8f8f8)); /* Chrome,Safari4+ */
+    background-image: -webkit-linear-gradient(top, #fcfcfc 0%,#f8f8f8 100%); /* Chrome10+,Safari5.1+ */
+    background-image: -o-linear-gradient(top, #fcfcfc 0%,#f8f8f8 100%); /* Opera 11.10+ */
+    background-image: -ms-linear-gradient(top, #fcfcfc 0%,#f8f8f8 100%); /* IE10+ */
+    background-image: linear-gradient(to bottom, #fcfcfc 0%,#f8f8f8 100%); /* W3C */
+    background-size: 100%;
+    padding: 16px;
+    border-radius: 12px;
+    border: 1px solid #cccccc;
+}
+
 .gtsNav, .gtsNav ul, .gtsNav li
 {
     margin: 0; padding: 0;

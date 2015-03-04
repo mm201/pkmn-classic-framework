@@ -70,9 +70,12 @@
     <Content Include="css\form.css" />
     <Content Include="css\login.css" />
     <Content Include="css\main.css" />
+    <Content Include="css\pkmnstats.css" />
+    <Content Include="css\types.css" />
     <Content Include="Default.aspx" />
     <Content Include="favicon.ico" />
     <Content Include="gts\Default.aspx" />
+    <Content Include="gts\Pokemon.aspx" />
     <Content Include="images\heading-backdrop%402x.png" />
     <Content Include="images\heading-backdrop%403x.png" />
     <Content Include="images\heading-backdrop.png" />
@@ -3528,6 +3531,13 @@
     </Compile>
     <Compile Include="gts\Default.aspx.designer.cs">
       <DependentUpon>Default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="gts\Pokemon.aspx.cs">
+      <DependentUpon>Pokemon.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="gts\Pokemon.aspx.designer.cs">
+      <DependentUpon>Pokemon.aspx</DependentUpon>
     </Compile>
     <Compile Include="masters\LeftColumn.master.cs">
       <DependentUpon>LeftColumn.master</DependentUpon>
