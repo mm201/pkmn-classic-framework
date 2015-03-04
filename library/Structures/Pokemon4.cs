@@ -384,6 +384,8 @@ namespace PkmnFoundations.Structures
 
         private IntStatValues m_stats;
 
+        // todo: this should go into the derived class.
+        // the implementation here should auto-calculate the stats. (as in GenV)
         public override IntStatValues Stats
         {
             get { return m_stats; }
