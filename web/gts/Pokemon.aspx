@@ -10,7 +10,7 @@
 <asp:Content ID="Content2" ContentPlaceHolderID="cpMain" runat="server">
     <div class="gtsBox gtsPokemonSummary">
         <div class="row basicInfo">
-            <div class="col basic1">
+            <div class="col colBasic1">
                 <ul>
                 <li class="nickname">
                     SparkySparky
@@ -45,8 +45,8 @@
                 <p>Capable of taking hits.</p>
             </div>
 
-            <div class="col basic2">
-                <table>
+            <div class="col colBasic2">
+                <table class="summaryItems">
                     <tr>
                         <th>Species</th>
                         <td>Pikachu</td>
@@ -69,12 +69,10 @@
                     </tr>
                     <tr>
                         <th>Exp.</th>
-                        <td>8000</td>
-                    </tr>
-                    <tr>
-                        <th>Next in</th>
-                        <td>1261<br />
-                            <div class="pfProgressBar expBar">
+                        <td>8000
+
+                            <div class="nextIn">next in 1261</div>
+                            <div class="gtsProgress expBar">
                                 <div class="progress" style="width: 50%;"></div>
                             </div>
                         </td>
@@ -96,12 +94,12 @@
                 </table>
             </div>
         
-            <div class="col stats">
-                <table>
+            <div class="col colStats">
+                <table class="summaryItems">
                     <tr>
                         <th>HP</th>
                         <td>50 / 50<br />
-                            <div class="progressBar hpBar">
+                            <div class="gtsProgress hpBar">
                                 <div class="progress" style="width: 90%;"></div>
                             </div>
                         </td>
@@ -127,35 +125,38 @@
                         <td>50</td>
                     </tr>
                 </table>
-            </div>
 
-            <div class="col moves">
-                <ul>
-                    <li class="move">
-                        <span class="name">Quick Attack</span>
-                        <span class="type normal">Normal</span>
-                        <span class="pp">PP</span>
-                        <span class="ppq">30 / 30</span>
-                    </li>
-                    <li class="move">
-                        <span class="name">Electro Ball</span>
-                        <span class="type electric">Electric</span>
-                        <span class="pp">PP</span>
-                        <span class="ppq">10 / 10</span>
-                    </li>
-                    <li class="move">
-                        <span class="name">Thunder Wave</span>
-                        <span class="type electric">Electric</span>
-                        <span class="pp">PP</span>
-                        <span class="ppq">20 / 20</span>
-                    </li>
-                    <li class="move">
-                        <span class="name">Drainging Kiss</span>
-                        <span class="type fairy">Fairy</span>
-                        <span class="pp">PP</span>
-                        <span class="ppq">10 / 10</span>
-                    </li>
-                </ul>
+                <table class="moves">
+                    <tr class="move normal">
+                        <th class="type normal">Normal</th>
+                        <td>
+                            <span class="name">Quick Attack</span>
+                            <span class="pp">30 / 30</span>
+                        </td>
+                    </tr>
+                    <tr class="move electric">
+                        <th class="type electric">Electric</th>
+                        <td>
+                            <span class="name">Electro Ball</span>
+                            <span class="pp">10 / 10</span>
+                        </td>
+                    </tr>
+                    <tr class="move electric">
+                        <th class="type electric">Electric</th>
+                        <td>
+                            <span class="name">Thunder Wave</span>
+                            <span class="pp">20 / 20</span>
+                        </td>
+                    </tr>
+                    <tr class="move fairy">
+                        <th class="type fairy">Fairy</th>
+                        <td>
+                            <span class="name">Drainging Kiss</span>
+                            <span class="pp">10 / 10</span>
+                        </td>
+                    </tr>
+                </table>
+
             </div>
 
         </div>

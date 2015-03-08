@@ -99,7 +99,6 @@ li
 
 .gtsBox
 {
-    color: black;
     box-shadow: 0 3px 8px 0 rgba(0,0,0,0.05), 0 -4px 3px -3px rgba(0,0,0,0.1) inset;
     background-color: #f8f8f8;
     background-image: -moz-linear-gradient(top, #fcfcfc 0%, #f8f8f8 100%); /* FF3.6+ */
@@ -155,6 +154,19 @@ li
     font-weight: bold;
     text-align: center;
     display: block;
+}
+
+.gtsProgress
+{
+    border: 1px solid #777777;
+    height: 2px;
+    border-radius: 2px;
+}
+
+.gtsProgress .progress
+{
+    background-color: #2dd350;
+    height: 2px;
 }
 
 #gtsHeader
@@ -320,11 +332,6 @@ li
     padding: 16px 0;
     min-height: 300px;
     color: #111111;
-}
-
-#gtsMain *:first-child *
-{
-    margin-top: 0;
 }
 
 #gtsMain .gtsColumn
