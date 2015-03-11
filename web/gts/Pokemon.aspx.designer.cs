@@ -13,6 +13,24 @@ namespace PkmnFoundations.Web.gts {
     public partial class Pokemon {
         
         /// <summary>
+        /// phSummary control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.PlaceHolder phSummary;
+        
+        /// <summary>
+        /// litNickname control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal litNickname;
+        
+        /// <summary>
         /// imgPokemon control.
         /// </summary>
         /// <remarks>
@@ -22,6 +40,42 @@ namespace PkmnFoundations.Web.gts {
         protected global::System.Web.UI.WebControls.Image imgPokemon;
         
         /// <summary>
+        /// phShiny control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.PlaceHolder phShiny;
+        
+        /// <summary>
+        /// phPkrs control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.PlaceHolder phPkrs;
+        
+        /// <summary>
+        /// phPkrsCured control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.PlaceHolder phPkrsCured;
+        
+        /// <summary>
+        /// litMarks control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal litMarks;
+        
+        /// <summary>
         /// imgPokeball control.
         /// </summary>
         /// <remarks>
@@ -29,6 +83,24 @@ namespace PkmnFoundations.Web.gts {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Image imgPokeball;
+        
+        /// <summary>
+        /// litLevel control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal litLevel;
+        
+        /// <summary>
+        /// litGender control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal litGender;
         
         /// <summary>
         /// imgItem control.

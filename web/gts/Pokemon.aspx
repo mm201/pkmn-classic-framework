@@ -8,36 +8,40 @@
 </asp:Content>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="cpMain" runat="server">
+    <asp:PlaceHolder ID="phSummary" runat="server">
     <div class="gtsBox gtsPokemonSummary">
         <div class="row basicInfo">
             <div class="col colBasic1">
                 <ul>
                 <li class="nickname">
-                    SparkySparky
+                    <asp:Literal ID="litNickname" runat="server" />
                 </li>
                 <li class="portrait">
-                <asp:Image ID="imgPokemon" CssClass="sprite species" ImageUrl="~/images/pkmn-lg-s/25.png" 
-                    Width="96" Height="96" AlternateText="Pikachu" runat="server" />
+                <asp:Image ID="imgPokemon" CssClass="sprite species"
+                    Width="96" Height="96" runat="server" />
                 </li>
                 <li class="specialFlags">
-                    <span class="shiny">⁂</span>
+                    <asp:PlaceHolder ID="phShiny" runat="server">
+                        <span class="shiny">⁂</span>
+                    </asp:PlaceHolder>
                     <%-- todo: use images for pkrs status --%>
-                    <span class="pkrs">PKRS</span>
-                    <span class="pkrs_cure">CURED</span>
+                    <asp:PlaceHolder ID="phPkrs" runat="server">
+                        <span class="pkrs">PKRS</span>
+                    </asp:PlaceHolder>
+                    <asp:PlaceHolder ID="phPkrsCured" runat="server">
+                        <span class="pkrs_cure">CURED</span>
+                    </asp:PlaceHolder>
                     &nbsp;
                 </li>
                 <li class="marks">
-                    <span class="m">●</span>
-                    <span class="m">▲</span>
-                    <span>■</span>
-                    <span class="m">♥</span>
-                    <span class="m">★</span>
-                    <span class="m">♦</span>
+                    <asp:Literal ID="litMarks" runat="server" />
                 </li>
                 <li>
-                    <asp:Image ID="imgPokeball" CssClass="sprite item" ImageUrl="~/images/item-sm/3004.png"
+                    <asp:Image ID="imgPokeball" CssClass="sprite item"
                         Width="24" Height="24" runat="server" />
-                    Lv. 20 ♂
+                    Lv. 
+                    <asp:Literal ID="litLevel" runat="server" />
+                    <asp:Literal ID="litGender" runat="server" />
                 </li>
                 </ul>
                 <p>Met December 19, 2014<br />
@@ -163,4 +167,5 @@
         <div class="clear"></div>
 
     </div>
+    </asp:PlaceHolder>
 </asp:Content>

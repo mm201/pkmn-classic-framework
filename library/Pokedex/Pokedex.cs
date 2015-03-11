@@ -170,7 +170,7 @@ namespace PkmnFoundations.Pokedex
             // fixme: fact check the values for apricorn pokeballs.
             // What's used here is most assuredly wrong (and probably quite silly)
             // todo: add a PokeballValue field to the Items table and a dictionary here
-            return m_items_generations[Generations.Generation6][value];
+            return m_items_generations[Generations.Generation5][value];
         }
 
         public Move Moves(int value)

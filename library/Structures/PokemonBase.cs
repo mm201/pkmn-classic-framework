@@ -126,6 +126,17 @@ namespace PkmnFoundations.Structures
         public abstract Genders Gender { get; set; }
         public abstract String Nickname { get; set; }
 
+        public virtual bool IsShiny
+        {
+            get
+            {
+                // Gen3/4/5 formula. Gen6 must override.
+                uint step1 = Personality ^ TrainerID;
+                int step2 = (int)((step1 >> 16) ^ (step1 & 0xffffu));
+                return step2 >> 3 == 0;
+            }
+        }
+
         protected static List<int> BlockScramble(uint personality)
         {
             int x = 4; // todo: this can be an argument but YAGNI
