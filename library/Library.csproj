@@ -99,6 +99,7 @@
     <Compile Include="Structures\StatValuesBase.cs" />
     <Compile Include="Structures\TrainerProfile4.cs" />
     <Compile Include="Structures\TrainerProfile5.cs" />
+    <Compile Include="Structures\TrainerProfilePlaza.cs" />
     <Compile Include="Support\AssertHelper.cs" />
     <Compile Include="Support\EncodedString4.cs" />
     <Compile Include="Support\EncodedString5.cs" />

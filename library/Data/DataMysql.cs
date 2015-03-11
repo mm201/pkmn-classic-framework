@@ -81,6 +81,61 @@ namespace PkmnFoundations.Data
             }
         }
 
+        public GtsRecord4 GtsGetRecord4(MySqlTransaction tran, long tradeId, bool isExchanged, bool allowHistory)
+        {
+            MySqlDataReader reader = (MySqlDataReader)tran.ExecuteReader("SELECT Data, Species, Gender, Level, " +
+                "RequestedSpecies, RequestedGender, RequestedMinLevel, RequestedMaxLevel, " +
+                "Unknown1, TrainerGender, Unknown2, TimeDeposited, TimeExchanged, pid, " +
+                "TrainerName, TrainerOT, TrainerCountry, TrainerRegion, TrainerClass, " +
+                "IsExchanged, TrainerVersion, TrainerLanguage FROM GtsPokemon4 " +
+                "WHERE id = @id AND IsExchanged = @is_exchanged",
+                new MySqlParameter("@id", tradeId),
+                new MySqlParameter("@is_exchanged", isExchanged ? 1 : 0));
+
+            if (reader.Read())
+            {
+                GtsRecord4 result = Record4FromReader(reader);
+                reader.Close();
+                return result;
+            }
+
+            if (allowHistory)
+            {
+                reader = (MySqlDataReader)tran.ExecuteReader("SELECT Data, Species, Gender, Level, " +
+                    "RequestedSpecies, RequestedGender, RequestedMinLevel, RequestedMaxLevel, " +
+                    "Unknown1, TrainerGender, Unknown2, TimeDeposited, TimeExchanged, pid, " +
+                    "TrainerName, TrainerOT, TrainerCountry, TrainerRegion, TrainerClass, " +
+                    "IsExchanged, TrainerVersion, TrainerLanguage FROM GtsHistory4 " +
+                    "WHERE trade_id = @id AND IsExchanged = @is_exchanged",
+                    new MySqlParameter("@id", tradeId),
+                    new MySqlParameter("@is_exchanged", isExchanged ? 1 : 0));
+
+                if (reader.Read())
+                {
+                    GtsRecord4 result = Record4FromReader(reader);
+                    reader.Close();
+                    return result;
+                }
+            }
+
+            reader.Close();
+            return null;
+        }
+
+        public override GtsRecord4 GtsGetRecord4(long tradeId, bool isExchanged, bool allowHistory)
+        {
+            using (MySqlConnection db = CreateConnection())
+            {
+                db.Open();
+                using (MySqlTransaction tran = db.BeginTransaction())
+                {
+                    GtsRecord4 result = GtsGetRecord4(tran, tradeId, isExchanged, allowHistory);
+                    tran.Commit();
+                    return result;
+                }
+            }
+        }
+
         public bool GtsDepositPokemon4(MySqlTransaction tran, GtsRecord4 record)
         {
             if (record.Data.Length != 236) throw new FormatException("pkm data must be 236 bytes.");
@@ -844,6 +899,88 @@ namespace PkmnFoundations.Data
         }
         #endregion
 
+        #region Wi-fi Plaza
+        public override TrainerProfilePlaza PlazaGetProfile(int pid)
+        {
+            using (MySqlConnection db = CreateConnection())
+            {
+                db.Open();
+                using (MySqlTransaction tran = db.BeginTransaction())
+                {
+                    TrainerProfilePlaza result = PlazaGetProfile(tran, pid);
+                    tran.Commit();
+                    return result;
+                }
+            }
+        }
+
+        public TrainerProfilePlaza PlazaGetProfile(MySqlTransaction tran, int pid)
+        {
+            MySqlDataReader reader = (MySqlDataReader)tran.ExecuteReader("SELECT " +
+                "DataPrefix, Data FROM pkmncf_plaza_profiles " +
+                "WHERE pid = @pid",
+                new MySqlParameter("@pid", pid));
+
+            if (reader.Read())
+            {
+                return new TrainerProfilePlaza(pid, reader.GetByteArray(0, 12), reader.GetByteArray(1, 152));
+            }
+            else return null;
+        }
+
+        public override bool PlazaSetProfile(TrainerProfilePlaza profile)
+        {
+            using (MySqlConnection db = CreateConnection())
+            {
+                db.Open();
+                using (MySqlTransaction tran = db.BeginTransaction())
+                {
+                    bool result = PlazaSetProfile(tran, profile);
+                    tran.Commit();
+                    return result;
+                }
+            }
+        }
+
+        public bool PlazaSetProfile(MySqlTransaction tran, TrainerProfilePlaza profile)
+        {
+            if (profile.DataPrefix.Length != 12) throw new FormatException("Profile data prefix must be 12 bytes.");
+            if (profile.Data.Length != 152) throw new FormatException("Profile data must be 152 bytes.");
+
+            long exists = (long)tran.ExecuteScalar("SELECT EXISTS(SELECT * FROM pkmncf_plaza_profiles WHERE pid = @pid)", new MySqlParameter("@pid", profile.PID));
+
+            MySqlParameter[] _params = new MySqlParameter[]{
+                new MySqlParameter("@pid", profile.PID),
+                new MySqlParameter("@data_prefix", profile.DataPrefix),
+                new MySqlParameter("@data", profile.Data),
+                new MySqlParameter("@version", (byte)profile.Version),
+                new MySqlParameter("@language", (byte)profile.Language),
+                new MySqlParameter("@country", profile.Country),
+                new MySqlParameter("@region", profile.Region),
+                new MySqlParameter("@ot", profile.OT),
+                new MySqlParameter("@name", profile.Name.RawData)
+            };
+
+            if (exists != 0)
+            {
+                return tran.ExecuteNonQuery("UPDATE pkmncf_plaza_profiles " +
+                    "SET DataPrefix = @data_prefix, Data = @data, " +
+                    "Version = @version, Language = @language, Country = @country, " +
+                    "Region = @region, OT = @ot, Name = @name, ParseVersion = 1, " +
+                    "TimeUpdated = UTC_TIMESTAMP() " +
+                    "WHERE pid = @pid", _params) > 0;
+            }
+            else
+            {
+                return tran.ExecuteNonQuery("INSERT INTO pkmncf_plaza_profiles " +
+                    "(pid, DataPrefix, Data, Version, Language, Country, Region, OT, Name, " +
+                    "ParseVersion, TimeAdded, TimeUpdated) VALUES " +
+                    "(@pid, @data_prefix, @data, @version, @language, @country, @region, @ot, " +
+                    "@name, 1, UTC_TIMESTAMP(), UTC_TIMESTAMP())", _params) > 0;
+            }
+        }
+        #endregion
+
         #region Other Gamestats 4
         public override bool GamestatsSetProfile4(TrainerProfile4 profile)
         {
@@ -928,6 +1065,63 @@ namespace PkmnFoundations.Data
                 using (MySqlTransaction tran = db.BeginTransaction())
                 {
                     GtsRecord5 result = GtsDataForUser5(tran, pid);
+                    tran.Commit();
+                    return result;
+                }
+            }
+        }
+
+        public GtsRecord5 GtsGetRecord5(MySqlTransaction tran, long tradeId, bool isExchanged, bool allowHistory)
+        {
+            MySqlDataReader reader = (MySqlDataReader)tran.ExecuteReader("SELECT Data, Unknown0, " +
+                "Species, Gender, Level, " +
+                "RequestedSpecies, RequestedGender, RequestedMinLevel, RequestedMaxLevel, " +
+                "Unknown1, TrainerGender, Unknown2, TimeDeposited, TimeExchanged, pid, " +
+                "TrainerOT, TrainerName, TrainerCountry, TrainerRegion, TrainerClass, " +
+                "IsExchanged, TrainerVersion, TrainerLanguage, TrainerBadges, TrainerUnityTower " +
+                "FROM GtsPokemon5 WHERE id = @id AND IsExchanged = @is_exchanged",
+                new MySqlParameter("@id", tradeId),
+                new MySqlParameter("@is_exchanged", isExchanged ? 1 : 0));
+
+            if (reader.Read())
+            {
+                GtsRecord5 result = Record5FromReader(reader);
+                reader.Close();
+                return result;
+            }
+
+            if (allowHistory)
+            {
+                reader = (MySqlDataReader)tran.ExecuteReader("SELECT Data, Unknown0, " +
+                    "Species, Gender, Level, " +
+                    "RequestedSpecies, RequestedGender, RequestedMinLevel, RequestedMaxLevel, " +
+                    "Unknown1, TrainerGender, Unknown2, TimeDeposited, TimeExchanged, pid, " +
+                    "TrainerOT, TrainerName, TrainerCountry, TrainerRegion, TrainerClass, " +
+                    "IsExchanged, TrainerVersion, TrainerLanguage, TrainerBadges, TrainerUnityTower " +
+                    "FROM GtsHistory5 WHERE trade_id = @id AND IsExchanged = @is_exchanged",
+                    new MySqlParameter("@id", tradeId),
+                    new MySqlParameter("@is_exchanged", isExchanged ? 1 : 0));
+
+                if (reader.Read())
+                {
+                    GtsRecord5 result = Record5FromReader(reader);
+                    reader.Close();
+                    return result;
+                }
+            }
+
+            reader.Close();
+            return null;
+        }
+
+        public override GtsRecord5 GtsGetRecord5(long tradeId, bool isExchanged, bool allowHistory)
+        {
+            using (MySqlConnection db = CreateConnection())
+            {
+                db.Open();
+                using (MySqlTransaction tran = db.BeginTransaction())
+                {
+                    GtsRecord5 result = GtsGetRecord5(tran, tradeId, isExchanged, allowHistory);
                     tran.Commit();
                     return result;
                 }

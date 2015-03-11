@@ -64,6 +64,7 @@ namespace PkmnFoundations.Data
         public const int GTS_VERSION_4 = 0;
 
         public abstract GtsRecord4 GtsDataForUser4(int pid);
+        public abstract GtsRecord4 GtsGetRecord4(long tradeId, bool isExchanged, bool allowHistory);
 
         public abstract bool GtsDepositPokemon4(GtsRecord4 record);
 
@@ -85,6 +86,11 @@ namespace PkmnFoundations.Data
         public abstract BattleTowerProfile4[] BattleTowerGetLeaders4(byte rank, byte roomNum);
         #endregion
 
+        #region Wi-fi Plaza
+        public abstract TrainerProfilePlaza PlazaGetProfile(int pid);
+        public abstract bool PlazaSetProfile(TrainerProfilePlaza profile);
+        #endregion
+
         #region Other Gamestats 4
         public abstract bool GamestatsSetProfile4(TrainerProfile4 profile);
         #endregion
@@ -93,6 +99,7 @@ namespace PkmnFoundations.Data
         public const int GTS_VERSION_5 = 0;
 
         public abstract GtsRecord5 GtsDataForUser5(int pid);
+        public abstract GtsRecord5 GtsGetRecord5(long tradeId, bool isExchanged, bool allowHistory);
 
         public abstract bool GtsDepositPokemon5(GtsRecord5 record);
 

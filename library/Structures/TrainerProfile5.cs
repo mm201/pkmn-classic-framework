@@ -23,7 +23,7 @@ namespace PkmnFoundations.Structures
 
         // todo: encapsulate these so calculated fields are always correct
         public int PID;
-        public byte[] Data;
+        public byte[] Data; // 100 bytes
 
         public Versions Version
         {
