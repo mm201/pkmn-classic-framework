@@ -33,7 +33,7 @@ namespace PkmnFoundations.Structures
         {
             get
             {
-                return (Versions)DataPrefix[0x03];
+                return (Versions)DataPrefix[0x02];
             }
         }
 
@@ -41,7 +41,7 @@ namespace PkmnFoundations.Structures
         {
             get
             {
-                return (Languages)DataPrefix[0x04];
+                return (Languages)DataPrefix[0x03];
             }
         }
 
@@ -49,7 +49,7 @@ namespace PkmnFoundations.Structures
         {
             get
             {
-                return Data[0x50];
+                return Data[0x40];
             }
         }
 
@@ -57,7 +57,7 @@ namespace PkmnFoundations.Structures
         {
             get
             {
-                return Data[0x52];
+                return Data[0x42];
             }
         }
 

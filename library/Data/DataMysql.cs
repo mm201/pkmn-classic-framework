@@ -924,7 +924,9 @@ namespace PkmnFoundations.Data
 
             if (reader.Read())
             {
-                return new TrainerProfilePlaza(pid, reader.GetByteArray(0, 12), reader.GetByteArray(1, 152));
+                TrainerProfilePlaza result = new TrainerProfilePlaza(pid, reader.GetByteArray(0, 12), reader.GetByteArray(1, 152));
+                reader.Close();
+                return result;
             }
             else return null;
         }
