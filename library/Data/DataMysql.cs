@@ -98,6 +98,7 @@ namespace PkmnFoundations.Data
                 reader.Close();
                 return result;
             }
+            reader.Close();
 
             if (allowHistory)
             {
@@ -1089,6 +1090,7 @@ namespace PkmnFoundations.Data
                 reader.Close();
                 return result;
             }
+            reader.Close();
 
             if (allowHistory)
             {

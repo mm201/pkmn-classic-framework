@@ -38,5 +38,14 @@ namespace PkmnFoundations.Pokedex
                 k => k == 0 ? null : (pokedex == null ? null : pokedex.Types(k)),
                 v => v == null ? 0 : v.ID);
         }
+
+        public String Identifier
+        {
+            get
+            {
+                // xxx: this is a hack. Should database this field instead.
+                return Name["EN"].ToLowerInvariant();
+            }
+        }
     }
 }

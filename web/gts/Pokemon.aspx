@@ -1,5 +1,7 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/masters/MasterPage.master" AutoEventWireup="true" CodeBehind="Pokemon.aspx.cs" Inherits="PkmnFoundations.Web.gts.Pokemon" %>
 <%@ Register TagPrefix="pf" Namespace="PkmnFoundations.Web" Assembly="PkmnFoundations.Web" %>
+<%@ Import Namespace="PkmnFoundations.Pokedex" %>
+<%@ Import Namespace="PkmnFoundations.Structures" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="cpHead" runat="server">
     <pf:RequireCss Key="form" CssUrl="~/css/form.css" runat="server" />
@@ -44,55 +46,59 @@
                     <asp:Literal ID="litGender" runat="server" />
                 </li>
                 </ul>
-                <p>Met December 19, 2014<br />
-                    in Slateport City at Lv. 20</p>
-                <p>Capable of taking hits.</p>
+                <p><asp:Literal ID="litTrainerMemo" Text="Trainer memo todo" runat="server" /></p>
+                <p><asp:Literal ID="litCharacteristic" Text="Characteristic todo" runat="server" /></p>
             </div>
 
             <div class="col colBasic2">
                 <table class="summaryItems">
                     <tr>
                         <th>Species</th>
-                        <td>Pikachu</td>
+                        <td><asp:Literal ID="litSpecies" runat="server" /></td>
                     </tr>
                     <tr>
                         <th>Pokédex</th>
-                        <td>025</td>
+                        <td>#<asp:Literal ID="litPokedex" runat="server" /></td>
                     </tr>
                     <tr>
                         <th>Type</th>
-                        <td><span class="type electric">Electric</span></td>
+                        <td>
+                            <asp:Literal ID="litType1" runat="server" />&nbsp;
+                            <asp:Literal ID="litType2" runat="server" />
+                        </td>
                     </tr>
                     <tr>
                         <th>OT</th>
-                        <td>Ash</td>
+                        <td><asp:Literal ID="litOtName" runat="server" /></td>
                     </tr>
                     <tr>
                         <th>ID No.</th>
-                        <td>12345</td>
+                        <td><asp:Literal ID="litTrainerId" runat="server" /></td>
                     </tr>
                     <tr>
                         <th>Exp.</th>
-                        <td>8000
+                        <td><asp:Literal ID="litExperience" runat="server" />
 
-                            <div class="nextIn">next in 1261</div>
+                            <div class="nextIn">next in ??? todo</div>
                             <div class="gtsProgress expBar">
-                                <div class="progress" style="width: 50%;"></div>
+                                <asp:Literal ID="litExpProgress" runat="server">
+                                    <div class="progress" style="width: 50%;"></div>
+                                </asp:Literal>
                             </div>
                         </td>
                     </tr>
                     <tr>
                         <th>Held item</th>
-                        <td><asp:Image ID="imgItem" CssClass="sprite item" ImageUrl="~/images/item-sm/3202.png" Width="24" Height="24" runat="server" />
-                            Light Ball</td>
+                        <td><asp:Image ID="imgHeldItem" CssClass="sprite item" ImageUrl="~/images/item-sm/3202.png" Width="24" Height="24" runat="server" />
+                            <asp:Literal ID="litHeldItem" runat="server" /></td>
                     </tr>
                     <tr>
                         <th>Nature</th>
-                        <td>Naive</td>
+                        <td><asp:Literal ID="litNature" runat="server" /></td>
                     </tr>
                     <tr>
                         <th>Ability</th>
-                        <td>Lightning Rod<sup>dw</sup>
+                        <td><asp:Literal ID="litAbility" runat="server" />
                         </td>
                     </tr>
                 </table>
@@ -102,63 +108,55 @@
                 <table class="summaryItems">
                     <tr>
                         <th>HP</th>
-                        <td>50 / 50<br />
+                        <td><asp:Literal ID="litHpCurr" runat="server" /> / <asp:Literal ID="litHp" runat="server" /><br />
                             <div class="gtsProgress hpBar">
-                                <div class="progress" style="width: 90%;"></div>
+                                <asp:Literal ID="litHpProgress" runat="server">
+                                    <div class="progress" style="width: 50%;"></div>
+                                </asp:Literal>
                             </div>
                         </td>
                     </tr>
                     <tr>
                         <th>Attack</th>
-                        <td>27</td>
+                        <td><asp:Literal ID="litAtk" runat="server" /></td>
                     </tr>
                     <tr>
                         <th>Defense</th>
-                        <td>27</td>
+                        <td><asp:Literal ID="litDef" runat="server" /></td>
                     </tr>
                     <tr>
                         <th>Sp. Atk</th>
-                        <td>31</td>
+                        <td><asp:Literal ID="litSAtk" runat="server" /></td>
                     </tr>
                     <tr>
                         <th>Sp. Def</th>
-                        <td>23</td>
+                        <td><asp:Literal ID="litSDef" runat="server" /></td>
                     </tr>
                     <tr>
                         <th>Speed</th>
-                        <td>50</td>
+                        <td><asp:Literal ID="litSpeed" runat="server" /></td>
                     </tr>
                 </table>
 
                 <table class="moves">
-                    <tr class="move normal">
-                        <th class="type normal">Normal</th>
-                        <td>
-                            <span class="name">Quick Attack</span>
-                            <span class="pp">30 / 30</span>
-                        </td>
-                    </tr>
-                    <tr class="move electric">
-                        <th class="type electric">Electric</th>
-                        <td>
-                            <span class="name">Electro Ball</span>
-                            <span class="pp">10 / 10</span>
-                        </td>
-                    </tr>
-                    <tr class="move electric">
-                        <th class="type electric">Electric</th>
-                        <td>
-                            <span class="name">Thunder Wave</span>
-                            <span class="pp">20 / 20</span>
-                        </td>
-                    </tr>
-                    <tr class="move fairy">
-                        <th class="type fairy">Fairy</th>
-                        <td>
-                            <span class="name">Drainging Kiss</span>
-                            <span class="pp">10 / 10</span>
-                        </td>
-                    </tr>
+                    <asp:Repeater ID="rptMoves" runat="server">
+                        <ItemTemplate>
+                            <tr class="move <%# ((MoveSlot)Container.DataItem).Move == null ? "" : ((MoveSlot)Container.DataItem).Move.Type.Identifier %>">
+                                <th class="type <%# ((MoveSlot)Container.DataItem).Move == null ? "" : ((MoveSlot)Container.DataItem).Move.Type.Identifier %>">
+                                    <%# ((MoveSlot)Container.DataItem).Move == null ? "" : ((MoveSlot)Container.DataItem).Move.Type.Name.ToString() %>
+                                </th>
+                                <td>
+                                    <span class="name">
+                                    <%# ((MoveSlot)Container.DataItem).Move == null ? "&nbsp;" : ((MoveSlot)Container.DataItem).Move.Name.ToString() %>
+                                    </span>
+                                    <span class="pp">
+                                    <%# ((MoveSlot)Container.DataItem).Move == null ? "" : ((MoveSlot)Container.DataItem).RemainingPP.ToString() + " / " %>
+                                    <%# ((MoveSlot)Container.DataItem).Move == null ? "" : ((MoveSlot)Container.DataItem).PP.ToString() %>
+                                    </span>
+                                </td>
+                            </tr>
+                        </ItemTemplate>
+                    </asp:Repeater>
                 </table>
 
             </div>

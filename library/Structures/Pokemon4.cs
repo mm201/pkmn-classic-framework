@@ -102,10 +102,10 @@ namespace PkmnFoundations.Structures
             {
                 byte[] block = blocks[1];
 
-                Moves[0] = new MoveSlot(m_pokedex, BitConverter.ToUInt16(block, 0), block[8], block[12]);
-                Moves[1] = new MoveSlot(m_pokedex, BitConverter.ToUInt16(block, 2), block[9], block[13]);
-                Moves[2] = new MoveSlot(m_pokedex, BitConverter.ToUInt16(block, 4), block[10], block[14]);
-                Moves[3] = new MoveSlot(m_pokedex, BitConverter.ToUInt16(block, 6), block[11], block[15]);
+                Moves[0] = new MoveSlot(m_pokedex, BitConverter.ToUInt16(block, 0), block[12], block[8]);
+                Moves[1] = new MoveSlot(m_pokedex, BitConverter.ToUInt16(block, 2), block[13], block[9]);
+                Moves[2] = new MoveSlot(m_pokedex, BitConverter.ToUInt16(block, 4), block[14], block[10]);
+                Moves[3] = new MoveSlot(m_pokedex, BitConverter.ToUInt16(block, 6), block[15], block[11]);
 
                 int ivs = BitConverter.ToInt32(block, 16);
                 IVs = new IvStatValues(ivs & 0x3fffffff);
@@ -170,8 +170,8 @@ namespace PkmnFoundations.Structures
                 for (int pos = 0; pos < 100; pos += 2)
                 {
                     rand = DecryptRNG(rand);
-                    block[pos] ^= (byte)(rand >> 24);
-                    block[pos + 1] ^= (byte)(rand >> 16);
+                    block[pos] ^= (byte)(rand >> 16);
+                    block[pos + 1] ^= (byte)(rand >> 24);
                 }
 
                 StatusAffliction = block[0];
@@ -339,9 +339,7 @@ namespace PkmnFoundations.Structures
 
         private bool IsHgss()
         {
-            return !(Version == Versions.Diamond || 
-                Version == Versions.Pearl || 
-                Version == Versions.Platinum);
+            return (Version == Versions.HeartGold || Version == Versions.SoulSilver);
         }
 
         private bool IsHgssPokeball(int pokeballId)

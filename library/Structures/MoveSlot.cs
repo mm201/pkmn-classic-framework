@@ -23,7 +23,7 @@ namespace PkmnFoundations.Structures
         public byte RemainingPP { get; set; } // todo: validate range (against pokedex data and pp ups)
 
         // todo: should have a MoveID/Move LazyKeyValuePair.
-        public Move Move { get { return m_pokedex.Moves(MoveID); } }
+        public Move Move { get { return MoveID == 0 ? null : m_pokedex.Moves(MoveID); } }
         public int PP { get { return Move.PP * (5 + PPUps) / 5; } }
     }
 }

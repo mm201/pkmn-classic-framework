@@ -56,7 +56,9 @@ namespace PkmnFoundations.Support
 			{
 				ushort gamecode = BitConverter.ToUInt16(data, i);
 				if (gamecode == 0xffff) { break; }
-				char ch = Generation4TextLookupTable[gamecode];
+				char ch = Generation4TextLookupTable.ContainsKey(gamecode) ?
+                    Generation4TextLookupTable[gamecode] :
+                    '?';
 				sb.Append(ch);
 			}
 

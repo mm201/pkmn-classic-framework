@@ -6,6 +6,7 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using PkmnFoundations.Data;
+using PkmnFoundations.Pokedex;
 using PkmnFoundations.Structures;
 using PkmnFoundations.Support;
 
@@ -92,10 +93,43 @@ namespace PkmnFoundations.Web.gts
             phPkrs.Visible = false;
             phPkrsCured.Visible = false;
             litMarks.Text = CreateMarks(pkmn.Markings);
-            imgPokeball.ImageUrl = "~/images/item-sm/" + pkmn.Pokeball.ID.ToString() + ".png";
+            imgPokeball.ImageUrl = ItemFilename(pkmn.Pokeball);
             imgPokeball.AlternateText = pkmn.Pokeball.Name.ToString();
+            imgPokeball.ToolTip = pkmn.Pokeball.Name.ToString();
             litLevel.Text = pkmn.Level.ToString();
             litGender.Text = CreateGender(pkmn.Gender);
+            litSpecies.Text = pkmn.Species.Name.ToString();
+            litPokedex.Text = pkmn.SpeciesID.ToString("000");
+            FormStats fs = pkmn.Form.BaseStats(Generations.Generation4);
+            litType1.Text = fs.Type1 == null ? "" : CreateType(fs.Type1);
+            litType2.Text = fs.Type2 == null ? "" : CreateType(fs.Type2);
+            litOtName.Text = Common.HtmlEncode(pkmn.TrainerName);
+            litTrainerId.Text = (pkmn.TrainerID & 0xffff).ToString("00000");
+            litExperience.Text = pkmn.Experience.ToString();
+            if (pkmn.HeldItem != null)
+            {
+                imgHeldItem.Visible = true;
+                imgHeldItem.ImageUrl = ItemFilename(pkmn.HeldItem);
+                litHeldItem.Text = pkmn.HeldItem.Name.ToString();
+            }
+            else
+            {
+                imgHeldItem.Visible = false;
+                litHeldItem.Text = "";
+            }
+            litNature.Text = pkmn.Nature.ToString(); // todo: i18n
+            litAbility.Text = pkmn.Ability == null ? "None" : pkmn.Ability.Name.ToString();
+            litHpCurr.Text = pkmn.HP.ToString();
+            litHp.Text = pkmn.Stats[Stats.Hp].ToString();
+            litHpProgress.Text = CreateProgress(pkmn.HP, pkmn.Stats[Stats.Hp]);
+            litAtk.Text = pkmn.Stats[Stats.Attack].ToString();
+            litDef.Text = pkmn.Stats[Stats.Defense].ToString();
+            litSAtk.Text = pkmn.Stats[Stats.SpecialAttack].ToString();
+            litSDef.Text = pkmn.Stats[Stats.SpecialDefense].ToString();
+            litSpeed.Text = pkmn.Stats[Stats.Speed].ToString();
+
+            rptMoves.DataSource = pkmn.Moves;
+            rptMoves.DataBind();
         }
 
         private String[] m_marks = new String[] { "●", "▲", "■", "♥", "★", "♦" };
@@ -141,6 +175,11 @@ namespace PkmnFoundations.Web.gts
             return builder.ToString();
         }
 
+        private String ItemFilename(Item item)
+        {
+            return "~/images/item-sm/" + item.ID.ToString() + ".png";
+        }
+
         private String CreateGender(Genders gender)
         {
             switch (gender)
@@ -152,6 +191,17 @@ namespace PkmnFoundations.Web.gts
                 default:
                     return "";
             }
+        }
+
+        private String CreateType(Pokedex.Type type)
+        {
+            return "<span class=\"type " + type.Identifier + "\">" + type.Name.ToString() + "</span>";
+        }
+
+        private String CreateProgress(int curr, int max)
+        {
+            float percent = (float)curr * 100.0f / (float)max;
+            return "<div class=\"progress\" style=\"width: " + percent.ToString() + "%;\"></div>";
         }
     }
 }
