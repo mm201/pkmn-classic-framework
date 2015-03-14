@@ -137,6 +137,29 @@ namespace PkmnFoundations.Structures
             }
         }
 
+        public Characteristic Characteristic
+        {
+            get
+            {
+                int toCheck = (int)(Personality % 6u);
+                Stats bestStat = (Structures.Stats)(toCheck + 1);
+                byte bestStatValue = 0;
+                for (int x = 0; x < 6; x++)
+                {
+                    if (IVs[(Structures.Stats)(x + 1)] > bestStatValue)
+                    {
+                        bestStat = (Structures.Stats)(toCheck + 1);
+                        bestStatValue = IVs[(Structures.Stats)(x + 1)];
+                    }
+
+                    toCheck++;
+                    toCheck %= 6;
+                }
+
+                return new Characteristic(bestStat, (byte)(bestStatValue % (byte)5));
+            }
+        }
+
         protected static List<int> BlockScramble(uint personality)
         {
             int x = 4; // todo: this can be an argument but YAGNI
@@ -175,6 +198,37 @@ namespace PkmnFoundations.Structures
                 result.Add(arg.IndexOf(x));
 
             return result;
+        }
+    }
+
+    public struct Characteristic
+    {
+        public Stats BestIv;
+        public byte BestIvModulo;
+
+        public Characteristic(Stats best_iv, byte best_iv_modulo)
+        {
+            BestIv = best_iv;
+            BestIvModulo = best_iv_modulo;
+        }
+
+        private static String[,] m_phrases = new String[,]
+        {
+            { "Loves to eat", "Takes plenty of siestas", "Nods off a lot", "Scatters things often", "Likes to relax"},
+            { "Proud of its power", "Likes to thrash about", "A little quick tempered", "Likes to fight", "Quick tempered"},
+            { "Sturdy body", "Capable of taking hits", "Highly persistent", "Good endurance", "Good perseverance"},
+            { "Likes to run", "Alert to sounds", "Impetuous and silly", "Somewhat of a clown", "Quick to flee"},
+            { "Highly curious", "Mischievous", "Thoroughly cunning", "Often lost in thought", "Very finicky"},
+            { "Strong willed", "Somewhat vain", "Strongly defiant", "Hates to lose", "Somewhat stubborn"},
+        };
+
+        public override string ToString()
+        {
+            // http://bulbapedia.bulbagarden.net/wiki/Characteristic#List_of_Characteristics
+            // todo: i18n
+            if (BestIv < Stats.Hp || BestIv > Stats.SpecialDefense) throw new InvalidOperationException();
+            if (BestIvModulo > 4) throw new InvalidOperationException();
+            return m_phrases[(int)BestIv - 1, BestIvModulo];
         }
     }
 }

@@ -98,6 +98,7 @@ namespace PkmnFoundations.Web.gts
             imgPokeball.ToolTip = pkmn.Pokeball.Name.ToString();
             litLevel.Text = pkmn.Level.ToString();
             litGender.Text = CreateGender(pkmn.Gender);
+            litCharacteristic.Text = pkmn.Characteristic.ToString();
             litSpecies.Text = pkmn.Species.Name.ToString();
             litPokedex.Text = pkmn.SpeciesID.ToString("000");
             FormStats fs = pkmn.Form.BaseStats(Generations.Generation4);
