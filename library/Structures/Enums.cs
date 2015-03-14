@@ -91,6 +91,26 @@ namespace PkmnFoundations.Structures
         SpecialDefense = 6
     }
 
+    [Flags]
+    public enum StatFlags
+    {
+        None = 0,
+        Hp = 1,
+        Attack = 2,
+        Defense = 4,
+        Speed = 8,
+        SpecialAttack = 16,
+        SpecialDefense = 32
+    }
+
+    public enum Potential
+    {
+        Decent,
+        AboveAverage,
+        RelativelySuperior,
+        Outstanding
+    }
+
     public enum Conditions
     {
         Cool = 1,
