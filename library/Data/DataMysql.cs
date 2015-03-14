@@ -985,6 +985,39 @@ namespace PkmnFoundations.Data
         #endregion
 
         #region Other Gamestats 4
+        public override bool GamestatsBumpProfile4(int pid)
+        {
+            // todo: I really need a WithTran helper
+            // WithTransaction(tran => GamestatsBumpProfile4(tran, pid));
+            using (MySqlConnection db = CreateConnection())
+            {
+                db.Open();
+                using (MySqlTransaction tran = db.BeginTransaction())
+                {
+                    bool result = GamestatsBumpProfile4(tran, pid);
+                    tran.Commit();
+                    return result;
+                }
+            }
+        }
+
+        public bool GamestatsBumpProfile4(MySqlTransaction tran, int pid)
+        {
+            long exists = (long)tran.ExecuteScalar("SELECT EXISTS(SELECT * FROM GtsProfiles4 WHERE pid = @pid)", new MySqlParameter("@pid", pid));
+
+            if (exists != 0)
+            {
+                return tran.ExecuteNonQuery("UPDATE GtsProfiles4 SET " +
+                    "TimeUpdated = UTC_TIMESTAMP() WHERE pid = @pid", new MySqlParameter("@pid", pid)) > 0;
+            }
+            else
+            {
+                return tran.ExecuteNonQuery("INSERT INTO GtsProfiles4 " +
+                    "(pid, TimeAdded, TimeUpdated) VALUES (@pid, UTC_TIMESTAMP(), " +
+                    "UTC_TIMESTAMP())", new MySqlParameter("@pid", pid)) > 0;
+            }
+        }
+
         public override bool GamestatsSetProfile4(TrainerProfile4 profile)
         {
             using (MySqlConnection db = CreateConnection())
