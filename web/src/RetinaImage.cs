@@ -68,7 +68,6 @@ namespace PkmnFoundations.Web
             base.LoadViewState(viewstate.RetinaImageBaseViewState);
             FormatString = viewstate.FormatString;
             AlternateSizes = viewstate.AlternateSizes;
-            this.ImageUrl = viewstate.ImageUrl;
         }
 
         protected override object SaveViewState()
@@ -77,14 +76,7 @@ namespace PkmnFoundations.Web
             viewstate.RetinaImageBaseViewState = base.SaveViewState();
             viewstate.FormatString = FormatString;
             viewstate.AlternateSizes = AlternateSizes;
-            viewstate.ImageUrl = this.ImageUrl;
             return viewstate;
-        }
-
-        public new String ImageUrl
-        {
-            get;
-            set;
         }
 
         /// <summary>
@@ -127,7 +119,6 @@ namespace PkmnFoundations.Web
             public object RetinaImageBaseViewState;
             public String FormatString;
             public String AlternateSizes;
-            public String ImageUrl;
         }
     }
 }

@@ -26,7 +26,7 @@ namespace PkmnFoundations.Web
             base.AddAttributesToRender(writer);
         }
 
-        public void WriteDataAttributes(HtmlTextWriter writer)
+        private void WriteDataAttributes(HtmlTextWriter writer)
         {
             foreach (ImageRendition r in m_scales)
             {
@@ -34,7 +34,7 @@ namespace PkmnFoundations.Web
             }
         }
 
-        private static NumberFormatInfo nfi = System.Globalization.CultureInfo.InvariantCulture.NumberFormat;
+        private static NumberFormatInfo nfi = CultureInfo.InvariantCulture.NumberFormat;
 
         public static String AttributeName(float scale)
         {
@@ -62,12 +62,18 @@ namespace PkmnFoundations.Web
                 r = f;
             }
 
-            this.ImageUrl = r.ImageUrl;
+            base.ImageUrl = r.ImageUrl;
         }
 
         private List<ImageRendition> m_scales;
 
         protected abstract List<ImageRendition> GetScales();
+
+        public new string ImageUrl
+        {
+            get;
+            set;
+        }
 
         private String m_css_class;
         /// <summary>
@@ -82,8 +88,53 @@ namespace PkmnFoundations.Web
             set
             {
                 m_css_class = value;
-                base.CssClass = value.Length > 0 ? "retina " + value : "retina";
+                UpdateCssClass();
             }
+        }
+
+        private bool m_keep_high_res;
+        /// <summary>
+        /// If this is true, a high resolution image will be kept in place even
+        /// after the image has shrunken down to the next stop. This can
+        /// prevent unnecessary image downloads.
+        /// </summary>
+        public bool KeepHighRes
+        {
+            get
+            {
+                return m_keep_high_res;
+            }
+            set
+            {
+                m_keep_high_res = value;
+                UpdateCssClass();
+            }
+        }
+
+        private void UpdateCssClass()
+        {
+            String prefix = m_keep_high_res ? "retina keephr" : "retina";
+            base.CssClass = m_css_class.Length > 0 ? (prefix + " " + m_css_class) : prefix;
+        }
+
+        protected override void LoadViewState(object savedState)
+        {
+            RetinaImageBaseViewState viewstate = (RetinaImageBaseViewState)savedState;
+            base.LoadViewState(viewstate.ImageViewState);
+            this.ImageUrl = viewstate.ImageUrl;
+            m_css_class = viewstate.CssClass;
+            m_keep_high_res = viewstate.KeepHighRes;
+            UpdateCssClass();
+        }
+
+        protected override object SaveViewState()
+        {
+            RetinaImageBaseViewState viewstate = new RetinaImageBaseViewState();
+            viewstate.ImageViewState = base.SaveViewState();
+            viewstate.ImageUrl = this.ImageUrl;
+            viewstate.CssClass = this.CssClass;
+            viewstate.KeepHighRes = this.KeepHighRes;
+            return viewstate;
         }
 
         protected struct ImageRendition : IComparable<ImageRendition>
@@ -101,6 +152,15 @@ namespace PkmnFoundations.Web
             {
                 return Scale.CompareTo(other.Scale);
             }
+        }
+
+        [Serializable()]
+        private struct RetinaImageBaseViewState
+        {
+            public object ImageViewState;
+            public String ImageUrl;
+            public String CssClass;
+            public bool KeepHighRes;
         }
     }
 }

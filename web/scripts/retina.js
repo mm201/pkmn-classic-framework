@@ -2,15 +2,13 @@
 {
     var expires = new Date();
     expires.setDate(expires.getDate() + 21);
-    document.cookie = "pixelRatio=" + scale + "; expires=" + expires;
+    document.cookie = "pixelRatio=" + scale + ";path=/;expires=" + expires;
 }
 setPixelRatioCookie(getPixelRatio());
 
 function getPixelRatio()
 {
-    if (window.rjsPrinting === true)
-        return 4.0;
-    else if (window.devicePixelRatio != undefined)
+    if (window.devicePixelRatio != undefined)
         return window.devicePixelRatio;
     else if (window.screen.deviceXDPI != undefined)
         return window.screen.deviceXDPI / 96.0;
@@ -45,6 +43,25 @@ function checkRetina(element, scale)
 {
     try
     {
+        var data_design_width = element.getAttribute("data-design-width");
+        var data_design_height = element.getAttribute("data-design-height");
+
+        if (data_design_width !== null &&
+            data_design_height !== null)
+        {
+            var scaleX = $(element).width() / parseFloat(data_design_width);
+            var scaleY = $(element).height() / parseFloat(data_design_height);
+            scale *= Math.max(scaleX, scaleY);
+        }
+        else if (data_design_width !== null)
+        {
+            scale *= $(element).width() / parseFloat(data_design_width);
+        }
+        else if (data_design_height !== null)
+        {
+            scale *= $(element).height() / parseFloat(data_design_height);
+        }
+
         var sizes = new Array();
         var x = 0;
         for (x in element.attributes)
@@ -67,22 +84,20 @@ function checkRetina(element, scale)
             best = f;
         }
 
+        if ($(element).hasClass("keephr") && element.retinaActiveScale && element.retinaActiveScale >= best) return;
+
         element.src = element.getAttribute("data-hires-" + best.toString());
+        element.retinaActiveScale = best;
     }
     catch (err)
     {
     }
 }
 
-var retinaLastCheckedScale;
-
 function checkAllRetina()
 {
     var scale = getPixelRatio();
-    if (retinaLastCheckedScale == scale) return;
-    retinaLastCheckedScale = scale;
-
-    $("img.retina").each(function ()
+    $(".retina").each(function ()
     {
         checkRetina(this, scale);
     });
@@ -92,7 +107,7 @@ function checkAllRetina()
 function checkRetinaIn(element)
 {
     var scale = getPixelRatio();
-    $("img.retina", element).each(function ()
+    $(".retina", element).each(function ()
     {
         checkRetina(this, scale);
     });
