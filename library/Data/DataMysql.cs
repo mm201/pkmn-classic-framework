@@ -44,6 +44,91 @@ namespace PkmnFoundations.Data
         }
         #endregion
 
+        #region Transaction helpers
+        public delegate T WithMysqlTransactionDelegate<T>(MySqlTransaction tran, out bool success);
+
+        /// <summary>
+        /// Provides a MySqlConnection and transaction to the command and runs
+        /// it. The transaction always commits unless an exception is thrown.
+        /// </summary>
+        private T WithTransaction<T>(Func<MySqlTransaction, T> command)
+        {
+            using (MySqlConnection db = CreateConnection())
+            {
+                db.Open();
+                using (MySqlTransaction tran = db.BeginTransaction())
+                {
+                    T result = command(tran);
+                    tran.Commit();
+                    return result;
+                }
+            }
+        }
+
+        private void WithTransaction(Action<MySqlTransaction> command)
+        {
+            using (MySqlConnection db = CreateConnection())
+            {
+                db.Open();
+                using (MySqlTransaction tran = db.BeginTransaction())
+                {
+                    command(tran);
+                    tran.Commit();
+                }
+            }
+        }
+
+        /// <summary>
+        /// Provides a MySqlConnection and transaction to the command and runs
+        /// it. The transaction is committed if success is set to true.
+        /// Otherwise it's rolled back.
+        /// </summary>
+        private T WithTransaction<T>(WithMysqlTransactionDelegate<T> command)
+        {
+            using (MySqlConnection db = CreateConnection())
+            {
+                db.Open();
+                using (MySqlTransaction tran = db.BeginTransaction())
+                {
+                    bool success;
+                    T result = command(tran, out success);
+
+                    if (success)
+                        tran.Commit();
+                    else
+                        tran.Rollback();
+
+                    return result;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Provides a MySqlConnection and transaction to the command and runs
+        /// it. The transaction is committed if the function returns true.
+        /// Otherwise it's rolled back.
+        /// </summary>
+        private bool WithTransactionSuccessful(Func<MySqlTransaction, bool> command)
+        {
+            using (MySqlConnection db = CreateConnection())
+            {
+                db.Open();
+                using (MySqlTransaction tran = db.BeginTransaction())
+                {
+                    bool success = command(tran);
+
+                    if (success)
+                        tran.Commit();
+                    else
+                        tran.Rollback();
+
+                    return success;
+                }
+            }
+        }
+
+        #endregion
+
         #region GTS 4
         public GtsRecord4 GtsDataForUser4(MySqlTransaction tran, int pid)
         {
@@ -69,16 +154,7 @@ namespace PkmnFoundations.Data
 
         public override GtsRecord4 GtsDataForUser4(int pid)
         {
-            using (MySqlConnection db = CreateConnection())
-            {
-                db.Open();
-                using (MySqlTransaction tran = db.BeginTransaction())
-                {
-                    GtsRecord4 result = GtsDataForUser4(tran, pid);
-                    tran.Commit();
-                    return result;
-                }
-            }
+            return WithTransaction(tran => GtsDataForUser4(tran, pid));
         }
 
         public GtsRecord4 GtsGetRecord4(MySqlTransaction tran, long tradeId, bool isExchanged, bool allowHistory)
@@ -125,16 +201,7 @@ namespace PkmnFoundations.Data
 
         public override GtsRecord4 GtsGetRecord4(long tradeId, bool isExchanged, bool allowHistory)
         {
-            using (MySqlConnection db = CreateConnection())
-            {
-                db.Open();
-                using (MySqlTransaction tran = db.BeginTransaction())
-                {
-                    GtsRecord4 result = GtsGetRecord4(tran, tradeId, isExchanged, allowHistory);
-                    tran.Commit();
-                    return result;
-                }
-            }
+            return WithTransaction(tran => GtsGetRecord4(tran, tradeId, isExchanged, allowHistory));
         }
 
         public bool GtsDepositPokemon4(MySqlTransaction tran, GtsRecord4 record)
@@ -174,27 +241,11 @@ namespace PkmnFoundations.Data
         {
             if (record.Data.Length != 236) throw new FormatException("pkm data must be 236 bytes.");
             if (record.TrainerName.RawData.Length != 16) throw new FormatException("Trainer name must be 16 bytes.");
-            // note that IsTraded being true in the record is not an error condition
-            // since it might have use later on. You should check for this in the upload handler.
 
-            using (MySqlConnection db = CreateConnection())
-            {
-                db.Open();
-                using (MySqlTransaction tran = db.BeginTransaction())
-                {
-                    if (!GtsDepositPokemon4(tran, record))
-                    {
-                        tran.Rollback();
-                        return false;
-                    }
-
-                    tran.Commit();
-                    return true;
-                }
-            }
+            return WithTransactionSuccessful(tran => GtsDepositPokemon4(tran, record));
         }
 
-        public ulong GtsGetDepositId4(int pid, MySqlTransaction tran)
+        public ulong GtsGetDepositId4(MySqlTransaction tran, int pid)
         {
             object o = tran.ExecuteScalar("SELECT id FROM GtsPokemon4 WHERE pid = @pid " +
                 "ORDER BY IsExchanged DESC, TimeExchanged, TimeDeposited LIMIT 1",
@@ -205,7 +256,7 @@ namespace PkmnFoundations.Data
 
         public bool GtsDeletePokemon4(MySqlTransaction tran, int pid)
         {
-            ulong pkmnId = GtsGetDepositId4(pid, tran);
+            ulong pkmnId = GtsGetDepositId4(tran, pid);
             if (pkmnId == 0) return false;
 
             tran.ExecuteNonQuery("DELETE FROM GtsPokemon4 WHERE id = @id",
@@ -215,136 +266,110 @@ namespace PkmnFoundations.Data
 
         public override bool GtsDeletePokemon4(int pid)
         {
-            using (MySqlConnection db = CreateConnection())
-            {
-                db.Open();
-                using (MySqlTransaction tran = db.BeginTransaction())
-                {
-                    if (!GtsDeletePokemon4(tran, pid))
-                    {
-                        tran.Rollback();
-                        return false;
-                    }
-
-                    tran.Commit();
-                    return true;
-                }
-            }
+            return WithTransactionSuccessful(tran => GtsDeletePokemon4(tran, pid));
         }
 
         public override bool GtsTradePokemon4(int pidSrc, int pidDest)
         {
-            // not needed yet.
-            return false;
+            throw new NotImplementedException();
         }
 
-        public override bool GtsTradePokemon4(GtsRecord4 upload, GtsRecord4 result)
+        public bool GtsTradePokemon4(MySqlTransaction tran, GtsRecord4 upload, GtsRecord4 result)
         {
             GtsRecord4 traded = upload.Clone();
             traded.FlagTraded(result);
 
-            using (MySqlConnection db = CreateConnection())
+            GtsRecord4 resultOrig = GtsDataForUser4(tran, result.PID);
+            if (resultOrig == null || resultOrig != result)
+                // looks like the pokemon was ninja'd between the Exchange and Exchange_finish
+                return false;
+
+            if (!GtsDeletePokemon4(tran, result.PID))
+                return false;
+
+            if (!GtsDepositPokemon4(tran, traded))
+                return false;
+
+            return true;
+        }
+
+        public override bool GtsTradePokemon4(GtsRecord4 upload, GtsRecord4 result)
+        {
+            return WithTransactionSuccessful(tran => GtsTradePokemon4(tran, upload, result));
+        }
+
+        public GtsRecord4[] GtsSearch4(MySqlTransaction tran, int pid, ushort species, Genders gender, byte minLevel, byte maxLevel, byte country, int count)
+        {
+            List<MySqlParameter> _params = new List<MySqlParameter>();
+            String where = "WHERE pid != @pid AND IsExchanged = 0";
+            _params.Add(new MySqlParameter("@pid", pid));
+
+            if (species > 0)
             {
-                db.Open();
-                using (MySqlTransaction tran = db.BeginTransaction())
-                {
-                    GtsRecord4 resultOrig = GtsDataForUser4(tran, result.PID);
-                    if (resultOrig == null || resultOrig != result)
-                    {
-                        // looks like the pokemon was ninja'd between the Exchange and Exchange_finish
-                        tran.Rollback();
-                        return false;
-                    }
-
-                    if (!GtsDeletePokemon4(tran, result.PID))
-                    {
-                        tran.Rollback();
-                        return false;
-                    }
-
-                    if (!GtsDepositPokemon4(tran, traded))
-                    {
-                        tran.Rollback();
-                        return false;
-                    }
-
-                    tran.Commit();
-                    return true;
-                }
+                where += " AND Species = @species";
+                _params.Add(new MySqlParameter("@species", species));
             }
+
+            if (gender != Genders.Either)
+            {
+                where += " AND Gender = @gender";
+                _params.Add(new MySqlParameter("@gender", (byte)gender));
+            }
+
+            if (minLevel > 0 && maxLevel > 0)
+            {
+                where += " AND Level BETWEEN @min_level AND @max_level";
+                _params.Add(new MySqlParameter("@min_level", minLevel));
+                _params.Add(new MySqlParameter("@max_level", maxLevel));
+            }
+            else if (minLevel > 0)
+            {
+                where += " AND Level >= @min_level";
+                _params.Add(new MySqlParameter("@min_level", minLevel));
+            }
+            else if (maxLevel > 0)
+            {
+                where += " AND Level <= @max_level";
+                _params.Add(new MySqlParameter("@max_level", maxLevel));
+            }
+
+            if (country > 0)
+            {
+                where += " AND TrainerCountry = @country";
+                _params.Add(new MySqlParameter("@country", country));
+            }
+
+            String limit = "";
+            if (count > 0)
+            {
+                _params.Add(new MySqlParameter("@count", count));
+                limit = " LIMIT @count";
+            }
+
+            // todo: sort me in creative ways
+            MySqlDataReader reader = (MySqlDataReader)tran.ExecuteReader("SELECT Data, Species, Gender, Level, " +
+                "RequestedSpecies, RequestedGender, RequestedMinLevel, RequestedMaxLevel, " +
+                "Unknown1, TrainerGender, Unknown2, TimeDeposited, TimeExchanged, pid, " +
+                "TrainerName, TrainerOT, TrainerCountry, TrainerRegion, TrainerClass, " +
+                "IsExchanged, TrainerVersion, TrainerLanguage FROM GtsPokemon4 " + where +
+                " ORDER BY TimeDeposited DESC" + limit,
+                _params.ToArray());
+
+            List<GtsRecord4> records;
+            if (count > 0) records = new List<GtsRecord4>(count);
+            else records = new List<GtsRecord4>();
+
+            while (reader.Read())
+            {
+                records.Add(Record4FromReader(reader));
+            }
+
+            return records.ToArray();
         }
 
         public override GtsRecord4[] GtsSearch4(int pid, ushort species, Genders gender, byte minLevel, byte maxLevel, byte country, int count)
         {
-            using (MySqlConnection db = CreateConnection())
-            {
-                List<MySqlParameter> _params = new List<MySqlParameter>();
-                String where = "WHERE pid != @pid AND IsExchanged = 0";
-                _params.Add(new MySqlParameter("@pid", pid));
-
-                if (species > 0)
-                {
-                    where += " AND Species = @species";
-                    _params.Add(new MySqlParameter("@species", species));
-                }
-
-                if (gender != Genders.Either)
-                {
-                    where += " AND Gender = @gender";
-                    _params.Add(new MySqlParameter("@gender", (byte)gender));
-                }
-
-                if (minLevel > 0 && maxLevel > 0)
-                {
-                    where += " AND Level BETWEEN @min_level AND @max_level";
-                    _params.Add(new MySqlParameter("@min_level", minLevel));
-                    _params.Add(new MySqlParameter("@max_level", maxLevel));
-                }
-                else if (minLevel > 0)
-                {
-                    where += " AND Level >= @min_level";
-                    _params.Add(new MySqlParameter("@min_level", minLevel));
-                }
-                else if (maxLevel > 0)
-                {
-                    where += " AND Level <= @max_level";
-                    _params.Add(new MySqlParameter("@max_level", maxLevel));
-                }
-
-                if (country > 0)
-                {
-                    where += " AND TrainerCountry = @country";
-                    _params.Add(new MySqlParameter("@country", country));
-                }
-
-                String limit = "";
-                if (count > 0)
-                {
-                    _params.Add(new MySqlParameter("@count", count));
-                    limit = " LIMIT @count";
-                }
-
-                db.Open();
-                // todo: sort me in creative ways
-                MySqlDataReader reader = (MySqlDataReader)db.ExecuteReader("SELECT Data, Species, Gender, Level, " +
-                    "RequestedSpecies, RequestedGender, RequestedMinLevel, RequestedMaxLevel, " +
-                    "Unknown1, TrainerGender, Unknown2, TimeDeposited, TimeExchanged, pid, " +
-                    "TrainerName, TrainerOT, TrainerCountry, TrainerRegion, TrainerClass, " +
-                    "IsExchanged, TrainerVersion, TrainerLanguage FROM GtsPokemon4 " + where +
-                    " ORDER BY TimeDeposited DESC" + limit,
-                    _params.ToArray());
-
-                List<GtsRecord4> records;
-                if (count > 0) records = new List<GtsRecord4>(count);
-                else records = new List<GtsRecord4>();
-
-                while (reader.Read())
-                {
-                    records.Add(Record4FromReader(reader));
-                }
-
-                return records.ToArray();
-            }
+            return WithTransaction(tran => GtsSearch4(tran, pid, species, gender, minLevel, maxLevel, country, count));
         }
 
         private static GtsRecord4 Record4FromReader(MySqlDataReader reader)
@@ -356,6 +381,7 @@ namespace PkmnFoundations.Data
             result.Data = data;
             data = null;
 
+            // xxx: Shouldn't use column ordinals
             result.Species = reader.GetUInt16(1);
             result.Gender = (Genders)reader.GetByte(2);
             result.Level = reader.GetByte(3);
@@ -418,26 +444,14 @@ namespace PkmnFoundations.Data
             return result;
         }
 
-        public override int GtsAvailablePokemon4()
+        public int GtsAvailablePokemon4(MySqlTransaction tran)
         {
-            using (MySqlConnection db = CreateConnection())
-            {
-                db.Open();
-                return (int)(long)db.ExecuteScalar("SELECT Count(*) FROM GtsPokemon4 WHERE IsExchanged = 0");
-            }
+            return Convert.ToInt32(tran.ExecuteScalar("SELECT Count(*) FROM GtsPokemon4 WHERE IsExchanged = 0"));
         }
 
-        public override void GtsLogTrade4(GtsRecord4 record, DateTime ? timeWithdrawn, int ? partner_pid)
+        public override int GtsAvailablePokemon4()
         {
-            using (MySqlConnection db = CreateConnection())
-            {
-                db.Open();
-                using (MySqlTransaction tran = db.BeginTransaction())
-                {
-                    GtsLogTrade4(tran, record, timeWithdrawn, partner_pid);
-                    tran.Commit();
-                }
-            }
+            return WithTransaction(tran => GtsAvailablePokemon4(tran));
         }
 
         public void GtsLogTrade4(MySqlTransaction tran, GtsRecord4 record, DateTime? timeWithdrawn, int ? partner_pid)
@@ -477,25 +491,18 @@ namespace PkmnFoundations.Data
                 "@trade_id, @partner_pid)",
                 _params2);
         }
+
+        public override void GtsLogTrade4(GtsRecord4 record, DateTime? timeWithdrawn, int? partner_pid)
+        {
+            if (record.Data.Length != 236) throw new FormatException("pkm data must be 236 bytes.");
+            if (record.TrainerName.RawData.Length != 16) throw new FormatException("Trainer name must be 16 bytes.");
+
+            WithTransaction(tran => GtsLogTrade4(tran, record, timeWithdrawn, partner_pid));
+        }
+
         #endregion
 
         #region Battle Tower 4
-        public override ulong BattleTowerUpdateRecord4(BattleTowerRecord4 record)
-        {
-            if (record.BattlesWon > 7) throw new ArgumentException("Battles won can not be greater than 7.");
-
-            using (MySqlConnection db = CreateConnection())
-            {
-                db.Open();
-                using (MySqlTransaction tran = db.BeginTransaction())
-                {
-                    ulong result = BattleTowerUpdateRecord4(tran, record);
-                    tran.Commit();
-                    return result;
-                }
-            }
-        }
-
         private ulong BattleTowerUpdateRecord4(MySqlTransaction tran, BattleTowerRecord4 record)
         {
             if (record.BattlesWon > 7) throw new ArgumentException("Battles won can not be greater than 7.");
@@ -596,6 +603,13 @@ namespace PkmnFoundations.Data
             return pkey;
         }
 
+        public override ulong BattleTowerUpdateRecord4(BattleTowerRecord4 record)
+        {
+            if (record.BattlesWon > 7) throw new ArgumentException("Battles won can not be greater than 7.");
+
+            return WithTransaction(tran => BattleTowerUpdateRecord4(tran, record));
+        }
+
         private void InsertBattleTowerPokemon4(MySqlTransaction tran, BattleTowerPokemon4 pokemon, ulong partyId, byte slot)
         {
             List<MySqlParameter> _params = ParamsFromBattleTowerPokemon4(pokemon);
@@ -673,20 +687,6 @@ namespace PkmnFoundations.Data
             return result;
         }
 
-        public override ulong BattleTowerAddLeader4(BattleTowerRecord4 record)
-        {
-            using (MySqlConnection db = CreateConnection())
-            {
-                db.Open();
-                using (MySqlTransaction tran = db.BeginTransaction())
-                {
-                    ulong result = BattleTowerAddLeader4(tran, record);
-                    tran.Commit();
-                    return result;
-                }
-            }
-        }
-
         private ulong BattleTowerAddLeader4(MySqlTransaction tran, BattleTowerRecord4 record)
         {
             ulong pkey = FindBattleTowerRecord4(tran, record, true);
@@ -723,6 +723,11 @@ namespace PkmnFoundations.Data
             }
 
             return pkey;
+        }
+
+        public override ulong BattleTowerAddLeader4(BattleTowerRecord4 record)
+        {
+            return WithTransaction(tran => BattleTowerAddLeader4(tran, record));
         }
 
         /// <summary>
@@ -772,58 +777,55 @@ namespace PkmnFoundations.Data
             return (ulong)(oPkey ?? 0UL);
         }
 
+        public BattleTowerRecord4[] BattleTowerGetOpponents4(MySqlTransaction tran, int pid, byte rank, byte roomNum)
+        {
+            List<BattleTowerRecord4> records = new List<BattleTowerRecord4>(7);
+            List<ulong> keys = new List<ulong>(7);
+            MySqlDataReader reader = (MySqlDataReader)tran.ExecuteReader(
+                "SELECT id, pid, Name, " +
+                "Version, Language, Country, Region, TrainerID, " +
+                "PhraseLeader, Gender, Unknown2, PhraseChallenged, " +
+                "PhraseWon, PhraseLost, Unknown3, Unknown5 FROM GtsBattleTower4 " +
+                "WHERE Rank = @rank AND RoomNum = @room AND pid != @pid " +
+                "ORDER BY Position LIMIT 7",
+                new MySqlParameter("@rank", rank),
+                new MySqlParameter("@room", roomNum),
+                new MySqlParameter("@pid", pid));
+            while (reader.Read())
+            {
+                BattleTowerRecord4 record = BattleTowerRecord4FromReader(reader);
+                record.Party = new BattleTowerPokemon4[3];
+                records.Add(record);
+                keys.Add(reader.GetUInt64(0));
+            }
+            reader.Close();
+
+            if (records.Count == 0) return new BattleTowerRecord4[0];
+
+            String inClause = String.Join(", ", keys.Select(i => i.ToString()).ToArray());
+            reader = (MySqlDataReader)tran.ExecuteReader("SELECT party_id, " +
+                "Slot, Species, HeldItem, Move1, Move2, Move3, Move4, " +
+                "TrainerID, Personality, IVs, EVs, Unknown1, Language, " +
+                "Ability, Happiness, Nickname FROM GtsBattleTowerPokemon4 " +
+                "WHERE party_id IN (" + inClause + ")");
+            while (reader.Read())
+            {
+                BattleTowerRecord4 record = records[keys.IndexOf(reader.GetUInt64(0))];
+                record.Party[reader.GetByte(1)] = BattleTowerPokemon4FromReader(reader);
+            }
+            reader.Close();
+
+            return Enumerable.Reverse(records).ToArray();
+        }
+
         public override BattleTowerRecord4[] BattleTowerGetOpponents4(int pid, byte rank, byte roomNum)
         {
-            using (MySqlConnection db = CreateConnection())
-            {
-                db.Open();
-                using (MySqlTransaction tran = db.BeginTransaction())
-                {
-                    List<BattleTowerRecord4> records = new List<BattleTowerRecord4>(7);
-                    List<ulong> keys = new List<ulong>(7);
-                    MySqlDataReader reader = (MySqlDataReader)tran.ExecuteReader(
-                        "SELECT id, pid, Name, " +
-                        "Version, Language, Country, Region, TrainerID, " +
-                        "PhraseLeader, Gender, Unknown2, PhraseChallenged, " +
-                        "PhraseWon, PhraseLost, Unknown3, Unknown5 FROM GtsBattleTower4 " +
-                        "WHERE Rank = @rank AND RoomNum = @room AND pid != @pid " +
-                        "ORDER BY Position LIMIT 7",
-                        new MySqlParameter("@rank", rank),
-                        new MySqlParameter("@room", roomNum),
-                        new MySqlParameter("@pid", pid));
-                    while (reader.Read())
-                    {
-                        BattleTowerRecord4 record = BattleTowerRecord4FromReader(reader);
-                        record.Party = new BattleTowerPokemon4[3];
-                        records.Add(record);
-                        keys.Add(reader.GetUInt64(0));
-                    }
-                    reader.Close();
-
-                    if (records.Count == 0) return new BattleTowerRecord4[0];
-
-                    String inClause = String.Join(", ", keys.Select(i => i.ToString()).ToArray());
-                    reader = (MySqlDataReader)tran.ExecuteReader("SELECT party_id, " +
-                        "Slot, Species, HeldItem, Move1, Move2, Move3, Move4, " +
-                        "TrainerID, Personality, IVs, EVs, Unknown1, Language, " +
-                        "Ability, Happiness, Nickname FROM GtsBattleTowerPokemon4 " +
-                        "WHERE party_id IN (" + inClause + ")");
-                    while (reader.Read())
-                    {
-                        BattleTowerRecord4 record = records[keys.IndexOf(reader.GetUInt64(0))];
-                        record.Party[reader.GetByte(1)] = BattleTowerPokemon4FromReader(reader);
-                    }
-                    reader.Close();
-
-                    tran.Commit();
-                    return Enumerable.Reverse(records).ToArray();
-                }
-            }
+            return WithTransaction(tran => BattleTowerGetOpponents4(tran, pid, rank, roomNum));
         }
 
         private BattleTowerRecord4 BattleTowerRecord4FromReader(MySqlDataReader reader)
         {
-            // todo: Stop using ordinals everywhere.
+            // xxx: Stop using ordinals everywhere.
             BattleTowerRecord4 result = new BattleTowerRecord4();
             result.PID = reader.GetInt32(1);
 
@@ -871,48 +873,37 @@ namespace PkmnFoundations.Data
             return result;
         }
 
+        public BattleTowerProfile4[] BattleTowerGetLeaders4(MySqlTransaction tran, byte rank, byte roomNum)
+        {
+            List<BattleTowerProfile4> profiles = new List<BattleTowerProfile4>(30);
+            MySqlDataReader reader = (MySqlDataReader)tran.ExecuteReader(
+                "SELECT id, pid, Name, " +
+                "Version, Language, Country, Region, TrainerID, " +
+                "PhraseLeader, Gender, Unknown2 FROM GtsBattleTowerLeaders4 " +
+                "WHERE Rank = @rank AND RoomNum = @room " +
+                "ORDER BY TimeUpdated DESC, id LIMIT 30",
+                new MySqlParameter("@rank", rank),
+                new MySqlParameter("@room", roomNum));
+            while (reader.Read())
+            {
+                profiles.Add(BattleTowerRecord4FromReader(reader).Profile);
+            }
+            reader.Close();
+
+            return profiles.ToArray();
+        }
+
         public override BattleTowerProfile4[] BattleTowerGetLeaders4(byte rank, byte roomNum)
         {
-            using (MySqlConnection db = CreateConnection())
-            {
-                db.Open();
-                using (MySqlTransaction tran = db.BeginTransaction())
-                {
-                    List<BattleTowerProfile4> profiles = new List<BattleTowerProfile4>(30);
-                    MySqlDataReader reader = (MySqlDataReader)tran.ExecuteReader(
-                        "SELECT id, pid, Name, " +
-                        "Version, Language, Country, Region, TrainerID, " +
-                        "PhraseLeader, Gender, Unknown2 FROM GtsBattleTowerLeaders4 " +
-                        "WHERE Rank = @rank AND RoomNum = @room " +
-                        "ORDER BY TimeUpdated DESC, id LIMIT 30",
-                        new MySqlParameter("@rank", rank),
-                        new MySqlParameter("@room", roomNum));
-                    while (reader.Read())
-                    {
-                        profiles.Add(BattleTowerRecord4FromReader(reader).Profile);
-                    }
-                    reader.Close();
-
-                    tran.Commit();
-                    return profiles.ToArray();
-                }
-            }
+            return WithTransaction(tran => BattleTowerGetLeaders4(tran, rank, roomNum));
         }
+
         #endregion
 
         #region Wi-fi Plaza
         public override TrainerProfilePlaza PlazaGetProfile(int pid)
         {
-            using (MySqlConnection db = CreateConnection())
-            {
-                db.Open();
-                using (MySqlTransaction tran = db.BeginTransaction())
-                {
-                    TrainerProfilePlaza result = PlazaGetProfile(tran, pid);
-                    tran.Commit();
-                    return result;
-                }
-            }
+            return WithTransaction(tran => PlazaGetProfile(tran, pid));
         }
 
         public TrainerProfilePlaza PlazaGetProfile(MySqlTransaction tran, int pid)
@@ -933,16 +924,7 @@ namespace PkmnFoundations.Data
 
         public override bool PlazaSetProfile(TrainerProfilePlaza profile)
         {
-            using (MySqlConnection db = CreateConnection())
-            {
-                db.Open();
-                using (MySqlTransaction tran = db.BeginTransaction())
-                {
-                    bool result = PlazaSetProfile(tran, profile);
-                    tran.Commit();
-                    return result;
-                }
-            }
+            return WithTransaction(tran => PlazaSetProfile(tran, profile));
         }
 
         public bool PlazaSetProfile(MySqlTransaction tran, TrainerProfilePlaza profile)
@@ -982,23 +964,13 @@ namespace PkmnFoundations.Data
                     "@name, 1, UTC_TIMESTAMP(), UTC_TIMESTAMP())", _params) > 0;
             }
         }
+
         #endregion
 
         #region Other Gamestats 4
         public override bool GamestatsBumpProfile4(int pid)
         {
-            // todo: I really need a WithTran helper
-            // WithTransaction(tran => GamestatsBumpProfile4(tran, pid));
-            using (MySqlConnection db = CreateConnection())
-            {
-                db.Open();
-                using (MySqlTransaction tran = db.BeginTransaction())
-                {
-                    bool result = GamestatsBumpProfile4(tran, pid);
-                    tran.Commit();
-                    return result;
-                }
-            }
+            return WithTransaction(tran => GamestatsBumpProfile4(tran, pid));
         }
 
         public bool GamestatsBumpProfile4(MySqlTransaction tran, int pid)
@@ -1020,16 +992,7 @@ namespace PkmnFoundations.Data
 
         public override bool GamestatsSetProfile4(TrainerProfile4 profile)
         {
-            using (MySqlConnection db = CreateConnection())
-            {
-                db.Open();
-                using (MySqlTransaction tran = db.BeginTransaction())
-                {
-                    bool result = GamestatsSetProfile4(tran, profile);
-                    tran.Commit();
-                    return result;
-                }
-            }
+            return WithTransaction(tran => GamestatsSetProfile4(tran, profile));
         }
 
         public bool GamestatsSetProfile4(MySqlTransaction tran, TrainerProfile4 profile)
