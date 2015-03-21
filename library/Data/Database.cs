@@ -77,6 +77,7 @@ namespace PkmnFoundations.Data
         public abstract int GtsAvailablePokemon4();
 
         public abstract void GtsLogTrade4(GtsRecord4 record, DateTime ? timeWithdrawn, int ? partner_pid);
+        public abstract void GtsSetLastSearch4(int pid);
         #endregion
 
         #region Battle Tower 4
@@ -113,6 +114,7 @@ namespace PkmnFoundations.Data
         public abstract int GtsAvailablePokemon5();
 
         public abstract void GtsLogTrade5(GtsRecord5 record, DateTime ? timeWithdrawn, int ? partner_pid);
+        public abstract void GtsSetLastSearch5(int pid);
         #endregion
 
         #region Other Gamestats 5

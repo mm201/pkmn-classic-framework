@@ -335,6 +335,8 @@ namespace PkmnFoundations.GTS
                         response.Write(record.Save(), 0, 296);
                     }
 
+                    Database.Instance.GtsSetLastSearch5(pid);
+
                 } break;
 
                 // the exchange request uploads a record of the exchangee pokemon
