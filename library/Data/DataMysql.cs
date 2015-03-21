@@ -503,7 +503,8 @@ namespace PkmnFoundations.Data
         public void GtsSetLastSearch4(MySqlTransaction tran, int pid)
         {
             tran.ExecuteNonQuery("UPDATE GtsProfiles4 SET TimeLastSearch = " +
-                "GETUTCDATE() WHERE pid = @pid", new MySqlParameter("@pid", pid));
+                "@now WHERE pid = @pid", new MySqlParameter("@now", DateTime.UtcNow),
+                new MySqlParameter("@pid", pid));
         }
 
         public override void GtsSetLastSearch4(int pid)
@@ -1437,7 +1438,8 @@ namespace PkmnFoundations.Data
         public void GtsSetLastSearch5(MySqlTransaction tran, int pid)
         {
             tran.ExecuteNonQuery("UPDATE GtsProfiles5 SET TimeLastSearch = " +
-                "GETUTCDATE() WHERE pid = @pid", new MySqlParameter("@pid", pid));
+                "@now WHERE pid = @pid", new MySqlParameter("@now", DateTime.UtcNow),
+                new MySqlParameter("@pid", pid));
         }
 
         public override void GtsSetLastSearch5(int pid)
