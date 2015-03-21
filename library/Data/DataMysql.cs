@@ -512,6 +512,19 @@ namespace PkmnFoundations.Data
             WithTransaction(tran => GtsSetLastSearch4(tran, pid));
         }
 
+        public DateTime ? GtsGetLastSearch4(MySqlTransaction tran, int pid)
+        {
+            object result = tran.ExecuteScalar("SELECT TimeLastSearch " +
+                "FROM GtsProfiles4 WHERE pid = @pid", new MySqlParameter("@pid", pid));
+            if (result == null || result is DBNull) return null;
+            return (DateTime)result;
+        }
+
+        public override DateTime ? GtsGetLastSearch4(int pid)
+        {
+            return WithTransaction(tran => GtsGetLastSearch4(tran, pid));
+        }
+
         #endregion
 
         #region Battle Tower 4
@@ -1445,6 +1458,19 @@ namespace PkmnFoundations.Data
         public override void GtsSetLastSearch5(int pid)
         {
             WithTransaction(tran => GtsSetLastSearch5(tran, pid));
+        }
+
+        public DateTime? GtsGetLastSearch5(MySqlTransaction tran, int pid)
+        {
+            object result = tran.ExecuteScalar("SELECT TimeLastSearch " +
+                "FROM GtsProfiles5 WHERE pid = @pid", new MySqlParameter("@pid", pid));
+            if (result == null || result is DBNull) return null;
+            return (DateTime)result;
+        }
+
+        public override DateTime? GtsGetLastSearch5(int pid)
+        {
+            return WithTransaction(tran => GtsGetLastSearch5(tran, pid));
         }
 
         #endregion
