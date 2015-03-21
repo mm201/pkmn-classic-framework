@@ -2260,58 +2260,53 @@ namespace PkmnFoundations.Data
         #endregion
 
         #region Global Terminal 5
+        public ulong MusicalUpload5(MySqlTransaction tran, MusicalRecord5 record)
+        {
+            long exists = (long)tran.ExecuteScalar("SELECT EXISTS(SELECT * " +
+                "FROM TerminalMusicals5 WHERE md5 = unhex(md5(@data)) " +
+                "AND Data = @data)",
+                new MySqlParameter("@data", record.Data));
+            if (exists != 0) return 0;
+
+            if (record.SerialNumber == 0)
+            {
+                ulong serial = Convert.ToUInt64(tran.ExecuteScalar("INSERT INTO TerminalMusicals5 " +
+                    "(pid, Data, md5, TimeAdded, ParseVersion) " +
+                    "VALUES (@pid, @data, unhex(md5(@data)), " +
+                    "UTC_TIMESTAMP(), 1); " +
+                    "SELECT LAST_INSERT_ID()",
+                    new MySqlParameter("@pid", record.PID),
+                    new MySqlParameter("@data", record.Data)
+                    ));
+
+                // todo: make a proc to insert both musical and party.
+                InsertMusicalParticipants5(record, serial, tran);
+
+                return serial;
+            }
+            else
+            {
+                int rows = tran.ExecuteNonQuery("INSERT INTO TerminalMusicals5 " +
+                    "(pid, SerialNumber, Data, md5, TimeAdded, ParseVersion) " +
+                    "VALUES (@pid, @serial, @data, unhex(md5(@data)), " +
+                    "UTC_TIMESTAMP(), 1)",
+                    new MySqlParameter("@pid", record.PID),
+                    new MySqlParameter("@serial", record.SerialNumber),
+                    new MySqlParameter("@data", record.Data)
+                    );
+
+                if (rows == 0) return 0;
+
+                InsertMusicalParticipants5(record, record.SerialNumber, tran);
+
+                return record.SerialNumber;
+            }
+        }
+
         public override ulong MusicalUpload5(MusicalRecord5 record)
         {
             if (record.Data.Length != 560) throw new ArgumentException();
-
-            using (MySqlConnection db = CreateConnection())
-            {
-                db.Open();
-                using (MySqlTransaction tran = db.BeginTransaction())
-                {
-                    long exists = (long)tran.ExecuteScalar("SELECT EXISTS(SELECT * " +
-                        "FROM TerminalMusicals5 WHERE md5 = unhex(md5(@data)) " +
-                        "AND Data = @data)",
-                        new MySqlParameter("@data", record.Data));
-                    if (exists != 0) return 0;
-
-                    if (record.SerialNumber == 0)
-                    {
-                        ulong serial = Convert.ToUInt64(tran.ExecuteScalar("INSERT INTO TerminalMusicals5 " +
-                            "(pid, Data, md5, TimeAdded, ParseVersion) " +
-                            "VALUES (@pid, @data, unhex(md5(@data)), " +
-                            "UTC_TIMESTAMP(), 1); " +
-                            "SELECT LAST_INSERT_ID()",
-                            new MySqlParameter("@pid", record.PID),
-                            new MySqlParameter("@data", record.Data)
-                            ));
-
-                        // todo: make a proc to insert both musical and party.
-                        InsertMusicalParticipants5(record, serial, tran);
-
-                        tran.Commit();
-                        return serial;
-                    }
-                    else
-                    {
-                        int rows = tran.ExecuteNonQuery("INSERT INTO TerminalMusicals5 " +
-                            "(pid, SerialNumber, Data, md5, TimeAdded, ParseVersion) " +
-                            "VALUES (@pid, @serial, @data, unhex(md5(@data)), " +
-                            "UTC_TIMESTAMP(), 1)",
-                            new MySqlParameter("@pid", record.PID),
-                            new MySqlParameter("@serial", record.SerialNumber),
-                            new MySqlParameter("@data", record.Data)
-                            );
-
-                        if (rows == 0) return 0;
-
-                        InsertMusicalParticipants5(record, record.SerialNumber, tran);
-
-                        tran.Commit();
-                        return record.SerialNumber;
-                    }
-                }
-            }
+            return WithTransaction(tran => MusicalUpload5(tran, record));
         }
 
         private void InsertMusicalParticipants5(MusicalRecord5 record, ulong SerialNumber, MySqlTransaction tran)
@@ -2334,29 +2329,28 @@ namespace PkmnFoundations.Data
             }
         }
 
+        public MusicalRecord5[] MusicalSearch5(MySqlTransaction tran, ushort species, int count)
+        {
+            List<MusicalRecord5> results = new List<MusicalRecord5>(count);
+            MySqlDataReader reader = (MySqlDataReader)tran.ExecuteReader("SELECT pid, " +
+                "SerialNumber, Data FROM TerminalMusicals5 " +
+                "WHERE EXISTS(SELECT * FROM TerminalMusicalPokemon5 " +
+                "WHERE musical_id = TerminalMusicals5.SerialNumber AND Species = @species) " +
+                "ORDER BY TimeAdded DESC LIMIT @count",
+                new MySqlParameter("@species", species),
+                new MySqlParameter("@count", count));
+            while (reader.Read())
+            {
+                results.Add(Musical5FromReader(reader));
+            }
+
+            reader.Close();
+            return results.ToArray();
+        }
+
         public override MusicalRecord5[] MusicalSearch5(ushort species, int count)
         {
-            using (MySqlConnection db = CreateConnection())
-            {
-                db.Open();
-
-                List<MusicalRecord5> results = new List<MusicalRecord5>(count);
-                MySqlDataReader reader = (MySqlDataReader)db.ExecuteReader("SELECT pid, " +
-                    "SerialNumber, Data FROM TerminalMusicals5 " +
-                    "WHERE EXISTS(SELECT * FROM TerminalMusicalPokemon5 " +
-                    "WHERE musical_id = TerminalMusicals5.SerialNumber AND Species = @species) " +
-                    "ORDER BY TimeAdded DESC LIMIT @count",
-                    new MySqlParameter("@species", species),
-                    new MySqlParameter("@count", count));
-                while (reader.Read())
-                {
-                    results.Add(Musical5FromReader(reader));
-                }
-
-                reader.Close();
-                db.Close();
-                return results.ToArray();
-            }
+            return WithTransaction(tran => MusicalSearch5(tran, species, count));
         }
 
         private MusicalRecord5 Musical5FromReader(MySqlDataReader reader)
@@ -2367,85 +2361,83 @@ namespace PkmnFoundations.Data
             return new MusicalRecord5(reader.GetInt32(0), reader.GetUInt64(1), data);
         }
 
-        public override ulong BattleVideoUpload5(BattleVideoRecord5 record)
+        public ulong BattleVideoUpload5(MySqlTransaction tran, BattleVideoRecord5 record)
         {
             if (record.Data.Length != 6112) throw new ArgumentException();
             if (record.Header.Data.Length != 196) throw new ArgumentException();
 
-            using (MySqlConnection db = CreateConnection())
+            long exists = (long)tran.ExecuteScalar("SELECT EXISTS(SELECT * " +
+                "FROM TerminalBattleVideos5 WHERE md5 = unhex(md5(CONCAT(@header, @data))) " +
+                "AND Data = @data AND Header = @header)",
+                new MySqlParameter("@header", record.Header.Data),
+                new MySqlParameter("@data", record.Data));
+            if (exists != 0) return 0;
+
+            if (record.SerialNumber == 0)
             {
-                db.Open();
-                using (MySqlTransaction tran = db.BeginTransaction())
-                {
-                    long exists = (long)tran.ExecuteScalar("SELECT EXISTS(SELECT * " +
-                        "FROM TerminalBattleVideos5 WHERE md5 = unhex(md5(CONCAT(@header, @data))) " +
-                        "AND Data = @data AND Header = @header)",
-                        new MySqlParameter("@header", record.Header.Data),
-                        new MySqlParameter("@data", record.Data));
-                    if (exists != 0) return 0;
+                ulong key = Convert.ToUInt64(tran.ExecuteScalar("INSERT INTO TerminalBattleVideos5 " +
+                    "(pid, Header, Data, md5, TimeAdded, ParseVersion, Streak, TrainerName, " +
+                    "Metagame, Country, Region) " +
+                    "VALUES (@pid, @header, @data, unhex(md5(CONCAT(@header, @data))), " +
+                    "UTC_TIMESTAMP(), 1, @streak, @trainer, @metagame, @country, @region); " +
+                    "SELECT LAST_INSERT_ID()",
+                    new MySqlParameter("@pid", record.PID),
+                    new MySqlParameter("@header", record.Header.Data),
+                    new MySqlParameter("@data", record.Data),
+                    new MySqlParameter("@streak", record.Header.Streak),
+                    new MySqlParameter("@trainer", record.Header.TrainerName),
+                    new MySqlParameter("@metagame", (byte)record.Header.Metagame),
+                    new MySqlParameter("@country", (byte)record.Header.Country),
+                    new MySqlParameter("@region", (byte)record.Header.Region)
+                    ));
+                ulong serial = BattleVideoHeader4.KeyToSerial(key);
 
-                    if (record.SerialNumber == 0)
-                    {
-                        ulong key = Convert.ToUInt64(tran.ExecuteScalar("INSERT INTO TerminalBattleVideos5 " +
-                            "(pid, Header, Data, md5, TimeAdded, ParseVersion, Streak, TrainerName, " +
-                            "Metagame, Country, Region) " +
-                            "VALUES (@pid, @header, @data, unhex(md5(CONCAT(@header, @data))), " +
-                            "UTC_TIMESTAMP(), 1, @streak, @trainer, @metagame, @country, @region); " +
-                            "SELECT LAST_INSERT_ID()",
-                            new MySqlParameter("@pid", record.PID),
-                            new MySqlParameter("@header", record.Header.Data),
-                            new MySqlParameter("@data", record.Data),
-                            new MySqlParameter("@streak", record.Header.Streak),
-                            new MySqlParameter("@trainer", record.Header.TrainerName),
-                            new MySqlParameter("@metagame", (byte)record.Header.Metagame),
-                            new MySqlParameter("@country", (byte)record.Header.Country),
-                            new MySqlParameter("@region", (byte)record.Header.Region)
-                            ));
-                        ulong serial = BattleVideoHeader4.KeyToSerial(key);
+                tran.ExecuteNonQuery("UPDATE TerminalBattleVideos5 SET " +
+                    "SerialNumber = @serial WHERE id = @key",
+                    new MySqlParameter("@serial", serial),
+                    new MySqlParameter("@key", key));
 
-                        tran.ExecuteNonQuery("UPDATE TerminalBattleVideos5 SET " +
-                            "SerialNumber = @serial WHERE id = @key",
-                            new MySqlParameter("@serial", serial),
-                            new MySqlParameter("@key", key));
+                // todo: make a proc to insert both video and party.
+                InsertBattleVideoParty5(record.Header, key, tran);
 
-                        // todo: make a proc to insert both video and party.
-                        InsertBattleVideoParty5(record.Header, key, tran);
-
-                        tran.Commit();
-                        return serial;
-                    }
-                    else
-                    {
-                        ulong key = (ulong)BattleVideoHeader4.SerialToKey(record.SerialNumber);
-
-                        int rows = tran.ExecuteNonQuery("INSERT INTO TerminalBattleVideos5 " +
-                            "(id, pid, SerialNumber, Header, Data, md5, TimeAdded, " +
-                            "ParseVersion, Streak, TrainerName, " +
-                            "Metagame, Country, Region) " +
-                            "VALUES (@key, @pid, @serial, @header, @data, " +
-                            "unhex(md5(CONCAT(@header, @data))), " +
-                            "UTC_TIMESTAMP(), 1, @streak, @trainer, @metagame, @country, @region)",
-                            new MySqlParameter("@key", key),
-                            new MySqlParameter("@pid", record.PID),
-                            new MySqlParameter("@serial", record.SerialNumber),
-                            new MySqlParameter("@header", record.Header.Data),
-                            new MySqlParameter("@data", record.Data),
-                            new MySqlParameter("@streak", record.Header.Streak),
-                            new MySqlParameter("@trainer", record.Header.TrainerName),
-                            new MySqlParameter("@metagame", (byte)record.Header.Metagame),
-                            new MySqlParameter("@country", (byte)record.Header.Country),
-                            new MySqlParameter("@region", (byte)record.Header.Region)
-                            );
-
-                        if (rows == 0) return 0;
-
-                        InsertBattleVideoParty5(record.Header, key, tran);
-
-                        tran.Commit();
-                        return record.SerialNumber;
-                    }
-                }
+                return serial;
             }
+            else
+            {
+                ulong key = (ulong)BattleVideoHeader4.SerialToKey(record.SerialNumber);
+
+                int rows = tran.ExecuteNonQuery("INSERT INTO TerminalBattleVideos5 " +
+                    "(id, pid, SerialNumber, Header, Data, md5, TimeAdded, " +
+                    "ParseVersion, Streak, TrainerName, " +
+                    "Metagame, Country, Region) " +
+                    "VALUES (@key, @pid, @serial, @header, @data, " +
+                    "unhex(md5(CONCAT(@header, @data))), " +
+                    "UTC_TIMESTAMP(), 1, @streak, @trainer, @metagame, @country, @region)",
+                    new MySqlParameter("@key", key),
+                    new MySqlParameter("@pid", record.PID),
+                    new MySqlParameter("@serial", record.SerialNumber),
+                    new MySqlParameter("@header", record.Header.Data),
+                    new MySqlParameter("@data", record.Data),
+                    new MySqlParameter("@streak", record.Header.Streak),
+                    new MySqlParameter("@trainer", record.Header.TrainerName),
+                    new MySqlParameter("@metagame", (byte)record.Header.Metagame),
+                    new MySqlParameter("@country", (byte)record.Header.Country),
+                    new MySqlParameter("@region", (byte)record.Header.Region)
+                    );
+
+                if (rows == 0) return 0;
+
+                InsertBattleVideoParty5(record.Header, key, tran);
+
+                return record.SerialNumber;
+            }
+        }
+
+        public override ulong BattleVideoUpload5(BattleVideoRecord5 record)
+        {
+            if (record.Data.Length != 6112) throw new ArgumentException();
+            if (record.Header.Data.Length != 196) throw new ArgumentException();
+            return WithTransaction(tran => BattleVideoUpload5(tran, record));
         }
 
         private void InsertBattleVideoParty5(BattleVideoHeader5 header, ulong key, MySqlTransaction tran)
@@ -2468,107 +2460,106 @@ namespace PkmnFoundations.Data
             }
         }
 
+        public BattleVideoHeader5[] BattleVideoSearch5(MySqlTransaction tran, ushort species, BattleVideoRankings5 ranking, BattleVideoMetagames5 metagame, byte country, byte region, int count)
+        {
+            List<MySqlParameter> _params = new List<MySqlParameter>();
+            String where = "";
+            String sort = "";
+            bool hasSearch = false;
+
+            if (ranking == BattleVideoRankings5.None)
+            {
+                if (species != 0xffff)
+                {
+                    where += (hasSearch ? " AND " : " WHERE ") +
+                        "EXISTS(SELECT * FROM TerminalBattleVideoPokemon5 " +
+                        "WHERE video_id = TerminalBattleVideos5.id AND Species = @species)";
+                    _params.Add(new MySqlParameter("@species", species));
+                    hasSearch = true;
+                }
+
+                if (metagame == BattleVideoMetagames5.RandomMatchupSingle)
+                {
+                    where += (hasSearch ? " AND " : " WHERE ") + "Metagame IN (40, 104)";
+                    hasSearch = true;
+                }
+                else if (metagame == BattleVideoMetagames5.RandomMatchupDouble)
+                {
+                    where += (hasSearch ? " AND " : " WHERE ") + "Metagame IN (41, 105)";
+                    hasSearch = true;
+                }
+                else if (metagame == BattleVideoMetagames5.RandomMatchupTriple)
+                {
+                    where += (hasSearch ? " AND " : " WHERE ") + "Metagame IN (42, 106)";
+                    hasSearch = true;
+                }
+                else if (metagame == BattleVideoMetagames5.RandomMatchupRotation)
+                {
+                    where += (hasSearch ? " AND " : " WHERE ") + "Metagame IN (43, 107)";
+                    hasSearch = true;
+                }
+                else if (metagame == BattleVideoMetagames5.SearchBattleCompetition)
+                {
+                    where += (hasSearch ? " AND " : " WHERE ") + "Metagame BETWEEN 56 AND 59";
+                    hasSearch = true;
+                }
+                else if (metagame != BattleVideoMetagames5.SearchNone)
+                {
+                    where += (hasSearch ? " AND " : " WHERE ") + "Metagame = @metagame";
+                    _params.Add(new MySqlParameter("@metagame", (byte)metagame));
+                    hasSearch = true;
+                }
+
+                if (country != 0xff)
+                {
+                    where += (hasSearch ? " AND " : " WHERE ") + "Country = @country";
+                    _params.Add(new MySqlParameter("@country", country));
+                    hasSearch = true;
+                }
+
+                if (region != 0xff)
+                {
+                    where += (hasSearch ? " AND " : " WHERE ") + "Region = @region";
+                    _params.Add(new MySqlParameter("@region", region));
+                }
+
+                sort = " ORDER BY TimeAdded DESC, id DESC";
+            }
+            else if (ranking == BattleVideoRankings5.LinkBattles)
+            {
+                // todo: sort by .. something.
+                where = " WHERE NOT (Metagame BETWEEN 0 AND 4)";
+                sort = " ORDER BY Streak DESC, TimeAdded DESC, id DESC";
+            }
+            else if (ranking == BattleVideoRankings5.SubwayBattles)
+            {
+                where = " WHERE Metagame BETWEEN 0 AND 4";
+                sort = " ORDER BY Streak DESC, TimeAdded DESC, id DESC";
+            }
+            else
+            {
+                sort = " ORDER BY TimeAdded DESC, id DESC";
+            }
+
+            _params.Add(new MySqlParameter("@count", count));
+
+            List<BattleVideoHeader5> results = new List<BattleVideoHeader5>(count);
+            MySqlDataReader reader = (MySqlDataReader)tran.ExecuteReader("SELECT pid, " +
+                "SerialNumber, Header FROM TerminalBattleVideos5" + where +
+                sort + " LIMIT @count",
+                _params.ToArray());
+            while (reader.Read())
+            {
+                results.Add(BattleVideoHeader5FromReader(reader));
+            }
+
+            reader.Close();
+            return results.ToArray();
+        }
+
         public override BattleVideoHeader5[] BattleVideoSearch5(ushort species, BattleVideoRankings5 ranking, BattleVideoMetagames5 metagame, byte country, byte region, int count)
         {
-            using (MySqlConnection db = CreateConnection())
-            {
-                List<MySqlParameter> _params = new List<MySqlParameter>();
-                String where = "";
-                String sort = "";
-                bool hasSearch = false;
-
-                if (ranking == BattleVideoRankings5.None)
-                {
-                    if (species != 0xffff)
-                    {
-                        where += (hasSearch ? " AND " : " WHERE ") +
-                            "EXISTS(SELECT * FROM TerminalBattleVideoPokemon5 " +
-                            "WHERE video_id = TerminalBattleVideos5.id AND Species = @species)";
-                        _params.Add(new MySqlParameter("@species", species));
-                        hasSearch = true;
-                    }
-
-                    if (metagame == BattleVideoMetagames5.RandomMatchupSingle)
-                    {
-                        where += (hasSearch ? " AND " : " WHERE ") + "Metagame IN (40, 104)";
-                        hasSearch = true;
-                    }
-                    else if (metagame == BattleVideoMetagames5.RandomMatchupDouble)
-                    {
-                        where += (hasSearch ? " AND " : " WHERE ") + "Metagame IN (41, 105)";
-                        hasSearch = true;
-                    }
-                    else if (metagame == BattleVideoMetagames5.RandomMatchupTriple)
-                    {
-                        where += (hasSearch ? " AND " : " WHERE ") + "Metagame IN (42, 106)";
-                        hasSearch = true;
-                    }
-                    else if (metagame == BattleVideoMetagames5.RandomMatchupRotation)
-                    {
-                        where += (hasSearch ? " AND " : " WHERE ") + "Metagame IN (43, 107)";
-                        hasSearch = true;
-                    }
-                    else if (metagame == BattleVideoMetagames5.SearchBattleCompetition)
-                    {
-                        where += (hasSearch ? " AND " : " WHERE ") + "Metagame BETWEEN 56 AND 59";
-                        hasSearch = true;
-                    }
-                    else if (metagame != BattleVideoMetagames5.SearchNone)
-                    {
-                        where += (hasSearch ? " AND " : " WHERE ") + "Metagame = @metagame";
-                        _params.Add(new MySqlParameter("@metagame", (byte)metagame));
-                        hasSearch = true;
-                    }
-
-                    if (country != 0xff)
-                    {
-                        where += (hasSearch ? " AND " : " WHERE ") + "Country = @country";
-                        _params.Add(new MySqlParameter("@country", country));
-                        hasSearch = true;
-                    }
-
-                    if (region != 0xff)
-                    {
-                        where += (hasSearch ? " AND " : " WHERE ") + "Region = @region";
-                        _params.Add(new MySqlParameter("@region", region));
-                    }
-
-                    sort = " ORDER BY TimeAdded DESC, id DESC";
-                }
-                else if (ranking == BattleVideoRankings5.LinkBattles)
-                {
-                    // todo: sort by .. something.
-                    where = " WHERE NOT (Metagame BETWEEN 0 AND 4)";
-                    sort = " ORDER BY Streak DESC, TimeAdded DESC, id DESC";
-                }
-                else if (ranking == BattleVideoRankings5.SubwayBattles)
-                {
-                    where = " WHERE Metagame BETWEEN 0 AND 4";
-                    sort = " ORDER BY Streak DESC, TimeAdded DESC, id DESC";
-                }
-                else
-                {
-                    sort = " ORDER BY TimeAdded DESC, id DESC";
-                }
-
-                _params.Add(new MySqlParameter("@count", count));
-
-                db.Open();
-
-                List<BattleVideoHeader5> results = new List<BattleVideoHeader5>(count);
-                MySqlDataReader reader = (MySqlDataReader)db.ExecuteReader("SELECT pid, " +
-                    "SerialNumber, Header FROM TerminalBattleVideos5" + where +
-                    sort + " LIMIT @count",
-                    _params.ToArray());
-                while (reader.Read())
-                {
-                    results.Add(BattleVideoHeader5FromReader(reader));
-                }
-
-                reader.Close();
-                db.Close();
-                return results.ToArray();
-            }
+            return WithTransaction(tran => BattleVideoSearch5(tran, species, ranking, metagame, country, region, count));
         }
 
         private BattleVideoHeader5 BattleVideoHeader5FromReader(MySqlDataReader reader)
@@ -2579,24 +2570,25 @@ namespace PkmnFoundations.Data
             return new BattleVideoHeader5(reader.GetInt32(0), reader.GetUInt64(1), data);
         }
 
-        public override BattleVideoRecord5 BattleVideoGet5(ulong serial, bool incrementViews = false)
+        public BattleVideoRecord5 BattleVideoGet5(MySqlTransaction tran, ulong serial, bool incrementViews = false)
         {
             String update = incrementViews ? "UPDATE TerminalBattleVideos5 " +
                 "SET Views = Views + 1 WHERE SerialNumber = @serial; " 
                 : "";
 
-            using (MySqlConnection db = CreateConnection())
-            {
-                db.Open();
-                MySqlDataReader reader = (MySqlDataReader)db.ExecuteReader(update + "SELECT pid, " +
-                    "SerialNumber, Header, Data FROM TerminalBattleVideos5 " +
-                    "WHERE SerialNumber = @serial",
-                    new MySqlParameter("@serial", serial));
+            MySqlDataReader reader = (MySqlDataReader)tran.ExecuteReader(update + "SELECT pid, " +
+                "SerialNumber, Header, Data FROM TerminalBattleVideos5 " +
+                "WHERE SerialNumber = @serial",
+                new MySqlParameter("@serial", serial));
 
-                if (reader.Read())
-                    return BattleVideo5FromReader(reader);
-                else return null;
-            }
+            if (reader.Read())
+                return BattleVideo5FromReader(reader);
+            else return null;
+        }
+
+        public override BattleVideoRecord5 BattleVideoGet5(ulong serial, bool incrementViews = false)
+        {
+            return WithTransaction(tran => BattleVideoGet5(tran, serial, incrementViews));
         }
 
         private BattleVideoRecord5 BattleVideo5FromReader(MySqlDataReader reader)
@@ -2608,28 +2600,28 @@ namespace PkmnFoundations.Data
             return new BattleVideoRecord5(header.PID, header.SerialNumber, header, data);
         }
 
+        public bool BattleVideoFlagSaved5(MySqlTransaction tran, ulong serial)
+        {
+            return tran.ExecuteNonQuery("UPDATE TerminalBattleVideos5 " +
+                "SET Saves = Saves + 1 WHERE SerialNumber = @serial",
+                new MySqlParameter("@serial", serial)) > 0;
+        }
+
         public override bool BattleVideoFlagSaved5(ulong serial)
         {
-            using (MySqlConnection db = CreateConnection())
-            {
-                db.Open();
-                int results = db.ExecuteNonQuery("UPDATE TerminalBattleVideos5 " +
-                    "SET Saves = Saves + 1 WHERE SerialNumber = @serial",
-                    new MySqlParameter("@serial", serial));
-                db.Close();
+            return WithTransaction(tran => BattleVideoFlagSaved5(tran, serial));
+        }
 
-                return results > 0;
-            }
+        public ulong BattleVideoCount5(MySqlTransaction tran)
+        {
+            return Convert.ToUInt64(tran.ExecuteScalar("SELECT Count(*) FROM TerminalBattleVideos5"));
         }
 
         public override ulong BattleVideoCount5()
         {
-            using (MySqlConnection db = CreateConnection())
-            {
-                db.Open();
-                return Convert.ToUInt64(db.ExecuteScalar("SELECT Count(*) FROM TerminalBattleVideos5"));
-            }
+            return WithTransaction(tran => BattleVideoCount5(tran));
         }
+
         #endregion
 
         #region Pokedex creation
