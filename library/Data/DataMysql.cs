@@ -1371,7 +1371,7 @@ namespace PkmnFoundations.Data
             return WithTransaction(tran => GtsAvailablePokemon5(tran));
         }
 
-        public override int GtsAvailablePokemon5(MySqlTransaction tran)
+        public int GtsAvailablePokemon5(MySqlTransaction tran)
         {
             return Convert.ToInt32(tran.ExecuteScalar("SELECT Count(*) FROM GtsPokemon5 WHERE IsExchanged = 0"));
         }
