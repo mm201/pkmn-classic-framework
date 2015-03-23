@@ -132,24 +132,26 @@ namespace PkmnFoundations.Data
         #region GTS 4
         public GtsRecord4 GtsDataForUser4(MySqlTransaction tran, int pid)
         {
-            MySqlDataReader reader = (MySqlDataReader)tran.ExecuteReader("SELECT Data, Species, Gender, Level, " +
+            using (MySqlDataReader reader = (MySqlDataReader)tran.ExecuteReader("SELECT Data, Species, Gender, Level, " +
                 "RequestedSpecies, RequestedGender, RequestedMinLevel, RequestedMaxLevel, " +
                 "Unknown1, TrainerGender, Unknown2, TimeDeposited, TimeExchanged, pid, " +
                 "TrainerName, TrainerOT, TrainerCountry, TrainerRegion, TrainerClass, " +
                 "IsExchanged, TrainerVersion, TrainerLanguage FROM GtsPokemon4 WHERE pid = @pid",
-                new MySqlParameter("@pid", pid));
-
-            if (!reader.Read())
+                new MySqlParameter("@pid", pid)))
             {
-                reader.Close();
-                return null;
-            }
-            GtsRecord4 result = Record4FromReader(reader);
+
+                if (!reader.Read())
+                {
+                    reader.Close();
+                    return null;
+                }
+                GtsRecord4 result = Record4FromReader(reader);
 #if DEBUG
-            AssertHelper.Equals(result.PID, pid);
+                AssertHelper.Equals(result.PID, pid);
 #endif
-            reader.Close();
-            return result;
+                reader.Close();
+                return result;
+            }
         }
 
         public override GtsRecord4 GtsDataForUser4(int pid)
@@ -159,43 +161,44 @@ namespace PkmnFoundations.Data
 
         public GtsRecord4 GtsGetRecord4(MySqlTransaction tran, long tradeId, bool isExchanged, bool allowHistory)
         {
-            MySqlDataReader reader = (MySqlDataReader)tran.ExecuteReader("SELECT Data, Species, Gender, Level, " +
+            using (MySqlDataReader reader = (MySqlDataReader)tran.ExecuteReader("SELECT Data, Species, Gender, Level, " +
                 "RequestedSpecies, RequestedGender, RequestedMinLevel, RequestedMaxLevel, " +
                 "Unknown1, TrainerGender, Unknown2, TimeDeposited, TimeExchanged, pid, " +
                 "TrainerName, TrainerOT, TrainerCountry, TrainerRegion, TrainerClass, " +
                 "IsExchanged, TrainerVersion, TrainerLanguage FROM GtsPokemon4 " +
                 "WHERE id = @id AND IsExchanged = @is_exchanged",
                 new MySqlParameter("@id", tradeId),
-                new MySqlParameter("@is_exchanged", isExchanged ? 1 : 0));
-
-            if (reader.Read())
+                new MySqlParameter("@is_exchanged", isExchanged ? 1 : 0)))
             {
-                GtsRecord4 result = Record4FromReader(reader);
-                reader.Close();
-                return result;
-            }
-            reader.Close();
-
-            if (allowHistory)
-            {
-                reader = (MySqlDataReader)tran.ExecuteReader("SELECT Data, Species, Gender, Level, " +
-                    "RequestedSpecies, RequestedGender, RequestedMinLevel, RequestedMaxLevel, " +
-                    "Unknown1, TrainerGender, Unknown2, TimeDeposited, TimeExchanged, pid, " +
-                    "TrainerName, TrainerOT, TrainerCountry, TrainerRegion, TrainerClass, " +
-                    "IsExchanged, TrainerVersion, TrainerLanguage FROM GtsHistory4 " +
-                    "WHERE trade_id = @id AND IsExchanged = @is_exchanged",
-                    new MySqlParameter("@id", tradeId),
-                    new MySqlParameter("@is_exchanged", isExchanged ? 1 : 0));
-
                 if (reader.Read())
                 {
                     GtsRecord4 result = Record4FromReader(reader);
                     reader.Close();
                     return result;
                 }
+                reader.Close();
             }
 
-            reader.Close();
+            if (allowHistory)
+            {
+                using (MySqlDataReader reader = (MySqlDataReader)tran.ExecuteReader("SELECT Data, Species, Gender, Level, " +
+                    "RequestedSpecies, RequestedGender, RequestedMinLevel, RequestedMaxLevel, " +
+                    "Unknown1, TrainerGender, Unknown2, TimeDeposited, TimeExchanged, pid, " +
+                    "TrainerName, TrainerOT, TrainerCountry, TrainerRegion, TrainerClass, " +
+                    "IsExchanged, TrainerVersion, TrainerLanguage FROM GtsHistory4 " +
+                    "WHERE trade_id = @id AND IsExchanged = @is_exchanged",
+                    new MySqlParameter("@id", tradeId),
+                    new MySqlParameter("@is_exchanged", isExchanged ? 1 : 0)))
+                {
+                    if (reader.Read())
+                    {
+                        GtsRecord4 result = Record4FromReader(reader);
+                        reader.Close();
+                        return result;
+                    }
+                }
+            }
+
             return null;
         }
 
@@ -347,24 +350,24 @@ namespace PkmnFoundations.Data
             }
 
             // todo: sort me in creative ways
-            MySqlDataReader reader = (MySqlDataReader)tran.ExecuteReader("SELECT Data, Species, Gender, Level, " +
+            using (MySqlDataReader reader = (MySqlDataReader)tran.ExecuteReader("SELECT Data, Species, Gender, Level, " +
                 "RequestedSpecies, RequestedGender, RequestedMinLevel, RequestedMaxLevel, " +
                 "Unknown1, TrainerGender, Unknown2, TimeDeposited, TimeExchanged, pid, " +
                 "TrainerName, TrainerOT, TrainerCountry, TrainerRegion, TrainerClass, " +
                 "IsExchanged, TrainerVersion, TrainerLanguage FROM GtsPokemon4 " + where +
                 " ORDER BY TimeDeposited DESC" + limit,
-                _params.ToArray());
-
-            List<GtsRecord4> records;
-            if (count > 0) records = new List<GtsRecord4>(count);
-            else records = new List<GtsRecord4>();
-
-            while (reader.Read())
+                _params.ToArray()))
             {
-                records.Add(Record4FromReader(reader));
-            }
+                List<GtsRecord4> records;
+                if (count > 0) records = new List<GtsRecord4>(count);
+                else records = new List<GtsRecord4>();
 
-            return records.ToArray();
+                while (reader.Read())
+                    records.Add(Record4FromReader(reader));
+
+                reader.Close();
+                return records.ToArray();
+            }
         }
 
         public override GtsRecord4[] GtsSearch4(int pid, ushort species, Genders gender, byte minLevel, byte maxLevel, byte country, int count)
@@ -781,7 +784,7 @@ namespace PkmnFoundations.Data
         {
             List<BattleTowerRecord4> records = new List<BattleTowerRecord4>(7);
             List<ulong> keys = new List<ulong>(7);
-            MySqlDataReader reader = (MySqlDataReader)tran.ExecuteReader(
+            using (MySqlDataReader reader = (MySqlDataReader)tran.ExecuteReader(
                 "SELECT id, pid, Name, " +
                 "Version, Language, Country, Region, TrainerID, " +
                 "PhraseLeader, Gender, Unknown2, PhraseChallenged, " +
@@ -790,30 +793,34 @@ namespace PkmnFoundations.Data
                 "ORDER BY Position LIMIT 7",
                 new MySqlParameter("@rank", rank),
                 new MySqlParameter("@room", roomNum),
-                new MySqlParameter("@pid", pid));
-            while (reader.Read())
+                new MySqlParameter("@pid", pid)))
             {
-                BattleTowerRecord4 record = BattleTowerRecord4FromReader(reader);
-                record.Party = new BattleTowerPokemon4[3];
-                records.Add(record);
-                keys.Add(reader.GetUInt64(0));
+                while (reader.Read())
+                {
+                    BattleTowerRecord4 record = BattleTowerRecord4FromReader(reader);
+                    record.Party = new BattleTowerPokemon4[3];
+                    records.Add(record);
+                    keys.Add(reader.GetUInt64(0));
+                }
+                reader.Close();
             }
-            reader.Close();
 
             if (records.Count == 0) return new BattleTowerRecord4[0];
 
             String inClause = String.Join(", ", keys.Select(i => i.ToString()).ToArray());
-            reader = (MySqlDataReader)tran.ExecuteReader("SELECT party_id, " +
+            using (MySqlDataReader reader = (MySqlDataReader)tran.ExecuteReader("SELECT party_id, " +
                 "Slot, Species, HeldItem, Move1, Move2, Move3, Move4, " +
                 "TrainerID, Personality, IVs, EVs, Unknown1, Language, " +
                 "Ability, Happiness, Nickname FROM GtsBattleTowerPokemon4 " +
-                "WHERE party_id IN (" + inClause + ")");
-            while (reader.Read())
+                "WHERE party_id IN (" + inClause + ")"))
             {
-                BattleTowerRecord4 record = records[keys.IndexOf(reader.GetUInt64(0))];
-                record.Party[reader.GetByte(1)] = BattleTowerPokemon4FromReader(reader);
+                while (reader.Read())
+                {
+                    BattleTowerRecord4 record = records[keys.IndexOf(reader.GetUInt64(0))];
+                    record.Party[reader.GetByte(1)] = BattleTowerPokemon4FromReader(reader);
+                }
+                reader.Close();
             }
-            reader.Close();
 
             return Enumerable.Reverse(records).ToArray();
         }
@@ -876,19 +883,20 @@ namespace PkmnFoundations.Data
         public BattleTowerProfile4[] BattleTowerGetLeaders4(MySqlTransaction tran, byte rank, byte roomNum)
         {
             List<BattleTowerProfile4> profiles = new List<BattleTowerProfile4>(30);
-            MySqlDataReader reader = (MySqlDataReader)tran.ExecuteReader(
+            using (MySqlDataReader reader = (MySqlDataReader)tran.ExecuteReader(
                 "SELECT id, pid, Name, " +
                 "Version, Language, Country, Region, TrainerID, " +
                 "PhraseLeader, Gender, Unknown2 FROM GtsBattleTowerLeaders4 " +
                 "WHERE Rank = @rank AND RoomNum = @room " +
                 "ORDER BY TimeUpdated DESC, id LIMIT 30",
                 new MySqlParameter("@rank", rank),
-                new MySqlParameter("@room", roomNum));
-            while (reader.Read())
+                new MySqlParameter("@room", roomNum)))
             {
-                profiles.Add(BattleTowerRecord4FromReader(reader).Profile);
+                while (reader.Read())
+                    profiles.Add(BattleTowerRecord4FromReader(reader).Profile);
+
+                reader.Close();
             }
-            reader.Close();
 
             return profiles.ToArray();
         }
@@ -908,18 +916,19 @@ namespace PkmnFoundations.Data
 
         public TrainerProfilePlaza PlazaGetProfile(MySqlTransaction tran, int pid)
         {
-            MySqlDataReader reader = (MySqlDataReader)tran.ExecuteReader("SELECT " +
+            using (MySqlDataReader reader = (MySqlDataReader)tran.ExecuteReader("SELECT " +
                 "DataPrefix, Data FROM pkmncf_plaza_profiles " +
                 "WHERE pid = @pid",
-                new MySqlParameter("@pid", pid));
-
-            if (reader.Read())
+                new MySqlParameter("@pid", pid)))
             {
-                TrainerProfilePlaza result = new TrainerProfilePlaza(pid, reader.GetByteArray(0, 12), reader.GetByteArray(1, 152));
-                reader.Close();
-                return result;
+                if (reader.Read())
+                {
+                    TrainerProfilePlaza result = new TrainerProfilePlaza(pid, reader.GetByteArray(0, 12), reader.GetByteArray(1, 152));
+                    reader.Close();
+                    return result;
+                }
+                else return null;
             }
-            else return null;
         }
 
         public override bool PlazaSetProfile(TrainerProfilePlaza profile)
@@ -1034,26 +1043,27 @@ namespace PkmnFoundations.Data
         #region GTS 5
         public GtsRecord5 GtsDataForUser5(MySqlTransaction tran, int pid)
         {
-            MySqlDataReader reader = (MySqlDataReader)tran.ExecuteReader("SELECT Data, Unknown0, " +
+            using (MySqlDataReader reader = (MySqlDataReader)tran.ExecuteReader("SELECT Data, Unknown0, " +
                 "Species, Gender, Level, " +
                 "RequestedSpecies, RequestedGender, RequestedMinLevel, RequestedMaxLevel, " +
                 "Unknown1, TrainerGender, Unknown2, TimeDeposited, TimeExchanged, pid, " +
                 "TrainerOT, TrainerName, TrainerCountry, TrainerRegion, TrainerClass, " +
                 "IsExchanged, TrainerVersion, TrainerLanguage, TrainerBadges, TrainerUnityTower " +
                 "FROM GtsPokemon5 WHERE pid = @pid",
-                new MySqlParameter("@pid", pid));
-
-            if (!reader.Read())
+                new MySqlParameter("@pid", pid)))
             {
-                reader.Close();
-                return null;
-            }
-            GtsRecord5 result = Record5FromReader(reader);
+                if (!reader.Read())
+                {
+                    reader.Close();
+                    return null;
+                }
+                GtsRecord5 result = Record5FromReader(reader);
 #if DEBUG
-            AssertHelper.Equals(result.PID, pid);
+                AssertHelper.Equals(result.PID, pid);
 #endif
-            reader.Close();
-            return result;
+                reader.Close();
+                return result;
+            }
         }
 
         public override GtsRecord5 GtsDataForUser5(int pid)
@@ -1063,7 +1073,7 @@ namespace PkmnFoundations.Data
 
         public GtsRecord5 GtsGetRecord5(MySqlTransaction tran, long tradeId, bool isExchanged, bool allowHistory)
         {
-            MySqlDataReader reader = (MySqlDataReader)tran.ExecuteReader("SELECT Data, Unknown0, " +
+            using (MySqlDataReader reader = (MySqlDataReader)tran.ExecuteReader("SELECT Data, Unknown0, " +
                 "Species, Gender, Level, " +
                 "RequestedSpecies, RequestedGender, RequestedMinLevel, RequestedMaxLevel, " +
                 "Unknown1, TrainerGender, Unknown2, TimeDeposited, TimeExchanged, pid, " +
@@ -1071,19 +1081,20 @@ namespace PkmnFoundations.Data
                 "IsExchanged, TrainerVersion, TrainerLanguage, TrainerBadges, TrainerUnityTower " +
                 "FROM GtsPokemon5 WHERE id = @id AND IsExchanged = @is_exchanged",
                 new MySqlParameter("@id", tradeId),
-                new MySqlParameter("@is_exchanged", isExchanged ? 1 : 0));
-
-            if (reader.Read())
+                new MySqlParameter("@is_exchanged", isExchanged ? 1 : 0)))
             {
-                GtsRecord5 result = Record5FromReader(reader);
+                if (reader.Read())
+                {
+                    GtsRecord5 result = Record5FromReader(reader);
+                    reader.Close();
+                    return result;
+                }
                 reader.Close();
-                return result;
             }
-            reader.Close();
 
             if (allowHistory)
             {
-                reader = (MySqlDataReader)tran.ExecuteReader("SELECT Data, Unknown0, " +
+                using (MySqlDataReader reader = (MySqlDataReader)tran.ExecuteReader("SELECT Data, Unknown0, " +
                     "Species, Gender, Level, " +
                     "RequestedSpecies, RequestedGender, RequestedMinLevel, RequestedMaxLevel, " +
                     "Unknown1, TrainerGender, Unknown2, TimeDeposited, TimeExchanged, pid, " +
@@ -1091,17 +1102,17 @@ namespace PkmnFoundations.Data
                     "IsExchanged, TrainerVersion, TrainerLanguage, TrainerBadges, TrainerUnityTower " +
                     "FROM GtsHistory5 WHERE trade_id = @id AND IsExchanged = @is_exchanged",
                     new MySqlParameter("@id", tradeId),
-                    new MySqlParameter("@is_exchanged", isExchanged ? 1 : 0));
-
-                if (reader.Read())
+                    new MySqlParameter("@is_exchanged", isExchanged ? 1 : 0)))
                 {
-                    GtsRecord5 result = Record5FromReader(reader);
-                    reader.Close();
-                    return result;
+                    if (reader.Read())
+                    {
+                        GtsRecord5 result = Record5FromReader(reader);
+                        reader.Close();
+                        return result;
+                    }
                 }
             }
 
-            reader.Close();
             return null;
         }
 
@@ -1262,7 +1273,7 @@ namespace PkmnFoundations.Data
             }
 
             // todo: sort me in creative ways
-            MySqlDataReader reader = (MySqlDataReader)tran.ExecuteReader("SELECT Data, Unknown0, " +
+            using (MySqlDataReader reader = (MySqlDataReader)tran.ExecuteReader("SELECT Data, Unknown0, " +
                 "Species, Gender, Level, " +
                 "RequestedSpecies, RequestedGender, RequestedMinLevel, RequestedMaxLevel, " +
                 "Unknown1, TrainerGender, Unknown2, TimeDeposited, TimeExchanged, pid, " +
@@ -1270,18 +1281,18 @@ namespace PkmnFoundations.Data
                 "IsExchanged, TrainerVersion, TrainerLanguage, TrainerBadges, TrainerUnityTower " +
                 "FROM GtsPokemon5 " + where +
                 " ORDER BY TimeDeposited DESC" + limit,
-                _params.ToArray());
-
-            List<GtsRecord5> records;
-            if (count > 0) records = new List<GtsRecord5>(count);
-            else records = new List<GtsRecord5>();
-
-            while (reader.Read())
+                _params.ToArray()))
             {
-                records.Add(Record5FromReader(reader));
-            }
+                List<GtsRecord5> records;
+                if (count > 0) records = new List<GtsRecord5>(count);
+                else records = new List<GtsRecord5>();
 
-            return records.ToArray();
+                while (reader.Read())
+                    records.Add(Record5FromReader(reader));
+
+                reader.Close();
+                return records.ToArray();
+            }
         }
 
         private static GtsRecord5 Record5FromReader(MySqlDataReader reader)
@@ -1707,7 +1718,7 @@ namespace PkmnFoundations.Data
         {
             List<BattleSubwayRecord5> records = new List<BattleSubwayRecord5>(7);
             List<ulong> keys = new List<ulong>(7);
-            MySqlDataReader reader = (MySqlDataReader)tran.ExecuteReader(
+            using (MySqlDataReader reader = (MySqlDataReader)tran.ExecuteReader(
                 "SELECT id, pid, Name, " +
                 "Version, Language, Country, Region, TrainerID, " +
                 "PhraseLeader, Gender, Unknown2, PhraseChallenged, " +
@@ -1717,30 +1728,34 @@ namespace PkmnFoundations.Data
                 "ORDER BY Position LIMIT 7",
                 new MySqlParameter("@rank", rank),
                 new MySqlParameter("@room", roomNum),
-                new MySqlParameter("@pid", pid));
-            while (reader.Read())
+                new MySqlParameter("@pid", pid)))
             {
-                BattleSubwayRecord5 record = BattleSubwayRecord5FromReader(reader);
-                record.Party = new BattleSubwayPokemon5[3];
-                records.Add(record);
-                keys.Add(reader.GetUInt64(0));
+                while (reader.Read())
+                {
+                    BattleSubwayRecord5 record = BattleSubwayRecord5FromReader(reader);
+                    record.Party = new BattleSubwayPokemon5[3];
+                    records.Add(record);
+                    keys.Add(reader.GetUInt64(0));
+                }
+                reader.Close();
             }
-            reader.Close();
 
             if (records.Count == 0) return new BattleSubwayRecord5[0];
 
             String inClause = String.Join(", ", keys.Select(i => i.ToString()).ToArray());
-            reader = (MySqlDataReader)tran.ExecuteReader("SELECT party_id, " +
+            using (MySqlDataReader reader = (MySqlDataReader)tran.ExecuteReader("SELECT party_id, " +
                 "Slot, Species, HeldItem, Move1, Move2, Move3, Move4, " +
                 "TrainerID, Personality, IVs, EVs, Unknown1, Language, " +
                 "Ability, Happiness, Nickname, Unknown2 FROM GtsBattleSubwayPokemon5 " +
-                "WHERE party_id IN (" + inClause + ")");
-            while (reader.Read())
+                "WHERE party_id IN (" + inClause + ")"))
             {
-                BattleSubwayRecord5 record = records[keys.IndexOf(reader.GetUInt64(0))];
-                record.Party[reader.GetByte(1)] = BattleSubwayPokemon5FromReader(reader);
+                while (reader.Read())
+                {
+                    BattleSubwayRecord5 record = records[keys.IndexOf(reader.GetUInt64(0))];
+                    record.Party[reader.GetByte(1)] = BattleSubwayPokemon5FromReader(reader);
+                }
+                reader.Close();
             }
-            reader.Close();
 
             return Enumerable.Reverse(records).ToArray();
         }
@@ -1806,19 +1821,20 @@ namespace PkmnFoundations.Data
         public BattleSubwayProfile5[] BattleSubwayGetLeaders5(MySqlTransaction tran, byte rank, byte roomNum)
         {
             List<BattleSubwayProfile5> profiles = new List<BattleSubwayProfile5>(30);
-            MySqlDataReader reader = (MySqlDataReader)tran.ExecuteReader(
+            using (MySqlDataReader reader = (MySqlDataReader)tran.ExecuteReader(
                 "SELECT id, pid, Name, " +
                 "Version, Language, Country, Region, TrainerID, " +
                 "PhraseLeader, Gender, Unknown2 FROM GtsBattleSubwayLeaders5 " +
                 "WHERE Rank = @rank AND RoomNum = @room " +
                 "ORDER BY TimeUpdated DESC, id LIMIT 30",
                 new MySqlParameter("@rank", rank),
-                new MySqlParameter("@room", roomNum));
-            while (reader.Read())
+                new MySqlParameter("@room", roomNum)))
             {
-                profiles.Add(BattleSubwayRecord5FromReader(reader).Profile);
+                while (reader.Read())
+                    profiles.Add(BattleSubwayRecord5FromReader(reader).Profile);
+
+                reader.Close();
             }
-            reader.Close();
 
             return profiles.ToArray();
         }
@@ -1908,17 +1924,18 @@ namespace PkmnFoundations.Data
         public DressupRecord4[] DressupSearch4(MySqlTransaction tran, ushort species, int count)
         {
             List<DressupRecord4> results = new List<DressupRecord4>(count);
-            MySqlDataReader reader = (MySqlDataReader)tran.ExecuteReader("SELECT pid, " +
+            using (MySqlDataReader reader = (MySqlDataReader)tran.ExecuteReader("SELECT pid, " +
                 "SerialNumber, Data FROM TerminalDressup4 WHERE Species = @species " +
-                "ORDER BY TimeAdded DESC LIMIT @count", 
-                new MySqlParameter("@species", species), 
-                new MySqlParameter("@count", count));
-            while (reader.Read())
+                "ORDER BY TimeAdded DESC LIMIT @count",
+                new MySqlParameter("@species", species),
+                new MySqlParameter("@count", count)))
             {
-                results.Add(Dressup4FromReader(reader));
+                while (reader.Read())
+                    results.Add(Dressup4FromReader(reader));
+
+                reader.Close();
             }
 
-            reader.Close();
             return results.ToArray();
         }
 
@@ -1977,17 +1994,17 @@ namespace PkmnFoundations.Data
         public BoxRecord4[] BoxSearch4(MySqlTransaction tran, BoxLabels4 label, int count)
         {
             List<BoxRecord4> results = new List<BoxRecord4>(count);
-            MySqlDataReader reader = (MySqlDataReader)tran.ExecuteReader("SELECT pid, " +
+            using (MySqlDataReader reader = (MySqlDataReader)tran.ExecuteReader("SELECT pid, " +
                 "Label, SerialNumber, Data FROM TerminalBoxes4 WHERE Label = @label " +
                 "ORDER BY TimeAdded DESC LIMIT @count",
                 new MySqlParameter("@label", (int)label),
-                new MySqlParameter("@count", count));
-            while (reader.Read())
+                new MySqlParameter("@count", count)))
             {
-                results.Add(Box4FromReader(reader));
-            }
+                while (reader.Read())
+                    results.Add(Box4FromReader(reader));
 
-            reader.Close();
+                reader.Close();
+            }
             return results.ToArray();
         }
 
@@ -2177,16 +2194,17 @@ namespace PkmnFoundations.Data
             _params.Add(new MySqlParameter("@count", count));
 
             List<BattleVideoHeader4> results = new List<BattleVideoHeader4>(count);
-            MySqlDataReader reader = (MySqlDataReader)tran.ExecuteReader("SELECT pid, " +
+            using (MySqlDataReader reader = (MySqlDataReader)tran.ExecuteReader("SELECT pid, " +
                 "SerialNumber, Header FROM TerminalBattleVideos4" + where +
                 sort + " LIMIT @count",
-                _params.ToArray());
-            while (reader.Read())
+                _params.ToArray()))
             {
-                results.Add(BattleVideoHeader4FromReader(reader));
+                while (reader.Read())
+                    results.Add(BattleVideoHeader4FromReader(reader));
+
+                reader.Close();
             }
 
-            reader.Close();
             return results.ToArray();
         }
 
@@ -2209,14 +2227,15 @@ namespace PkmnFoundations.Data
                 "SET Views = Views + 1 WHERE SerialNumber = @serial; "
                 : "";
 
-            MySqlDataReader reader = (MySqlDataReader)tran.ExecuteReader(update + "SELECT pid, " +
+            using (MySqlDataReader reader = (MySqlDataReader)tran.ExecuteReader(update + "SELECT pid, " +
                 "SerialNumber, Header, Data FROM TerminalBattleVideos4 " +
-                "WHERE SerialNumber = @serial", 
-                new MySqlParameter("@serial", serial));
-
-            if (reader.Read())
-                return BattleVideo4FromReader(reader);
-            else return null;
+                "WHERE SerialNumber = @serial",
+                new MySqlParameter("@serial", serial)))
+            {
+                if (reader.Read())
+                    return BattleVideo4FromReader(reader);
+                else return null;
+            }
         }
 
         public override BattleVideoRecord4 BattleVideoGet4(ulong serial, bool incrementViews = false)
@@ -2332,19 +2351,19 @@ namespace PkmnFoundations.Data
         public MusicalRecord5[] MusicalSearch5(MySqlTransaction tran, ushort species, int count)
         {
             List<MusicalRecord5> results = new List<MusicalRecord5>(count);
-            MySqlDataReader reader = (MySqlDataReader)tran.ExecuteReader("SELECT pid, " +
+            using (MySqlDataReader reader = (MySqlDataReader)tran.ExecuteReader("SELECT pid, " +
                 "SerialNumber, Data FROM TerminalMusicals5 " +
                 "WHERE EXISTS(SELECT * FROM TerminalMusicalPokemon5 " +
                 "WHERE musical_id = TerminalMusicals5.SerialNumber AND Species = @species) " +
                 "ORDER BY TimeAdded DESC LIMIT @count",
                 new MySqlParameter("@species", species),
-                new MySqlParameter("@count", count));
-            while (reader.Read())
+                new MySqlParameter("@count", count)))
             {
-                results.Add(Musical5FromReader(reader));
-            }
+                while (reader.Read())
+                    results.Add(Musical5FromReader(reader));
 
-            reader.Close();
+                reader.Close();
+            }
             return results.ToArray();
         }
 
@@ -2544,16 +2563,16 @@ namespace PkmnFoundations.Data
             _params.Add(new MySqlParameter("@count", count));
 
             List<BattleVideoHeader5> results = new List<BattleVideoHeader5>(count);
-            MySqlDataReader reader = (MySqlDataReader)tran.ExecuteReader("SELECT pid, " +
+            using (MySqlDataReader reader = (MySqlDataReader)tran.ExecuteReader("SELECT pid, " +
                 "SerialNumber, Header FROM TerminalBattleVideos5" + where +
                 sort + " LIMIT @count",
-                _params.ToArray());
-            while (reader.Read())
+                _params.ToArray()))
             {
-                results.Add(BattleVideoHeader5FromReader(reader));
-            }
+                while (reader.Read())
+                    results.Add(BattleVideoHeader5FromReader(reader));
 
-            reader.Close();
+                reader.Close();
+            }
             return results.ToArray();
         }
 
@@ -2576,14 +2595,15 @@ namespace PkmnFoundations.Data
                 "SET Views = Views + 1 WHERE SerialNumber = @serial; " 
                 : "";
 
-            MySqlDataReader reader = (MySqlDataReader)tran.ExecuteReader(update + "SELECT pid, " +
+            using (MySqlDataReader reader = (MySqlDataReader)tran.ExecuteReader(update + "SELECT pid, " +
                 "SerialNumber, Header, Data FROM TerminalBattleVideos5 " +
                 "WHERE SerialNumber = @serial",
-                new MySqlParameter("@serial", serial));
-
-            if (reader.Read())
-                return BattleVideo5FromReader(reader);
-            else return null;
+                new MySqlParameter("@serial", serial)))
+            {
+                if (reader.Read())
+                    return BattleVideo5FromReader(reader);
+                else return null;
+            }
         }
 
         public override BattleVideoRecord5 BattleVideoGet5(ulong serial, bool incrementViews = false)
