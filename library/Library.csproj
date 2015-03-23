@@ -65,6 +65,7 @@
     <Compile Include="Pokedex\Move.cs" />
     <Compile Include="Pokedex\Pokedex.cs" />
     <Compile Include="Pokedex\PokedexRecordBase.cs" />
+    <Compile Include="Pokedex\Ribbon.cs" />
     <Compile Include="Pokedex\Species.cs" />
     <Compile Include="Pokedex\Family.cs" />
     <Compile Include="Pokedex\Form.cs" />

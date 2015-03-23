@@ -531,10 +531,88 @@ namespace VeekunImport
                     Console.WriteLine("Inserted {0} {1}", i.ID, i.Name.ToString());
                 }
 
+                // pkmncf_pokedex_ribbons
+                if (!File.Exists("ribbons.txt"))
+                    Console.WriteLine("ribbons.txt not found. Not inserting any ribbons.");
+                else
+                {
+                    Dictionary<int, RibbonLoading> ribbons = new Dictionary<int, RibbonLoading>();
+                    using (FileStream fs = File.Open("ribbons.txt", FileMode.Open))
+                    {
+                        StreamReader sr = new StreamReader(fs, Encoding.UTF8);
+                        String line;
+                        while ((line = sr.ReadLine()) != null)
+                        {
+                            String[] fields = line.Split('\t');
+                            if (fields.Length <= 2) continue;
+                            int id = Convert.ToInt32(fields[0]);
+                            ribbons.Add(id, new RibbonLoading(id, fields[1], fields[2]));
+                        }
+                    }
+
+                    for (int generation = 3; generation <= GENERATIONS; generation++)
+                    {
+                        String filename = String.Format("ribbon_positions{0}.txt", generation);
+                        if (!File.Exists(filename))
+                        {
+                            Console.WriteLine("File {0} not found, skipped.", filename);
+                            continue;
+                        }
+                        using (FileStream fs = File.Open(filename, FileMode.Open))
+                        {
+                            StreamReader sr = new StreamReader(fs, Encoding.UTF8);
+                            String line;
+                            while ((line = sr.ReadLine()) != null)
+                            {
+                                String[] fields = line.Split('\t');
+                                if (fields.Length <= 1) continue;
+
+                                int id = Convert.ToInt32(fields[0]);
+                                int position = Convert.ToInt32(fields[1]);
+                                if (!ribbons.ContainsKey(id))
+                                {
+                                    Console.WriteLine("Error: Ribbon ID {0} contained in {1} but not in ribbons.txt!", id, filename);
+                                    continue;
+                                }
+                                RibbonLoading r = ribbons[id];
+                                switch (generation)
+                                {
+                                    case 3:
+                                        r.Position3 = position;
+                                        break;
+                                    case 4:
+                                        r.Position4 = position;
+                                        break;
+                                    case 5:
+                                        r.Position5 = position;
+                                        break;
+                                    case 6:
+                                        r.Position6 = position;
+                                        break;
+                                }
+                            }
+                        }
+                    }
+
+                    foreach (KeyValuePair<int, RibbonLoading> pair in ribbons)
+                    {
+                        RibbonLoading r = pair.Value;
+                        Console.WriteLine("Inserted {0} {1}", r.ID, r.Name);
+                        db.PokedexInsertRibbon(new Ribbon(null, r.ID,
+                            new LocalizedString() { { "EN", r.Name } },
+                            new LocalizedString() { { "EN", r.Description } },
+                            r.Position3, r.Position4, r.Position5, r.Position6,
+                            null, null, null, null
+                            ));
+                    }
+                }
+
                 connVeekun.Close();
             }
 
+#if DEBUG
             Console.ReadKey();
+#endif
         }
 
         private static String[] LANGS = { "JA", "EN", "FR", "IT", "DE", "ES", "KO" };
@@ -572,5 +650,21 @@ namespace VeekunImport
         public LocalizedString NameLocalized;
         public int? Value3, Value4, Value5, Value6;
         public int Price;
+    }
+
+    internal class RibbonLoading
+    {
+        public RibbonLoading(int id, String name, String description)
+        {
+            ID = id;
+            Name = name;
+            Description = description;
+            Position3 = Position4 = Position5 = Position6 = null;
+        }
+
+        public int ID;
+        public String Name;
+        public String Description;
+        public int? Position3, Position4, Position5, Position6;
     }
 }

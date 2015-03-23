@@ -1,0 +1,80 @@
+﻿3001	0	;Hoenn Cool Ribbon
+3002	1	;Hoenn Cool Ribbon Super
+3003	2	;Hoenn Cool Ribbon Hyper
+3004	3	;Hoenn Cool Ribbon Master
+3005	4	;Hoenn Beauty Ribbon
+3006	5	;Hoenn Beauty Ribbon Super
+3007	6	;Hoenn Beauty Ribbon Hyper
+3008	7	;Hoenn Beauty Ribbon Master
+3009	8	;Hoenn Cute Ribbon
+3010	9	;Hoenn Cute Ribbon Super
+3011	10	;Hoenn Cute Ribbon Hyper
+3012	11	;Hoenn Cute Ribbon Master
+3013	12	;Hoenn Smart Ribbon
+3014	13	;Hoenn Smart Ribbon Super
+3015	14	;Hoenn Smart Ribbon Hyper
+3016	15	;Hoenn Smart Ribbon Master
+3017	16	;Hoenn Tough Ribbon
+3018	17	;Hoenn Tough Ribbon Super
+3019	18	;Hoenn Tough Ribbon Hyper
+3020	19	;Hoenn Tough Ribbon Master
+3021	20	;Champion Ribbon
+3022	21	;Winning Ribbon
+3023	22	;Victory Ribbon
+3024	23	;Artist Ribbon
+3025	24	;Effort Ribbon
+3026	25	;Marine Ribbon
+3027	26	;Land Ribbon
+3028	27	;Sky Ribbon
+3029	28	;Country Ribbon
+3030	29	;National Ribbon
+3031	30	;Earth Ribbon
+3032	31	;World Ribbon
+4001	32	;Sinnoh Champ Ribbon
+4002	33	;Ability Ribbon
+4003	34	;Great Ability Ribbon
+4004	35	;Double Ability Ribbon
+4005	36	;Multi Ability Ribbon
+4006	37	;Pair Ability Ribbon
+4007	38	;World Ability Ribbon
+4008	39	;Alert Ribbon
+4009	40	;Shock Ribbon
+4010	41	;Downcast Ribbon
+4011	42	;Careless Ribbon
+4012	43	;Relax Ribbon
+4013	44	;Snooze Ribbon
+4014	45	;Smile Ribbon
+4015	46	;Gorgeous Ribbon
+4016	47	;Royal Ribbon
+4017	48	;Gorgeous Royal Ribbon
+4018	49	;Footprint Ribbon
+4019	50	;Record Ribbon
+4020	51	;History Ribbon
+4021	52	;Legend Ribbon
+4022	53	;Red Ribbon
+4023	54	;Green Ribbon
+4024	55	;Blue Ribbon
+4025	56	;Festival Ribbon
+4026	57	;Carnival Ribbon
+4027	58	;Classic Ribbon
+4028	59	;Premier Ribbon
+4029	64	;Sinnoh Cool Ribbon
+4030	65	;Sinnoh Cool Ribbon Great
+4031	66	;Sinnoh Cool Ribbon Ultra
+4032	67	;Sinnoh Cool Ribbon Master
+4033	68	;Sinnoh Beauty Ribbon
+4034	69	;Sinnoh Beauty Ribbon Great
+4035	70	;Sinnoh Beauty Ribbon Ultra
+4036	71	;Sinnoh Beauty Ribbon Master
+4037	72	;Sinnoh Cute Ribbon
+4038	73	;Sinnoh Cute Ribbon Great
+4039	74	;Sinnoh Cute Ribbon Ultra
+4040	75	;Sinnoh Cute Ribbon Master
+4041	76	;Sinnoh Smart Ribbon
+4042	77	;Sinnoh Smart Ribbon Great
+4043	78	;Sinnoh Smart Ribbon Ultra
+4044	79	;Sinnoh Smart Ribbon Master
+4045	80	;Sinnoh Tough Ribbon
+4046	81	;Sinnoh Tough Ribbon Great
+4047	82	;Sinnoh Tough Ribbon Ultra
+4048	83	;Sinnoh Tough Ribbon Master

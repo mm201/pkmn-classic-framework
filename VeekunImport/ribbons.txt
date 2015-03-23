@@ -1,0 +1,89 @@
+﻿3001	Cool Ribbon	Hoenn Cool Contest Normal Rank winner!
+3002	Cool Ribbon Super	Hoenn Cool Contest Super Rank winner!
+3003	Cool Ribbon Hyper	Hoenn Cool Contest Hyper Rank winner!
+3004	Cool Ribbon Master	Hoenn Cool Contest Master Rank winner!
+3005	Beauty Ribbon	Hoenn Beauty Contest Normal Rank winner!
+3006	Beauty Ribbon Super	Hoenn Beauty Contest Super Rank winner!
+3007	Beauty Ribbon Hyper	Hoenn Beauty Contest Hyper Rank winner!
+3008	Beauty Ribbon Master	Hoenn Beauty Contest Master Rank winner!
+3009	Cute Ribbon	Hoenn Cute Contest Normal Rank winner!
+3010	Cute Ribbon Super	Hoenn Cute Contest Super Rank winner!
+3011	Cute Ribbon Hyper	Hoenn Cute Contest Hyper Rank winner!
+3012	Cute Ribbon Master	Hoenn Cute Contest Master Rank winner!
+3013	Smart Ribbon	Hoenn Smart Contest Normal Rank winner!
+3014	Smart Ribbon Super	Hoenn Smart Contest Super Rank winner!
+3015	Smart Ribbon Hyper	Hoenn Smart Contest Hyper Rank winner!
+3016	Smart Ribbon Master	Hoenn Smart Contest Master Rank winner!
+3017	Tough Ribbon	Hoenn Tough Contest Normal Rank winner!
+3018	Tough Ribbon Super	Hoenn Tough Contest Super Rank winner!
+3019	Tough Ribbon Hyper	Hoenn Tough Contest Hyper Rank winner!
+3020	Tough Ribbon Master	Hoenn Tough Contest Master Rank winner!
+3021	Champion Ribbon	A Ribbon awarded for clearing the Pokémon League and entering the Hall of Fame in another region.
+3022	Winning Ribbon	Ribbon awarded for clearing Hoenn's Battle Tower's Lv. 50 challenge.
+3023	Victory Ribbon	Ribbon awarded for clearing Hoenn's Battle Tower's Lv. 100 challenge.
+3024	Artist Ribbon	A Ribbon awarded for being chosen as a super sketch model in the Hoenn Region.
+3025	Effort Ribbon	A Ribbon awarded for being an exceptionally hard worker.
+3026	Marine Ribbon	A commemorative Ribbon obtained in a Mystery Zone.
+3027	Land Ribbon	A commemorative Ribbon obtained in a Mystery Zone.
+3028	Sky Ribbon	A commemorative Ribbon obtained in a Mystery Zone.
+3029	Country Ribbon	A Ribbon awarded to a Pokémon League Champion.
+3030	National Ribbon	A Ribbon awarded for overcoming all difficult challenges.
+3031	Earth Ribbon	A Ribbon awarded for winning 100 battles in a row.
+3032	World Ribbon	A Ribbon awarded to a Pokémon League Champion.
+4001	Sinnoh Champ Ribbon	A Ribbon awarded for beating the Sinnoh Champion and entering the Sinnoh Hall of Fame.
+4002	Ability Ribbon	A Ribbon awarded for defeating the Tower Tycoon at the Battle Tower.
+4003	Great Ability Ribbon	A Ribbon awarded for defeating the Tower Tycoon at the Battle Tower.
+4004	Double Ability Ribbon	A Ribbon awarded for completing the Battle Tower Double challenge.
+4005	Multi Ability Ribbon	A Ribbon awarded for completing the Battle Tower Multi challenge.
+4006	Pair Ability Ribbon	A Ribbon awarded for completing the Battle Tower Link Multi challenge.
+4007	World Ability Ribbon	A Ribbon awarded for completing the Wi-Fi Battle Tower challenge.
+4008	Alert Ribbon	A Ribbon for recalling an invigorating event that created life energy.
+4009	Shock Ribbon	A Ribbon for recalling a thrilling event that made life more exciting.
+4010	Downcast Ribbon	A Ribbon for recalling feelings of sadness that added spice to life.
+4011	Careless Ribbon	A Ribbon for recalling a careless error that helped steer life decisions.
+4012	Relax Ribbon	A Ribbon for recalling a refreshing event that added sparkle to life.
+4013	Snooze Ribbon	A Ribbon for recalling a deep slumber that made life soothing.
+4014	Smile Ribbon	A Ribbon for recalling that smiles enrich the quality of life.
+4015	Gorgeous Ribbon	An extraordinarily gorgeous and extravagant Ribbon.
+4016	Royal Ribbon	An incredibly regal Ribbon with an air of nobility.
+4017	Gorgeous Royal Ribbon	A gorgeous and regal Ribbon that is the peak of fabulous.
+4018	Footprint Ribbon	A Ribbon awarded to a Pokémon deemed to have a top-quality footprint.
+4019	Record Ribbon	A Ribbon awarded for setting an incredible record.
+4020	History Ribbon	A Ribbon awarded for setting a historical record.
+4021	Legend Ribbon	A Ribbon awarded for setting a legendary record.
+4022	Red Ribbon	A commemorative Ribbon obtained in a Mystery Zone.
+4023	Green Ribbon	A commemorative Ribbon obtained in a Mystery Zone.
+4024	Blue Ribbon	A commemorative Ribbon obtained in a Mystery Zone.
+4025	Festival Ribbon	A commemorative Ribbon obtained in a Mystery Zone.
+4026	Carnival Ribbon	A commemorative Ribbon obtained in a Mystery Zone.
+4027	Classic Ribbon	A Ribbon that proclaims love for Pokémon.
+4028	Premier Ribbon	A Ribbon awarded for a special holdiay.
+4029	Cool Ribbon	Super Contest Cool Category Normal Rank winner!
+4030	Cool Ribbon Great	Super Contest Cool Category Great Rank winner!
+4031	Cool Ribbon Ultra	Super Contest Cool Category Ultra Rank winner!
+4032	Cool Ribbon Master	Super Contest Cool Category Master Rank winner!
+4033	Beauty Ribbon	Super Contest Beauty Category Normal Rank winner!
+4034	Beauty Ribbon Great	Super Contest Beauty Category Great Rank winner!
+4035	Beauty Ribbon Ultra	Super Contest Beauty Category Ultra Rank winner!
+4036	Beauty Ribbon Master	Super Contest Beauty Category Master Rank winner!
+4037	Cute Ribbon	Super Contest Cute Category Normal Rank winner!
+4038	Cute Ribbon Great	Super Contest Cute Category Great Rank winner!
+4039	Cute Ribbon Ultra	Super Contest Cute Category Ultra Rank winner!
+4040	Cute Ribbon Master	Super Contest Cute Category Master Rank winner!
+4041	Smart Ribbon	Super Contest Smart Category Normal Rank winner!
+4042	Smart Ribbon Great	Super Contest Smart Category Great Rank winner!
+4043	Smart Ribbon Ultra	Super Contest Smart Category Ultra Rank winner!
+4044	Smart Ribbon Master	Super Contest Smart Category Master Rank winner!
+4045	Tough Ribbon	Super Contest Tough Category Normal Rank winner!
+4046	Tough Ribbon Great	Super Contest Tough Category Great Rank winner!
+4047	Tough Ribbon Ultra	Super Contest Tough Category Ultra Rank winner!
+4048	Tough Ribbon Master	Super Contest Tough Category Master Rank winner!
+5001	Battle Champion Ribbon	A Ribbon awarded to a Battle Competition Champion.
+5002	Regional Champion Ribbon	A Ribbon awarded to a Regional Champion in the Pokémon World Championships.
+5003	National Champion Ribbon	A Ribbon awarded to a National Champion in the Pokémon World Championships.
+5004	Event Ribbon	A Ribbon awarded for participating in a special Pokémon event.
+5005	World Champion Ribbon	A Ribbon awarded to a World Champion in the Pokémon World Championships.
+5006	Birthday Ribbon	A Ribbon that commemorates a birthday.
+5007	Special Ribbon	A special Ribbon for a special day.
+5008	Souvenir Ribbon	A Ribbon for cherishing a special memory.
+5009	Wishing Ribbon	A Ribbon said to make your wish come true.

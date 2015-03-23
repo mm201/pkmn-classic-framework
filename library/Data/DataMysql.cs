@@ -2627,15 +2627,26 @@ namespace PkmnFoundations.Data
         #region Pokedex creation
         private const String INSERT_COLUMNS = "Name_JA, Name_EN, Name_FR, Name_IT, Name_DE, Name_ES, Name_KO";
         private const String INSERT_VALUES = "@name_ja, @name_en, @name_fr, @name_it, @name_de, @name_es, @name_ko";
+        private static String[] m_query_langs = new String[] { "JA", "EN", "FR", "IT", "DE", "ES", "KO" };
 
-        private void CreateLocalizedStringQueryPieces(LocalizedString s, List<MySqlParameter> insertParams)
+        private static void CreateLocalizedStringQueryPieces(LocalizedString s, 
+            List<MySqlParameter> insertParams, String prefix = "@name_")
         {
-            String[] langs = new String[] { "JA", "EN", "FR", "IT", "DE", "ES", "KO" };
-            foreach (String lang in langs)
+            foreach (String lang in m_query_langs)
             {
-                MySqlParameter param = new MySqlParameter("@name_" + lang.ToLowerInvariant(), s.ContainsKey(lang) ? s[lang] : (object)DBNull.Value);
+                MySqlParameter param = new MySqlParameter(prefix + lang.ToLowerInvariant(), s.ContainsKey(lang) ? s[lang] : (object)DBNull.Value);
                 insertParams.Add(param);
             }
+        }
+
+        private static String CreateLocalizedInsertColumns(String prefix)
+        {
+            return String.Join(", ", m_query_langs.Select(lang => prefix + lang).ToArray());
+        }
+
+        private static String CreateLocalizedInsertValues(String prefix)
+        {
+            return String.Join(", ", m_query_langs.Select(lang => prefix + lang.ToLowerInvariant()).ToArray());
         }
 
         public override void PokedexInsertSpecies(Species s)
@@ -2844,6 +2855,35 @@ namespace PkmnFoundations.Data
             }
         }
 
+        public void PokedexInsertRibbon(MySqlTransaction tran, Ribbon r)
+        {
+            List<MySqlParameter> insertParams = new List<MySqlParameter>();
+            insertParams.Add(new MySqlParameter("@id", r.ID));
+            insertParams.Add(new MySqlParameter("@position3", r.Position3));
+            insertParams.Add(new MySqlParameter("@position4", r.Position4));
+            insertParams.Add(new MySqlParameter("@position5", r.Position5));
+            insertParams.Add(new MySqlParameter("@position6", r.Position6));
+            insertParams.Add(new MySqlParameter("@value3", r.Value3));
+            insertParams.Add(new MySqlParameter("@value4", r.Value4));
+            insertParams.Add(new MySqlParameter("@value5", r.Value5));
+            insertParams.Add(new MySqlParameter("@value6", r.Value6));
+            CreateLocalizedStringQueryPieces(r.Name, insertParams);
+            CreateLocalizedStringQueryPieces(r.Name, insertParams, "@description_");
+
+            tran.ExecuteNonQuery("INSERT INTO pkmncf_pokedex_ribbons (ID, " +
+                "Position3, Position4, Position5, Position6, Value3, Value4, " +
+                "Value5, Value6, " + INSERT_COLUMNS + ", " +
+                CreateLocalizedInsertColumns("Description_") + ") VALUES (@id, " +
+                "@position3, @position4, @position5, @position6, @value3, " +
+                "@value4, @value5, @value6, " + INSERT_VALUES + ", " +
+                CreateLocalizedInsertValues("@description_") + ")", insertParams.ToArray());
+        }
+
+        public override void PokedexInsertRibbon(Ribbon r)
+        {
+            WithTransaction(tran => PokedexInsertRibbon(tran, r));
+        }
+
         #endregion
 
         #region Pokedex retrieval
@@ -2999,6 +3039,23 @@ namespace PkmnFoundations.Data
                 }
             }
         }
+
+        public List<Ribbon> PokedexGetAllRibbons(MySqlTransaction tran, Pokedex.Pokedex pokedex)
+        {
+            using (MySqlDataReader reader = (MySqlDataReader)tran.ExecuteReader("SELECT " +
+                "ID, Position3, Position4, Position5, Position6, Value3, " +
+                "Value4, Value5, Value6, " + INSERT_COLUMNS + ", " + 
+                CreateLocalizedInsertColumns("Description_") + " FROM pkmncf_pokedex_ribbons"))
+            {
+                return ReaderToList(reader, pokedex, () => new Ribbon(pokedex, reader));
+            }
+        }
+
+        public override List<Ribbon> PokedexGetAllRibbons(Pokedex.Pokedex pokedex)
+        {
+            return WithTransaction(tran => PokedexGetAllRibbons(tran, pokedex));
+        }
+
         #endregion
 
     }

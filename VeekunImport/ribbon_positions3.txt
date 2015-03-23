@@ -1,0 +1,5 @@
+﻿3021	15	;Champion Ribbon
+3022	16	;Winning Ribbon
+3023	17	;Victory Ribbon
+3024	18	;Artist Ribbon
+3025	19	;Effort Ribbon
