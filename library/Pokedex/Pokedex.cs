@@ -213,5 +213,15 @@ namespace PkmnFoundations.Pokedex
         {
             return m_abilities[value];
         }
+
+        public IDictionary<int, Ribbon> Ribbons()
+        {
+            return m_ribbons;
+        }
+
+        public IDictionary<int, Ribbon> Ribbons(Generations generation)
+        {
+            return m_ribbon_positions_generations[generation];
+        }
     }
 }

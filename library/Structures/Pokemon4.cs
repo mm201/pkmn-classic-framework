@@ -96,7 +96,7 @@ namespace PkmnFoundations.Structures
                                                    block[26], 
                                                    block[27]);
 
-                ribbons1 = BitConverter.ToInt32(block, 28);
+                ribbons2 = BitConverter.ToInt32(block, 28);
             }
 
             {
@@ -112,7 +112,7 @@ namespace PkmnFoundations.Structures
                 IsEgg = (ivs & 0x40000000) != 0;
                 HasNickname = (ivs & 0x80000000) != 0;
 
-                ribbons2 = BitConverter.ToInt32(block, 20);
+                ribbons1 = BitConverter.ToInt32(block, 20);
 
                 byte forme = block[24];
                 FatefulEncounter = (forme & 0x01) != 0;
@@ -202,19 +202,27 @@ namespace PkmnFoundations.Structures
             // id, value3, value4, value5, value6, Name_JA, etc, Description_JA, etc
             // value >> 3 --> array offset.
             // value & 0x07 --> bit position.
-            /*
+
             byte[] ribbons = new byte[12];
             Array.Copy(BitConverter.GetBytes(ribbons1), 0, ribbons, 0, 4);
             Array.Copy(BitConverter.GetBytes(ribbons2), 0, ribbons, 4, 4);
             Array.Copy(BitConverter.GetBytes(ribbons3), 0, ribbons, 8, 4);
 
-            HashSet<Ribbon> Ribbons = new HashSet<Ribbon>();
-            foreach (Ribbon r in m_pokedex.Ribbons(Generations.Generation4))
+            Ribbons = new HashSet<Ribbon>();
+            UnknownRibbons = new HashSet<int>();
+
+            IDictionary<int, Ribbon> allRibbons = m_pokedex.Ribbons(Generations.Generation4);
+
+            for (int x = 0; x < 96; x++)
             {
-                if (HasRibbon(ribbons, r.Value4))
-                    ActualRibbons.Add(r);
+                if (HasRibbon(ribbons, x))
+                {
+                    if (allRibbons.ContainsKey(x))
+                        Ribbons.Add(allRibbons[x]);
+                    else
+                        UnknownRibbons.Add(x);
+                }
             }
-            */
         }
 
         bool HasRibbon(byte[] ribbons, int value)
@@ -368,6 +376,8 @@ namespace PkmnFoundations.Structures
         public int Ribbons1 { get; set; }
         public int Ribbons2 { get; set; }
         public int Ribbons3 { get; set; }
+        public HashSet<Ribbon> Ribbons { get; private set; }
+        public HashSet<int> UnknownRibbons { get; private set; }
 
         // party-only stuff. (todo: put in derived class)
         public byte StatusAffliction { get; set; }

@@ -161,6 +161,27 @@
 
             </div>
 
+            <div class="col colRibbons">
+
+                <asp:Repeater ID="rptRibbons" runat="server">
+
+                    <ItemTemplate>
+                        <asp:Image ImageUrl='<%# "~/images/ribbon-sm/" + ((Ribbon)Container.DataItem).ID.ToString() + ".png" %>'
+                            ToolTip='<%# ((Ribbon)Container.DataItem).Name.ToString() %>' CssClass="sprite" runat="server" />
+                    </ItemTemplate>
+
+                </asp:Repeater>
+
+                <asp:Repeater ID="rptUnknownRibbons" runat="server">
+
+                    <ItemTemplate>
+                        Unknown ribbon in position <%# ((int)Container.DataItem).ToString() %>.
+                    </ItemTemplate>
+
+                </asp:Repeater>
+
+            </div>
+
         </div>
         <div class="clear"></div>
 

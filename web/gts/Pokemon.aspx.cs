@@ -131,6 +131,12 @@ namespace PkmnFoundations.Web.gts
 
             rptMoves.DataSource = pkmn.Moves;
             rptMoves.DataBind();
+
+            rptRibbons.DataSource = pkmn.Ribbons;
+            rptRibbons.DataBind();
+
+            rptUnknownRibbons.DataSource = pkmn.UnknownRibbons;
+            rptUnknownRibbons.DataBind();
         }
 
         private String[] m_marks = new String[] { "●", "▲", "■", "♥", "★", "♦" };
