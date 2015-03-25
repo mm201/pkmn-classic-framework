@@ -18,13 +18,27 @@ namespace PkmnFoundations.GTS
         {
             m_pokedex = (Pokedex.Pokedex)Application["pkmncfPokedex"];
 
-            GtsRecord4[] records4 = Database.Instance.GtsSearch4(0, 0, Genders.Either, 0, 0, 0, -1);
-            rptPokemon4.DataSource = records4;
-            rptPokemon4.DataBind();
+            int species; Int32.TryParse(ppSpecies.Value, out species);
+            int minLevel = Convert.ToInt32(txtLevelMin.Text);
+            int maxLevel = Convert.ToInt32(txtLevelMax.Text);
+            Genders gender = (Genders)Convert.ToInt32(rbGender.SelectedValue);
 
-            GtsRecord5[] records5 = Database.Instance.GtsSearch5(0, 0, Genders.Either, 0, 0, 0, -1);
-            rptPokemon5.DataSource = records5;
-            rptPokemon5.DataBind();
+            if (rbGen4.Checked)
+            {
+                GtsRecord4[] records4 = Database.Instance.GtsSearch4(0, (ushort)species, gender, (byte)minLevel, (byte)maxLevel, 0, -1);
+                rptPokemon4.DataSource = records4;
+                rptPokemon4.DataBind();
+                rptPokemon4.Visible = true;
+                rptPokemon5.Visible = false;
+            }
+            else if (rbGen5.Checked)
+            {
+                GtsRecord5[] records5 = Database.Instance.GtsSearch5(0, (ushort)species, gender, (byte)minLevel, (byte)maxLevel, 0, -1);
+                rptPokemon5.DataSource = records5;
+                rptPokemon5.DataBind();
+                rptPokemon4.Visible = false;
+                rptPokemon5.Visible = true;
+            }
         }
 
         private Pokedex.Pokedex m_pokedex;

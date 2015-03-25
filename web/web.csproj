@@ -67,6 +67,7 @@
     <Content Include="admin\AddMusical.aspx" />
     <Content Include="battlevideo\Default.aspx" />
     <Content Include="controls\LabelTextBox.ascx" />
+    <Content Include="controls\PokemonPicker.ascx" />
     <Content Include="css\form.css" />
     <Content Include="css\login.css" />
     <Content Include="css\main.css" />
@@ -3514,6 +3515,13 @@
     </Compile>
     <Compile Include="controls\LabelTextBox.ascx.designer.cs">
       <DependentUpon>LabelTextBox.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="controls\PokemonPicker.ascx.cs">
+      <DependentUpon>PokemonPicker.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="controls\PokemonPicker.ascx.designer.cs">
+      <DependentUpon>PokemonPicker.ascx</DependentUpon>
     </Compile>
     <Compile Include="Default.aspx.cs">
       <DependentUpon>Default.aspx</DependentUpon>
