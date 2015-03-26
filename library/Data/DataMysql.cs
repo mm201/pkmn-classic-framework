@@ -328,7 +328,7 @@ namespace PkmnFoundations.Data
             {
 #endif
                 GtsLogTrade4(tran, result, null, partner_pid, trade_id);
-                GtsLogTrade4(tran, upload, null, partner_pid, trade_id);
+                GtsLogTrade4(tran, traded, null, partner_pid, trade_id);
 #if !DEBUG
             }
             catch { }
@@ -509,7 +509,7 @@ namespace PkmnFoundations.Data
 
             // when calling delete.asp, the partner pid can't be told from the request alone,
             // so obtain it from the database instead.
-            if (record.IsExchanged != 0 && trade_id != null)
+            if (record.IsExchanged != 0 && trade_id != null && partner_pid == null)
             {
                 partner_pid = (int?)tran.ExecuteScalar("SELECT partner_pid FROM GtsHistory4 " +
                     "WHERE trade_id = @trade_id AND IsExchanged = 0", new MySqlParameter("@trade_id", trade_id));
@@ -1296,7 +1296,7 @@ namespace PkmnFoundations.Data
             GtsRecord5 traded = upload.Clone();
             traded.FlagTraded(result);
 
-            ulong? trade_id = GtsGetDepositId4(tran, result.PID);
+            ulong? trade_id = GtsGetDepositId5(tran, result.PID);
             GtsRecord5 resultOrig = GtsDataForUser5(tran, result.PID);
             if (resultOrig == null || resultOrig != result)
                 // looks like the pokemon was ninja'd between the Exchange and Exchange_finish
@@ -1313,7 +1313,7 @@ namespace PkmnFoundations.Data
             {
 #endif
                 GtsLogTrade5(tran, result, null, partner_pid, trade_id);
-                GtsLogTrade5(tran, upload, null, partner_pid, trade_id);
+                GtsLogTrade5(tran, traded, null, partner_pid, trade_id);
 #if !DEBUG
             }
             catch { }
@@ -1514,7 +1514,7 @@ namespace PkmnFoundations.Data
 
             // when calling delete.asp, the partner pid can't be told from the request alone,
             // so obtain it from the database instead.
-            if (record.IsExchanged != 0 && trade_id != null)
+            if (record.IsExchanged != 0 && trade_id != null && partner_pid == null)
                 partner_pid = (int ?)tran.ExecuteScalar("SELECT partner_pid FROM GtsHistory5 " +
                     "WHERE trade_id = @trade_id AND IsExchanged = 0", new MySqlParameter("@trade_id", trade_id));
 

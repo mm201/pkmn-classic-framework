@@ -349,8 +349,6 @@ namespace PkmnFoundations.GTS
                         result.IsExchanged != 0)
                     {
                         // Pokémon is traded (or was never here to begin with)
-                        // todo: I only checked this on GenV. Check that this
-                        // is the correct response on GenIV.
                         SessionManager.Remove(session);
                         response.Write(new byte[] { 0x02, 0x00 }, 0, 2);
                         break;
