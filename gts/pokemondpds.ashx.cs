@@ -334,6 +334,8 @@ namespace PkmnFoundations.GTS
                         response.Write(record.Save(), 0, 292);
                     }
 
+                    Database.Instance.GtsSetLastSearch4(pid);
+
                 } break;
 
                 // the exchange request uploads a record of the exchangee pokemon
@@ -353,8 +355,11 @@ namespace PkmnFoundations.GTS
                     upload.IsExchanged = 0;
                     int targetPid = BitConverter.ToInt32(data, 292);
                     GtsRecord4 result = Database.Instance.GtsDataForUser4(targetPid);
+                    DateTime ? searchTime = Database.Instance.GtsGetLastSearch4(pid);
 
-                    if (result == null || result.IsExchanged != 0)
+                    if (result == null || searchTime == null || 
+                        result.TimeDeposited > (DateTime)searchTime || // If this condition is met, it means the pokemon in the system is DIFFERENT from the one the user is trying to trade for, ie. it was deposited AFTER the user did their search. The one the user wants was either taken back or traded.
+                        result.IsExchanged != 0)
                     {
                         // Pokémon is traded (or was never here to begin with)
                         // todo: I only checked this on GenV. Check that this

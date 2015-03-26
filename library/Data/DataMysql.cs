@@ -502,6 +502,31 @@ namespace PkmnFoundations.Data
             WithTransaction(tran => GtsLogTrade4(tran, record, timeWithdrawn, partner_pid));
         }
 
+        public void GtsSetLastSearch4(MySqlTransaction tran, int pid)
+        {
+            tran.ExecuteNonQuery("UPDATE GtsProfiles4 SET TimeLastSearch = " +
+                "@now WHERE pid = @pid", new MySqlParameter("@now", DateTime.UtcNow),
+                new MySqlParameter("@pid", pid));
+        }
+
+        public override void GtsSetLastSearch4(int pid)
+        {
+            WithTransaction(tran => GtsSetLastSearch4(tran, pid));
+        }
+
+        public DateTime ? GtsGetLastSearch4(MySqlTransaction tran, int pid)
+        {
+            object result = tran.ExecuteScalar("SELECT TimeLastSearch " +
+                "FROM GtsProfiles4 WHERE pid = @pid", new MySqlParameter("@pid", pid));
+            if (result == null || result is DBNull) return null;
+            return (DateTime)result;
+        }
+
+        public override DateTime ? GtsGetLastSearch4(int pid)
+        {
+            return WithTransaction(tran => GtsGetLastSearch4(tran, pid));
+        }
+
         #endregion
 
         #region Battle Tower 4
@@ -1430,6 +1455,31 @@ namespace PkmnFoundations.Data
                 "@IsExchanged, @TrainerVersion, @TrainerLanguage, @TrainerBadges, " +
                 "@TrainerUnityTower, @TimeWithdrawn, @trade_id, @partner_pid)",
                 _params2);
+        }
+
+        public void GtsSetLastSearch5(MySqlTransaction tran, int pid)
+        {
+            tran.ExecuteNonQuery("UPDATE GtsProfiles5 SET TimeLastSearch = " +
+                "@now WHERE pid = @pid", new MySqlParameter("@now", DateTime.UtcNow),
+                new MySqlParameter("@pid", pid));
+        }
+
+        public override void GtsSetLastSearch5(int pid)
+        {
+            WithTransaction(tran => GtsSetLastSearch5(tran, pid));
+        }
+
+        public DateTime? GtsGetLastSearch5(MySqlTransaction tran, int pid)
+        {
+            object result = tran.ExecuteScalar("SELECT TimeLastSearch " +
+                "FROM GtsProfiles5 WHERE pid = @pid", new MySqlParameter("@pid", pid));
+            if (result == null || result is DBNull) return null;
+            return (DateTime)result;
+        }
+
+        public override DateTime? GtsGetLastSearch5(int pid)
+        {
+            return WithTransaction(tran => GtsGetLastSearch5(tran, pid));
         }
 
         #endregion
