@@ -248,7 +248,7 @@ namespace PkmnFoundations.Data
             return WithTransactionSuccessful(tran => GtsDepositPokemon4(tran, record));
         }
 
-        public ulong GtsGetDepositId4(MySqlTransaction tran, int pid)
+        public ulong ? GtsGetDepositId4(MySqlTransaction tran, int pid)
         {
             object o = tran.ExecuteScalar("SELECT id FROM GtsPokemon4 WHERE pid = @pid " +
                 "ORDER BY IsExchanged DESC, TimeExchanged, TimeDeposited LIMIT 1",
@@ -259,8 +259,8 @@ namespace PkmnFoundations.Data
 
         public bool GtsDeletePokemon4(MySqlTransaction tran, int pid)
         {
-            ulong pkmnId = GtsGetDepositId4(tran, pid);
-            if (pkmnId == 0) return false;
+            ulong ? pkmnId = GtsGetDepositId4(tran, pid);
+            if (pkmnId == null) return false;
 
             tran.ExecuteNonQuery("DELETE FROM GtsPokemon4 WHERE id = @id",
                 new MySqlParameter("@id", pkmnId));
@@ -464,8 +464,7 @@ namespace PkmnFoundations.Data
             // note that IsTraded being true in the record is not an error condition
             // since it might have use later on. You should check for this in the upload handler.
 
-            int trade_id = (int)tran.ExecuteScalar("SELECT id FROM GtsPokemon4 WHERE pid = @pid",
-                new MySqlParameter("@pid", record.PID));
+            ulong ? trade_id = GtsGetDepositId4(tran, record.PID);
 
             // when calling delete.asp, the partner pid can't be told from the request alone,
             // so obtain it from the database instead.
@@ -1166,19 +1165,19 @@ namespace PkmnFoundations.Data
             return WithTransactionSuccessful(tran => GtsDepositPokemon5(tran, record));
         }
 
-        public ulong GtsGetDepositId5(int pid, MySqlTransaction tran)
+        public ulong ? GtsGetDepositId5(MySqlTransaction tran, int pid)
         {
             object o = tran.ExecuteScalar("SELECT id FROM GtsPokemon5 WHERE pid = @pid " +
                 "ORDER BY IsExchanged DESC, TimeExchanged, TimeDeposited LIMIT 1",
                 new MySqlParameter("@pid", pid));
-            if (o == null || o == DBNull.Value) return 0;
+            if (o == null || o == DBNull.Value) return null;
             return Convert.ToUInt64(o);
         }
 
         public bool GtsDeletePokemon5(MySqlTransaction tran, int pid)
         {
-            ulong pkmnId = GtsGetDepositId5(pid, tran);
-            if (pkmnId == 0) return false;
+            ulong ? pkmnId = GtsGetDepositId5(tran, pid);
+            if (pkmnId == null) return false;
 
             tran.ExecuteNonQuery("DELETE FROM GtsPokemon5 WHERE id = @id",
                 new MySqlParameter("@id", pkmnId));
@@ -1402,8 +1401,7 @@ namespace PkmnFoundations.Data
             // note that IsTraded being true in the record is not an error condition
             // since it might have use later on. You should check for this in the upload handler.
 
-            int trade_id = (int)tran.ExecuteScalar("SELECT id FROM GtsPokemon5 WHERE pid = @pid",
-                new MySqlParameter("@pid", record.PID));
+            ulong ? trade_id = GtsGetDepositId5(tran, record.PID);
 
             // when calling delete.asp, the partner pid can't be told from the request alone,
             // so obtain it from the database instead.
