@@ -257,11 +257,8 @@ namespace PkmnFoundations.GlobalTerminalService
                         if ((byte)meta == 254)
                         {
                             // todo: Figure out how to make the game perform this search!
-                            // Then implement
-                            logEntry.AppendLine("Search type not implemented.");
-                            type = EventLogEntryType.FailureAudit;
-                            response.Write(new byte[] { 0x02, 0x00 }, 0, 2);
-                            break;
+                            logEntry.AppendLine("Reverting to latest 30.");
+                            meta = BattleVideoMetagames4.SearchLatest30;
                         }
 
                         BattleVideoHeader4[] results = Database.Instance.BattleVideoSearch4(species, ranking, meta, country, region, 30);
