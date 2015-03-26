@@ -253,7 +253,7 @@ namespace PkmnFoundations.Data
             object o = tran.ExecuteScalar("SELECT id FROM GtsPokemon4 WHERE pid = @pid " +
                 "ORDER BY IsExchanged DESC, TimeExchanged, TimeDeposited LIMIT 1",
                 new MySqlParameter("@pid", pid));
-            if (o == null || o == DBNull.Value) return 0;
+            if (o == null || o == DBNull.Value) return null;
             return Convert.ToUInt64(o);
         }
 
