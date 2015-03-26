@@ -262,6 +262,19 @@ namespace PkmnFoundations.Data
             ulong ? pkmnId = GtsGetDepositId4(tran, pid);
             if (pkmnId == null) return false;
 
+#if !DEBUG
+            try
+            {
+#endif
+                // this has to run before deletion or isExchanged information is lost.
+                // fixme: the trade_id is wrong here because logs use the
+                // deposited trade ID, not the exchanged one
+                GtsSetWithdrawTime4(tran, (ulong)pkmnId);
+#if !DEBUG
+            }
+            catch { }
+#endif
+
             tran.ExecuteNonQuery("DELETE FROM GtsPokemon4 WHERE id = @id",
                 new MySqlParameter("@id", pkmnId));
             return true;
@@ -272,16 +285,33 @@ namespace PkmnFoundations.Data
             return WithTransactionSuccessful(tran => GtsDeletePokemon4(tran, pid));
         }
 
+        private void GtsSetWithdrawTime4(MySqlTransaction tran, ulong trade_id)
+        {
+            // only set the withdraw time if IsExchanged is true.
+            // If false, no trade has happened; we are withdrawing our old pokemon.
+            if (Convert.ToByte(
+                tran.ExecuteScalar("SELECT IsExchanged FROM GtsPokemon4 WHERE id = @id",
+                new MySqlParameter("@id", trade_id))) != 0)
+            {
+                tran.ExecuteNonQuery("UPDATE GtsHistory4 " +
+                    "SET TimeWithdrawn = @now " +
+                    "WHERE trade_id = @trade_id",
+                    new MySqlParameter("@now", DateTime.UtcNow),
+                    new MySqlParameter("@trade_id", trade_id));
+            }
+        }
+
         public override bool GtsTradePokemon4(int pidSrc, int pidDest)
         {
             throw new NotImplementedException();
         }
 
-        public bool GtsTradePokemon4(MySqlTransaction tran, GtsRecord4 upload, GtsRecord4 result)
+        public bool GtsTradePokemon4(MySqlTransaction tran, GtsRecord4 upload, GtsRecord4 result, int partner_pid)
         {
             GtsRecord4 traded = upload.Clone();
             traded.FlagTraded(result);
 
+            ulong? trade_id = GtsGetDepositId4(tran, result.PID);
             GtsRecord4 resultOrig = GtsDataForUser4(tran, result.PID);
             if (resultOrig == null || resultOrig != result)
                 // looks like the pokemon was ninja'd between the Exchange and Exchange_finish
@@ -293,12 +323,22 @@ namespace PkmnFoundations.Data
             if (!GtsDepositPokemon4(tran, traded))
                 return false;
 
+#if !DEBUG
+            try
+            {
+#endif
+                GtsLogTrade4(tran, result, null, partner_pid, trade_id);
+                GtsLogTrade4(tran, upload, null, partner_pid, trade_id);
+#if !DEBUG
+            }
+            catch { }
+#endif
             return true;
         }
 
-        public override bool GtsTradePokemon4(GtsRecord4 upload, GtsRecord4 result)
+        public override bool GtsTradePokemon4(GtsRecord4 upload, GtsRecord4 result, int partner_pid)
         {
-            return WithTransactionSuccessful(tran => GtsTradePokemon4(tran, upload, result));
+            return WithTransactionSuccessful(tran => GtsTradePokemon4(tran, upload, result, partner_pid));
         }
 
         public GtsRecord4[] GtsSearch4(MySqlTransaction tran, int pid, ushort species, Genders gender, byte minLevel, byte maxLevel, byte country, int count)
@@ -457,20 +497,23 @@ namespace PkmnFoundations.Data
             return WithTransaction(tran => GtsAvailablePokemon4(tran));
         }
 
-        public void GtsLogTrade4(MySqlTransaction tran, GtsRecord4 record, DateTime? timeWithdrawn, int ? partner_pid)
+        public void GtsLogTrade4(MySqlTransaction tran, GtsRecord4 record, DateTime? timeWithdrawn, int ? partner_pid, ulong ? trade_id)
         {
             if (record.Data.Length != 236) throw new FormatException("pkm data must be 236 bytes.");
             if (record.TrainerName.RawData.Length != 16) throw new FormatException("Trainer name must be 16 bytes.");
             // note that IsTraded being true in the record is not an error condition
             // since it might have use later on. You should check for this in the upload handler.
 
-            ulong ? trade_id = GtsGetDepositId4(tran, record.PID);
+            if (trade_id == null)
+                trade_id = GtsGetDepositId4(tran, record.PID);
 
             // when calling delete.asp, the partner pid can't be told from the request alone,
             // so obtain it from the database instead.
-            if (record.IsExchanged != 0)
-                partner_pid = (int ?)tran.ExecuteScalar("SELECT partner_pid FROM GtsHistory4 " +
+            if (record.IsExchanged != 0 && trade_id != null)
+            {
+                partner_pid = (int?)tran.ExecuteScalar("SELECT partner_pid FROM GtsHistory4 " +
                     "WHERE trade_id = @trade_id AND IsExchanged = 0", new MySqlParameter("@trade_id", trade_id));
+            }
 
             MySqlParameter[] _params = ParamsFromRecord4(record);
             MySqlParameter[] _params2 = new MySqlParameter[25];
@@ -494,12 +537,12 @@ namespace PkmnFoundations.Data
                 _params2);
         }
 
-        public override void GtsLogTrade4(GtsRecord4 record, DateTime? timeWithdrawn, int? partner_pid)
+        public void GtsLogTrade4(GtsRecord4 record, DateTime? timeWithdrawn, int? partner_pid, ulong ? trade_id)
         {
             if (record.Data.Length != 236) throw new FormatException("pkm data must be 236 bytes.");
             if (record.TrainerName.RawData.Length != 16) throw new FormatException("Trainer name must be 16 bytes.");
 
-            WithTransaction(tran => GtsLogTrade4(tran, record, timeWithdrawn, partner_pid));
+            WithTransaction(tran => GtsLogTrade4(tran, record, timeWithdrawn, partner_pid, trade_id));
         }
 
         public void GtsSetLastSearch4(MySqlTransaction tran, int pid)
@@ -1204,6 +1247,19 @@ namespace PkmnFoundations.Data
             ulong ? pkmnId = GtsGetDepositId5(tran, pid);
             if (pkmnId == null) return false;
 
+#if !DEBUG
+            try
+            {
+#endif
+                // this has to run before deletion or isExchanged information is lost.
+                // fixme: the trade_id is wrong here because logs use the
+                // deposited trade ID, not the exchanged one
+                GtsSetWithdrawTime5(tran, (ulong)pkmnId);
+#if !DEBUG
+            }
+            catch { }
+#endif
+
             tran.ExecuteNonQuery("DELETE FROM GtsPokemon5 WHERE id = @id",
                 new MySqlParameter("@id", pkmnId));
             return true;
@@ -1214,16 +1270,33 @@ namespace PkmnFoundations.Data
             return WithTransactionSuccessful(tran => GtsDeletePokemon5(tran, pid));
         }
 
+        private void GtsSetWithdrawTime5(MySqlTransaction tran, ulong trade_id)
+        {
+            // only set the withdraw time if IsExchanged is true.
+            // If false, no trade has happened; we are withdrawing our old pokemon.
+            if (Convert.ToByte(
+                tran.ExecuteScalar("SELECT IsExchanged FROM GtsPokemon5 WHERE id = @id",
+                new MySqlParameter("@id", trade_id))) != 0)
+            {
+                tran.ExecuteNonQuery("UPDATE GtsHistory5 " +
+                    "SET TimeWithdrawn = @now " +
+                    "WHERE trade_id = @trade_id",
+                    new MySqlParameter("@now", DateTime.UtcNow),
+                    new MySqlParameter("@trade_id", trade_id));
+            }
+        }
+
         public override bool GtsTradePokemon5(int pidSrc, int pidDest)
         {
             throw new NotImplementedException();
         }
 
-        public bool GtsTradePokemon5(MySqlTransaction tran, GtsRecord5 upload, GtsRecord5 result)
+        public bool GtsTradePokemon5(MySqlTransaction tran, GtsRecord5 upload, GtsRecord5 result, int partner_pid)
         {
             GtsRecord5 traded = upload.Clone();
             traded.FlagTraded(result);
 
+            ulong? trade_id = GtsGetDepositId4(tran, result.PID);
             GtsRecord5 resultOrig = GtsDataForUser5(tran, result.PID);
             if (resultOrig == null || resultOrig != result)
                 // looks like the pokemon was ninja'd between the Exchange and Exchange_finish
@@ -1235,12 +1308,22 @@ namespace PkmnFoundations.Data
             if (!GtsDepositPokemon5(tran, traded))
                 return false;
 
+#if !DEBUG
+            try
+            {
+#endif
+                GtsLogTrade5(tran, result, null, partner_pid, trade_id);
+                GtsLogTrade5(tran, upload, null, partner_pid, trade_id);
+#if !DEBUG
+            }
+            catch { }
+#endif
             return true;
         }
 
-        public override bool GtsTradePokemon5(GtsRecord5 upload, GtsRecord5 result)
+        public override bool GtsTradePokemon5(GtsRecord5 upload, GtsRecord5 result, int partner_pid)
         {
-            return WithTransactionSuccessful(tran => GtsTradePokemon5(tran, upload, result));
+            return WithTransactionSuccessful(tran => GtsTradePokemon5(tran, upload, result, partner_pid));
         }
 
         public override GtsRecord5[] GtsSearch5(int pid, ushort species, Genders gender, byte minLevel, byte maxLevel, byte country, int count)
@@ -1411,12 +1494,12 @@ namespace PkmnFoundations.Data
             return Convert.ToInt32(tran.ExecuteScalar("SELECT Count(*) FROM GtsPokemon5 WHERE IsExchanged = 0"));
         }
 
-        public override void GtsLogTrade5(GtsRecord5 record, DateTime ? timeWithdrawn, int ? partner_pid)
+        public void GtsLogTrade5(GtsRecord5 record, DateTime ? timeWithdrawn, int ? partner_pid, ulong ? trade_id)
         {
-            WithTransaction(tran => GtsLogTrade5(tran, record, timeWithdrawn, partner_pid));
+            WithTransaction(tran => GtsLogTrade5(tran, record, timeWithdrawn, partner_pid, trade_id));
         }
 
-        public void GtsLogTrade5(MySqlTransaction tran, GtsRecord5 record, DateTime ? timeWithdrawn, int ? partner_pid)
+        public void GtsLogTrade5(MySqlTransaction tran, GtsRecord5 record, DateTime ? timeWithdrawn, int ? partner_pid, ulong ? trade_id)
         {
             // todo: Bring these out into a ValidateRecord5 method
             if (record == null) throw new ArgumentNullException("record");
@@ -1426,11 +1509,12 @@ namespace PkmnFoundations.Data
             // note that IsTraded being true in the record is not an error condition
             // since it might have use later on. You should check for this in the upload handler.
 
-            ulong ? trade_id = GtsGetDepositId5(tran, record.PID);
+            if (trade_id == null)
+                trade_id = GtsGetDepositId5(tran, record.PID);
 
             // when calling delete.asp, the partner pid can't be told from the request alone,
             // so obtain it from the database instead.
-            if (record.IsExchanged != 0)
+            if (record.IsExchanged != 0 && trade_id != null)
                 partner_pid = (int ?)tran.ExecuteScalar("SELECT partner_pid FROM GtsHistory5 " +
                     "WHERE trade_id = @trade_id AND IsExchanged = 0", new MySqlParameter("@trade_id", trade_id));
 

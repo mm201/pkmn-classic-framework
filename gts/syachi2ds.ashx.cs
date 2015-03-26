@@ -148,24 +148,9 @@ namespace PkmnFoundations.GTS
                         // (either here or when the trade is done)
                         bool success = Database.Instance.GtsDeletePokemon5(pid);
                         if (success)
-                        {
-#if !DEBUG
-                            try
-                            {
-#endif
-                                Database.Instance.GtsLogTrade5(record, DateTime.UtcNow, null);
-                                // todo: invalidate cache.
-                                //manager.RefreshStats();
-#if !DEBUG
-                            }
-                            catch { }
-#endif
                             response.Write(new byte[] { 0x01, 0x00 }, 0, 2);
-                        }
                         else
-                        {
                             response.Write(new byte[] { 0x00, 0x00 }, 0, 2);
-                        }
                     }
                     else
                     {
@@ -431,21 +416,8 @@ namespace PkmnFoundations.GTS
                     GtsRecord5 upload = (GtsRecord5)tag[0];
                     GtsRecord5 result = (GtsRecord5)tag[1];
 
-                    if (Database.Instance.GtsTradePokemon5(upload, result))
-                    {
-#if !DEBUG
-                        try
-                        {
-#endif
-                            Database.Instance.GtsLogTrade5(result, null, pid);
-                            // todo: invalidate cache
-                            //manager.RefreshStats();
-#if !DEBUG
-                        }
-                        catch { }
-#endif
+                    if (Database.Instance.GtsTradePokemon5(upload, result, pid))
                         response.Write(new byte[] { 0x01, 0x00 }, 0, 2);
-                    }
                     else
                         response.Write(new byte[] { 0x00, 0x00 }, 0, 2);
 

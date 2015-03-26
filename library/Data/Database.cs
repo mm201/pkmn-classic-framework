@@ -71,14 +71,13 @@ namespace PkmnFoundations.Data
         public abstract bool GtsDeletePokemon4(int pid);
 
         public abstract bool GtsTradePokemon4(int pidSrc, int pidDest);
-        public abstract bool GtsTradePokemon4(GtsRecord4 upload, GtsRecord4 result);
+        public abstract bool GtsTradePokemon4(GtsRecord4 upload, GtsRecord4 result, int partner_pid);
 
         public abstract GtsRecord4[] GtsSearch4(int pid, ushort species, Genders gender, byte minLevel, byte maxLevel, byte country, int count);
         public abstract int GtsAvailablePokemon4();
 
-        public abstract void GtsLogTrade4(GtsRecord4 record, DateTime ? timeWithdrawn, int ? partner_pid);
         public abstract void GtsSetLastSearch4(int pid);
-        public abstract DateTime ? GtsGetLastSearch4(int pid);
+        public abstract DateTime? GtsGetLastSearch4(int pid);
         #endregion
 
         #region Battle Tower 4
@@ -109,12 +108,11 @@ namespace PkmnFoundations.Data
         public abstract bool GtsDeletePokemon5(int pid);
 
         public abstract bool GtsTradePokemon5(int pidSrc, int pidDest);
-        public abstract bool GtsTradePokemon5(GtsRecord5 upload, GtsRecord5 result);
+        public abstract bool GtsTradePokemon5(GtsRecord5 upload, GtsRecord5 result, int partner_pid);
 
         public abstract GtsRecord5[] GtsSearch5(int pid, ushort species, Genders gender, byte minLevel, byte maxLevel, byte country, int count);
         public abstract int GtsAvailablePokemon5();
 
-        public abstract void GtsLogTrade5(GtsRecord5 record, DateTime ? timeWithdrawn, int ? partner_pid);
         public abstract void GtsSetLastSearch5(int pid);
         public abstract DateTime ? GtsGetLastSearch5(int pid);
         #endregion

@@ -159,22 +159,9 @@ namespace PkmnFoundations.GTS
                         // (either here or when the trade is done)
                         bool success = Database.Instance.GtsDeletePokemon4(pid);
                         if (success)
-                        {
-#if !DEBUG
-                            try
-                            {
-#endif
-                                Database.Instance.GtsLogTrade4(record, DateTime.UtcNow, null);
-#if !DEBUG
-                            }
-                            catch { }
-#endif
                             response.Write(new byte[] { 0x01, 0x00 }, 0, 2);
-                        }
                         else
-                        {
                             response.Write(new byte[] { 0x00, 0x00 }, 0, 2);
-                        }
                     }
                     else
                     {
@@ -438,19 +425,8 @@ namespace PkmnFoundations.GTS
                     GtsRecord4 upload = (GtsRecord4)tag[0];
                     GtsRecord4 result = (GtsRecord4)tag[1];
 
-                    if (Database.Instance.GtsTradePokemon4(upload, result))
-                    {
-#if !DEBUG
-                        try
-                        {
-#endif
-                            Database.Instance.GtsLogTrade4(result, null, pid);
-#if !DEBUG
-                        }
-                        catch { }
-#endif
+                    if (Database.Instance.GtsTradePokemon4(upload, result, pid))
                         response.Write(new byte[] { 0x01, 0x00 }, 0, 2);
-                    }
                     else
                         response.Write(new byte[] { 0x00, 0x00 }, 0, 2);
 
