@@ -355,7 +355,7 @@ namespace PkmnFoundations.Data
 
             if (gender != Genders.Either)
             {
-                where += " AND Gender = @gender";
+                where += " AND Gender IN (@gender, 3)";
                 _params.Add(new MySqlParameter("@gender", (byte)gender));
             }
 
@@ -1345,7 +1345,7 @@ namespace PkmnFoundations.Data
 
             if (gender != Genders.Either)
             {
-                where += " AND Gender = @gender";
+                where += " AND Gender IN (@gender, 3)";
                 _params.Add(new MySqlParameter("@gender", (byte)gender));
             }
 
