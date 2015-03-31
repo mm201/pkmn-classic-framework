@@ -129,6 +129,9 @@ namespace PkmnFoundations.Web.gts
             litSDef.Text = pkmn.Stats[Stats.SpecialDefense].ToString();
             litSpeed.Text = pkmn.Stats[Stats.Speed].ToString();
 
+            phPkrs.Visible = pkmn.Pokerus == Pokerus.Infected;
+            phPkrsCured.Visible = pkmn.Pokerus == Pokerus.Cured;
+
             rptMoves.DataSource = pkmn.Moves;
             rptMoves.DataBind();
 

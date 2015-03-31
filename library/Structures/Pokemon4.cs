@@ -151,7 +151,9 @@ namespace PkmnFoundations.Structures
                 Array.Copy(block, 19, Date, 0, 3);
 
                 TrainerMemo = BitConverter.ToInt32(block, 22);
-                PokerusStatus = block[26];
+                byte pokerusStatus = block[26];
+                PokerusDaysLeft = (byte)(pokerusStatus & 0x0f);
+                PokerusStrain = (byte)(pokerusStatus >> 4);
                 PokeBallID = block[27];
 
                 byte encounter_level = block[28];
@@ -301,8 +303,33 @@ namespace PkmnFoundations.Structures
         public byte[] Date { get; set; } // 3 bytes
         public int TrainerMemo { get; set; }
 
-        // todo: parse pokerus
-        public byte PokerusStatus { get; set; }
+        private byte m_pokerus_days_left;
+        public override byte PokerusDaysLeft
+        {
+            get
+            {
+                return m_pokerus_days_left;
+            }
+            set
+            {
+                if (value > 15) throw new ArgumentOutOfRangeException();
+                m_pokerus_days_left = value;
+            }
+        }
+
+        private byte m_pokerus_strain;
+        public override byte PokerusStrain
+        {
+            get
+            {
+                return m_pokerus_strain;
+            }
+            set
+            {
+                if (value > 15) throw new ArgumentOutOfRangeException();
+                m_pokerus_strain = value;
+            }
+        }
 
         // todo: need list of values and map them onto items
         public byte PokeBallID { get; set; }

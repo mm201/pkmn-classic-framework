@@ -212,4 +212,11 @@ namespace PkmnFoundations.Structures
         Modest = 15, Mild = 16, Quiet = 17, Bashful = 18, Rash = 19,
         Calm = 20, Gentle = 21, Sassy = 22, Careful = 23, Quirky = 24
     }
+
+    public enum Pokerus
+    {
+        None,
+        Infected,
+        Cured
+    }
 }

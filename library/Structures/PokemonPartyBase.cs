@@ -45,5 +45,18 @@ namespace PkmnFoundations.Structures
         //public HashSet<Ribbon> Ribbons { get; }
 
         public abstract IntStatValues Stats { get; }
+
+        public abstract byte PokerusDaysLeft { get; set; }
+        public abstract byte PokerusStrain { get; set; }
+
+        public Pokerus Pokerus
+        {
+            get
+            {
+                if (PokerusDaysLeft > 0) return Pokerus.Infected;
+                if (PokerusStrain > 0) return Pokerus.Cured;
+                return Pokerus.None;
+            }
+        }
     }
 }
