@@ -199,6 +199,80 @@ namespace PkmnFoundations.Structures
 
             return result;
         }
+
+        public static int ExperienceAt(int level, GrowthRates gr)
+        {
+            if (level > 100 || level < 1) throw new ArgumentOutOfRangeException("level");
+            if (level == 1) return 0;
+            switch (gr)
+            {
+                case GrowthRates.Slow:
+                    return ExperienceAt_Slow(level);
+                case GrowthRates.Medium:
+                    return ExperienceAt_Medium(level);
+                case GrowthRates.Fast:
+                    return ExperienceAt_Fast(level);
+                case GrowthRates.MediumSlow:
+                    return ExperienceAt_MediumSlow(level);
+                case GrowthRates.Erratic:
+                    return ExperienceAt_Erratic(level);
+                case GrowthRates.Fluctuating:
+                    return ExperienceAt_Fluctuating(level);
+            }
+            throw new ArgumentException("gr");
+        }
+
+        private static int ExperienceAt_Slow(int level)
+        {
+            int cube = level * level * level;
+            return 5 * cube / 4;
+        }
+
+        private static int ExperienceAt_Medium(int level)
+        {
+            int cube = level * level * level;
+            return cube;
+        }
+
+        private static int ExperienceAt_Fast(int level)
+        {
+            int cube = level * level * level;
+            return 4 * cube / 5;
+        }
+
+        private static int ExperienceAt_MediumSlow(int level)
+        {
+            int square = level * level;
+            int cube = square * level;
+            return 6 * cube / 5 - 15 * square + 100 * level - 140;
+        }
+
+        private static int ExperienceAt_Erratic(int level)
+        {
+            int cube = level * level * level;
+
+            if (level < 50)
+                return (cube * (100 - level)) / 50;
+            else if (level < 68)
+                return (cube * (150 - level)) / 100;
+            else if (level < 98)
+                // note that there is intentional rounding error cause by /3 inside the formula.
+                return (cube * ((1911 - 10 * level) / 3)) / 500;
+            else
+                return (cube * (160 - level)) / 100;
+        }
+
+        private static int ExperienceAt_Fluctuating(int level)
+        {
+            int cube = level * level * level;
+
+            if (level < 15)
+                return cube * ((level + 1) / 3 + 24) / 50;
+            else if (level < 36)
+                return cube * (level + 14) / 50;
+            else
+                return cube * (level / 2 + 32) / 50;
+        }
     }
 
     public struct Characteristic
