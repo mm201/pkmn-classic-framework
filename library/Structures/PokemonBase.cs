@@ -222,6 +222,34 @@ namespace PkmnFoundations.Structures
             throw new ArgumentException("gr");
         }
 
+        public static int LevelAt(int experience, GrowthRates gr)
+        {
+            if (experience < 0) throw new ArgumentOutOfRangeException("experience");
+
+            int minLevel = 1, maxLevel = 100;
+            int minExp = ExperienceAt(1, gr), maxExp = ExperienceAt(100, gr);
+
+            while (1 < 2)
+            {
+                if (maxExp <= experience) return maxLevel;
+                if (minLevel + 1 >= maxLevel) return minLevel;
+
+                int midLevel = (minLevel + maxLevel) >> 1;
+                int midExp = ExperienceAt(midLevel, gr);
+
+                if (experience >= midExp)
+                {
+                    minLevel = midLevel;
+                    minExp = midExp;
+                }
+                else
+                {
+                    maxLevel = midLevel;
+                    maxExp = midExp;
+                }
+            }
+        }
+
         private static int ExperienceAt_Slow(int level)
         {
             int cube = level * level * level;
