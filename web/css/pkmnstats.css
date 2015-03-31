@@ -3,13 +3,6 @@
     position: relative;
 }
 
-.gtsPokemonSummary .col
-{
-    float: left;
-    position: relative;
-    margin-right: 16px;
-}
-
 .gtsPokemonSummary .nickname
 {
     font-size: 12pt;
@@ -85,43 +78,21 @@
     top: -2px;
 }
 
-.gtsPokemonSummary .col table.summaryItems, .gtsPokemonSummary .col table.moves
+.colBasic2 .pfFormTable.summaryItems th
 {
-    border-radius: 4px;
-    overflow: hidden;
-    border-spacing: 0;
-}
-
-.gtsPokemonSummary .col table.summaryItems th
-{
-    color: white;
-    text-shadow: 0 1px 0 #2f8fbb;
-    border-bottom: 1px solid #2f8fbb;
     background-color: #43c4ff;
+    border-bottom: 1px solid #2f8fbb;
+    text-shadow: 0 1px 0 #2f8fbb;
 }
 
-.gtsPokemonSummary .col table.summaryItems th, .gtsPokemonSummary .col table.moves th
-{
-    text-align: left;
-    width: 64px;
-    margin: 0;
-    padding: 4px 2px 4px 8px;
-    background-image: -moz-linear-gradient(top, transparent 0%, rgba(0,0,0,0.05) 100%); /* FF3.6+ */
-    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%,transparent), color-stop(100%,rgba(0,0,0,0.05))); /* Chrome,Safari4+ */
-    background-image: -webkit-linear-gradient(top, transparent 0%,rgba(0,0,0,0.05) 100%); /* Chrome10+,Safari5.1+ */
-    background-image: -o-linear-gradient(top, transparent 0%,rgba(0,0,0,0.05) 100%); /* Opera 11.10+ */
-    background-image: -ms-linear-gradient(top, transparent 0%,rgba(0,0,0,0.05) 100%); /* IE10+ */
-    background-image: linear-gradient(to bottom, transparent 0%,rgba(0,0,0,0.05) 100%); /* W3C */
-}
-
-.gtsPokemonSummary .col.colStats table.summaryItems th
+.colStats .pfFormTable.summaryItems th
 {
     background-color: #9761e9;
     border-color: #6d45ab;
     text-shadow: 0 1px 0 #6d45ab;
 }
 
-.gtsPokemonSummary .col table.summaryItems td, .gtsPokemonSummary .col table.moves td
+.gtsPokemonSummary .pfColumn table.summaryItems td, .gtsPokemonSummary .pfColumn .pfFormTableMoves td
 {
     width: 180px;
     margin: 0;
@@ -136,7 +107,7 @@
     background-image: linear-gradient(to bottom, transparent 0%,rgba(0,0,0,0.05) 100%); /* W3C */
 }
 
-.gtsPokemonSummary .col.colBasic1
+.gtsPokemonSummary .pfColumn.colBasic1
 {
     width: 160px;
     margin-right: 16px;
@@ -151,18 +122,18 @@
     margin-top: 3px;
 }
 
-.gtsPokemonSummary .moves
+.gtsPokemonSummary .pfFormTableMoves
 {
     margin-top: 16px;
     overflow: hidden;
     border-radius: 4px;
 }
 
-.gtsPokemonSummary .moves .move
+.gtsPokemonSummary .pfFormTableMoves .move
 {
 }
 
-.moves .move
+.pfFormTableMoves .move
 {
     position: relative;
     margin: 0;
@@ -177,18 +148,18 @@
     background-image: linear-gradient(to bottom, transparent 0%,rgba(0,0,0,0.05) 100%); /* W3C */
 }
 
-.moves .move .name
+.pfFormTableMoves .move .name
 {
 }
 
-.moves .move .type
+.pfFormTableMoves .move .type
 {
     height: auto;
     display: table-cell;
     border-radius: 0;
 }
 
-.moves .move .pp
+.pfFormTableMoves .move .pp
 {
     float: right;
 }

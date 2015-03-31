@@ -82,3 +82,56 @@ input[type=submit].large, button.large
     background-color: white;
 }
 
+.pfColGroup
+{
+    position: relative;
+    overflow: hidden;
+}
+
+.pfColumn
+{
+    float: left;
+    position: relative;
+    margin-right: 16px;
+}
+
+.pfSubmitGroup
+{
+    position: absolute;
+    bottom: 12px;
+    right: 16px;
+}
+
+.pfFormTable, .pfFormTableMoves
+{
+    border-radius: 4px;
+    overflow: hidden;
+    border-spacing: 0;
+}
+
+.pfFormTable th, .pfFormTableMoves th
+{
+    text-align: left;
+    width: 64px;
+    margin: 0;
+    padding: 4px 2px 4px 8px;
+}
+
+.pfFormTable th
+{
+    color: white;
+    text-shadow: 0 1px 0 #2f8fbb;
+    border-bottom: 1px solid #2f8fbb;
+    background-color: #43c4ff;
+    text-align: left;
+    width: 64px;
+    margin: 0;
+    padding: 4px 2px 4px 8px;
+    background-image: -moz-linear-gradient(top, transparent 0%, rgba(0,0,0,0.05) 100%); /* FF3.6+ */
+    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%,transparent), color-stop(100%,rgba(0,0,0,0.05))); /* Chrome,Safari4+ */
+    background-image: -webkit-linear-gradient(top, transparent 0%,rgba(0,0,0,0.05) 100%); /* Chrome10+,Safari5.1+ */
+    background-image: -o-linear-gradient(top, transparent 0%,rgba(0,0,0,0.05) 100%); /* Opera 11.10+ */
+    background-image: -ms-linear-gradient(top, transparent 0%,rgba(0,0,0,0.05) 100%); /* IE10+ */
+    background-image: linear-gradient(to bottom, transparent 0%,rgba(0,0,0,0.05) 100%); /* W3C */
+}
+

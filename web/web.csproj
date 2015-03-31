@@ -3458,6 +3458,7 @@
     </Content>
     <Content Include="scripts\form.js" />
     <Content Include="scripts\jquery-1.11.1.min.js" />
+    <Content Include="scripts\jquery-ui.min.js" />
     <Content Include="scripts\retina.js" />
     <Content Include="test\BoxUp.aspx" />
     <Content Include="test\Decode.aspx" />

@@ -13,7 +13,7 @@
     <asp:PlaceHolder ID="phSummary" runat="server">
     <div class="gtsBox gtsPokemonSummary">
         <div class="row basicInfo">
-            <div class="col colBasic1">
+            <div class="pfColumn colBasic1">
                 <ul>
                 <li class="nickname">
                     <asp:Literal ID="litNickname" runat="server" />
@@ -50,8 +50,8 @@
                 <p><asp:Literal ID="litCharacteristic" Text="Characteristic todo" runat="server" /></p>
             </div>
 
-            <div class="col colBasic2">
-                <table class="summaryItems">
+            <div class="pfColumn colBasic2">
+                <table class="pfFormTable summaryItems">
                     <tr>
                         <th>Species</th>
                         <td><asp:Literal ID="litSpecies" runat="server" /></td>
@@ -104,8 +104,8 @@
                 </table>
             </div>
         
-            <div class="col colStats">
-                <table class="summaryItems">
+            <div class="pfColumn colStats">
+                <table class="pfFormTable summaryItems">
                     <tr>
                         <th>HP</th>
                         <td><asp:Literal ID="litHpCurr" runat="server" /> / <asp:Literal ID="litHp" runat="server" /><br />
@@ -138,7 +138,7 @@
                     </tr>
                 </table>
 
-                <table class="moves">
+                <table class="pfFormTableMoves">
                     <asp:Repeater ID="rptMoves" runat="server">
                         <ItemTemplate>
                             <tr class="move <%# ((MoveSlot)Container.DataItem).Move == null ? "" : ((MoveSlot)Container.DataItem).Move.Type.Identifier %>">
