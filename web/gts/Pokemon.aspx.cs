@@ -107,6 +107,21 @@ namespace PkmnFoundations.Web.gts
             litOtName.Text = Common.HtmlEncode(pkmn.TrainerName);
             litTrainerId.Text = (pkmn.TrainerID & 0xffff).ToString("00000");
             litExperience.Text = pkmn.Experience.ToString();
+            if (pkmn.Level < 100)
+            {
+                int expCurrLevel = PokemonBase.ExperienceAt(pkmn.Level, pkmn.Species.GrowthRate);
+                int expNextLevel = PokemonBase.ExperienceAt(pkmn.Level + 1, pkmn.Species.GrowthRate);
+                int progress = pkmn.Experience - expCurrLevel;
+                int nextIn = expNextLevel - pkmn.Experience;
+
+                litExperienceNext.Text = String.Format("next in {0}", nextIn);
+                litExpProgress.Text = CreateProgress(progress, expNextLevel - expCurrLevel);
+            }
+            else
+            {
+                litExperienceNext.Text = "";
+                litExpProgress.Text = CreateProgress(0, 1);
+            }
             if (pkmn.HeldItem != null)
             {
                 imgHeldItem.Visible = true;

@@ -184,6 +184,15 @@ namespace PkmnFoundations.Web.gts {
         protected global::System.Web.UI.WebControls.Literal litExperience;
         
         /// <summary>
+        /// litExperienceNext control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal litExperienceNext;
+        
+        /// <summary>
         /// litExpProgress control.
         /// </summary>
         /// <remarks>

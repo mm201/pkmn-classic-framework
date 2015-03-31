@@ -79,7 +79,7 @@
                         <th>Exp.</th>
                         <td><asp:Literal ID="litExperience" runat="server" />
 
-                            <div class="nextIn">next in ??? todo</div>
+                            <div class="nextIn"><asp:Literal ID="litExperienceNext" runat="server" /></div>
                             <div class="gtsProgress expBar">
                                 <asp:Literal ID="litExpProgress" runat="server">
                                     <div class="progress" style="width: 50%;"></div>
