@@ -11,6 +11,8 @@
 
 <asp:Content ID="Content2" ContentPlaceHolderID="cpMain" runat="server">
 
+    <h1>Available Pokémon</h1>
+
     <script type="text/javascript">
         $(document).ready(function ()
         {
@@ -20,43 +22,37 @@
     </script>
 
     <form id="theForm" runat="server">
-    <div class="gtsBox pfColGroup">
-        <p>
-            Please enter your search terms:
-        </p>
+    <div class="gtsBox pfColGroup" style="width: 640px;">
         <div class="pfColumn">
-            <table class="pfFormTable">
-                <tr>
-                    <th>Species</th>
-                    <td>
+            <table class="pfFormGroup">
+                <tr class="pfFormPair">
+                    <th class="pfFormKey">Species</th>
+                    <td class="pfFormValue">
                         <pf:PokemonPicker ID="ppSpecies" runat="server" />
                     </td>
                 </tr>
-                <tr>
-                    <th>Level</th>
-                    <td>
-                        <asp:TextBox ID="txtLevelMin" Width="3em" min="1" max="100" Text="1" runat="server" />
+                <tr class="pfFormPair">
+                    <th class="pfFormKey">Level</th>
+                    <td class="pfFormValue">
+                        <asp:TextBox ID="txtLevelMin" min="1" max="100" Width="3em" Text="1" runat="server" />
                         to
-                        <asp:TextBox ID="txtLevelMax" Width="3em" min="1" max="100" Text="100" runat="server" />
+                        <asp:TextBox ID="txtLevelMax" min="1" max="100" Width="3em" Text="100" runat="server" />
                     </td>
                 </tr>
-                <tr>
-                    <th>Gender</th>
-                    <td>
-                        <asp:RadioButtonList ID="rbGender" runat="server">
-                            <asp:ListItem Text="Male" Value="1" />
-                            <asp:ListItem Text="Female" Value="2" />
-                            <asp:ListItem Text="Any" Value="3" Selected="True" />
-                        </asp:RadioButtonList>
+                <tr class="pfFormPair">
+                    <th class="pfFormKey">Gender</th>
+                    <td class="pfFormValue">
+                        <asp:CheckBox ID="chkMale" Text="Male" Checked="true" runat="server" />
+                        <asp:CheckBox ID="chkFemale" Text="Female" Checked="true" runat="server" />
                     </td>
                 </tr>
             </table>
         </div>
         <div class="pfColumn">
-            <table class="pfFormTable">
-                <tr>
-                    <th>Version</th>
-                    <td>
+            <table class="pfFormGroup">
+                <tr class="pfFormPair">
+                    <th class="pfFormKey">Version</th>
+                    <td class="pfFormValue">
                         <asp:RadioButton ID="rbGen4" GroupName="grpGeneration" Checked="true" runat="server" />
                         <asp:Label ID="lblGen4" AssociatedControlID="rbGen4" runat="server">
                             <asp:Image ImageUrl="~/images/ver-icon/10.png" CssClass="sprite" 
@@ -87,7 +83,7 @@
                 </tr>
             </table>
         </div>
-        <div class="pfSubmitGroup">
+        <div class="pfFormSubmit">
         <asp:Button ID="btnSearch" Width="8em" Text="Search" runat="server" />
         </div>
     </div>

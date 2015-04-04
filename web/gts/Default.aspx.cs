@@ -21,7 +21,9 @@ namespace PkmnFoundations.GTS
             int species; Int32.TryParse(ppSpecies.Value, out species);
             int minLevel = Convert.ToInt32(txtLevelMin.Text);
             int maxLevel = Convert.ToInt32(txtLevelMax.Text);
-            Genders gender = (Genders)Convert.ToInt32(rbGender.SelectedValue);
+            Genders gender = Genders.Either;
+            if (chkMale.Checked && !chkFemale.Checked) gender = Genders.Male;
+            if (chkFemale.Checked && !chkMale.Checked) gender = Genders.Female;
 
             if (rbGen4.Checked)
             {

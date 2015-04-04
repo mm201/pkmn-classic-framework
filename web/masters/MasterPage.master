@@ -142,6 +142,16 @@
             <% break;
                    case "gts": %>
 
+                <ul class="gtsNav">
+                    <li>
+                        <asp:HyperLink ID="hlGts_Offers" NavigateUrl="~/gts/Default.aspx" runat="server">
+                            <span class="inner">
+                                Available Pokémon
+                            </span>
+                        </asp:HyperLink>
+                    </li>
+                </ul>
+
             <% break;
                } %>
         <div class="clear"></div>

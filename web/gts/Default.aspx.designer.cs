@@ -58,13 +58,22 @@ namespace PkmnFoundations.GTS {
         protected global::System.Web.UI.WebControls.TextBox txtLevelMax;
         
         /// <summary>
-        /// rbGender control.
+        /// chkMale control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.RadioButtonList rbGender;
+        protected global::System.Web.UI.WebControls.CheckBox chkMale;
+        
+        /// <summary>
+        /// chkFemale control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CheckBox chkFemale;
         
         /// <summary>
         /// rbGen4 control.

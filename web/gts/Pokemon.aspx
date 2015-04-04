@@ -51,33 +51,33 @@
             </div>
 
             <div class="pfColumn colBasic2">
-                <table class="pfFormTable summaryItems">
-                    <tr>
-                        <th>Species</th>
-                        <td><asp:Literal ID="litSpecies" runat="server" /></td>
+                <table class="pfFormGroup pfGroupBasic2">
+                    <tr class="pfFormPair">
+                        <th class="pfFormKey">Species</th>
+                        <td class="pfFormValue"><asp:Literal ID="litSpecies" runat="server" /></td>
                     </tr>
-                    <tr>
-                        <th>Pokédex</th>
-                        <td>#<asp:Literal ID="litPokedex" runat="server" /></td>
+                    <tr class="pfFormPair">
+                        <th class="pfFormKey">Pokédex</th>
+                        <td class="pfFormValue">#<asp:Literal ID="litPokedex" runat="server" /></td>
                     </tr>
-                    <tr>
-                        <th>Type</th>
-                        <td>
+                    <tr class="pfFormPair">
+                        <th class="pfFormKey">Type</th>
+                        <td class="pfFormValue">
                             <asp:Literal ID="litType1" runat="server" />&nbsp;
                             <asp:Literal ID="litType2" runat="server" />
                         </td>
                     </tr>
-                    <tr>
-                        <th>OT</th>
-                        <td><asp:Literal ID="litOtName" runat="server" /></td>
+                    <tr class="pfFormPair">
+                        <th class="pfFormKey">OT</th>
+                        <td class="pfFormValue"><asp:Literal ID="litOtName" runat="server" /></td>
                     </tr>
-                    <tr>
-                        <th>ID No.</th>
-                        <td><asp:Literal ID="litTrainerId" runat="server" /></td>
+                    <tr class="pfFormPair">
+                        <th class="pfFormKey">ID No.</th>
+                        <td class="pfFormValue"><asp:Literal ID="litTrainerId" runat="server" /></td>
                     </tr>
-                    <tr>
-                        <th>Exp.</th>
-                        <td><asp:Literal ID="litExperience" runat="server" />
+                    <tr class="pfFormPair">
+                        <th class="pfFormKey">Exp.</th>
+                        <td class="pfFormValue"><asp:Literal ID="litExperience" runat="server" />
 
                             <div class="nextIn"><asp:Literal ID="litExperienceNext" runat="server" /></div>
                             <div class="gtsProgress expBar">
@@ -87,28 +87,28 @@
                             </div>
                         </td>
                     </tr>
-                    <tr>
-                        <th>Held item</th>
-                        <td><asp:Image ID="imgHeldItem" CssClass="sprite item" ImageUrl="~/images/item-sm/3202.png" Width="24" Height="24" runat="server" />
+                    <tr class="pfFormPair">
+                        <th class="pfFormKey">Held item</th>
+                        <td class="pfFormValue"><asp:Image ID="imgHeldItem" CssClass="sprite item" ImageUrl="~/images/item-sm/3202.png" Width="24" Height="24" runat="server" />
                             <asp:Literal ID="litHeldItem" runat="server" /></td>
                     </tr>
-                    <tr>
-                        <th>Nature</th>
-                        <td><asp:Literal ID="litNature" runat="server" /></td>
+                    <tr class="pfFormPair">
+                        <th class="pfFormKey">Nature</th>
+                        <td class="pfFormValue"><asp:Literal ID="litNature" runat="server" /></td>
                     </tr>
-                    <tr>
-                        <th>Ability</th>
-                        <td><asp:Literal ID="litAbility" runat="server" />
+                    <tr class="pfFormPair">
+                        <th class="pfFormKey">Ability</th>
+                        <td class="pfFormValue"><asp:Literal ID="litAbility" runat="server" />
                         </td>
                     </tr>
                 </table>
             </div>
         
             <div class="pfColumn colStats">
-                <table class="pfFormTable summaryItems">
-                    <tr>
-                        <th>HP</th>
-                        <td><asp:Literal ID="litHpCurr" runat="server" /> / <asp:Literal ID="litHp" runat="server" /><br />
+                <table class="pfFormGroup pfGroupStats">
+                    <tr class="pfFormPair">
+                        <th class="pfFormKey">HP</th>
+                        <td class="pfFormValue"><asp:Literal ID="litHpCurr" runat="server" /> / <asp:Literal ID="litHp" runat="server" /><br />
                             <div class="gtsProgress hpBar">
                                 <asp:Literal ID="litHpProgress" runat="server">
                                     <div class="progress" style="width: 50%;"></div>
@@ -116,36 +116,36 @@
                             </div>
                         </td>
                     </tr>
-                    <tr>
-                        <th>Attack</th>
-                        <td><asp:Literal ID="litAtk" runat="server" /></td>
+                    <tr class="pfFormPair">
+                        <th class="pfFormKey">Attack</th>
+                        <td class="pfFormValue"><asp:Literal ID="litAtk" runat="server" /></td>
                     </tr>
-                    <tr>
-                        <th>Defense</th>
-                        <td><asp:Literal ID="litDef" runat="server" /></td>
+                    <tr class="pfFormPair">
+                        <th class="pfFormKey">Defense</th>
+                        <td class="pfFormValue"><asp:Literal ID="litDef" runat="server" /></td>
                     </tr>
-                    <tr>
-                        <th>Sp. Atk</th>
-                        <td><asp:Literal ID="litSAtk" runat="server" /></td>
+                    <tr class="pfFormPair">
+                        <th class="pfFormKey">Sp. Atk</th>
+                        <td class="pfFormValue"><asp:Literal ID="litSAtk" runat="server" /></td>
                     </tr>
-                    <tr>
-                        <th>Sp. Def</th>
-                        <td><asp:Literal ID="litSDef" runat="server" /></td>
+                    <tr class="pfFormPair">
+                        <th class="pfFormKey">Sp. Def</th>
+                        <td class="pfFormValue"><asp:Literal ID="litSDef" runat="server" /></td>
                     </tr>
-                    <tr>
-                        <th>Speed</th>
-                        <td><asp:Literal ID="litSpeed" runat="server" /></td>
+                    <tr class="pfFormPair">
+                        <th class="pfFormKey">Speed</th>
+                        <td class="pfFormValue"><asp:Literal ID="litSpeed" runat="server" /></td>
                     </tr>
                 </table>
 
-                <table class="pfFormTableMoves">
+                <table class="pfFormGroup pfGroupMoves">
                     <asp:Repeater ID="rptMoves" runat="server">
                         <ItemTemplate>
                             <tr class="move <%# ((MoveSlot)Container.DataItem).Move == null ? "" : ((MoveSlot)Container.DataItem).Move.Type.Identifier %>">
-                                <th class="type <%# ((MoveSlot)Container.DataItem).Move == null ? "" : ((MoveSlot)Container.DataItem).Move.Type.Identifier %>">
+                                <th class="pfFormKey type <%# ((MoveSlot)Container.DataItem).Move == null ? "" : ((MoveSlot)Container.DataItem).Move.Type.Identifier %>">
                                     <%# ((MoveSlot)Container.DataItem).Move == null ? "" : ((MoveSlot)Container.DataItem).Move.Type.Name.ToString() %>
                                 </th>
-                                <td>
+                                <td class="pfFormValue">
                                     <span class="name">
                                     <%# ((MoveSlot)Container.DataItem).Move == null ? "&nbsp;" : ((MoveSlot)Container.DataItem).Move.Name.ToString() %>
                                     </span>

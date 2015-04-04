@@ -30,6 +30,7 @@
     width: 104px;
     color: #e0e0e0;
     color: rgba(128,128,128,0.2);
+    font-family: 'Meiryo UI',sans-serif;
 }
 
 .gtsPokemonSummary .marks .m
@@ -78,33 +79,31 @@
     top: -2px;
 }
 
-.colBasic2 .pfFormTable.summaryItems th
+.pfGroupBasic2 .pfFormKey
 {
     background-color: #43c4ff;
-    border-bottom: 1px solid #2f8fbb;
-    text-shadow: 0 1px 0 #2f8fbb;
 }
 
-.colStats .pfFormTable.summaryItems th
+.pfGroupStats .pfFormKey
 {
     background-color: #9761e9;
-    border-color: #6d45ab;
-    text-shadow: 0 1px 0 #6d45ab;
 }
 
-.gtsPokemonSummary .pfColumn table.summaryItems td, .gtsPokemonSummary .pfColumn .pfFormTableMoves td
+.pfFormGroup.pfGroupMoves
+{
+    margin-top: 16px;
+    overflow: hidden;
+    border-radius: 4px;
+}
+
+.pfFormGroup .type
+{
+    border-bottom: none;
+}
+
+.gtsPokemonSummary .pfFormValue
 {
     width: 180px;
-    margin: 0;
-    padding: 4px 8px 4px 8px;
-    border-bottom: 1px solid #aaaaaa;
-    background-color: #f2f2f2;
-    background-image: -moz-linear-gradient(top, transparent 0%, rgba(0,0,0,0.05) 100%); /* FF3.6+ */
-    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%,transparent), color-stop(100%,rgba(0,0,0,0.05))); /* Chrome,Safari4+ */
-    background-image: -webkit-linear-gradient(top, transparent 0%,rgba(0,0,0,0.05) 100%); /* Chrome10+,Safari5.1+ */
-    background-image: -o-linear-gradient(top, transparent 0%,rgba(0,0,0,0.05) 100%); /* Opera 11.10+ */
-    background-image: -ms-linear-gradient(top, transparent 0%,rgba(0,0,0,0.05) 100%); /* IE10+ */
-    background-image: linear-gradient(to bottom, transparent 0%,rgba(0,0,0,0.05) 100%); /* W3C */
 }
 
 .gtsPokemonSummary .pfColumn.colBasic1
@@ -122,44 +121,21 @@
     margin-top: 3px;
 }
 
-.gtsPokemonSummary .pfFormTableMoves
+.pfFormGroup .type
 {
-    margin-top: 16px;
-    overflow: hidden;
-    border-radius: 4px;
-}
-
-.gtsPokemonSummary .pfFormTableMoves .move
-{
-}
-
-.pfFormTableMoves .move
-{
-    position: relative;
-    margin: 0;
-    padding: 4px;
-    border-bottom: 1px solid #aaaaaa;
     background-color: #f2f2f2;
-    background-image: -moz-linear-gradient(top, transparent 0%, rgba(0,0,0,0.05) 100%); /* FF3.6+ */
-    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%,transparent), color-stop(100%,rgba(0,0,0,0.05))); /* Chrome,Safari4+ */
-    background-image: -webkit-linear-gradient(top, transparent 0%,rgba(0,0,0,0.05) 100%); /* Chrome10+,Safari5.1+ */
-    background-image: -o-linear-gradient(top, transparent 0%,rgba(0,0,0,0.05) 100%); /* Opera 11.10+ */
-    background-image: -ms-linear-gradient(top, transparent 0%,rgba(0,0,0,0.05) 100%); /* IE10+ */
-    background-image: linear-gradient(to bottom, transparent 0%,rgba(0,0,0,0.05) 100%); /* W3C */
 }
 
-.pfFormTableMoves .move .name
-{
-}
-
-.pfFormTableMoves .move .type
+.pfFormGroup .move .type
 {
     height: auto;
     display: table-cell;
     border-radius: 0;
+    text-align: left;
+    padding: 4px 2px 4px 8px;
 }
 
-.pfFormTableMoves .move .pp
+.pfFormGroup .move .pp
 {
     float: right;
 }
