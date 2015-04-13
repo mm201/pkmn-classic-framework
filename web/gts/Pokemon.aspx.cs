@@ -85,14 +85,13 @@ namespace PkmnFoundations.Web.gts
         {
             litNickname.Text = pkmn.Nickname;
             bool shiny = pkmn.IsShiny;
-            imgPokemon.ImageUrl = (shiny ? "~/images/pkmn-lg-s/" : "~/images/pkmn-lg/") +
-                SpeciesFilename(pkmn) + ".png";
+            imgPokemon.ImageUrl = WebFormat.PokemonImage(pkmn);
             imgPokemon.AlternateText = pkmn.Species.Name.ToString();
             phShiny.Visible = shiny;
             // todo: pokerus
             phPkrs.Visible = false;
             phPkrsCured.Visible = false;
-            litMarks.Text = CreateMarks(pkmn.Markings);
+            litMarks.Text = WebFormat.Markings(pkmn.Markings);
             imgPokeball.ImageUrl = ItemFilename(pkmn.Pokeball);
             imgPokeball.AlternateText = pkmn.Pokeball.Name.ToString();
             imgPokeball.ToolTip = pkmn.Pokeball.Name.ToString();
@@ -155,49 +154,6 @@ namespace PkmnFoundations.Web.gts
 
             rptUnknownRibbons.DataSource = pkmn.UnknownRibbons;
             rptUnknownRibbons.DataBind();
-        }
-
-        private String[] m_marks = new String[] { "●", "▲", "■", "♥", "★", "♦" };
-
-        private String CreateMarks(Markings markings)
-        {
-            StringBuilder result = new StringBuilder();
-            int marking = 1;
-            for (int value = 0; value < 6; value++)
-            {
-                if (((int)markings & marking) != 0)
-                {
-                    result.Append("<span class=\"m\">");
-                    result.Append(m_marks[value]);
-                    result.Append("</span>");
-                }
-                else
-                {
-                    result.Append("<span>");
-                    result.Append(m_marks[value]);
-                    result.Append("</span>");
-                }
-
-                marking <<= 1;
-            }
-
-            return result.ToString();
-        }
-
-        private String SpeciesFilename(Pokemon4 pkmn)
-        {
-            // todo: move to a more central location
-            StringBuilder builder = new StringBuilder();
-            builder.Append(pkmn.SpeciesID);
-            if (pkmn.Form.Suffix.Length > 0)
-            {
-                builder.Append('-');
-                builder.Append(pkmn.Form.Suffix);
-            }
-            if (pkmn.Species.GenderVariations && pkmn.Gender == Genders.Female)
-                builder.Append("-f");
-
-            return builder.ToString();
         }
 
         private String ItemFilename(Item item)

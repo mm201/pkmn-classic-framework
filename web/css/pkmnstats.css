@@ -33,24 +33,24 @@
     font-family: 'Meiryo UI',sans-serif;
 }
 
-.gtsPokemonSummary .marks .m
+.marks .m
 {
     color: #808080;
 }
 
-.gtsPokemonSummary .specialFlags, .gtsPokemonSummary li.specialFlags
+.specialFlags, li.specialFlags
 {
     width: 104px;
 }
 
-.gtsPokemonSummary .specialFlags .shiny
+.specialFlags .shiny
 {
     font-weight: bold;
     vertical-align: middle;
     color: #ee0000;
 }
 
-.gtsPokemonSummary .specialFlags .pkrs, .specialFlags .pkrs_cure
+.specialFlags .pkrs, .specialFlags .pkrs_cure
 {
     font-weight: bold;
     vertical-align: middle;
@@ -79,16 +79,6 @@
     top: -2px;
 }
 
-.pfGroupBasic2 .pfFormKey
-{
-    background-color: #43c4ff;
-}
-
-.pfGroupStats .pfFormKey
-{
-    background-color: #9761e9;
-}
-
 .pfFormGroup.pfGroupMoves
 {
     margin-top: 16px;
@@ -108,8 +98,7 @@
 
 .gtsPokemonSummary .pfColumn.colBasic1
 {
-    width: 160px;
-    margin-right: 16px;
+    width: 104px;
 }
 
 .gtsPokemonSummary .nextIn
@@ -123,7 +112,6 @@
 
 .pfFormGroup .type
 {
-    background-color: #f2f2f2;
 }
 
 .pfFormGroup .move .type
@@ -160,3 +148,12 @@
     background-color: #43c4ff;
 }
 
+.gtsOffer
+{
+    margin: 8px 0;
+}
+
+.gtsOffer .pfColumn
+{
+    margin: 0 8px;
+}

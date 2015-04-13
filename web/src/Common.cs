@@ -39,6 +39,21 @@ namespace PkmnFoundations.Web
                 message[x] ^= m_pad[(x + padOffset) & 0xff];
         }
 
+        public static String ResolveUrl(String url)
+        {
+            url = url.Trim();
+            if (!(url[0] == '~')) return url;
+            try
+            {
+                if (VirtualPathUtility.IsAppRelative(url)) return VirtualPathUtility.ToAbsolute(url);
+                return url;
+            }
+            catch (HttpException)
+            {
+                return url;
+            }
+        }
+
         #region File extensions
         public static String GetExtension(String filename)
         {

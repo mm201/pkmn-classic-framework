@@ -98,7 +98,11 @@ input[type=submit].large, button.large
 {
     float: left;
     position: relative;
-    margin-right: 16px;
+}
+
+.gtsBox .pfColumn
+{
+    margin: 16px;
 }
 
 .pfFormSubmit
@@ -110,9 +114,14 @@ input[type=submit].large, button.large
 
 .pfFormGroup
 {
-    border-radius: 4px;
     overflow: hidden;
     border-spacing: 0;
+    height: 100%;
+}
+
+.gtsBox .pfFormGroup
+{
+    border-radius: 4px;
 }
 
 .pfFormKey, .pfFormValue
@@ -132,8 +141,6 @@ input[type=submit].large, button.large
 {
     color: white;
     text-align: left;
-    width: 64px;
-    padding-right: 2px;
     text-shadow: 0 1px 0 rgba(0,0,0,0.3);
 }
 
@@ -142,9 +149,39 @@ input[type=submit].large, button.large
     background-color: #82d2e0;
 }
 
+.home .pfFormKey {background-color: #ff8063;}
+.gts .pfFormKey {background-color: #43c4ff;}
+.bv .pfFormKey {background-color: #9761e9;}
+.dw .pfFormKey {background-color: #fa79d4;}
+.dex .pfFormKey {background-color: #2dd350;}
+.stat .pfFormKey {background-color: #ffc321;}
+.test .pfFormKey {background-color: #82d2e0;}
+.admin .pfFormKey {background-color: #555555;}
+
 .pfFormValue
 {
     background-color: #f2f2f2;
+}
+
+.pfRadListItem
+{
+    display: block;
+    margin: 4px 0;
+}
+
+.pfRadListItem *
+{
+    vertical-align: middle;
+}
+
+.pfRadListItem:first-child
+{
+    margin-top: 0;
+}
+
+.pfRadListItem:last-child
+{
+    margin-bottom: 0;
 }
 
 .ui-spinner

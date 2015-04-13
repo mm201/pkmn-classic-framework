@@ -49,124 +49,117 @@ namespace PkmnFoundations.GTS
         {
             if (min == 0 && max == 0)
             {
-                return "Any";
+                return "Any level";
             }
             else if (min == 0)
             {
-                return String.Format("{0} and under", max);
+                return String.Format("Lv. {0} and under", max);
             }
             else if (max == 0)
             {
-                return String.Format("{0} and up", min);
+                return String.Format("Lv. {0} and up", min);
             }
             else
             {
-                return String.Format("{0} to {1}", min, max);
+                return String.Format("Lv. {0} to {1}", min, max);
             }
         }
 
-        protected String CreateOffer4(object DataItem)
+        protected String CreateOfferImage(object DataItem)
+        {
+            return "<img src=\"" + ResolveUrl("~/images/pkmn-lg/todo.png") +
+                "\" alt=\"todo\" class=\"sprite species\" width=\"96px\" height=\"96px\" />";
+        }
+
+        protected String CreatePokeball(object DataItem)
+        {
+            return "<img src=\"" + ResolveUrl("~/images/item-sm/todo.png") +
+                "\" alt=\"todo\" title=\"todo\" class=\"sprite item\" width=\"24px\" height=\"24px\" />";
+        }
+
+        protected String CreatePokerus(object DataItem)
+        {
+            return "";
+        }
+
+
+        // fixme: I can remove the need for separate 4/5 functions by making
+        // the GtsRecords inherit from IGtsRecord and make the the Pokemon field
+        // return PokemonPartyBase.
+
+        protected String CreateLevel(object DataItem)
         {
             GtsRecord4 record = (GtsRecord4)DataItem;
-            Pokemon4 pokemon = null;
-            StringBuilder builder = new StringBuilder();
-
-            try
-            {
-                pokemon = new Pokemon4(m_pokedex, record.Data);
-            }
-            catch
-            {
-                builder.Append("Failure to parse pokemon data.<br />");
-            }
-
-            try
-            {
-                try
-                {
-                    builder.Append(String.Format("{0} (#{1})", pokemon.Species.Name, pokemon.SpeciesID));
-                }
-                catch (KeyNotFoundException)
-                {
-                    builder.Append(String.Format("??? (#{0})", record.Species));
-                }
-                catch (NullReferenceException)
-                {
-                    builder.Append(String.Format("??? (#{0})", record.Species));
-                }
-                builder.Append("<br />");
-                try
-                {
-                    if (pokemon.FormID != 0)
-                    {
-                        try
-                        {
-                            builder.Append(pokemon.Form.Name);
-                        }
-                        catch (KeyNotFoundException)
-                        {
-                            builder.Append("Unknown form");
-                        }
-                        catch (NullReferenceException)
-                        {
-                            builder.Append("Unknown form");
-                        }
-                        builder.Append("<br />");
-                    }
-                }
-                catch (NullReferenceException)
-                {
-                    builder.Append("Unknown form");
-                }
-                builder.Append(String.Format("Lv {0}", record.Level));
-                builder.Append(String.Format(", {0}", record.Gender));
-                builder.Append("<br />");
-                try
-                {
-                    builder.Append(String.Format("Nature: {0}", pokemon.Nature.ToString()));
-                }
-                catch (NullReferenceException)
-                {
-                    builder.Append("Nature: ???");
-                }
-                builder.Append("<br />");
-                try
-                {
-                    builder.Append(String.Format("Ability: {0}", pokemon.Ability.Name));
-                }
-                catch (KeyNotFoundException)
-                {
-                    builder.Append("Ability: ???");
-                }
-                catch (NullReferenceException)
-                {
-                    builder.Append("Ability: ???");
-                }
-                builder.Append("<br />");
-
-                return builder.ToString();
-            }
-            catch
-            {
-                return "Encountered an error trying to display this offer.";
-            }
+            return record.Level.ToString();
         }
 
-        protected String CreateWanted4(object DataItem)
+        protected String CreateGender(object DataItem)
         {
             GtsRecord4 record = (GtsRecord4)DataItem;
-            return String.Format("{3} (#{0})<br />{1}<br />Lv {2}",
-                record.RequestedSpecies, 
-                record.RequestedGender, 
-                FormatLevels(record.RequestedMinLevel, record.RequestedMaxLevel),
-                m_pokedex.Species(record.RequestedSpecies).Name);
+            return Format.GenderSymbol(record.Gender);
         }
 
-        protected String CreateTrainer4(object DataItem)
+        protected String CreateNickname(object DataItem)
+        {
+            return "todo";
+        }
+
+        protected String CreateSpecies(object DataItem)
+        {
+            GtsRecord4 record = (GtsRecord4)DataItem;
+            return m_pokedex.Species(record.Species).Name.ToString();
+        }
+
+        protected String CreatePokedex(object DataItem)
+        {
+            GtsRecord4 record = (GtsRecord4)DataItem;
+            return record.Species.ToString();
+        }
+
+        protected String CreateHeldItem(object DataItem)
+        {
+            return "todo";
+        }
+
+        protected String CreateNature(object DataItem)
+        {
+            return "todo";
+        }
+
+        protected String CreateAbility(object DataItem)
+        {
+            return "todo";
+        }
+
+        protected String CreateTrainer(object DataItem)
         {
             GtsRecord4 record = (GtsRecord4)DataItem;
             return Common.HtmlEncode(record.TrainerName.Text);
         }
+
+        protected String CreateWantedSpecies(object DataItem)
+        {
+            GtsRecord4 record = (GtsRecord4)DataItem;
+            return String.Format("{0} (#{1})",
+                m_pokedex.Species(record.RequestedSpecies).Name,
+                record.RequestedSpecies);
+        }
+
+        protected String CreateWantedGender(object DataItem)
+        {
+            GtsRecord4 record = (GtsRecord4)DataItem;
+            return Format.GenderSymbol(record.RequestedGender);
+        }
+
+        protected String CreateWantedLevel(object DataItem)
+        {
+            GtsRecord4 record = (GtsRecord4)DataItem;
+            return FormatLevels(record.RequestedMinLevel, record.RequestedMaxLevel);
+        }
+
+
+
+
 
         protected String CreateOffer5(object DataItem)
         {
@@ -181,7 +174,7 @@ namespace PkmnFoundations.GTS
         protected String CreateWanted5(object DataItem)
         {
             GtsRecord5 record = (GtsRecord5)DataItem;
-            return String.Format("{3} (#{0})<br />{1}<br />Lv {2}",
+            return String.Format("{3} (#{0})<br />{1}<br />{2}",
                 record.RequestedSpecies, 
                 record.RequestedGender, 
                 FormatLevels(record.RequestedMinLevel, record.RequestedMaxLevel),
@@ -193,8 +186,5 @@ namespace PkmnFoundations.GTS
             GtsRecord5 record = (GtsRecord5)DataItem;
             return Common.HtmlEncode(record.TrainerName.Text);
         }
-
-
-
     }
 }
