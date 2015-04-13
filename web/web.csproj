@@ -3587,6 +3587,7 @@
     <Compile Include="src\RetinaImage.cs" />
     <Compile Include="src\RetinaImageBase.cs" />
     <Compile Include="src\WebException.cs" />
+    <Compile Include="src\WebFormat.cs" />
     <Compile Include="test\BoxUp.aspx.cs">
       <DependentUpon>BoxUp.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>

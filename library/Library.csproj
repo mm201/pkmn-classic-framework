@@ -86,6 +86,7 @@
     <Compile Include="Structures\ByteStatValues.cs" />
     <Compile Include="Structures\ContestStatValues.cs" />
     <Compile Include="Structures\DressupRecord4.cs" />
+    <Compile Include="Structures\Format.cs" />
     <Compile Include="Structures\GtsRecord5.cs" />
     <Compile Include="Structures\Enums.cs" />
     <Compile Include="Structures\GtsRecord4.cs" />
