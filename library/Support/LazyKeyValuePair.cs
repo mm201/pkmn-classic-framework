@@ -28,6 +28,7 @@ namespace PkmnFoundations.Support
             set
             {
                 m_key = value;
+                m_has_key = true;
                 m_has_value = false;
             }
         }
@@ -45,29 +46,44 @@ namespace PkmnFoundations.Support
             set
             {
                 m_value = value;
+                m_has_value = true;
                 m_has_key = false;
             }
         }
 
         public void EvaluateKey()
         {
+#if DEBUG
+            AssertHelper.Assert(m_has_key || m_has_value);
+#endif
             if (!m_has_key) m_key = m_key_evaluator(m_value);
             m_has_key = true;
         }
 
         public void Evaluate()
         {
+#if DEBUG
+            AssertHelper.Assert(m_has_key || m_has_value);
+#endif
             if (!m_has_value) m_value = m_evaluator(m_key);
             m_has_value = true;
         }
 
+        /// <summary>
+        /// Causes the Key to be lost so it will be recomputed from the Value.
+        /// </summary>
         public void InvalidateKey()
         {
+            if (!m_has_value) throw new InvalidOperationException();
             m_has_key = false;
         }
 
+        /// <summary>
+        /// Causes the Value to be lost so it will be recomputed from the Key.
+        /// </summary>
         public void Invalidate()
         {
+            if (!m_has_key) throw new InvalidOperationException();
             m_has_value = false;
         }
     }
