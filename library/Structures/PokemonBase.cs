@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -60,7 +61,6 @@ namespace PkmnFoundations.Structures
             {
                 // changing species will cause the looked up Form to be
                 // incorrect so null it out.
-                // xxx: should really observer pattern this.
                 m_species_pair.Key = value;
                 m_form_pair.Invalidate();
             }
@@ -79,12 +79,19 @@ namespace PkmnFoundations.Structures
         public byte FormID
         {
             get { return m_form_pair.Key; }
-            set { m_form_pair.Key = value; }
+            set
+            {
+                m_form_pair.Key = value;
+            }
         }
         public Form Form
         {
             get { return m_form_pair.Value; }
-            set { m_form_pair.Value = value; }
+            set
+            {
+                SpeciesID = value.SpeciesID;
+                m_form_pair.Value = value;
+            }
         }
 
         public abstract Generations Generation { get; }
@@ -113,16 +120,16 @@ namespace PkmnFoundations.Structures
             set { m_ability_pair.Value = value; }
         }
 
-        public MoveSlot[] Moves { get { return m_moves; } }
+        public IList<MoveSlot> Moves { get { return m_moves; } }
         public uint TrainerID { get; set; }
         public uint Personality { get; set; }
         public Natures Nature { get { return (Natures)(Personality % 25u); } }
-        public byte Level { get; set; }
         public byte Happiness { get; set; }
         public Languages Language { get; set; }
         public IvStatValues IVs { get; set; }
         public ByteStatValues EVs { get; set; }
 
+        public abstract byte Level { get; set; }
         public abstract Genders Gender { get; set; }
         public abstract String Nickname { get; set; }
 
@@ -131,10 +138,15 @@ namespace PkmnFoundations.Structures
             get
             {
                 // Gen3/4/5 formula. Gen6 must override.
-                uint step1 = Personality ^ TrainerID;
-                int step2 = (int)((step1 >> 16) ^ (step1 & 0xffffu));
-                return step2 >> 3 == 0;
+                return ShinyTest(Personality, TrainerID, 3);
             }
+        }
+
+        public static bool ShinyTest(uint personality, uint trainerId, int trimBits)
+        {
+            uint step1 = personality ^ trainerId;
+            int step2 = (int)((step1 >> 16) ^ (step1 & 0xffffu));
+            return step2 >> trimBits == 0;
         }
 
         public Characteristic Characteristic
@@ -200,6 +212,7 @@ namespace PkmnFoundations.Structures
             return result;
         }
 
+        #region Experience formulas
         public static int ExperienceAt(int level, GrowthRates gr)
         {
             if (level > 100 || level < 1) throw new ArgumentOutOfRangeException("level");
@@ -222,7 +235,7 @@ namespace PkmnFoundations.Structures
             throw new ArgumentException("gr");
         }
 
-        public static int LevelAt(int experience, GrowthRates gr)
+        public static byte LevelAt(int experience, GrowthRates gr)
         {
             if (experience < 0) throw new ArgumentOutOfRangeException("experience");
 
@@ -231,8 +244,8 @@ namespace PkmnFoundations.Structures
 
             while (1 < 2)
             {
-                if (maxExp <= experience) return maxLevel;
-                if (minLevel + 1 >= maxLevel) return minLevel;
+                if (maxExp <= experience) return (byte)maxLevel;
+                if (minLevel + 1 >= maxLevel) return (byte)minLevel;
 
                 int midLevel = (minLevel + maxLevel) >> 1;
                 int midExp = ExperienceAt(midLevel, gr);
@@ -301,6 +314,7 @@ namespace PkmnFoundations.Structures
             else
                 return cube * (level / 2 + 32) / 50;
         }
+        #endregion
     }
 
     public struct Characteristic

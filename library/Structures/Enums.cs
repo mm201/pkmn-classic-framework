@@ -219,4 +219,15 @@ namespace PkmnFoundations.Structures
         Infected,
         Cured
     }
+
+    [Flags]
+    public enum ShinyLeaves : byte
+    {
+        LeafA = 1,
+        LeafB = 2,
+        LeafC = 4,
+        LeafD = 8,
+        LeafE = 16,
+        Crown = 32
+    }
 }

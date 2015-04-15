@@ -35,6 +35,7 @@ namespace PkmnFoundations.Structures
 
         private void Initialize()
         {
+            UnknownRibbons = new HashSet<int>();
         }
 
         protected override void Load(BinaryReader reader)
@@ -116,17 +117,15 @@ namespace PkmnFoundations.Structures
 
                 byte forme = block[24];
                 FatefulEncounter = (forme & 0x01) != 0;
-                Female = (forme & 0x02) != 0;
-                Genderless = (forme & 0x04) != 0;
+                m_female = (forme & 0x02) != 0;
+                m_genderless = (forme & 0x04) != 0;
                 FormID = (byte)(forme >> 3);
 
-                // todo: parse this in a meaningful way.
-                ShinyLeaves = block[25];
-                Unknown1 = BitConverter.ToUInt16(block, 26); // Probably unused?
+                ShinyLeaves = (ShinyLeaves)block[25];
+                Unknown1 = BitConverter.ToUInt16(block, 26);
 
-                // todo: doing trainer memos the right way is a pretty large task
-                // involving new database work.
-                TrainerMemoPlatinum = BitConverter.ToInt32(block, 28);
+                EggLocationID_Plat = BitConverter.ToUInt16(block, 28);
+                LocationID_Plat = BitConverter.ToUInt16(block, 30);
             }
 
             {
@@ -136,7 +135,7 @@ namespace PkmnFoundations.Structures
                 Unknown2 = block[22];
                 Version = (Versions)block[23];
                 ribbons3 = BitConverter.ToInt32(block, 24);
-                Unknown3 = BitConverter.ToInt32(block, 28);
+                Unknown3 = BitConverter.ToUInt32(block, 28);
             }
 
             {
@@ -144,13 +143,14 @@ namespace PkmnFoundations.Structures
 
                 TrainerNameEncoded = new EncodedString4(block, 0, 16);
 
-                // todo: parse dates
+                // todo: store as DateTime
                 EggDate = new byte[3];
                 Array.Copy(block, 16, EggDate, 0, 3);
                 Date = new byte[3];
                 Array.Copy(block, 19, Date, 0, 3);
 
-                TrainerMemo = BitConverter.ToInt32(block, 22);
+                EggLocationID = BitConverter.ToUInt16(block, 22);
+                LocationID = BitConverter.ToUInt16(block, 24);
                 byte pokerusStatus = block[26];
                 PokerusDaysLeft = (byte)(pokerusStatus & 0x0f);
                 PokerusStrain = (byte)(pokerusStatus >> 4);
@@ -158,7 +158,8 @@ namespace PkmnFoundations.Structures
 
                 byte encounter_level = block[28];
                 EncounterLevel = (byte)(encounter_level & 0x7f);
-                TrainerFemale = (encounter_level & 0x80) != 0;
+                bool trainerFemale = (encounter_level & 0x80) != 0;
+                TrainerGender = trainerFemale ? TrainerGenders.Female : TrainerGenders.Male;
 
                 EncounterType = block[29];
                 PokeBallID_Hgss = block[30];
@@ -195,29 +196,19 @@ namespace PkmnFoundations.Structures
                 Array.Copy(block, 76, Seals, 0, 24);
             }
 
-            Ribbons1 = ribbons1;
-            Ribbons2 = ribbons2;
-            Ribbons3 = ribbons3;
-
-            // todo: Ribbons need to be tracked in the database and stored in a meaningful way.
-            // pkmncf_pokedex_ribbons
-            // id, value3, value4, value5, value6, Name_JA, etc, Description_JA, etc
-            // value >> 3 --> array offset.
-            // value & 0x07 --> bit position.
-
             byte[] ribbons = new byte[12];
             Array.Copy(BitConverter.GetBytes(ribbons1), 0, ribbons, 0, 4);
             Array.Copy(BitConverter.GetBytes(ribbons2), 0, ribbons, 4, 4);
             Array.Copy(BitConverter.GetBytes(ribbons3), 0, ribbons, 8, 4);
 
-            Ribbons = new HashSet<Ribbon>();
-            UnknownRibbons = new HashSet<int>();
+            Ribbons.Clear();
+            UnknownRibbons.Clear();
 
             IDictionary<int, Ribbon> allRibbons = m_pokedex.Ribbons(Generations.Generation4);
 
             for (int x = 0; x < 96; x++)
             {
-                if (HasRibbon(ribbons, x))
+                if (PokemonPartyBase.HasRibbon(ribbons, x))
                 {
                     if (allRibbons.ContainsKey(x))
                         Ribbons.Add(allRibbons[x]);
@@ -227,16 +218,9 @@ namespace PkmnFoundations.Structures
             }
         }
 
-        bool HasRibbon(byte[] ribbons, int value)
-        {
-            if (value >= 96 || value < 0) throw new ArgumentOutOfRangeException();
-            int offset = value >> 3;
-            byte mask = (byte)(1 << (value & 0x07));
-            return (ribbons[offset] & mask) != 0;
-        }
-
         protected override void Save(BinaryWriter writer)
         {
+            // todo: implement save
             throw new NotImplementedException();
         }
 
@@ -245,30 +229,27 @@ namespace PkmnFoundations.Structures
             get { return Generations.Generation4; }
         }
 
-        public bool Female { get; set; }
-        public bool Genderless { get; set; }
+        private bool m_female;
+        private bool m_genderless;
         public override Genders Gender
         {
             get 
             {
-                if (Genderless) return Genders.None;
-                if (Female) return Genders.Female;
+                if (m_genderless) return Genders.None;
+                if (m_female) return Genders.Female;
                 return Genders.Male;
             }
             set
             {
-                Female = value == Genders.Female;
-                Genderless = value == Genders.None;
+                m_female = value == Genders.Female;
+                m_genderless = value == Genders.None;
             }
         }
 
-        // todo: parse shiny leaves data
-        public byte ShinyLeaves { get; set; }
-        public ushort Unknown1 { get; set; }
+        public ShinyLeaves ShinyLeaves { get; set; }
+        public ushort Unknown1 { get; set; } // appears just after a flags region storing gender, forme, shiny leaves, etc.
 
-        // this will require some database work.
-        public int TrainerMemoPlatinum { get; set; } // trainer memo for PtHGSS
-        public EncodedString4 NicknameEncoded { get; set; }
+        public EncodedString4 NicknameEncoded { get; set; } // public so trash bytes can be inspected/manipulated
         public override string Nickname
         {
             get
@@ -282,8 +263,9 @@ namespace PkmnFoundations.Structures
                 else NicknameEncoded.Text = value;
             }
         }
-        public byte Unknown2 { get; set; }
-        public int Unknown3 { get; set; }
+
+        public byte Unknown2 { get; set; } // appears just before Version
+        public uint Unknown3 { get; set; } // appears just after the last ribbon block
         public EncodedString4 TrainerNameEncoded { get; set; }
         public override string TrainerName
         {
@@ -298,40 +280,21 @@ namespace PkmnFoundations.Structures
                 else TrainerNameEncoded.Text = value;
             }
         }
-        // fixme: use DateTimes for these
+
+        // todo: Implement trainer memo structure
         public byte[] EggDate { get; set; } // 3 bytes
         public byte[] Date { get; set; } // 3 bytes
-        public int TrainerMemo { get; set; }
+        public ushort EggLocationID { get; set; }
+        public ushort LocationID { get; set; }
+        public ushort EggLocationID_Plat { get; set; }
+        public ushort LocationID_Plat { get; set; }
+        public byte EncounterLevel { get; set; }
 
-        private byte m_pokerus_days_left;
-        public override byte PokerusDaysLeft
-        {
-            get
-            {
-                return m_pokerus_days_left;
-            }
-            set
-            {
-                if (value > 15) throw new ArgumentOutOfRangeException();
-                m_pokerus_days_left = value;
-            }
-        }
+        // this is the notorious genIV encounter type flag, not used for much besides validation
+        public byte EncounterType { get; set; }
+        public byte Unknown4 { get; set; } // appears just after HGSS pokeball
 
-        private byte m_pokerus_strain;
-        public override byte PokerusStrain
-        {
-            get
-            {
-                return m_pokerus_strain;
-            }
-            set
-            {
-                if (value > 15) throw new ArgumentOutOfRangeException();
-                m_pokerus_strain = value;
-            }
-        }
-
-        // todo: need list of values and map them onto items
+        // todo: obtain complete list of Pokeball IDs in HGSS
         public byte PokeBallID { get; set; }
         public byte PokeBallID_Hgss { get; set; }
 
@@ -348,11 +311,7 @@ namespace PkmnFoundations.Structures
             set 
             {
                 if (m_pokeball == value) return;
-                if (value == null)
-                {
-                    m_pokeball = null;
-                    return;
-                }
+                if (value == null) throw new ArgumentNullException();
 
                 if (value.PokeballValue == null) throw new ArgumentException("Item is not a valid Pokeball.");
                 if ((int)value.PokeballValue > 255 || (int)value.PokeballValue < 0)
@@ -362,12 +321,15 @@ namespace PkmnFoundations.Structures
                 bool is_hgss = IsHgss();
                 bool is_hgss_pokeball = IsHgssPokeball(pokeballId);
                 if (!is_hgss && is_hgss_pokeball) throw new NotSupportedException("Can't place an HGSS Pokeball on a DPPt Pokémon.");
+                // xxx: we can probably allow an hgss pokeball on a dppt pokemon
+                // although the structure won't be valid
+                // todo: fact check how hgss responds in this situation.
 
                 // todo: fact check these two values:
-                // 1. a pokemon in an HGSS ball has a DPPt value of 1
+                // 1. a pokemon in an HGSS ball has a DPPt value of 4
                 // 2. any pokemon from DPPt has an HGSS value of 0
                 // (investigating pokemon in the system should be enough)
-                PokeBallID = (byte)(is_hgss_pokeball ? 1 : pokeballId);
+                PokeBallID = (byte)(is_hgss_pokeball ? 4 : pokeballId);
                 PokeBallID_Hgss = (byte)(is_hgss ? pokeballId : 0);
             }
         }
@@ -377,33 +339,14 @@ namespace PkmnFoundations.Structures
             return (Version == Versions.HeartGold || Version == Versions.SoulSilver);
         }
 
-        private bool IsHgssPokeball(int pokeballId)
+        private static bool IsHgssPokeball(int pokeballId)
         {
             return pokeballId > 16;
         }
 
-        public byte EncounterLevel { get; set; }
-        public bool TrainerFemale { get; set; }
-        public override TrainerGenders TrainerGender
-        {
-            get
-            {
-                return TrainerFemale ? TrainerGenders.Female : TrainerGenders.Male;
-            }
-            set
-            {
-                TrainerFemale = value == TrainerGenders.Female;
-            }
-        }
-
-        // this is the notorious genIV encounter type flag, not used for much besides validation
-        public byte EncounterType { get; set; }
-        public byte Unknown4 { get; set; }
-
-        public int Ribbons1 { get; set; }
-        public int Ribbons2 { get; set; }
-        public int Ribbons3 { get; set; }
-        public HashSet<Ribbon> Ribbons { get; private set; }
+        /// <summary>
+        /// This allows preservation of unknown ribbon flags when saving.
+        /// </summary>
         public HashSet<int> UnknownRibbons { get; private set; }
 
         // party-only stuff. (todo: put in derived class)
@@ -414,7 +357,7 @@ namespace PkmnFoundations.Structures
         public byte CapsuleIndex { get; set; }
         public ushort HP { get; set; }
         //public IntStatValues Stats { get; set; } // cached stats (only refreshes per level on gen4)
-        public byte[] Unknown7 { get; set; }
+        public byte[] Unknown7 { get; set; } // 56 bytes
         public byte[] Seals { get; set; }
 
         private IntStatValues m_stats;
