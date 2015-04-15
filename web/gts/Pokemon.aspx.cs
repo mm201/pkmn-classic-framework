@@ -19,7 +19,7 @@ namespace PkmnFoundations.Web.gts
         protected void Page_Load(object sender, EventArgs e)
         {
             m_pokedex = (Pokedex.Pokedex)Application["pkmncfPokedex"];
-            Pokemon4 pkmn = null;
+            PokemonParty4 pkmn = null;
 
             if (Request.QueryString.Count == 0 || Request.QueryString.Count > 2) throw new WebException(400);
             if (Request.QueryString["offer"] != null ||
@@ -55,13 +55,13 @@ namespace PkmnFoundations.Web.gts
                     case "4":
                     {
                         GtsRecord4 record = Database.Instance.GtsGetRecord4(tradeId, isExchanged, true);
-                        if (record != null) pkmn = new Pokemon4(m_pokedex, record.Data);
+                        if (record != null) pkmn = new PokemonParty4(m_pokedex, record.Data);
 
                     } break;
                     case "5":
                     {
                         GtsRecord5 record = Database.Instance.GtsGetRecord5(tradeId, isExchanged, true);
-                        if (record != null) pkmn = new Pokemon4(m_pokedex, record.Data);
+                        if (record != null) pkmn = new PokemonParty4(m_pokedex, record.Data);
 
                     } break;
                     default:
@@ -81,7 +81,7 @@ namespace PkmnFoundations.Web.gts
             Bind(pkmn);
         }
 
-        private void Bind(Pokemon4 pkmn)
+        private void Bind(PokemonParty4 pkmn)
         {
             litNickname.Text = pkmn.Nickname;
             bool shiny = pkmn.IsShiny;

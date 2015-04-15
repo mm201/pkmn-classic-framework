@@ -166,36 +166,6 @@ namespace PkmnFoundations.Structures
                 Unknown4 = block[31];
             }
 
-            // todo: split this class into separate box/party versions.
-            {
-                rand = (int)Personality;
-                byte[] block = reader.ReadBytes(100);
-                for (int pos = 0; pos < 100; pos += 2)
-                {
-                    rand = DecryptRNG(rand);
-                    block[pos] ^= (byte)(rand >> 16);
-                    block[pos + 1] ^= (byte)(rand >> 24);
-                }
-
-                StatusAffliction = block[0];
-                Unknown5 = block[1];
-                Unknown6 = BitConverter.ToUInt16(block, 2);
-                Level = block[4];
-                CapsuleIndex = block[5];
-                HP = BitConverter.ToUInt16(block, 6);
-                m_stats = new IntStatValues(BitConverter.ToUInt16(block, 8),
-                    BitConverter.ToUInt16(block, 10),
-                    BitConverter.ToUInt16(block, 12),
-                    BitConverter.ToUInt16(block, 14),
-                    BitConverter.ToUInt16(block, 16),
-                    BitConverter.ToUInt16(block, 18));
-
-                Unknown7 = new byte[56];
-                Array.Copy(block, 20, Unknown7, 0, 56);
-                Seals = new byte[24];
-                Array.Copy(block, 76, Seals, 0, 24);
-            }
-
             byte[] ribbons = new byte[12];
             Array.Copy(BitConverter.GetBytes(ribbons1), 0, ribbons, 0, 4);
             Array.Copy(BitConverter.GetBytes(ribbons2), 0, ribbons, 4, 4);
@@ -349,34 +319,14 @@ namespace PkmnFoundations.Structures
         /// </summary>
         public HashSet<int> UnknownRibbons { get; private set; }
 
-        // party-only stuff. (todo: put in derived class)
-        public byte StatusAffliction { get; set; }
-        // todo: ball seals
-        public byte Unknown5 { get; set; }
-        public ushort Unknown6 { get; set; }
-        public byte CapsuleIndex { get; set; }
-        public ushort HP { get; set; }
-        //public IntStatValues Stats { get; set; } // cached stats (only refreshes per level on gen4)
-        public byte[] Unknown7 { get; set; } // 56 bytes
-        public byte[] Seals { get; set; }
-
-        private IntStatValues m_stats;
-
-        // todo: this should go into the derived class.
-        // the implementation here should auto-calculate the stats. (as in GenV)
-        public override IntStatValues Stats
-        {
-            get { return m_stats; }
-        }
-
-        private static int DecryptRNG(int prev)
+        protected static int DecryptRNG(int prev)
         {
             return prev * 0x41c64e6d + 0x6073;
         }
 
         public override int Size
         {
-            get { return 236; }
+            get { return 136; }
         }
     }
 }
