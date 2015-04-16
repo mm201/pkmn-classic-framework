@@ -2089,7 +2089,7 @@ namespace PkmnFoundations.Data
         {
             if (record.Data.Length != 540) throw new ArgumentException("Box data must be 540 bytes.");
             long exists = (long)tran.ExecuteScalar("SELECT EXISTS(SELECT * FROM TerminalBoxes4 WHERE md5 = unhex(md5(@data)) AND Data = @data)", new MySqlParameter("@data", record.Data));
-            if (exists != 0) return 0;
+            if (exists != 0) return 0; // xxx: it would be better to return a null ulong ? than 0
 
             if (record.SerialNumber == 0)
             {
@@ -2099,7 +2099,6 @@ namespace PkmnFoundations.Data
                     new MySqlParameter("@pid", record.PID),
                     new MySqlParameter("@data", record.Data),
                     new MySqlParameter("@label", (int)record.Label)));
-                tran.Commit();
                 return serial;
             }
             else
@@ -2111,7 +2110,6 @@ namespace PkmnFoundations.Data
                     new MySqlParameter("@serial", record.SerialNumber),
                     new MySqlParameter("@data", record.Data),
                     new MySqlParameter("@label", (int)record.Label));
-                tran.Commit();
 
                 return rows > 0 ? record.SerialNumber : 0;
             }
