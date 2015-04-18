@@ -90,6 +90,7 @@
     <Compile Include="Structures\GtsRecord5.cs" />
     <Compile Include="Structures\Enums.cs" />
     <Compile Include="Structures\GtsRecord4.cs" />
+    <Compile Include="Structures\GtsRecordBase.cs" />
     <Compile Include="Structures\IvStatValues.cs" />
     <Compile Include="Structures\MoveSlot.cs" />
     <Compile Include="Structures\MusicalRecord5.cs" />

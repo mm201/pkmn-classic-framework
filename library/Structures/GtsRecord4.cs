@@ -13,17 +13,22 @@ namespace PkmnFoundations.Structures
     /// Includes a Pokémon box structure and metadata related to the trainer
     /// and request.
     /// </summary>
-    public class GtsRecord4 : IEquatable<GtsRecord4>
+    public class GtsRecord4 : GtsRecordBase, IEquatable<GtsRecord4>
     {
-        // todo: We should have a base class for Gen4/5 GTS records.
-
-        public GtsRecord4()
+        public GtsRecord4() : base()
         {
+            Initialize();
         }
 
-        public GtsRecord4(byte[] data)
+        public GtsRecord4(byte[] data) : base()
         {
+            Initialize();
             Load(data);
+        }
+
+        private void Initialize()
+        {
+
         }
 
         /// <summary>
@@ -83,66 +88,65 @@ namespace PkmnFoundations.Structures
         public byte TrainerVersion;
         public byte TrainerLanguage;
 
-        public byte[] Save()
+        protected override void Save(BinaryWriter writer)
         {
             // todo: enclose in properties and validate these when assigning.
             if (Data.Length != 0xEC) throw new FormatException("PKM length is incorrect");
             if (TrainerName.RawData.Length != 0x10) throw new FormatException("Trainer name length is incorrect");
-            byte[] data = new byte[292];
-            MemoryStream s = new MemoryStream(data);
-            s.Write(Data, 0, 0xEC);
-            s.Write(BitConverter.GetBytes(Species), 0, 2);
-            s.WriteByte((byte)Gender);
-            s.WriteByte(Level);
-            s.Write(BitConverter.GetBytes(RequestedSpecies), 0, 2);
-            s.WriteByte((byte)RequestedGender);
-            s.WriteByte(RequestedMinLevel);
-            s.WriteByte(RequestedMaxLevel);
-            s.WriteByte(Unknown1);
-            s.WriteByte((byte)TrainerGender);
-            s.WriteByte(Unknown2);
-            s.Write(BitConverter.GetBytes(DateToTimestamp(TimeDeposited)), 0, 8);
-            s.Write(BitConverter.GetBytes(DateToTimestamp(TimeExchanged)), 0, 8);
-            s.Write(BitConverter.GetBytes(PID), 0, 4);
-            s.Write(TrainerName.RawData, 0, 0x10);
-            s.Write(BitConverter.GetBytes(TrainerOT), 0, 2);
-            s.WriteByte(TrainerCountry);
-            s.WriteByte(TrainerRegion);
-            s.WriteByte(TrainerClass);
-            s.WriteByte(IsExchanged);
-            s.WriteByte(TrainerVersion);
-            s.WriteByte(TrainerLanguage);
-            s.Close();
-            return data;
+
+            writer.Write(Data, 0, 0xEC);                               // 0x0000
+            writer.Write(Species);                                     // 0x00EC
+            writer.Write((byte)Gender);                                // 0x00EE
+            writer.Write(Level);                                       // 0x00EF
+            writer.Write(RequestedSpecies);                            // 0x00F0
+            writer.Write((byte)RequestedGender);                       // 0x00F2
+            writer.Write(RequestedMinLevel);                           // 0x00F3
+            writer.Write(RequestedMaxLevel);                           // 0x00F4
+            writer.Write(Unknown1);                                    // 0x00F5
+            writer.Write((byte)TrainerGender);                         // 0x00F6
+            writer.Write(Unknown2);                                    // 0x00F7
+            writer.Write(DateToTimestamp(TimeDeposited));              // 0x00F8
+            writer.Write(DateToTimestamp(TimeExchanged));              // 0x0100
+            writer.Write(PID);                                         // 0x0108
+            writer.Write(TrainerName.RawData, 0, 0x10);                // 0x010C
+            writer.Write(TrainerOT);                                   // 0x011C
+            writer.Write(TrainerCountry);                              // 0x011E
+            writer.Write(TrainerRegion);                               // 0x011F
+            writer.Write(TrainerClass);                                // 0x0120
+            writer.Write(IsExchanged);                                 // 0x0121
+            writer.Write(TrainerVersion);                              // 0x0122
+            writer.Write(TrainerLanguage);                             // 0x0123
         }
 
-        public void Load(byte[] data)
+        protected override void Load(BinaryReader reader)
         {
-            if (data.Length != 292) throw new FormatException("GTS record length is incorrect.");
+            Data = reader.ReadBytes(0xEC);                             // 0x0000
+            Species = reader.ReadUInt16();                             // 0x00EC
+            Gender = (Genders)reader.ReadByte();                       // 0x00EE
+            Level = reader.ReadByte();                                 // 0x00EF
+            RequestedSpecies = reader.ReadUInt16();                    // 0x00F0
+            RequestedGender = (Genders)reader.ReadByte();              // 0x00F2
+            RequestedMinLevel = reader.ReadByte();                     // 0x00F3
+            RequestedMaxLevel = reader.ReadByte();                     // 0x00F4
+            Unknown1 = reader.ReadByte();                              // 0x00F5
+            TrainerGender = (TrainerGenders)reader.ReadByte();         // 0x00F6
+            Unknown2 = reader.ReadByte();                              // 0x00F7
+            TimeDeposited = TimestampToDate(reader.ReadUInt64());      // 0x00F8
+            TimeExchanged = TimestampToDate(reader.ReadUInt64());      // 0x0100
+            PID = reader.ReadInt32();                                  // 0x0108
+            TrainerName = new EncodedString4(reader.ReadBytes(0x10));  // 0x010C
+            TrainerOT = reader.ReadUInt16();                           // 0x011C
+            TrainerCountry = reader.ReadByte();                        // 0x011E
+            TrainerRegion = reader.ReadByte();                         // 0x011F
+            TrainerClass = reader.ReadByte();                          // 0x0120
+            IsExchanged = reader.ReadByte();                           // 0x0121
+            TrainerVersion = reader.ReadByte();                        // 0x0122
+            TrainerLanguage = reader.ReadByte();                       // 0x0123
+        }
 
-            Data = new byte[0xEC];
-            Array.Copy(data, 0, Data, 0, 0xEC);
-            Species = BitConverter.ToUInt16(data, 0xEC);
-            Gender = (Genders)data[0xEE];
-            Level = data[0xEF];
-            RequestedSpecies = BitConverter.ToUInt16(data, 0xF0);
-            RequestedGender = (Genders)data[0xF2];
-            RequestedMinLevel = data[0xF3];
-            RequestedMaxLevel = data[0xF4];
-            Unknown1 = data[0xF5];
-            TrainerGender = (TrainerGenders)data[0xF6];
-            Unknown2 = data[0xF7];
-            TimeDeposited = TimestampToDate(BitConverter.ToUInt64(data, 0xF8));
-            TimeExchanged = TimestampToDate(BitConverter.ToUInt64(data, 0x100));
-            PID = BitConverter.ToInt32(data, 0x108);
-            TrainerName = new EncodedString4(data, 0x10C, 0x10);
-            TrainerOT = BitConverter.ToUInt16(data, 0x11C);
-            TrainerCountry = data[0x11E];
-            TrainerRegion = data[0x11F];
-            TrainerClass = data[0x120];
-            IsExchanged = data[0x121];
-            TrainerVersion = data[0x122];
-            TrainerLanguage = data[0x123];
+        public override int Size
+        {
+            get { return 292; }
         }
 
         public GtsRecord4 Clone()
@@ -185,47 +189,6 @@ namespace PkmnFoundations.Structures
             TimeExchanged = DateTime.UtcNow;
             PID = other.PID;
             IsExchanged = 0x01;
-        }
-
-        public static bool CheckLevels(byte min, byte max, byte other)
-        {
-            if (max == 0) max = 255;
-            return other >= min && other <= max;
-        }
-
-        public static DateTime ? TimestampToDate(ulong timestamp)
-        {
-            if (timestamp == 0) return null;
-
-            ushort year = (ushort)((timestamp >> 0x30) & 0xffff);
-            byte month = (byte)((timestamp >> 0x28) & 0xff);
-            byte day = (byte)((timestamp >> 0x20) & 0xff);
-            byte hour = (byte)((timestamp >> 0x18) & 0xff);
-            byte minute = (byte)((timestamp >> 0x10) & 0xff);
-            byte second = (byte)((timestamp >> 0x08) & 0xff);
-            //byte fractional = (byte)(timestamp & 0xff); // always 0
-
-            try
-            {
-                return new DateTime(year, month, day, hour, minute, second);
-            }
-            catch (ArgumentOutOfRangeException)
-            {
-                return null;
-            }
-        }
-
-        public static ulong DateToTimestamp(DateTime ? date)
-        {
-            if (date == null) return 0;
-            DateTime date2 = (DateTime)date;
-
-            return (ulong)(date2.Year & 0xffff) << 0x30
-                | (ulong)(date2.Month & 0xff) << 0x28
-                | (ulong)(date2.Day & 0xff) << 0x20
-                | (ulong)(date2.Hour & 0xff) << 0x18
-                | (ulong)(date2.Minute & 0xff) << 0x10
-                | (ulong)(date2.Second & 0xff) << 0x08;
         }
 
         public static bool operator ==(GtsRecord4 a, GtsRecord4 b)

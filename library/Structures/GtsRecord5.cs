@@ -13,17 +13,22 @@ namespace PkmnFoundations.Structures
     /// Includes a Pokémon box structure and metadata related to the trainer
     /// and request.
     /// </summary>
-    public class GtsRecord5 : IEquatable<GtsRecord5>
+    public class GtsRecord5 : GtsRecordBase, IEquatable<GtsRecord5>
     {
-        // todo: We should have a base class for Gen4/5 GTS records.
-
         public GtsRecord5()
         {
+            Initialize();
         }
 
         public GtsRecord5(byte[] data)
         {
+            Initialize();
             Load(data);
+        }
+
+        private void Initialize()
+        {
+
         }
 
         // xxx: Data and Unknown0 should be one field.
@@ -93,73 +98,72 @@ namespace PkmnFoundations.Structures
         public byte TrainerBadges; // speculative. Usually 8.
         public byte TrainerUnityTower;
 
-        public byte[] Save()
+        protected override void Save(BinaryWriter writer)
         {
             // todo: enclose in properties and validate these when assigning.
             if (Data.Length != 0xDC) throw new FormatException("PKM length is incorrect");
             if (TrainerName.RawData.Length != 0x10) throw new FormatException("Trainer name length is incorrect");
-            byte[] data = new byte[296];
-            MemoryStream s = new MemoryStream(data);
-            s.Write(Data, 0, 0xDC);
-            s.Write(Unknown0, 0, 0x10);
-            s.Write(BitConverter.GetBytes(Species), 0, 2);
-            s.WriteByte((byte)Gender);
-            s.WriteByte(Level);
-            s.Write(BitConverter.GetBytes(RequestedSpecies), 0, 2);
-            s.WriteByte((byte)RequestedGender);
-            s.WriteByte(RequestedMinLevel);
-            s.WriteByte(RequestedMaxLevel);
-            s.WriteByte(Unknown1);
-            s.WriteByte((byte)TrainerGender);
-            s.WriteByte(Unknown2);
-            s.Write(BitConverter.GetBytes(GtsRecord4.DateToTimestamp(TimeDeposited)), 0, 8);
-            s.Write(BitConverter.GetBytes(GtsRecord4.DateToTimestamp(TimeExchanged)), 0, 8);
-            s.Write(BitConverter.GetBytes(PID), 0, 4);
-            s.Write(BitConverter.GetBytes(TrainerOT), 0, 4);
-            s.Write(TrainerName.RawData, 0, 0x10);
-            s.WriteByte(TrainerCountry);
-            s.WriteByte(TrainerRegion);
-            s.WriteByte(TrainerClass);
-            s.WriteByte(IsExchanged);
-            s.WriteByte(TrainerVersion);
-            s.WriteByte(TrainerLanguage);
-            s.WriteByte(TrainerBadges);
-            s.WriteByte(TrainerUnityTower);
-            s.Close();
-            return data;
+
+            writer.Write(Data, 0, 0xDC);                               // 0x0000
+            writer.Write(Unknown0, 0, 0x10);                           // 0x00DC
+
+            writer.Write(Species);                                     // 0x00EC
+            writer.Write((byte)Gender);                                // 0x00EE
+            writer.Write(Level);                                       // 0x00EF
+            writer.Write(RequestedSpecies);                            // 0x00F0
+            writer.Write((byte)RequestedGender);                       // 0x00F2
+            writer.Write(RequestedMinLevel);                           // 0x00F3
+            writer.Write(RequestedMaxLevel);                           // 0x00F4
+            writer.Write(Unknown1);                                    // 0x00F5
+            writer.Write((byte)TrainerGender);                         // 0x00F6
+            writer.Write(Unknown2);                                    // 0x00F7
+            writer.Write(DateToTimestamp(TimeDeposited));              // 0x00F8
+            writer.Write(DateToTimestamp(TimeExchanged));              // 0x0100
+            writer.Write(PID);                                         // 0x0108
+            writer.Write(TrainerOT);                                   // 0x010C
+            writer.Write(TrainerName.RawData, 0, 0x10);                // 0x0110
+            writer.Write(TrainerCountry);                              // 0x0120
+            writer.Write(TrainerRegion);                               // 0x0121
+            writer.Write(TrainerClass);                                // 0x0122
+            writer.Write(IsExchanged);                                 // 0x0123
+            writer.Write(TrainerVersion);                              // 0x0124
+            writer.Write(TrainerLanguage);                             // 0x0125
+            writer.Write(TrainerBadges);                               // 0x0126
+            writer.Write(TrainerUnityTower);                           // 0x0127
         }
 
-        public void Load(byte[] data)
+        protected override void Load(BinaryReader reader)
         {
-            if (data.Length != 296) throw new FormatException("GTS record length is incorrect.");
+            Data = reader.ReadBytes(0xDC);                             // 0x0000
+            Unknown0 = reader.ReadBytes(0x10);                         // 0x00DC
+            Species = reader.ReadUInt16();                             // 0x00EC
+            Gender = (Genders)reader.ReadByte();                       // 0x00EE
+            Level = reader.ReadByte();                                 // 0x00EF
+            RequestedSpecies = reader.ReadUInt16();                    // 0x00F0
+            RequestedGender = (Genders)reader.ReadByte();              // 0x00F2
+            RequestedMinLevel = reader.ReadByte();                     // 0x00F3
+            RequestedMaxLevel = reader.ReadByte();                     // 0x00F4
+            Unknown1 = reader.ReadByte();                              // 0x00F5
+            TrainerGender = (TrainerGenders)reader.ReadByte();         // 0x00F6
+            Unknown2 = reader.ReadByte();                              // 0x00F7
+            TimeDeposited = TimestampToDate(reader.ReadUInt64());      // 0x00F8
+            TimeExchanged = TimestampToDate(reader.ReadUInt64());      // 0x0100
+            PID = reader.ReadInt32();                                  // 0x0108
+            TrainerOT = reader.ReadUInt32();                           // 0x010C
+            TrainerName = new EncodedString5(reader.ReadBytes(0x10));  // 0x0110
+            TrainerCountry = reader.ReadByte();                        // 0x0120
+            TrainerRegion = reader.ReadByte();                         // 0x0121
+            TrainerClass = reader.ReadByte();                          // 0x0122
+            IsExchanged = reader.ReadByte();                           // 0x0123
+            TrainerVersion = reader.ReadByte();                        // 0x0124
+            TrainerLanguage = reader.ReadByte();                       // 0x0125
+            TrainerBadges = reader.ReadByte();                         // 0x0126
+            TrainerUnityTower = reader.ReadByte();                     // 0x0127
+        }
 
-            Data = new byte[0xDC];
-            Array.Copy(data, 0, Data, 0, 0xDC);
-            Unknown0 = new byte[0x10];
-            Array.Copy(data, 0xDC, Unknown0, 0, 0x10);
-            Species = BitConverter.ToUInt16(data, 0xEC);
-            Gender = (Genders)data[0xEE];
-            Level = data[0xEF];
-            RequestedSpecies = BitConverter.ToUInt16(data, 0xF0);
-            RequestedGender = (Genders)data[0xF2];
-            RequestedMinLevel = data[0xF3];
-            RequestedMaxLevel = data[0xF4];
-            Unknown1 = data[0xF5];
-            TrainerGender = (TrainerGenders)data[0xF6];
-            Unknown2 = data[0xF7];
-            TimeDeposited = GtsRecord4.TimestampToDate(BitConverter.ToUInt64(data, 0xF8));
-            TimeExchanged = GtsRecord4.TimestampToDate(BitConverter.ToUInt64(data, 0x100));
-            PID = BitConverter.ToInt32(data, 0x108);
-            TrainerOT = BitConverter.ToUInt32(data, 0x10C);
-            TrainerName = new EncodedString5(data, 0x110, 0x10);
-            TrainerCountry = data[0x120];
-            TrainerRegion = data[0x121];
-            TrainerClass = data[0x122];
-            IsExchanged = data[0x123];
-            TrainerVersion = data[0x124];
-            TrainerLanguage = data[0x125];
-            TrainerBadges = data[0x126];
-            TrainerUnityTower = data[0x127];
+        public override int Size
+        {
+            get { return 296; }
         }
 
         public GtsRecord5 Clone()
@@ -202,12 +206,6 @@ namespace PkmnFoundations.Structures
             TimeExchanged = DateTime.UtcNow;
             PID = other.PID;
             IsExchanged = 0x01;
-        }
-
-        public static bool CheckLevels(byte min, byte max, byte other)
-        {
-            if (max == 0) max = 255;
-            return other >= min && other <= max;
         }
 
         public static bool operator ==(GtsRecord5 a, GtsRecord5 b)
