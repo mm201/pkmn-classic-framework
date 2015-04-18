@@ -1191,8 +1191,7 @@ namespace PkmnFoundations.Data
         public bool GtsDepositPokemon5(MySqlTransaction tran, GtsRecord5 record)
         {
             if (record == null) throw new ArgumentNullException("record");
-            if (record.Data.Length != 220) throw new FormatException("pkm data must be 220 bytes.");
-            if (record.Unknown0.Length != 16) throw new FormatException("pkm padding must be 16 bytes.");
+            if (record.Data.Length != 236) throw new FormatException("pkm data must be 220 bytes.");
             if (record.TrainerName.RawData.Length != 16) throw new FormatException("Trainer name must be 16 bytes.");
             // note that IsTraded being true in the record is not an error condition
             // since it might have use later on. You should check for this in the upload handler.
@@ -1226,8 +1225,7 @@ namespace PkmnFoundations.Data
         public override bool GtsDepositPokemon5(GtsRecord5 record)
         {
             if (record == null) throw new ArgumentNullException("record");
-            if (record.Data.Length != 220) throw new FormatException("pkm data must be 220 bytes.");
-            if (record.Unknown0.Length != 16) throw new FormatException("pkm padding must be 16 bytes.");
+            if (record.Data.Length != 236) throw new FormatException("pkm data must be 236 bytes.");
             if (record.TrainerName.RawData.Length != 16) throw new FormatException("Trainer name must be 16 bytes.");
 
             return WithTransactionSuccessful(tran => GtsDepositPokemon5(tran, record));
@@ -1407,14 +1405,12 @@ namespace PkmnFoundations.Data
             // xxx: Don't use ordinals here
             GtsRecord5 result = new GtsRecord5();
 
-            byte[] data = new byte[220];
+            // xxx: Data and Unknown0 should share a database field.
+            // (This requires migrating a lot of existing data)
+            byte[] data = new byte[236];
             reader.GetBytes(0, 0, data, 0, 220);
+            reader.GetBytes(1, 0, data, 220, 16);
             result.Data = data;
-            data = null;
-
-            data = new byte[16];
-            reader.GetBytes(1, 0, data, 0, 16);
-            result.Unknown0 = data;
             data = null;
 
             result.Species = reader.GetUInt16(2);
@@ -1455,8 +1451,13 @@ namespace PkmnFoundations.Data
         {
             MySqlParameter[] result = new MySqlParameter[25];
 
-            result[0] = new MySqlParameter("@Data", record.Data);
-            result[1] = new MySqlParameter("@Unknown0", record.Unknown0);
+            byte[] data = new byte[220];
+            byte[] unknown0 = new byte[16];
+            Array.Copy(record.Data, 0, data, 0, 220);
+            Array.Copy(record.Data, 220, unknown0, 0, 16);
+
+            result[0] = new MySqlParameter("@Data", data);
+            result[1] = new MySqlParameter("@Unknown0", unknown0);
             result[2] = new MySqlParameter("@Species", record.Species);
             result[3] = new MySqlParameter("@Gender", (byte)record.Gender);
             result[4] = new MySqlParameter("@Level", record.Level);
@@ -1503,8 +1504,7 @@ namespace PkmnFoundations.Data
         {
             // todo: Bring these out into a ValidateRecord5 method
             if (record == null) throw new ArgumentNullException("record");
-            if (record.Data.Length != 220) throw new FormatException("pkm data must be 220 bytes.");
-            if (record.Unknown0.Length != 16) throw new FormatException("pkm padding must be 16 bytes.");
+            if (record.Data.Length != 236) throw new FormatException("pkm data must be 236 bytes.");
             if (record.TrainerName.RawData.Length != 16) throw new FormatException("Trainer name must be 16 bytes.");
             // note that IsTraded being true in the record is not an error condition
             // since it might have use later on. You should check for this in the upload handler.

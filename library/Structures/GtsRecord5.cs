@@ -39,11 +39,6 @@ namespace PkmnFoundations.Structures
         public byte[] Data;
 
         /// <summary>
-        /// Unknown padding between pkm and rest of data. 16 bytes.
-        /// </summary>
-        public byte[] Unknown0;
-
-        /// <summary>
         /// National Dex species number
         /// </summary>
         public ushort Species;
@@ -101,12 +96,10 @@ namespace PkmnFoundations.Structures
         protected override void Save(BinaryWriter writer)
         {
             // todo: enclose in properties and validate these when assigning.
-            if (Data.Length != 0xDC) throw new FormatException("PKM length is incorrect");
+            if (Data.Length != 0xEC) throw new FormatException("PKM length is incorrect");
             if (TrainerName.RawData.Length != 0x10) throw new FormatException("Trainer name length is incorrect");
 
-            writer.Write(Data, 0, 0xDC);                               // 0x0000
-            writer.Write(Unknown0, 0, 0x10);                           // 0x00DC
-
+            writer.Write(Data, 0, 0xEC);                               // 0x0000
             writer.Write(Species);                                     // 0x00EC
             writer.Write((byte)Gender);                                // 0x00EE
             writer.Write(Level);                                       // 0x00EF
@@ -134,8 +127,7 @@ namespace PkmnFoundations.Structures
 
         protected override void Load(BinaryReader reader)
         {
-            Data = reader.ReadBytes(0xDC);                             // 0x0000
-            Unknown0 = reader.ReadBytes(0x10);                         // 0x00DC
+            Data = reader.ReadBytes(0xEC);                             // 0x0000
             Species = reader.ReadUInt16();                             // 0x00EC
             Gender = (Genders)reader.ReadByte();                       // 0x00EE
             Level = reader.ReadByte();                                 // 0x00EF
