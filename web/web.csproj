@@ -3577,6 +3577,7 @@
     <Compile Include="RoomLeaders.aspx.designer.cs">
       <DependentUpon>RoomLeaders.aspx</DependentUpon>
     </Compile>
+    <Compile Include="src\AppStateHelper.cs" />
     <Compile Include="src\Common.cs" />
     <Compile Include="src\DependencyNode.cs" />
     <Compile Include="src\HeaderColour.cs" />

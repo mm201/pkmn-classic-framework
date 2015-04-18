@@ -130,7 +130,7 @@ namespace PkmnFoundations.Data
         #endregion
 
         #region GTS 4
-        public GtsRecord4 GtsDataForUser4(MySqlTransaction tran, int pid)
+        public GtsRecord4 GtsDataForUser4(MySqlTransaction tran, Pokedex.Pokedex pokedex, int pid)
         {
             using (MySqlDataReader reader = (MySqlDataReader)tran.ExecuteReader("SELECT Data, Species, Gender, Level, " +
                 "RequestedSpecies, RequestedGender, RequestedMinLevel, RequestedMaxLevel, " +
@@ -145,7 +145,7 @@ namespace PkmnFoundations.Data
                     reader.Close();
                     return null;
                 }
-                GtsRecord4 result = Record4FromReader(reader);
+                GtsRecord4 result = Record4FromReader(pokedex, reader);
 #if DEBUG
                 AssertHelper.Equals(result.PID, pid);
 #endif
@@ -154,12 +154,12 @@ namespace PkmnFoundations.Data
             }
         }
 
-        public override GtsRecord4 GtsDataForUser4(int pid)
+        public override GtsRecord4 GtsDataForUser4(Pokedex.Pokedex pokedex, int pid)
         {
-            return WithTransaction(tran => GtsDataForUser4(tran, pid));
+            return WithTransaction(tran => GtsDataForUser4(tran, pokedex, pid));
         }
 
-        public GtsRecord4 GtsGetRecord4(MySqlTransaction tran, long tradeId, bool isExchanged, bool allowHistory)
+        public GtsRecord4 GtsGetRecord4(MySqlTransaction tran, Pokedex.Pokedex pokedex, long tradeId, bool isExchanged, bool allowHistory)
         {
             using (MySqlDataReader reader = (MySqlDataReader)tran.ExecuteReader("SELECT Data, Species, Gender, Level, " +
                 "RequestedSpecies, RequestedGender, RequestedMinLevel, RequestedMaxLevel, " +
@@ -172,7 +172,7 @@ namespace PkmnFoundations.Data
             {
                 if (reader.Read())
                 {
-                    GtsRecord4 result = Record4FromReader(reader);
+                    GtsRecord4 result = Record4FromReader(pokedex, reader);
                     reader.Close();
                     return result;
                 }
@@ -192,7 +192,7 @@ namespace PkmnFoundations.Data
                 {
                     if (reader.Read())
                     {
-                        GtsRecord4 result = Record4FromReader(reader);
+                        GtsRecord4 result = Record4FromReader(pokedex, reader);
                         reader.Close();
                         return result;
                     }
@@ -202,9 +202,9 @@ namespace PkmnFoundations.Data
             return null;
         }
 
-        public override GtsRecord4 GtsGetRecord4(long tradeId, bool isExchanged, bool allowHistory)
+        public override GtsRecord4 GtsGetRecord4(Pokedex.Pokedex pokedex, long tradeId, bool isExchanged, bool allowHistory)
         {
-            return WithTransaction(tran => GtsGetRecord4(tran, tradeId, isExchanged, allowHistory));
+            return WithTransaction(tran => GtsGetRecord4(tran, pokedex, tradeId, isExchanged, allowHistory));
         }
 
         public bool GtsDepositPokemon4(MySqlTransaction tran, GtsRecord4 record)
@@ -312,7 +312,7 @@ namespace PkmnFoundations.Data
             traded.FlagTraded(result);
 
             ulong? trade_id = GtsGetDepositId4(tran, result.PID);
-            GtsRecord4 resultOrig = GtsDataForUser4(tran, result.PID);
+            GtsRecord4 resultOrig = GtsDataForUser4(tran, result.Pokedex, result.PID);
             if (resultOrig == null || resultOrig != result)
                 // looks like the pokemon was ninja'd between the Exchange and Exchange_finish
                 return false;
@@ -341,7 +341,7 @@ namespace PkmnFoundations.Data
             return WithTransactionSuccessful(tran => GtsTradePokemon4(tran, upload, result, partner_pid));
         }
 
-        public GtsRecord4[] GtsSearch4(MySqlTransaction tran, int pid, ushort species, Genders gender, byte minLevel, byte maxLevel, byte country, int count)
+        public GtsRecord4[] GtsSearch4(MySqlTransaction tran, Pokedex.Pokedex pokedex, int pid, ushort species, Genders gender, byte minLevel, byte maxLevel, byte country, int count)
         {
             List<MySqlParameter> _params = new List<MySqlParameter>();
             String where = "WHERE pid != @pid AND IsExchanged = 0";
@@ -403,21 +403,21 @@ namespace PkmnFoundations.Data
                 else records = new List<GtsRecord4>();
 
                 while (reader.Read())
-                    records.Add(Record4FromReader(reader));
+                    records.Add(Record4FromReader(pokedex, reader));
 
                 reader.Close();
                 return records.ToArray();
             }
         }
 
-        public override GtsRecord4[] GtsSearch4(int pid, ushort species, Genders gender, byte minLevel, byte maxLevel, byte country, int count)
+        public override GtsRecord4[] GtsSearch4(Pokedex.Pokedex pokedex, int pid, ushort species, Genders gender, byte minLevel, byte maxLevel, byte country, int count)
         {
-            return WithTransaction(tran => GtsSearch4(tran, pid, species, gender, minLevel, maxLevel, country, count));
+            return WithTransaction(tran => GtsSearch4(tran, pokedex, pid, species, gender, minLevel, maxLevel, country, count));
         }
 
-        private static GtsRecord4 Record4FromReader(MySqlDataReader reader)
+        private static GtsRecord4 Record4FromReader(Pokedex.Pokedex pokedex, MySqlDataReader reader)
         {
-            GtsRecord4 result = new GtsRecord4();
+            GtsRecord4 result = new GtsRecord4(pokedex);
 
             byte[] data = new byte[236];
             reader.GetBytes(0, 0, data, 0, 236);
@@ -1108,7 +1108,7 @@ namespace PkmnFoundations.Data
         #endregion
 
         #region GTS 5
-        public GtsRecord5 GtsDataForUser5(MySqlTransaction tran, int pid)
+        public GtsRecord5 GtsDataForUser5(MySqlTransaction tran, Pokedex.Pokedex pokedex, int pid)
         {
             using (MySqlDataReader reader = (MySqlDataReader)tran.ExecuteReader("SELECT Data, Unknown0, " +
                 "Species, Gender, Level, " +
@@ -1124,7 +1124,7 @@ namespace PkmnFoundations.Data
                     reader.Close();
                     return null;
                 }
-                GtsRecord5 result = Record5FromReader(reader);
+                GtsRecord5 result = Record5FromReader(pokedex, reader);
 #if DEBUG
                 AssertHelper.Equals(result.PID, pid);
 #endif
@@ -1133,12 +1133,12 @@ namespace PkmnFoundations.Data
             }
         }
 
-        public override GtsRecord5 GtsDataForUser5(int pid)
+        public override GtsRecord5 GtsDataForUser5(Pokedex.Pokedex pokedex, int pid)
         {
-            return WithTransaction(tran => GtsDataForUser5(tran, pid));
+            return WithTransaction(tran => GtsDataForUser5(tran, pokedex, pid));
         }
 
-        public GtsRecord5 GtsGetRecord5(MySqlTransaction tran, long tradeId, bool isExchanged, bool allowHistory)
+        public GtsRecord5 GtsGetRecord5(MySqlTransaction tran, Pokedex.Pokedex pokedex, long tradeId, bool isExchanged, bool allowHistory)
         {
             using (MySqlDataReader reader = (MySqlDataReader)tran.ExecuteReader("SELECT Data, Unknown0, " +
                 "Species, Gender, Level, " +
@@ -1152,7 +1152,7 @@ namespace PkmnFoundations.Data
             {
                 if (reader.Read())
                 {
-                    GtsRecord5 result = Record5FromReader(reader);
+                    GtsRecord5 result = Record5FromReader(pokedex, reader);
                     reader.Close();
                     return result;
                 }
@@ -1173,7 +1173,7 @@ namespace PkmnFoundations.Data
                 {
                     if (reader.Read())
                     {
-                        GtsRecord5 result = Record5FromReader(reader);
+                        GtsRecord5 result = Record5FromReader(pokedex, reader);
                         reader.Close();
                         return result;
                     }
@@ -1183,9 +1183,9 @@ namespace PkmnFoundations.Data
             return null;
         }
 
-        public override GtsRecord5 GtsGetRecord5(long tradeId, bool isExchanged, bool allowHistory)
+        public override GtsRecord5 GtsGetRecord5(Pokedex.Pokedex pokedex, long tradeId, bool isExchanged, bool allowHistory)
         {
-            return WithTransaction(tran => GtsGetRecord5(tran, tradeId, isExchanged, allowHistory));
+            return WithTransaction(tran => GtsGetRecord5(tran, pokedex, tradeId, isExchanged, allowHistory));
         }
 
         public bool GtsDepositPokemon5(MySqlTransaction tran, GtsRecord5 record)
@@ -1295,7 +1295,7 @@ namespace PkmnFoundations.Data
             traded.FlagTraded(result);
 
             ulong? trade_id = GtsGetDepositId5(tran, result.PID);
-            GtsRecord5 resultOrig = GtsDataForUser5(tran, result.PID);
+            GtsRecord5 resultOrig = GtsDataForUser5(tran, result.Pokedex, result.PID);
             if (resultOrig == null || resultOrig != result)
                 // looks like the pokemon was ninja'd between the Exchange and Exchange_finish
                 return false;
@@ -1324,12 +1324,12 @@ namespace PkmnFoundations.Data
             return WithTransactionSuccessful(tran => GtsTradePokemon5(tran, upload, result, partner_pid));
         }
 
-        public override GtsRecord5[] GtsSearch5(int pid, ushort species, Genders gender, byte minLevel, byte maxLevel, byte country, int count)
+        public override GtsRecord5[] GtsSearch5(Pokedex.Pokedex pokedex, int pid, ushort species, Genders gender, byte minLevel, byte maxLevel, byte country, int count)
         {
-            return WithTransaction(tran => GtsSearch5(tran, pid, species, gender, minLevel, maxLevel, country, count));
+            return WithTransaction(tran => GtsSearch5(tran, pokedex, pid, species, gender, minLevel, maxLevel, country, count));
         }
-            
-        public GtsRecord5[] GtsSearch5(MySqlTransaction tran, int pid, ushort species, Genders gender, byte minLevel, byte maxLevel, byte country, int count)
+
+        public GtsRecord5[] GtsSearch5(MySqlTransaction tran, Pokedex.Pokedex pokedex, int pid, ushort species, Genders gender, byte minLevel, byte maxLevel, byte country, int count)
         {
             List<MySqlParameter> _params = new List<MySqlParameter>();
             String where = "WHERE pid != @pid AND IsExchanged = 0";
@@ -1393,17 +1393,17 @@ namespace PkmnFoundations.Data
                 else records = new List<GtsRecord5>();
 
                 while (reader.Read())
-                    records.Add(Record5FromReader(reader));
+                    records.Add(Record5FromReader(pokedex, reader));
 
                 reader.Close();
                 return records.ToArray();
             }
         }
 
-        private static GtsRecord5 Record5FromReader(MySqlDataReader reader)
+        private static GtsRecord5 Record5FromReader(Pokedex.Pokedex pokedex, MySqlDataReader reader)
         {
             // xxx: Don't use ordinals here
-            GtsRecord5 result = new GtsRecord5();
+            GtsRecord5 result = new GtsRecord5(pokedex);
 
             // xxx: Data and Unknown0 should share a database field.
             // (This requires migrating a lot of existing data)

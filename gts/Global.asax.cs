@@ -14,7 +14,7 @@ namespace PkmnFoundations.GTS
         void Application_Start(object sender, EventArgs e)
         {
             // Code that runs on application startup
-            Application["pkmncfPokedex"] = new Pokedex.Pokedex(Database.Instance, false);
+            AppStateHelper.Pokedex(Application);
         }
 
         void Application_End(object sender, EventArgs e)

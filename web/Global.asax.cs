@@ -6,7 +6,7 @@ using System.Web.Security;
 using System.Web.SessionState;
 using PkmnFoundations.Data;
 
-namespace PkmnFoundations.GTS
+namespace PkmnFoundations.Web
 {
     public class Global : System.Web.HttpApplication
     {

@@ -25,6 +25,8 @@ namespace PkmnFoundations.GTS
 
         public override void ProcessGamestatsRequest(byte[] request, MemoryStream response, string url, int pid, HttpContext context, GamestatsSession session)
         {
+            Pokedex.Pokedex pokedex = AppStateHelper.Pokedex(context.Application);
+
             switch (url)
             {
                 default:
@@ -83,7 +85,7 @@ namespace PkmnFoundations.GTS
                     // my guess is that it's trainer profile info like setProfile.asp
                     // There's a long string of 0s which could be a trainer card signature raster
 
-                    GtsRecord5 record = Database.Instance.GtsDataForUser5(pid);
+                    GtsRecord5 record = Database.Instance.GtsDataForUser5(pokedex, pid);
 
                     if (record == null)
                     {
@@ -112,7 +114,7 @@ namespace PkmnFoundations.GTS
                     // todo: what does this do if the contained pokemon is traded??
                     // todo: the same big blob of stuff from result.asp is sent here too.
 
-                    GtsRecord5 record = Database.Instance.GtsDataForUser5(pid);
+                    GtsRecord5 record = Database.Instance.GtsDataForUser5(pokedex, pid);
 
                     if (record == null)
                     {
@@ -135,7 +137,7 @@ namespace PkmnFoundations.GTS
 
                     // todo: the same big blob of stuff from result.asp is sent here too.
 
-                    GtsRecord5 record = Database.Instance.GtsDataForUser5(pid);
+                    GtsRecord5 record = Database.Instance.GtsDataForUser5(pokedex, pid);
                     if (record == null)
                     {
                         response.Write(new byte[] { 0x00, 0x00 }, 0, 2);
@@ -164,7 +166,7 @@ namespace PkmnFoundations.GTS
                 {
                     SessionManager.Remove(session);
 
-                    GtsRecord5 record = Database.Instance.GtsDataForUser5(pid);
+                    GtsRecord5 record = Database.Instance.GtsDataForUser5(pokedex, pid);
                     if (record == null)
                     {
                         response.Write(new byte[] { 0x00, 0x00 }, 0, 2);
@@ -203,7 +205,7 @@ namespace PkmnFoundations.GTS
                     }
 
                     // todo: add transaction
-                    if (Database.Instance.GtsDataForUser5(pid) != null)
+                    if (Database.Instance.GtsDataForUser5(pokedex, pid) != null)
                     {
                         // there's already a pokemon inside
                         SessionManager.Remove(session);
@@ -214,7 +216,7 @@ namespace PkmnFoundations.GTS
                     // keep the record in memory while we wait for post_finish.asp request
                     byte[] recordBinary = new byte[296];
                     Array.Copy(request, 0, recordBinary, 0, 296);
-                    GtsRecord5 record = new GtsRecord5(recordBinary);
+                    GtsRecord5 record = new GtsRecord5(pokedex, recordBinary);
 
                     // todo: figure out what bytes 296-431 do:
                     // appears to be 4 bytes of 00, 128 bytes of stuff, 4 bytes of 80 00 00 00
@@ -314,7 +316,7 @@ namespace PkmnFoundations.GTS
                     if (request.Length > 7) country = request[7];
 
                     if (resultsCount > 7) resultsCount = 7; // stop DDOS
-                    GtsRecord5[] records = Database.Instance.GtsSearch5(pid, species, gender, minLevel, maxLevel, country, resultsCount);
+                    GtsRecord5[] records = Database.Instance.GtsSearch5(pokedex, pid, species, gender, minLevel, maxLevel, country, resultsCount);
                     foreach (GtsRecord5 record in records)
                     {
                         response.Write(record.Save(), 0, 296);
@@ -337,10 +339,10 @@ namespace PkmnFoundations.GTS
 
                     byte[] uploadData = new byte[296];
                     Array.Copy(request, 0, uploadData, 0, 296);
-                    GtsRecord5 upload = new GtsRecord5(uploadData);
+                    GtsRecord5 upload = new GtsRecord5(pokedex, uploadData);
                     upload.IsExchanged = 0;
                     int targetPid = BitConverter.ToInt32(request, 296);
-                    GtsRecord5 result = Database.Instance.GtsDataForUser5(targetPid);
+                    GtsRecord5 result = Database.Instance.GtsDataForUser5(pokedex, targetPid);
                     DateTime ? searchTime = Database.Instance.GtsGetLastSearch5(pid);
 
                     if (result == null || searchTime == null ||

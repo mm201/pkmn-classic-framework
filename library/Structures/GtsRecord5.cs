@@ -15,15 +15,31 @@ namespace PkmnFoundations.Structures
     /// </summary>
     public class GtsRecord5 : GtsRecordBase, IEquatable<GtsRecord5>
     {
-        public GtsRecord5()
+        public GtsRecord5(Pokedex.Pokedex pokedex)
+            : base(pokedex)
         {
             Initialize();
         }
 
-        public GtsRecord5(byte[] data)
+        public GtsRecord5(Pokedex.Pokedex pokedex, BinaryReader data)
+            : base(pokedex)
         {
             Initialize();
             Load(data);
+        }
+
+        public GtsRecord5(Pokedex.Pokedex pokedex, byte[] data)
+            : base(pokedex)
+        {
+            Initialize();
+            Load(data);
+        }
+
+        public GtsRecord5(Pokedex.Pokedex pokedex, byte[] data, int offset)
+            : base(pokedex)
+        {
+            Initialize();
+            Load(data, offset);
         }
 
         private void Initialize()
@@ -161,7 +177,7 @@ namespace PkmnFoundations.Structures
         public GtsRecord5 Clone()
         {
             // todo: I am not very efficient
-            return new GtsRecord5(Save());
+            return new GtsRecord5(m_pokedex, Save());
         }
 
         public bool Validate()

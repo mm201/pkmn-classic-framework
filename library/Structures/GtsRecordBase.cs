@@ -7,7 +7,23 @@ namespace PkmnFoundations.Structures
 {
     public abstract class GtsRecordBase : BinarySerializableBase
     {
+        public GtsRecordBase(Pokedex.Pokedex pokedex) : base()
+        {
+            m_pokedex = pokedex;
+        }
 
+        protected Pokedex.Pokedex m_pokedex;
+        public Pokedex.Pokedex Pokedex
+        {
+            get
+            {
+                return m_pokedex;
+            }
+            set
+            {
+                m_pokedex = value;
+            }
+        }
 
         public static bool CheckLevels(byte min, byte max, byte other)
         {

@@ -27,6 +27,8 @@ namespace PkmnFoundations.GTS
 
         public override void ProcessGamestatsRequest(byte[] data, MemoryStream response, string url, int pid, HttpContext context, GamestatsSession session)
         {
+            Pokedex.Pokedex pokedex = AppStateHelper.Pokedex(context.Application);
+
             switch (url)
             {
                 default:
@@ -93,7 +95,7 @@ namespace PkmnFoundations.GTS
                     * in the GTS, it responds with 0x0004; if not, it responds 
                     * with 0x0005. */
 
-                    GtsRecord4 record = Database.Instance.GtsDataForUser4(pid);
+                    GtsRecord4 record = Database.Instance.GtsDataForUser4(pokedex, pid);
 
                     if (record == null)
                     {
@@ -125,7 +127,7 @@ namespace PkmnFoundations.GTS
                     // this is only called if result.asp returned 4.
                     // todo: what does this do if the contained pokemon is traded??
 
-                    GtsRecord4 record = Database.Instance.GtsDataForUser4(pid);
+                    GtsRecord4 record = Database.Instance.GtsDataForUser4(pokedex, pid);
 
                     if (record == null)
                     {
@@ -146,7 +148,7 @@ namespace PkmnFoundations.GTS
                 {
                     SessionManager.Remove(session);
 
-                    GtsRecord4 record = Database.Instance.GtsDataForUser4(pid);
+                    GtsRecord4 record = Database.Instance.GtsDataForUser4(pokedex, pid);
                     if (record == null)
                     {
                         response.Write(new byte[] { 0x00, 0x00 }, 0, 2);
@@ -175,7 +177,7 @@ namespace PkmnFoundations.GTS
                 {
                     SessionManager.Remove(session);
 
-                    GtsRecord4 record = Database.Instance.GtsDataForUser4(pid);
+                    GtsRecord4 record = Database.Instance.GtsDataForUser4(pokedex, pid);
                     if (record == null)
                     {
                         response.Write(new byte[] { 0x00, 0x00 }, 0, 2);
@@ -212,7 +214,7 @@ namespace PkmnFoundations.GTS
                     }
 
                     // todo: add transaction
-                    if (Database.Instance.GtsDataForUser4(pid) != null)
+                    if (Database.Instance.GtsDataForUser4(pokedex, pid) != null)
                     {
                         // there's already a pokemon inside
                         SessionManager.Remove(session);
@@ -223,7 +225,7 @@ namespace PkmnFoundations.GTS
                     // keep the record in memory while we wait for post_finish.asp request
                     byte[] recordBinary = new byte[292];
                     Array.Copy(data, 0, recordBinary, 0, 292);
-                    GtsRecord4 record = new GtsRecord4(recordBinary);
+                    GtsRecord4 record = new GtsRecord4(pokedex, recordBinary);
                     if (!record.Validate())
                     {
                         // hack check failed
@@ -315,7 +317,7 @@ namespace PkmnFoundations.GTS
                     if (data.Length > 7) country = data[7];
 
                     if (resultsCount > 7) resultsCount = 7; // stop DDOS
-                    GtsRecord4[] records = Database.Instance.GtsSearch4(pid, species, gender, minLevel, maxLevel, country, resultsCount);
+                    GtsRecord4[] records = Database.Instance.GtsSearch4(pokedex, pid, species, gender, minLevel, maxLevel, country, resultsCount);
                     foreach (GtsRecord4 record in records)
                     {
                         response.Write(record.Save(), 0, 292);
@@ -338,10 +340,10 @@ namespace PkmnFoundations.GTS
 
                     byte[] uploadData = new byte[292];
                     Array.Copy(data, 0, uploadData, 0, 292);
-                    GtsRecord4 upload = new GtsRecord4(uploadData);
+                    GtsRecord4 upload = new GtsRecord4(pokedex, uploadData);
                     upload.IsExchanged = 0;
                     int targetPid = BitConverter.ToInt32(data, 292);
-                    GtsRecord4 result = Database.Instance.GtsDataForUser4(targetPid);
+                    GtsRecord4 result = Database.Instance.GtsDataForUser4(pokedex, targetPid);
                     DateTime ? searchTime = Database.Instance.GtsGetLastSearch4(pid);
 
                     if (result == null || searchTime == null || 

@@ -16,7 +16,7 @@ namespace PkmnFoundations.GTS
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            m_pokedex = (Pokedex.Pokedex)Application["pkmncfPokedex"];
+            Pokedex.Pokedex pokedex = AppStateHelper.Pokedex(Application);
 
             int species; Int32.TryParse(ppSpecies.Value, out species);
             int minLevel = Convert.ToInt32(txtLevelMin.Text);
@@ -27,7 +27,7 @@ namespace PkmnFoundations.GTS
 
             if (rbGen4.Checked)
             {
-                GtsRecord4[] records4 = Database.Instance.GtsSearch4(0, (ushort)species, gender, (byte)minLevel, (byte)maxLevel, 0, -1);
+                GtsRecord4[] records4 = Database.Instance.GtsSearch4(pokedex, 0, (ushort)species, gender, (byte)minLevel, (byte)maxLevel, 0, -1);
                 rptPokemon4.DataSource = records4;
                 rptPokemon4.DataBind();
                 rptPokemon4.Visible = true;
@@ -35,15 +35,13 @@ namespace PkmnFoundations.GTS
             }
             else if (rbGen5.Checked)
             {
-                GtsRecord5[] records5 = Database.Instance.GtsSearch5(0, (ushort)species, gender, (byte)minLevel, (byte)maxLevel, 0, -1);
+                GtsRecord5[] records5 = Database.Instance.GtsSearch5(pokedex, 0, (ushort)species, gender, (byte)minLevel, (byte)maxLevel, 0, -1);
                 rptPokemon5.DataSource = records5;
                 rptPokemon5.DataBind();
                 rptPokemon4.Visible = false;
                 rptPokemon5.Visible = true;
             }
         }
-
-        private Pokedex.Pokedex m_pokedex;
 
         private String FormatLevels(byte min, byte max)
         {
@@ -106,8 +104,9 @@ namespace PkmnFoundations.GTS
 
         protected String CreateSpecies(object DataItem)
         {
+            Pokedex.Pokedex pokedex = AppStateHelper.Pokedex(Application);
             GtsRecord4 record = (GtsRecord4)DataItem;
-            return m_pokedex.Species(record.Species).Name.ToString();
+            return pokedex.Species(record.Species).Name.ToString();
         }
 
         protected String CreatePokedex(object DataItem)
@@ -139,9 +138,10 @@ namespace PkmnFoundations.GTS
 
         protected String CreateWantedSpecies(object DataItem)
         {
+            Pokedex.Pokedex pokedex = AppStateHelper.Pokedex(Application);
             GtsRecord4 record = (GtsRecord4)DataItem;
             return String.Format("{0} (#{1})",
-                m_pokedex.Species(record.RequestedSpecies).Name,
+                pokedex.Species(record.RequestedSpecies).Name,
                 record.RequestedSpecies);
         }
 
@@ -163,22 +163,24 @@ namespace PkmnFoundations.GTS
 
         protected String CreateOffer5(object DataItem)
         {
+            Pokedex.Pokedex pokedex = AppStateHelper.Pokedex(Application);
             GtsRecord5 record = (GtsRecord5)DataItem;
             return String.Format("{3} (#{0})<br />{1}<br />Lv {2}", 
                 record.Species, 
                 record.Gender, 
                 record.Level,
-                m_pokedex.Species(record.Species).Name);
+                pokedex.Species(record.Species).Name);
         }
 
         protected String CreateWanted5(object DataItem)
         {
+            Pokedex.Pokedex pokedex = AppStateHelper.Pokedex(Application);
             GtsRecord5 record = (GtsRecord5)DataItem;
             return String.Format("{3} (#{0})<br />{1}<br />{2}",
                 record.RequestedSpecies, 
                 record.RequestedGender, 
                 FormatLevels(record.RequestedMinLevel, record.RequestedMaxLevel),
-                m_pokedex.Species(record.RequestedSpecies).Name);
+                pokedex.Species(record.RequestedSpecies).Name);
         }
 
         protected String CreateTrainer5(object DataItem)

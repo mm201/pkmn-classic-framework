@@ -14,11 +14,9 @@ namespace PkmnFoundations.Web.gts
 {
     public partial class Pokemon : System.Web.UI.Page
     {
-        private Pokedex.Pokedex m_pokedex;
-
         protected void Page_Load(object sender, EventArgs e)
         {
-            m_pokedex = (Pokedex.Pokedex)Application["pkmncfPokedex"];
+            Pokedex.Pokedex pokedex = AppStateHelper.Pokedex(Application);
             PokemonParty4 pkmn = null;
 
             if (Request.QueryString.Count == 0 || Request.QueryString.Count > 2) throw new WebException(400);
@@ -54,14 +52,14 @@ namespace PkmnFoundations.Web.gts
                 {
                     case "4":
                     {
-                        GtsRecord4 record = Database.Instance.GtsGetRecord4(tradeId, isExchanged, true);
-                        if (record != null) pkmn = new PokemonParty4(m_pokedex, record.Data);
+                        GtsRecord4 record = Database.Instance.GtsGetRecord4(pokedex, tradeId, isExchanged, true);
+                        if (record != null) pkmn = new PokemonParty4(pokedex, record.Data);
 
                     } break;
                     case "5":
                     {
-                        GtsRecord5 record = Database.Instance.GtsGetRecord5(tradeId, isExchanged, true);
-                        if (record != null) pkmn = new PokemonParty4(m_pokedex, record.Data);
+                        GtsRecord5 record = Database.Instance.GtsGetRecord5(pokedex, tradeId, isExchanged, true);
+                        if (record != null) pkmn = new PokemonParty4(pokedex, record.Data);
 
                     } break;
                     default:
