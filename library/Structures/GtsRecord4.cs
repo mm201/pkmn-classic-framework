@@ -52,41 +52,8 @@ namespace PkmnFoundations.Structures
         /// </summary>
         public byte[] Data;
 
-        /// <summary>
-        /// National Dex species number
-        /// </summary>
-        public ushort Species;
-
-        /// <summary>
-        /// Pokémon gender
-        /// </summary>
-        public Genders Gender;
-
-        /// <summary>
-        /// Pokémon level
-        /// </summary>
-        public byte Level;
-
-        /// <summary>
-        /// Requested National Dex species number
-        /// </summary>
-        public ushort RequestedSpecies;
-
-        public Genders RequestedGender;
-
-        public byte RequestedMinLevel;
-        public byte RequestedMaxLevel;
         public byte Unknown1;
-        public TrainerGenders TrainerGender;
         public byte Unknown2;
-
-        public DateTime ? TimeDeposited;
-        public DateTime ? TimeExchanged;
-
-        /// <summary>
-        /// User ID of the player (not Personality Value)
-        /// </summary>
-        public int PID;
 
         /// <summary>
         /// 16 bytes
@@ -94,15 +61,6 @@ namespace PkmnFoundations.Structures
         public EncodedString4 TrainerName;
 
         public ushort TrainerOT;
-
-        public byte TrainerCountry;
-        public byte TrainerRegion;
-        public byte TrainerClass;
-
-        public byte IsExchanged;
-
-        public byte TrainerVersion;
-        public byte TrainerLanguage;
 
         protected override void Save(BinaryWriter writer)
         {

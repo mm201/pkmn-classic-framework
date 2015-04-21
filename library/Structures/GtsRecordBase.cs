@@ -25,6 +25,50 @@ namespace PkmnFoundations.Structures
             }
         }
 
+        /// <summary>
+        /// National Dex species number
+        /// </summary>
+        public ushort Species;
+
+        /// <summary>
+        /// Pokémon gender
+        /// </summary>
+        public Genders Gender;
+
+        /// <summary>
+        /// Pokémon level
+        /// </summary>
+        public byte Level;
+
+        /// <summary>
+        /// Requested National Dex species number
+        /// </summary>
+        public ushort RequestedSpecies;
+
+        public Genders RequestedGender;
+
+        public byte RequestedMinLevel;
+        public byte RequestedMaxLevel;
+
+        public TrainerGenders TrainerGender;
+
+        public DateTime? TimeDeposited;
+        public DateTime? TimeExchanged;
+
+        /// <summary>
+        /// User ID of the player (not Personality Value)
+        /// </summary>
+        public int PID;
+
+        public byte TrainerCountry;
+        public byte TrainerRegion;
+        public byte TrainerClass;
+
+        public byte IsExchanged;
+
+        public byte TrainerVersion;
+        public byte TrainerLanguage;
+
         public static bool CheckLevels(byte min, byte max, byte other)
         {
             if (max == 0) max = 255;
