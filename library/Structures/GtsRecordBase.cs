@@ -25,6 +25,11 @@ namespace PkmnFoundations.Structures
             }
         }
 
+        public abstract PokemonPartyBase Pokemon
+        {
+            get;
+        }
+
         /// <summary>
         /// National Dex species number
         /// </summary>

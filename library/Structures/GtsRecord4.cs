@@ -71,13 +71,35 @@ namespace PkmnFoundations.Structures
             }
             set
             {
+                if (value == null)
+                {
+                    m_data = null;
+                    m_data_readonly = null;
+                    m_pokemon = null;
+                    return;
+                }
                 if (value.Length != 0xEC) throw new ArgumentException("PKM length is incorrect");
                 m_data = value;
                 m_data_readonly = new ReadOnlyCollection<byte>(m_data);
+                m_pokemon = null;
             }
         }
         private byte[] m_data;
         private ReadOnlyCollection<byte> m_data_readonly;
+        private PokemonParty4 m_pokemon;
+
+        public override PokemonPartyBase Pokemon
+        {
+            get
+            {
+                if (DataActual == null || m_pokedex == null)
+                    return null;
+                if (m_pokemon == null)
+                    m_pokemon = new PokemonParty4(m_pokedex, DataActual);
+
+                return m_pokemon;
+            }
+        }
 
         public byte Unknown1;
         public byte Unknown2;
