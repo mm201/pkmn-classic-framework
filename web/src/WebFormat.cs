@@ -64,6 +64,8 @@ namespace PkmnFoundations.Web
 
         public static String SpeciesImageSmall(Form f)
         {
+            // fixme: this is appending forms to some pokemon eg. arceus, keldeo, deerling
+            // todo: need to take gender here optionally
             return "~/images/pkmn-sm/" + PokemonImage2(f, Genders.Male) + ".png";
         }
 

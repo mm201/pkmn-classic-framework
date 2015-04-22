@@ -100,7 +100,6 @@ namespace PkmnFoundations.GTS
                     case Pokerus.Infected:
                         return "<span class=\"pkrs\">PKRS</span>";
                     case Pokerus.Cured:
-                        return "<span class=\"pkrs_cure\">CURED</span>";
                     case Pokerus.None:
                     default:
                         return "";
@@ -237,6 +236,13 @@ namespace PkmnFoundations.GTS
         {
             GtsRecordBase record = (GtsRecordBase)DataItem;
             return FormatLevels(record.RequestedMinLevel, record.RequestedMaxLevel);
+        }
+
+        protected String CreateDate(object DataItem)
+        {
+            GtsRecordBase record = (GtsRecordBase)DataItem;
+            if (record.TimeDeposited == null) return "";
+            return Common.HtmlEncode(((DateTime)record.TimeDeposited).ToString("f"));
         }
     }
 }

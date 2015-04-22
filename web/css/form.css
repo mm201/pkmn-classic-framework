@@ -129,6 +129,7 @@ input[type=submit].large, button.large
     margin: 0;
     padding: 4px 8px;
     border-bottom: 1px solid rgba(0,0,0,0.3);
+    height: 18px;
     background-image: -moz-linear-gradient(top, transparent 0%, rgba(0,0,0,0.05) 100%); /* FF3.6+ */
     background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%,transparent), color-stop(100%,rgba(0,0,0,0.05))); /* Chrome,Safari4+ */
     background-image: -webkit-linear-gradient(top, transparent 0%,rgba(0,0,0,0.05) 100%); /* Chrome10+,Safari5.1+ */
@@ -147,6 +148,10 @@ input[type=submit].large, button.large
 .pfFormKey
 {
     background-color: #82d2e0;
+}
+
+.pfFormValue
+{
 }
 
 .home .pfFormKey {background-color: #ff8063;}

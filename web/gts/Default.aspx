@@ -85,8 +85,9 @@
     <div class="clear"></div>
 <asp:Repeater ID="rptPokemon" runat="server">
 <ItemTemplate>
-<div class="gtsPokemonSummary gtsOffer pfBoxThin">
-    <div class="pfColumn colPortrait">
+
+<table class="gtsPokemonSummary gtsOffer pfBoxThin pfFormGroup">
+    <td class="pfFormValue colPortrait" rowspan="6">
         <ul>
         <li class="portrait">
             <%# CreateOfferImage(Container.DataItem) %>
@@ -99,57 +100,44 @@
             <%# CreatePokerus(Container.DataItem) %>
         </li>
         </ul>
-    </div>
-    <div class="pfColumn colBasic">
-        <table class="pfFormGroup">
-            <tr class="pfFormPair">
-                <th class="pfFormKey">
-                    Name
-                </th>
-                <td class="pfFormValue">
-                    <%# CreateNickname(Container.DataItem) %>
-                </td>
-            </tr>
-            <tr class="pfFormPair">
-                <th class="pfFormKey">Species</th>
-                <td class="pfFormValue"><%# CreateSpecies(Container.DataItem) %>
-                    (#<%# CreatePokedex(Container.DataItem) %>)
-                </td>
-            </tr>
-            <tr class="pfFormPair">
-                <th class="pfFormKey">Held item</th>
-                <td class="pfFormValue"><%# CreateHeldItem(Container.DataItem) %></td>
-            </tr>
-            <tr class="pfFormPair">
-                <th class="pfFormKey">Nature</th>
-                <td class="pfFormValue"><%# CreateNature(Container.DataItem) %></td>
-            </tr>
-            <tr class="pfFormPair">
-                <th class="pfFormKey">Ability</th>
-                <td class="pfFormValue"><%# CreateAbility(Container.DataItem) %></td>
-            </tr>
-        </table>
-    </div>
-    <div class="pfColumn colWanted">
-        <table class="pfFormGroup">
-            <tr class="pfFormPair">
-                <th class="pfFormKey">Offered by</th>
-                <td class="pfFormValue"><%# CreateTrainer(Container.DataItem) %></td>
-            </tr>
-            <tr class="pfFormPair">
-                <th class="pfFormKey" rowspan="2">Wanted</th>
-                <td class="pfFormValue"><%# CreateWantedSpecies(Container.DataItem) %>
-                    <%# CreateWantedGender(Container.DataItem) %>
-                </td>
-            </tr>
-            <tr class="pfFormPair">
-                <td class="pfFormValue"><%# CreateWantedLevel(Container.DataItem) %></td>
-            </tr>
-        </table>
-    </div>
+    </td>
+    <tr class="pfFormPair">
+        <th class="pfFormKey">
+            Name
+        </th>
+        <td class="pfFormValue">
+            <%# CreateNickname(Container.DataItem) %>
+        </td>
+        <th class="pfFormKey" rowspan="2">Offered by</th>
+        <td class="pfFormValue"><%# CreateTrainer(Container.DataItem) %></td>
+    </tr>
+    <tr class="pfFormPair">
+        <th class="pfFormKey">Species</th>
+        <td class="pfFormValue"><%# CreateSpecies(Container.DataItem) %>
+            (#<%# CreatePokedex(Container.DataItem) %>)
+        </td>
+        <td class="pfFormValue"></td>
+    </tr>
+    <tr class="pfFormPair">
+        <th class="pfFormKey">Held item</th>
+        <td class="pfFormValue"><%# CreateHeldItem(Container.DataItem) %></td>
+        <th class="pfFormKey" rowspan="2">Wanted</th>
+        <td class="pfFormValue"><%# CreateWantedSpecies(Container.DataItem) %></td>
+    </tr>
+    <tr class="pfFormPair">
+        <th class="pfFormKey">Nature</th>
+        <td class="pfFormValue"><%# CreateNature(Container.DataItem) %></td>
+        <td class="pfFormValue"><%# CreateWantedGender(Container.DataItem) %>
+            <%# CreateWantedLevel(Container.DataItem) %></td>
+    </tr>
+    <tr class="pfFormPair">
+        <th class="pfFormKey">Ability</th>
+        <td class="pfFormValue"><%# CreateAbility(Container.DataItem) %></td>
+        <th class="pfFormKey">Date</th>
+        <td class="pfFormValue"><%# CreateDate(Container.DataItem) %></td>
+    </tr>
+</table>
 
-    <div class="clear"></div>
-</div>
 </ItemTemplate>
 </asp:Repeater>
 

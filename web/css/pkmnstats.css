@@ -33,7 +33,13 @@
     font-family: 'Meiryo UI',sans-serif;
 }
 
-.gtsOffer .colPortrait
+.gtsOffer .colPortrait, .gtsOffer .pfFormValue.colPortrait
+{
+    width: 104px;
+    padding-top: 8px;
+}
+
+.colPortrait ul
 {
     width: 104px;
     white-space: nowrap;
@@ -107,6 +113,11 @@
     border-bottom: none;
 }
 
+.gtsPokemonSummary .pfFormKey
+{
+    width: 64px;
+}
+
 .gtsPokemonSummary .pfFormValue
 {
     width: 180px;
@@ -167,9 +178,9 @@
 .gtsOffer
 {
     margin: 8px 0;
+    width: 672px;
 }
 
 .gtsOffer .pfColumn
 {
-    margin: 0 8px;
 }

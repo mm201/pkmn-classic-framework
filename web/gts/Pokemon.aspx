@@ -24,7 +24,7 @@
                 </li>
                 <li class="specialFlags">
                     <asp:PlaceHolder ID="phShiny" runat="server">
-                        <span class="shiny">⁂</span>
+                        <span class="shiny">★</span>
                     </asp:PlaceHolder>
                     <%-- todo: use images for pkrs status --%>
                     <asp:PlaceHolder ID="phPkrs" runat="server">

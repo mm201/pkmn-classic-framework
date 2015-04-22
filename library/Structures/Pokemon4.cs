@@ -252,6 +252,10 @@ namespace PkmnFoundations.Structures
         }
 
         // todo: Implement trainer memo structure
+        // Dates encoding seems to be 1 byte for year, starting in 2000,
+        // 1 byte for month (1-12), and 1 byte for day of month (1-31, depending)
+        // EggDate is all 0s if not hatched.
+        // Platinum locations are 0 on DP, egg locations are 0 if not hatched.
         public byte[] EggDate { get; set; } // 3 bytes
         public byte[] Date { get; set; } // 3 bytes
         public ushort EggLocationID { get; set; }
