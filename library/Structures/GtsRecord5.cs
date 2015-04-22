@@ -110,7 +110,21 @@ namespace PkmnFoundations.Structures
         /// <summary>
         /// 16 bytes
         /// </summary>
-        public EncodedString5 TrainerName;
+        public EncodedString5 TrainerNameEncoded;
+
+        public override string TrainerName
+        {
+            get
+            {
+                if (TrainerNameEncoded == null) return null;
+                return TrainerNameEncoded.Text;
+            }
+            set
+            {
+                if (TrainerNameEncoded == null) TrainerNameEncoded = new EncodedString5(value, 16);
+                else TrainerNameEncoded.Text = value;
+            }
+        }
 
         public byte TrainerBadges; // speculative. Usually 8.
         public byte TrainerUnityTower;
@@ -118,7 +132,7 @@ namespace PkmnFoundations.Structures
         protected override void Save(BinaryWriter writer)
         {
             // todo: enclose in properties and validate these when assigning.
-            if (TrainerName.RawData.Length != 0x10) throw new FormatException("Trainer name length is incorrect");
+            if (TrainerNameEncoded.RawData.Length != 0x10) throw new FormatException("Trainer name length is incorrect");
 
             writer.Write(DataActual, 0, 0xEC);                         // 0x0000
             writer.Write(Species);                                     // 0x00EC
@@ -135,7 +149,7 @@ namespace PkmnFoundations.Structures
             writer.Write(DateToTimestamp(TimeExchanged));              // 0x0100
             writer.Write(PID);                                         // 0x0108
             writer.Write(TrainerOT);                                   // 0x010C
-            writer.Write(TrainerName.RawData, 0, 0x10);                // 0x0110
+            writer.Write(TrainerNameEncoded.RawData, 0, 0x10);         // 0x0110
             writer.Write(TrainerCountry);                              // 0x0120
             writer.Write(TrainerRegion);                               // 0x0121
             writer.Write(TrainerClass);                                // 0x0122
@@ -163,7 +177,7 @@ namespace PkmnFoundations.Structures
             TimeExchanged = TimestampToDate(reader.ReadUInt64());      // 0x0100
             PID = reader.ReadInt32();                                  // 0x0108
             TrainerOT = reader.ReadUInt32();                           // 0x010C
-            TrainerName = new EncodedString5(reader.ReadBytes(0x10));  // 0x0110
+            TrainerNameEncoded = new EncodedString5(reader.ReadBytes(0x10)); // 0x0110
             TrainerCountry = reader.ReadByte();                        // 0x0120
             TrainerRegion = reader.ReadByte();                         // 0x0121
             TrainerClass = reader.ReadByte();                          // 0x0122

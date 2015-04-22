@@ -210,7 +210,7 @@ namespace PkmnFoundations.Data
         public bool GtsDepositPokemon4(MySqlTransaction tran, GtsRecord4 record)
         {
             if (record.Data.Count != 236) throw new FormatException("pkm data must be 236 bytes.");
-            if (record.TrainerName.RawData.Length != 16) throw new FormatException("Trainer name must be 16 bytes.");
+            if (record.TrainerNameEncoded.RawData.Length != 16) throw new FormatException("Trainer name must be 16 bytes.");
             // note that IsTraded being true in the record is not an error condition
             // since it might have use later on. You should check for this in the upload handler.
 
@@ -243,7 +243,7 @@ namespace PkmnFoundations.Data
         public override bool GtsDepositPokemon4(GtsRecord4 record)
         {
             if (record.Data.Count != 236) throw new FormatException("pkm data must be 236 bytes.");
-            if (record.TrainerName.RawData.Length != 16) throw new FormatException("Trainer name must be 16 bytes.");
+            if (record.TrainerNameEncoded.RawData.Length != 16) throw new FormatException("Trainer name must be 16 bytes.");
 
             return WithTransactionSuccessful(tran => GtsDepositPokemon4(tran, record));
         }
@@ -443,7 +443,7 @@ namespace PkmnFoundations.Data
 
             data = new byte[16];
             reader.GetBytes(14, 0, data, 0, 16);
-            result.TrainerName = new EncodedString4(data);
+            result.TrainerNameEncoded = new EncodedString4(data);
             data = null;
 
             result.TrainerOT = reader.GetUInt16(15);
@@ -475,7 +475,7 @@ namespace PkmnFoundations.Data
             result[11] = new MySqlParameter("@TimeDeposited", record.TimeDeposited);
             result[12] = new MySqlParameter("@TimeExchanged", record.TimeExchanged);
             result[13] = new MySqlParameter("@pid", record.PID);
-            result[14] = new MySqlParameter("@TrainerName", record.TrainerName.RawData);
+            result[14] = new MySqlParameter("@TrainerName", record.TrainerNameEncoded.RawData);
             result[15] = new MySqlParameter("@TrainerOT", record.TrainerOT);
             result[16] = new MySqlParameter("@TrainerCountry", record.TrainerCountry);
             result[17] = new MySqlParameter("@TrainerRegion", record.TrainerRegion);
@@ -500,7 +500,7 @@ namespace PkmnFoundations.Data
         public void GtsLogTrade4(MySqlTransaction tran, GtsRecord4 record, DateTime? timeWithdrawn, int ? partner_pid, ulong ? trade_id)
         {
             if (record.Data.Count != 236) throw new FormatException("pkm data must be 236 bytes.");
-            if (record.TrainerName.RawData.Length != 16) throw new FormatException("Trainer name must be 16 bytes.");
+            if (record.TrainerNameEncoded.RawData.Length != 16) throw new FormatException("Trainer name must be 16 bytes.");
             // note that IsTraded being true in the record is not an error condition
             // since it might have use later on. You should check for this in the upload handler.
 
@@ -540,7 +540,7 @@ namespace PkmnFoundations.Data
         public void GtsLogTrade4(GtsRecord4 record, DateTime? timeWithdrawn, int? partner_pid, ulong ? trade_id)
         {
             if (record.Data.Count != 236) throw new FormatException("pkm data must be 236 bytes.");
-            if (record.TrainerName.RawData.Length != 16) throw new FormatException("Trainer name must be 16 bytes.");
+            if (record.TrainerNameEncoded.RawData.Length != 16) throw new FormatException("Trainer name must be 16 bytes.");
 
             WithTransaction(tran => GtsLogTrade4(tran, record, timeWithdrawn, partner_pid, trade_id));
         }
@@ -1192,7 +1192,7 @@ namespace PkmnFoundations.Data
         {
             if (record == null) throw new ArgumentNullException("record");
             if (record.Data.Count != 236) throw new FormatException("pkm data must be 236 bytes.");
-            if (record.TrainerName.RawData.Length != 16) throw new FormatException("Trainer name must be 16 bytes.");
+            if (record.TrainerNameEncoded.RawData.Length != 16) throw new FormatException("Trainer name must be 16 bytes.");
             // note that IsTraded being true in the record is not an error condition
             // since it might have use later on. You should check for this in the upload handler.
 
@@ -1226,7 +1226,7 @@ namespace PkmnFoundations.Data
         {
             if (record == null) throw new ArgumentNullException("record");
             if (record.Data.Count != 236) throw new FormatException("pkm data must be 236 bytes.");
-            if (record.TrainerName.RawData.Length != 16) throw new FormatException("Trainer name must be 16 bytes.");
+            if (record.TrainerNameEncoded.RawData.Length != 16) throw new FormatException("Trainer name must be 16 bytes.");
 
             return WithTransactionSuccessful(tran => GtsDepositPokemon5(tran, record));
         }
@@ -1432,7 +1432,7 @@ namespace PkmnFoundations.Data
 
             data = new byte[16];
             reader.GetBytes(16, 0, data, 0, 16);
-            result.TrainerName = new EncodedString5(data);
+            result.TrainerNameEncoded = new EncodedString5(data);
             data = null;
 
             result.TrainerCountry = reader.GetByte(17);
@@ -1473,7 +1473,7 @@ namespace PkmnFoundations.Data
             result[13] = new MySqlParameter("@TimeExchanged", record.TimeExchanged);
             result[14] = new MySqlParameter("@pid", record.PID);
             result[15] = new MySqlParameter("@TrainerOT", record.TrainerOT);
-            result[16] = new MySqlParameter("@TrainerName", record.TrainerName.RawData);
+            result[16] = new MySqlParameter("@TrainerName", record.TrainerNameEncoded.RawData);
             result[17] = new MySqlParameter("@TrainerCountry", record.TrainerCountry);
             result[18] = new MySqlParameter("@TrainerRegion", record.TrainerRegion);
             result[19] = new MySqlParameter("@TrainerClass", record.TrainerClass);
@@ -1506,7 +1506,7 @@ namespace PkmnFoundations.Data
             // todo: Bring these out into a ValidateRecord5 method
             if (record == null) throw new ArgumentNullException("record");
             if (record.Data.Count != 236) throw new FormatException("pkm data must be 236 bytes.");
-            if (record.TrainerName.RawData.Length != 16) throw new FormatException("Trainer name must be 16 bytes.");
+            if (record.TrainerNameEncoded.RawData.Length != 16) throw new FormatException("Trainer name must be 16 bytes.");
             // note that IsTraded being true in the record is not an error condition
             // since it might have use later on. You should check for this in the upload handler.
 

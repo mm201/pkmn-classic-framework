@@ -69,6 +69,12 @@ namespace PkmnFoundations.Structures
         public byte TrainerRegion;
         public byte TrainerClass;
 
+        public abstract String TrainerName
+        {
+            get;
+            set;
+        }
+
         public byte IsExchanged;
 
         public byte TrainerVersion;

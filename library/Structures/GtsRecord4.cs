@@ -107,14 +107,28 @@ namespace PkmnFoundations.Structures
         /// <summary>
         /// 16 bytes
         /// </summary>
-        public EncodedString4 TrainerName;
+        public EncodedString4 TrainerNameEncoded;
+
+        public override string TrainerName
+        {
+            get
+            {
+                if (TrainerNameEncoded == null) return null;
+                return TrainerNameEncoded.Text;
+            }
+            set
+            {
+                if (TrainerNameEncoded == null) TrainerNameEncoded = new EncodedString4(value, 16);
+                else TrainerNameEncoded.Text = value;
+            }
+        }
 
         public ushort TrainerOT;
 
         protected override void Save(BinaryWriter writer)
         {
             // todo: enclose in properties and validate these when assigning.
-            if (TrainerName.RawData.Length != 0x10) throw new FormatException("Trainer name length is incorrect");
+            if (TrainerNameEncoded.RawData.Length != 0x10) throw new FormatException("Trainer name length is incorrect");
 
             writer.Write(DataActual, 0, 0xEC);                         // 0x0000
             writer.Write(Species);                                     // 0x00EC
@@ -130,7 +144,7 @@ namespace PkmnFoundations.Structures
             writer.Write(DateToTimestamp(TimeDeposited));              // 0x00F8
             writer.Write(DateToTimestamp(TimeExchanged));              // 0x0100
             writer.Write(PID);                                         // 0x0108
-            writer.Write(TrainerName.RawData, 0, 0x10);                // 0x010C
+            writer.Write(TrainerNameEncoded.RawData, 0, 0x10);         // 0x010C
             writer.Write(TrainerOT);                                   // 0x011C
             writer.Write(TrainerCountry);                              // 0x011E
             writer.Write(TrainerRegion);                               // 0x011F
@@ -156,7 +170,7 @@ namespace PkmnFoundations.Structures
             TimeDeposited = TimestampToDate(reader.ReadUInt64());      // 0x00F8
             TimeExchanged = TimestampToDate(reader.ReadUInt64());      // 0x0100
             PID = reader.ReadInt32();                                  // 0x0108
-            TrainerName = new EncodedString4(reader.ReadBytes(0x10));  // 0x010C
+            TrainerNameEncoded = new EncodedString4(reader.ReadBytes(0x10)); // 0x010C
             TrainerOT = reader.ReadUInt16();                           // 0x011C
             TrainerCountry = reader.ReadByte();                        // 0x011E
             TrainerRegion = reader.ReadByte();                         // 0x011F
