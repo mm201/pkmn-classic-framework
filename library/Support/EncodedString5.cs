@@ -8,11 +8,21 @@ namespace PkmnFoundations.Support
 {
     public class EncodedString5
     {
+        /// <summary>
+        /// Instances an EncodedString5 from its binary representation.
+        /// </summary>
+        /// <param name="data">This buffer is copied.</param>
         public EncodedString5(byte[] data)
         {
             RawData = data;
         }
 
+        /// <summary>
+        /// Instances an EncodedString5 from its binary representation.
+        /// </summary>
+        /// <param name="data">Buffer to copy from</param>
+        /// <param name="start">Offset in buffer</param>
+        /// <param name="length">Number of bytes (not chars) to copy</param>
         public EncodedString5(byte[] data, int start, int length)
         {
             if (data.Length < start + length) throw new ArgumentOutOfRangeException("length");
@@ -25,6 +35,11 @@ namespace PkmnFoundations.Support
             AssignData(trim);
         }
 
+        /// <summary>
+        /// Instances an EncodedString5 from a Unicode string.
+        /// </summary>
+        /// <param name="text">text</param>
+        /// <param name="length">Length of encoded buffer in bytes (not chars)</param>
         public EncodedString5(String text, int length)
         {
             if (length < 2) throw new ArgumentOutOfRangeException("length");

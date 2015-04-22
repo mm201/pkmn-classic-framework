@@ -35,6 +35,11 @@ namespace PkmnFoundations.Support
             AssignData(trim);
         }
 
+        /// <summary>
+        /// Instances an EncodedString4 from a Unicode string.
+        /// </summary>
+        /// <param name="text">text</param>
+        /// <param name="length">Length of encoded buffer in bytes (not chars)</param>
         public EncodedString4(String text, int length)
         {
             if (length < 2) throw new ArgumentOutOfRangeException("length");
