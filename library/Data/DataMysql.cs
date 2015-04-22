@@ -209,7 +209,7 @@ namespace PkmnFoundations.Data
 
         public bool GtsDepositPokemon4(MySqlTransaction tran, GtsRecord4 record)
         {
-            if (record.Data.Length != 236) throw new FormatException("pkm data must be 236 bytes.");
+            if (record.Data.Count != 236) throw new FormatException("pkm data must be 236 bytes.");
             if (record.TrainerName.RawData.Length != 16) throw new FormatException("Trainer name must be 16 bytes.");
             // note that IsTraded being true in the record is not an error condition
             // since it might have use later on. You should check for this in the upload handler.
@@ -242,7 +242,7 @@ namespace PkmnFoundations.Data
 
         public override bool GtsDepositPokemon4(GtsRecord4 record)
         {
-            if (record.Data.Length != 236) throw new FormatException("pkm data must be 236 bytes.");
+            if (record.Data.Count != 236) throw new FormatException("pkm data must be 236 bytes.");
             if (record.TrainerName.RawData.Length != 16) throw new FormatException("Trainer name must be 16 bytes.");
 
             return WithTransactionSuccessful(tran => GtsDepositPokemon4(tran, record));
@@ -499,7 +499,7 @@ namespace PkmnFoundations.Data
 
         public void GtsLogTrade4(MySqlTransaction tran, GtsRecord4 record, DateTime? timeWithdrawn, int ? partner_pid, ulong ? trade_id)
         {
-            if (record.Data.Length != 236) throw new FormatException("pkm data must be 236 bytes.");
+            if (record.Data.Count != 236) throw new FormatException("pkm data must be 236 bytes.");
             if (record.TrainerName.RawData.Length != 16) throw new FormatException("Trainer name must be 16 bytes.");
             // note that IsTraded being true in the record is not an error condition
             // since it might have use later on. You should check for this in the upload handler.
@@ -539,7 +539,7 @@ namespace PkmnFoundations.Data
 
         public void GtsLogTrade4(GtsRecord4 record, DateTime? timeWithdrawn, int? partner_pid, ulong ? trade_id)
         {
-            if (record.Data.Length != 236) throw new FormatException("pkm data must be 236 bytes.");
+            if (record.Data.Count != 236) throw new FormatException("pkm data must be 236 bytes.");
             if (record.TrainerName.RawData.Length != 16) throw new FormatException("Trainer name must be 16 bytes.");
 
             WithTransaction(tran => GtsLogTrade4(tran, record, timeWithdrawn, partner_pid, trade_id));
@@ -1191,7 +1191,7 @@ namespace PkmnFoundations.Data
         public bool GtsDepositPokemon5(MySqlTransaction tran, GtsRecord5 record)
         {
             if (record == null) throw new ArgumentNullException("record");
-            if (record.Data.Length != 236) throw new FormatException("pkm data must be 220 bytes.");
+            if (record.Data.Count != 236) throw new FormatException("pkm data must be 236 bytes.");
             if (record.TrainerName.RawData.Length != 16) throw new FormatException("Trainer name must be 16 bytes.");
             // note that IsTraded being true in the record is not an error condition
             // since it might have use later on. You should check for this in the upload handler.
@@ -1225,7 +1225,7 @@ namespace PkmnFoundations.Data
         public override bool GtsDepositPokemon5(GtsRecord5 record)
         {
             if (record == null) throw new ArgumentNullException("record");
-            if (record.Data.Length != 236) throw new FormatException("pkm data must be 236 bytes.");
+            if (record.Data.Count != 236) throw new FormatException("pkm data must be 236 bytes.");
             if (record.TrainerName.RawData.Length != 16) throw new FormatException("Trainer name must be 16 bytes.");
 
             return WithTransactionSuccessful(tran => GtsDepositPokemon5(tran, record));
@@ -1451,10 +1451,11 @@ namespace PkmnFoundations.Data
         {
             MySqlParameter[] result = new MySqlParameter[25];
 
+            byte[] src = record.Data.ToArray(); // xxx: why is there no IList<T>.CopyTo(T[] dest, int destOffset, int count) overload??
             byte[] data = new byte[220];
             byte[] unknown0 = new byte[16];
-            Array.Copy(record.Data, 0, data, 0, 220);
-            Array.Copy(record.Data, 220, unknown0, 0, 16);
+            Array.Copy(src, 0, data, 0, 220);
+            Array.Copy(src, 220, unknown0, 0, 16);
 
             result[0] = new MySqlParameter("@Data", data);
             result[1] = new MySqlParameter("@Unknown0", unknown0);
@@ -1504,7 +1505,7 @@ namespace PkmnFoundations.Data
         {
             // todo: Bring these out into a ValidateRecord5 method
             if (record == null) throw new ArgumentNullException("record");
-            if (record.Data.Length != 236) throw new FormatException("pkm data must be 236 bytes.");
+            if (record.Data.Count != 236) throw new FormatException("pkm data must be 236 bytes.");
             if (record.TrainerName.RawData.Length != 16) throw new FormatException("Trainer name must be 16 bytes.");
             // note that IsTraded being true in the record is not an error condition
             // since it might have use later on. You should check for this in the upload handler.

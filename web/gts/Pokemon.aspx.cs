@@ -53,13 +53,13 @@ namespace PkmnFoundations.Web.gts
                     case "4":
                     {
                         GtsRecord4 record = Database.Instance.GtsGetRecord4(pokedex, tradeId, isExchanged, true);
-                        if (record != null) pkmn = new PokemonParty4(pokedex, record.Data);
+                        if (record != null) pkmn = new PokemonParty4(pokedex, record.Data.ToArray());
 
                     } break;
                     case "5":
                     {
                         GtsRecord5 record = Database.Instance.GtsGetRecord5(pokedex, tradeId, isExchanged, true);
-                        if (record != null) pkmn = new PokemonParty4(pokedex, record.Data);
+                        if (record != null) pkmn = new PokemonParty4(pokedex, record.Data.ToArray());
 
                     } break;
                     default:

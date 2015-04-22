@@ -5,6 +5,7 @@ using System.Text;
 using System.Runtime.Serialization;
 using System.IO;
 using PkmnFoundations.Support;
+using System.Collections.ObjectModel;
 
 namespace PkmnFoundations.Structures
 {
@@ -50,7 +51,33 @@ namespace PkmnFoundations.Structures
         /// <summary>
         /// Obfuscated Pokémon (pkm) data. 236 bytes
         /// </summary>
-        public byte[] Data;
+        public IList<byte> Data
+        {
+            get
+            {
+                return m_data_readonly;
+            }
+            set
+            {
+                DataActual = value.ToArray();
+            }
+        }
+
+        private byte[] DataActual
+        {
+            get
+            {
+                return m_data;
+            }
+            set
+            {
+                if (value.Length != 0xEC) throw new ArgumentException("PKM length is incorrect");
+                m_data = value;
+                m_data_readonly = new ReadOnlyCollection<byte>(m_data);
+            }
+        }
+        private byte[] m_data;
+        private ReadOnlyCollection<byte> m_data_readonly;
 
         public byte Unknown1;
         public byte Unknown2;
@@ -65,10 +92,9 @@ namespace PkmnFoundations.Structures
         protected override void Save(BinaryWriter writer)
         {
             // todo: enclose in properties and validate these when assigning.
-            if (Data.Length != 0xEC) throw new FormatException("PKM length is incorrect");
             if (TrainerName.RawData.Length != 0x10) throw new FormatException("Trainer name length is incorrect");
 
-            writer.Write(Data, 0, 0xEC);                               // 0x0000
+            writer.Write(DataActual, 0, 0xEC);                         // 0x0000
             writer.Write(Species);                                     // 0x00EC
             writer.Write((byte)Gender);                                // 0x00EE
             writer.Write(Level);                                       // 0x00EF
@@ -94,7 +120,7 @@ namespace PkmnFoundations.Structures
 
         protected override void Load(BinaryReader reader)
         {
-            Data = reader.ReadBytes(0xEC);                             // 0x0000
+            DataActual = reader.ReadBytes(0xEC);                       // 0x0000
             Species = reader.ReadUInt16();                             // 0x00EC
             Gender = (Genders)reader.ReadByte();                       // 0x00EE
             Level = reader.ReadByte();                                 // 0x00EF
