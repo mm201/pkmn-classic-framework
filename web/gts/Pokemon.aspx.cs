@@ -83,24 +83,21 @@ namespace PkmnFoundations.Web.gts
         {
             litNickname.Text = pkmn.Nickname;
             bool shiny = pkmn.IsShiny;
-            imgPokemon.ImageUrl = WebFormat.PokemonImage(pkmn);
+            imgPokemon.ImageUrl = WebFormat.PokemonImageLarge(pkmn);
             imgPokemon.AlternateText = pkmn.Species.Name.ToString();
             phShiny.Visible = shiny;
-            // todo: pokerus
-            phPkrs.Visible = false;
-            phPkrsCured.Visible = false;
             litMarks.Text = WebFormat.Markings(pkmn.Markings);
-            imgPokeball.ImageUrl = ItemFilename(pkmn.Pokeball);
+            imgPokeball.ImageUrl = WebFormat.ItemImage(pkmn.Pokeball);
             imgPokeball.AlternateText = pkmn.Pokeball.Name.ToString();
             imgPokeball.ToolTip = pkmn.Pokeball.Name.ToString();
             litLevel.Text = pkmn.Level.ToString();
-            litGender.Text = CreateGender(pkmn.Gender);
+            litGender.Text = WebFormat.Gender(pkmn.Gender);
             litCharacteristic.Text = pkmn.Characteristic.ToString();
             litSpecies.Text = pkmn.Species.Name.ToString();
             litPokedex.Text = pkmn.SpeciesID.ToString("000");
             FormStats fs = pkmn.Form.BaseStats(Generations.Generation4);
-            litType1.Text = fs.Type1 == null ? "" : CreateType(fs.Type1);
-            litType2.Text = fs.Type2 == null ? "" : CreateType(fs.Type2);
+            litType1.Text = fs.Type1 == null ? "" : WebFormat.RenderType(fs.Type1);
+            litType2.Text = fs.Type2 == null ? "" : WebFormat.RenderType(fs.Type2);
             litOtName.Text = Common.HtmlEncode(pkmn.TrainerName);
             litTrainerId.Text = (pkmn.TrainerID & 0xffff).ToString("00000");
             litExperience.Text = pkmn.Experience.ToString();
@@ -112,17 +109,17 @@ namespace PkmnFoundations.Web.gts
                 int nextIn = expNextLevel - pkmn.Experience;
 
                 litExperienceNext.Text = String.Format("next in {0}", nextIn);
-                litExpProgress.Text = CreateProgress(progress, expNextLevel - expCurrLevel);
+                litExpProgress.Text = WebFormat.RenderProgress(progress, expNextLevel - expCurrLevel);
             }
             else
             {
                 litExperienceNext.Text = "";
-                litExpProgress.Text = CreateProgress(0, 1);
+                litExpProgress.Text = WebFormat.RenderProgress(0, 1);
             }
             if (pkmn.HeldItem != null)
             {
                 imgHeldItem.Visible = true;
-                imgHeldItem.ImageUrl = ItemFilename(pkmn.HeldItem);
+                imgHeldItem.ImageUrl = WebFormat.ItemImage(pkmn.HeldItem);
                 litHeldItem.Text = pkmn.HeldItem.Name.ToString();
             }
             else
@@ -134,7 +131,7 @@ namespace PkmnFoundations.Web.gts
             litAbility.Text = pkmn.Ability == null ? "" : pkmn.Ability.Name.ToString();
             litHpCurr.Text = pkmn.HP.ToString();
             litHp.Text = pkmn.Stats[Stats.Hp].ToString();
-            litHpProgress.Text = CreateProgress(pkmn.HP, pkmn.Stats[Stats.Hp]);
+            litHpProgress.Text = WebFormat.RenderProgress(pkmn.HP, pkmn.Stats[Stats.Hp]);
             litAtk.Text = pkmn.Stats[Stats.Attack].ToString();
             litDef.Text = pkmn.Stats[Stats.Defense].ToString();
             litSAtk.Text = pkmn.Stats[Stats.SpecialAttack].ToString();
@@ -154,33 +151,5 @@ namespace PkmnFoundations.Web.gts
             rptUnknownRibbons.DataBind();
         }
 
-        private String ItemFilename(Item item)
-        {
-            return "~/images/item-sm/" + item.ID.ToString() + ".png";
-        }
-
-        private String CreateGender(Genders gender)
-        {
-            switch (gender)
-            {
-                case Genders.Male:
-                    return "♂";
-                case Genders.Female:
-                    return "♀";
-                default:
-                    return "";
-            }
-        }
-
-        private String CreateType(Pokedex.Type type)
-        {
-            return "<span class=\"type " + type.Identifier + "\">" + type.Name.ToString() + "</span>";
-        }
-
-        private String CreateProgress(int curr, int max)
-        {
-            float percent = (float)curr * 100.0f / (float)max;
-            return "<div class=\"progress\" style=\"width: " + percent.ToString() + "%;\"></div>";
-        }
     }
 }

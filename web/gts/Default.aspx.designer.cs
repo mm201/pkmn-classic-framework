@@ -121,21 +121,12 @@ namespace PkmnFoundations.GTS {
         protected global::System.Web.UI.WebControls.CheckBox chkFemale;
         
         /// <summary>
-        /// rptPokemon4 control.
+        /// rptPokemon control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Repeater rptPokemon4;
-        
-        /// <summary>
-        /// rptPokemon5 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Repeater rptPokemon5;
+        protected global::System.Web.UI.WebControls.Repeater rptPokemon;
     }
 }

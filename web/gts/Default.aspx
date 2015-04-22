@@ -83,16 +83,8 @@
         </table>
     </form>
     <div class="clear"></div>
-<asp:Repeater ID="rptPokemon4" runat="server">
-
-<HeaderTemplate>
-
-</HeaderTemplate>
-
-
-
+<asp:Repeater ID="rptPokemon" runat="server">
 <ItemTemplate>
-
 <div class="gtsPokemonSummary gtsOffer pfBoxThin">
     <div class="pfColumn colPortrait">
         <ul>
@@ -159,43 +151,6 @@
     <div class="clear"></div>
 </div>
 </ItemTemplate>
-
-
-<FooterTemplate>
-
-</FooterTemplate>
-
-</asp:Repeater>
-
-
-<asp:Repeater ID="rptPokemon5" runat="server">
-
-<HeaderTemplate>
-<table>
-<thead>
-<tr>
-<td>Offer</td>
-<td>Wanted</td>
-<td>Trainer</td>
-</tr>
-</thead>
-</HeaderTemplate>
-
-
-
-<ItemTemplate>
-<tr>
-<td><%# CreateOffer5(Container.DataItem) %></td>
-<td><%# CreateWanted5(Container.DataItem) %></td>
-<td><%# CreateTrainer5(Container.DataItem) %></td>
-</tr>
-</ItemTemplate>
-
-
-<FooterTemplate>
-</table>
-</FooterTemplate>
-
 </asp:Repeater>
 
 </asp:Content>

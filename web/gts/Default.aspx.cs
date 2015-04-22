@@ -28,18 +28,14 @@ namespace PkmnFoundations.GTS
             if (rbGen4.Checked)
             {
                 GtsRecord4[] records4 = Database.Instance.GtsSearch4(pokedex, 0, (ushort)species, gender, (byte)minLevel, (byte)maxLevel, 0, -1);
-                rptPokemon4.DataSource = records4;
-                rptPokemon4.DataBind();
-                rptPokemon4.Visible = true;
-                rptPokemon5.Visible = false;
+                rptPokemon.DataSource = records4;
+                rptPokemon.DataBind();
             }
             else if (rbGen5.Checked)
             {
                 GtsRecord5[] records5 = Database.Instance.GtsSearch5(pokedex, 0, (ushort)species, gender, (byte)minLevel, (byte)maxLevel, 0, -1);
-                rptPokemon5.DataSource = records5;
-                rptPokemon5.DataBind();
-                rptPokemon4.Visible = false;
-                rptPokemon5.Visible = true;
+                rptPokemon.DataSource = records5;
+                rptPokemon.DataBind();
             }
         }
 
@@ -65,128 +61,182 @@ namespace PkmnFoundations.GTS
 
         protected String CreateOfferImage(object DataItem)
         {
-            return "<img src=\"" + ResolveUrl("~/images/pkmn-lg/todo.png") +
-                "\" alt=\"todo\" class=\"sprite species\" width=\"96px\" height=\"96px\" />";
+            try
+            {
+                GtsRecordBase record = (GtsRecordBase)DataItem;
+                return "<img src=\"" + ResolveUrl(WebFormat.PokemonImageLarge(record.Pokemon)) +
+                    "\" alt=\"" + Common.HtmlEncode(record.Pokemon.Species.Name.ToString()) +
+                    "\" class=\"sprite species\" width=\"96px\" height=\"96px\" />";
+            }
+            catch
+            {
+                return "???";
+            }
         }
 
         protected String CreatePokeball(object DataItem)
         {
-            return "<img src=\"" + ResolveUrl("~/images/item-sm/todo.png") +
-                "\" alt=\"todo\" title=\"todo\" class=\"sprite item\" width=\"24px\" height=\"24px\" />";
+            try
+            {
+                GtsRecordBase record = (GtsRecordBase)DataItem;
+                String itemName = Common.HtmlEncode(record.Pokemon.Pokeball.Name.ToString());
+                return "<img src=\"" + ResolveUrl(WebFormat.ItemImage(record.Pokemon.Pokeball)) +
+                    "\" alt=\"" + itemName + "\" title=\"" + itemName + 
+                    "\" class=\"sprite item\" width=\"24px\" height=\"24px\" />";
+            }
+            catch
+            {
+                return "???";
+            }
         }
 
         protected String CreatePokerus(object DataItem)
         {
-            return "";
+            try
+            {
+                GtsRecordBase record = (GtsRecordBase)DataItem;
+                switch (record.Pokemon.Pokerus)
+                {
+                    case Pokerus.Infected:
+                        return "<span class=\"pkrs\">PKRS</span>";
+                    case Pokerus.Cured:
+                        return "<span class=\"pkrs_cure\">CURED</span>";
+                    case Pokerus.None:
+                    default:
+                        return "";
+                }
+            }
+            catch
+            {
+                return "";
+            }
         }
-
-
-        // fixme: I can remove the need for separate 4/5 functions by making
-        // the GtsRecords inherit from IGtsRecord and make the the Pokemon field
-        // return PokemonPartyBase.
 
         protected String CreateLevel(object DataItem)
         {
-            GtsRecord4 record = (GtsRecord4)DataItem;
+            GtsRecordBase record = (GtsRecordBase)DataItem;
             return record.Level.ToString();
         }
 
         protected String CreateGender(object DataItem)
         {
-            GtsRecord4 record = (GtsRecord4)DataItem;
+            GtsRecordBase record = (GtsRecordBase)DataItem;
             return Format.GenderSymbol(record.Gender);
         }
 
         protected String CreateNickname(object DataItem)
         {
-            return "todo";
+            try
+            {
+                GtsRecordBase record = (GtsRecordBase)DataItem;
+                return Common.HtmlEncode(record.Pokemon.Nickname);
+            }
+            catch
+            {
+                return "???";
+            }
         }
 
         protected String CreateSpecies(object DataItem)
         {
-            Pokedex.Pokedex pokedex = AppStateHelper.Pokedex(Application);
-            GtsRecord4 record = (GtsRecord4)DataItem;
-            return pokedex.Species(record.Species).Name.ToString();
+            try
+            {
+                Pokedex.Pokedex pokedex = AppStateHelper.Pokedex(Application);
+                GtsRecordBase record = (GtsRecordBase)DataItem;
+                return Common.HtmlEncode(pokedex.Species(record.Species).Name.ToString());
+            }
+            catch
+            {
+                return "???";
+            }
         }
 
         protected String CreatePokedex(object DataItem)
         {
-            GtsRecord4 record = (GtsRecord4)DataItem;
-            return record.Species.ToString();
+            try
+            {
+                GtsRecordBase record = (GtsRecordBase)DataItem;
+                return Common.HtmlEncode(record.Species.ToString());
+            }
+            catch
+            {
+                return "???";
+            }
         }
 
         protected String CreateHeldItem(object DataItem)
         {
-            return "todo";
+            try
+            {
+                GtsRecordBase record = (GtsRecordBase)DataItem;
+                if (record.Pokemon.HeldItem == null) return "";
+                String itemName = Common.HtmlEncode(record.Pokemon.HeldItem.Name.ToString());
+                return "<img src=\"" + ResolveUrl(WebFormat.ItemImage(record.Pokemon.HeldItem)) +
+                    "\" alt=\"" + itemName + "\" class=\"sprite item\" width=\"24px\" height=\"24px\" />" +
+                    itemName;
+            }
+            catch
+            {
+                return "???";
+            }
         }
 
         protected String CreateNature(object DataItem)
         {
-            return "todo";
+            try
+            {
+                GtsRecordBase record = (GtsRecordBase)DataItem;
+                return Common.HtmlEncode(record.Pokemon.Nature.ToString());
+            }
+            catch
+            {
+                return "???";
+            }
         }
 
         protected String CreateAbility(object DataItem)
         {
-            return "todo";
+            try
+            {
+                GtsRecordBase record = (GtsRecordBase)DataItem;
+                return Common.HtmlEncode(record.Pokemon.Ability.Name.ToString());
+            }
+            catch
+            {
+                return "???";
+            }
         }
 
         protected String CreateTrainer(object DataItem)
         {
-            GtsRecord4 record = (GtsRecord4)DataItem;
-            return Common.HtmlEncode(record.TrainerName.Text);
+            GtsRecordBase record = (GtsRecordBase)DataItem;
+            return Common.HtmlEncode(record.TrainerName);
         }
 
         protected String CreateWantedSpecies(object DataItem)
         {
             Pokedex.Pokedex pokedex = AppStateHelper.Pokedex(Application);
-            GtsRecord4 record = (GtsRecord4)DataItem;
-            return String.Format("{0} (#{1})",
-                pokedex.Species(record.RequestedSpecies).Name,
+            GtsRecordBase record = (GtsRecordBase)DataItem;
+            Species species = pokedex.Species(record.RequestedSpecies);
+
+            return "<img src=\"" + ResolveUrl(WebFormat.SpeciesImageSmall(species)) +
+                "\" alt=\"" + Common.HtmlEncode(species.Name.ToString()) + 
+                "\" class=\"sprite speciesSmall\" width=\"40px\" height=\"32px\" />" +
+                String.Format("{0} (#{1})",
+                Common.HtmlEncode(species.Name.ToString()),
                 record.RequestedSpecies);
         }
 
         protected String CreateWantedGender(object DataItem)
         {
-            GtsRecord4 record = (GtsRecord4)DataItem;
+            GtsRecordBase record = (GtsRecordBase)DataItem;
             return Format.GenderSymbol(record.RequestedGender);
         }
 
         protected String CreateWantedLevel(object DataItem)
         {
-            GtsRecord4 record = (GtsRecord4)DataItem;
+            GtsRecordBase record = (GtsRecordBase)DataItem;
             return FormatLevels(record.RequestedMinLevel, record.RequestedMaxLevel);
-        }
-
-
-
-
-
-        protected String CreateOffer5(object DataItem)
-        {
-            Pokedex.Pokedex pokedex = AppStateHelper.Pokedex(Application);
-            GtsRecord5 record = (GtsRecord5)DataItem;
-            return String.Format("{3} (#{0})<br />{1}<br />Lv {2}", 
-                record.Species, 
-                record.Gender, 
-                record.Level,
-                pokedex.Species(record.Species).Name);
-        }
-
-        protected String CreateWanted5(object DataItem)
-        {
-            Pokedex.Pokedex pokedex = AppStateHelper.Pokedex(Application);
-            GtsRecord5 record = (GtsRecord5)DataItem;
-            return String.Format("{3} (#{0})<br />{1}<br />{2}",
-                record.RequestedSpecies, 
-                record.RequestedGender, 
-                FormatLevels(record.RequestedMinLevel, record.RequestedMaxLevel),
-                pokedex.Species(record.RequestedSpecies).Name);
-        }
-
-        protected String CreateTrainer5(object DataItem)
-        {
-            GtsRecord5 record = (GtsRecord5)DataItem;
-            return Common.HtmlEncode(record.TrainerName.Text);
         }
     }
 }
