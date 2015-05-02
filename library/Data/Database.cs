@@ -175,6 +175,8 @@ namespace PkmnFoundations.Data
         public abstract void PokedexInsertAbility(Ability a);
         public abstract void PokedexInsertRibbon(Ribbon r);
 
+        public abstract void PokedexInsertRegion(Region r);
+
         #endregion
 
         #region Pokedex retrieval

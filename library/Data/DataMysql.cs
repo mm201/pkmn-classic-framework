@@ -3035,6 +3035,22 @@ namespace PkmnFoundations.Data
             WithTransaction(tran => PokedexInsertRibbon(tran, r));
         }
 
+        public void PokedexInsertRegion(MySqlTransaction tran, Region r)
+        {
+            List<MySqlParameter> insertParams = new List<MySqlParameter>();
+            insertParams.Add(new MySqlParameter("@id", r.ID));
+            CreateLocalizedStringQueryPieces(r.Name, insertParams);
+
+            tran.ExecuteNonQuery("INSERT INTO pkmncf_pokedex_regions (ID, " +
+                INSERT_COLUMNS + ") VALUES (@id, " + INSERT_VALUES + ")",
+                insertParams.ToArray());
+        }
+
+        public override void PokedexInsertRegion(Region r)
+        {
+            WithTransaction(tran => PokedexInsertRegion(tran, r));
+        }
+
         #endregion
 
         #region Pokedex retrieval
