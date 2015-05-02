@@ -7,7 +7,7 @@
 #
 # Host: 127.0.0.1 (MySQL 5.5.40)
 # Database: gts
-# Generation Time: 2014-12-27 08:18:18 +0000
+# Generation Time: 2015-05-02 20:12:33 +0000
 # ************************************************************
 
 
@@ -303,6 +303,7 @@ CREATE TABLE `GtsHistory4` (
   `TrainerLanguage` tinyint(3) unsigned NOT NULL,
   `ParseVersion` int(11) unsigned DEFAULT NULL,
   `TimeWithdrawn` datetime DEFAULT NULL,
+  `partner_pid` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `pid` (`pid`),
   KEY `Species` (`Species`),
@@ -319,6 +320,7 @@ DROP TABLE IF EXISTS `GtsHistory5`;
 
 CREATE TABLE `GtsHistory5` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `trade_id` bigint(20) unsigned DEFAULT NULL,
   `Data` blob NOT NULL,
   `Unknown0` blob NOT NULL,
   `Species` smallint(5) unsigned NOT NULL,
@@ -346,6 +348,7 @@ CREATE TABLE `GtsHistory5` (
   `TrainerUnityTower` tinyint(3) unsigned NOT NULL,
   `ParseVersion` int(10) unsigned DEFAULT NULL,
   `TimeWithdrawn` datetime DEFAULT NULL,
+  `partner_pid` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `pid` (`pid`),
   KEY `Species` (`Species`),
@@ -443,16 +446,17 @@ DROP TABLE IF EXISTS `GtsProfiles4`;
 
 CREATE TABLE `GtsProfiles4` (
   `pid` int(11) NOT NULL,
-  `Data` blob NOT NULL,
-  `Version` tinyint(3) unsigned NOT NULL,
-  `Language` tinyint(3) unsigned NOT NULL,
-  `Country` tinyint(3) unsigned NOT NULL,
-  `Region` tinyint(3) unsigned NOT NULL,
-  `OT` int(10) unsigned NOT NULL,
-  `Name` binary(16) NOT NULL DEFAULT '\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0',
-  `ParseVersion` int(10) unsigned NOT NULL,
-  `TimeAdded` datetime DEFAULT NULL,
-  `TimeUpdated` datetime DEFAULT NULL,
+  `Data` blob,
+  `Version` tinyint(3) unsigned DEFAULT NULL,
+  `Language` tinyint(3) unsigned DEFAULT NULL,
+  `Country` tinyint(3) unsigned DEFAULT NULL,
+  `Region` tinyint(3) unsigned DEFAULT NULL,
+  `OT` int(10) unsigned DEFAULT NULL,
+  `Name` binary(16) DEFAULT NULL,
+  `ParseVersion` int(10) unsigned DEFAULT NULL,
+  `TimeAdded` datetime NOT NULL,
+  `TimeUpdated` datetime NOT NULL,
+  `TimeLastSearch` datetime DEFAULT NULL,
   PRIMARY KEY (`pid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -465,16 +469,40 @@ DROP TABLE IF EXISTS `GtsProfiles5`;
 
 CREATE TABLE `GtsProfiles5` (
   `pid` int(11) NOT NULL,
-  `Data` blob NOT NULL,
-  `Version` tinyint(3) unsigned NOT NULL,
-  `Language` tinyint(3) unsigned NOT NULL,
-  `Country` tinyint(3) unsigned NOT NULL,
-  `Region` tinyint(3) unsigned NOT NULL,
-  `OT` int(11) unsigned NOT NULL,
-  `Name` binary(16) NOT NULL DEFAULT '\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0',
-  `ParseVersion` int(11) unsigned NOT NULL,
-  `TimeAdded` datetime DEFAULT NULL,
-  `TimeUpdated` datetime DEFAULT NULL,
+  `Data` blob,
+  `Version` tinyint(3) unsigned DEFAULT NULL,
+  `Language` tinyint(3) unsigned DEFAULT NULL,
+  `Country` tinyint(3) unsigned DEFAULT NULL,
+  `Region` tinyint(3) unsigned DEFAULT NULL,
+  `OT` int(10) unsigned DEFAULT NULL,
+  `Name` binary(16) DEFAULT NULL,
+  `ParseVersion` int(10) unsigned DEFAULT NULL,
+  `TimeAdded` datetime NOT NULL,
+  `TimeUpdated` datetime NOT NULL,
+  `TimeLastSearch` datetime DEFAULT NULL,
+  PRIMARY KEY (`pid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+
+# Dump of table pkmncf_plaza_profiles
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `pkmncf_plaza_profiles`;
+
+CREATE TABLE `pkmncf_plaza_profiles` (
+  `pid` int(11) NOT NULL,
+  `DataPrefix` blob,
+  `Data` blob,
+  `Version` tinyint(3) unsigned DEFAULT NULL,
+  `Language` tinyint(3) unsigned DEFAULT NULL,
+  `Country` tinyint(3) unsigned DEFAULT NULL,
+  `Region` tinyint(3) unsigned DEFAULT NULL,
+  `OT` int(10) unsigned DEFAULT NULL,
+  `Name` binary(16) DEFAULT NULL,
+  `ParseVersion` int(10) unsigned DEFAULT NULL,
+  `TimeAdded` datetime NOT NULL,
+  `TimeUpdated` datetime NOT NULL,
   PRIMARY KEY (`pid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -550,6 +578,25 @@ CREATE TABLE `pkmncf_pokedex_country_regions` (
 
 
 
+# Dump of table pkmncf_pokedex_encounters_random
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `pkmncf_pokedex_encounters_random`;
+
+CREATE TABLE `pkmncf_pokedex_encounters_random` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `room_id` int(10) unsigned NOT NULL,
+  `Version` int(10) unsigned NOT NULL,
+  `Method` int(10) unsigned NOT NULL,
+  `EncounterSlot` tinyint(3) unsigned NOT NULL,
+  `form_id` int(10) unsigned NOT NULL,
+  `MinLevel` tinyint(3) unsigned NOT NULL,
+  `MaxLevel` tinyint(3) unsigned NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+
 # Dump of table pkmncf_pokedex_items
 # ------------------------------------------------------------
 
@@ -574,6 +621,32 @@ CREATE TABLE `pkmncf_pokedex_items` (
   KEY `Value4` (`Value4`),
   KEY `Value5` (`Value5`),
   KEY `Value6` (`Value6`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+
+# Dump of table pkmncf_pokedex_locations
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `pkmncf_pokedex_locations`;
+
+CREATE TABLE `pkmncf_pokedex_locations` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `region_id` int(11) unsigned NOT NULL,
+  `Name_JA` varchar(30) DEFAULT NULL,
+  `Name_EN` varchar(30) DEFAULT NULL,
+  `Name_FR` varchar(30) DEFAULT NULL,
+  `Name_IT` varchar(30) DEFAULT NULL,
+  `Name_DE` varchar(30) DEFAULT NULL,
+  `Name_ES` varchar(30) DEFAULT NULL,
+  `Name_KO` varchar(30) DEFAULT NULL,
+  `Value3` int(11) unsigned DEFAULT NULL,
+  `Value_Colo` int(11) unsigned DEFAULT NULL,
+  `Value_XD` int(11) unsigned DEFAULT NULL,
+  `Value4` int(11) unsigned DEFAULT NULL,
+  `Value5` int(11) unsigned DEFAULT NULL,
+  `Value6` int(11) unsigned DEFAULT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
@@ -622,9 +695,9 @@ CREATE TABLE `pkmncf_pokedex_pokemon` (
   `Name_KO` varchar(36) DEFAULT NULL,
   `GrowthRate` int(10) unsigned NOT NULL,
   `GenderRatio` tinyint(3) unsigned NOT NULL,
-  `EggGroup1` tinyint(3) unsigned DEFAULT NULL,
-  `EggGroup2` tinyint(3) unsigned DEFAULT NULL,
-  `EggSteps` int(10) unsigned DEFAULT NULL,
+  `EggGroup1` tinyint(3) unsigned NOT NULL,
+  `EggGroup2` tinyint(3) unsigned NOT NULL,
+  `EggSteps` int(10) unsigned NOT NULL,
   `GenderVariations` bit(1) DEFAULT NULL,
   PRIMARY KEY (`NationalDex`),
   KEY `family_id` (`family_id`),
@@ -708,6 +781,73 @@ CREATE TABLE `pkmncf_pokedex_pokemon_forms` (
 
 
 
+# Dump of table pkmncf_pokedex_regions
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `pkmncf_pokedex_regions`;
+
+CREATE TABLE `pkmncf_pokedex_regions` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `Name_JA` varchar(30) DEFAULT NULL,
+  `Name_EN` varchar(30) DEFAULT NULL,
+  `Name_FR` varchar(30) DEFAULT NULL,
+  `Name_IT` varchar(30) DEFAULT NULL,
+  `Name_DE` varchar(30) DEFAULT NULL,
+  `Name_ES` varchar(30) DEFAULT NULL,
+  `Name_KO` varchar(30) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+
+# Dump of table pkmncf_pokedex_ribbons
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `pkmncf_pokedex_ribbons`;
+
+CREATE TABLE `pkmncf_pokedex_ribbons` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `Position3` int(10) unsigned DEFAULT NULL,
+  `Position4` int(10) unsigned DEFAULT NULL,
+  `Position5` int(10) unsigned DEFAULT NULL,
+  `Position6` int(10) unsigned DEFAULT NULL,
+  `Value3` int(10) unsigned DEFAULT NULL,
+  `Value4` int(10) unsigned DEFAULT NULL,
+  `Value5` int(10) unsigned DEFAULT NULL,
+  `Value6` int(10) unsigned DEFAULT NULL,
+  `Name_JA` varchar(30) DEFAULT NULL,
+  `Name_EN` varchar(30) DEFAULT NULL,
+  `Name_FR` varchar(30) DEFAULT NULL,
+  `Name_IT` varchar(30) DEFAULT NULL,
+  `Name_DE` varchar(30) DEFAULT NULL,
+  `Name_ES` varchar(30) DEFAULT NULL,
+  `Name_KO` varchar(30) DEFAULT NULL,
+  `Description_JA` varchar(300) DEFAULT NULL,
+  `Description_EN` varchar(300) DEFAULT NULL,
+  `Description_FR` varchar(300) DEFAULT NULL,
+  `Description_IT` varchar(300) DEFAULT NULL,
+  `Description_DE` varchar(300) DEFAULT NULL,
+  `Description_ES` varchar(300) DEFAULT NULL,
+  `Description_KO` varchar(300) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+
+# Dump of table pkmncf_pokedex_rooms
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `pkmncf_pokedex_rooms`;
+
+CREATE TABLE `pkmncf_pokedex_rooms` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `location_id` int(11) unsigned NOT NULL,
+  `Comment` varchar(300) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+
 # Dump of table pkmncf_pokedex_types
 # ------------------------------------------------------------
 
@@ -723,6 +863,18 @@ CREATE TABLE `pkmncf_pokedex_types` (
   `Name_ES` varchar(30) DEFAULT NULL,
   `Name_KO` varchar(30) DEFAULT NULL,
   `DamageClass` tinyint(3) unsigned DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+
+# Dump of table pkmncf_web_news
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `pkmncf_web_news`;
+
+CREATE TABLE `pkmncf_web_news` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
