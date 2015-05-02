@@ -1,0 +1,9 @@
+﻿1	Event
+2	Kanto
+3	Johto
+4	Hoenn
+5	Orre
+6	Sevii Islands
+7	Sinnoh
+8	Unova
+9	Kalos

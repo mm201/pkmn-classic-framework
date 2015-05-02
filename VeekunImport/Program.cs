@@ -607,6 +607,14 @@ namespace VeekunImport
                     }
                 }
 
+                // pkmncf_pokedex_regions
+                ProcessTSV("regions.txt", fields =>
+                {
+                    if (fields.Length < 2) return;
+                    int id = Convert.ToInt32(fields[0]);
+                    db.PokedexInsertRegion(new Region(null, id, new LocalizedString(){{"EN", fields[1]}}));
+                });
+
                 connVeekun.Close();
             }
 
@@ -632,6 +640,27 @@ namespace VeekunImport
         {
             if (reader["damage_class_id"] is DBNull) return DamageClass.None;
             return (DamageClass)(Convert.ToInt32(reader["damage_class_id"]) - 1);
+        }
+
+        private static bool ProcessTSV(String filename, Action<String[]> action)
+        {
+            if (!File.Exists(filename))
+            {
+                Console.WriteLine("File {0} not found, skipped.", filename);
+                return false;
+            }
+            using (FileStream fs = File.Open(filename, FileMode.Open))
+            {
+                StreamReader sr = new StreamReader(fs, Encoding.UTF8);
+                String line;
+                while ((line = sr.ReadLine()) != null)
+                {
+                    String[] fields = line.Split('\t');
+                    action(fields);
+                }
+                fs.Close();
+            }
+            return true;
         }
     }
 

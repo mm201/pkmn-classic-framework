@@ -92,6 +92,7 @@
     <Content Include="families.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="regions.txt" />
     <Content Include="ribbons.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
