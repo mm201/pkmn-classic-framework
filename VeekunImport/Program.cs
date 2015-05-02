@@ -59,37 +59,25 @@ namespace VeekunImport
                 // Obtain the families map. We will use it in a few places.
                 Dictionary<int, int> familyMap = new Dictionary<int, int>();
                 List<int[]> familyList = new List<int[]>();
-                using (FileStream fs = File.Open("families_map.txt", FileMode.Open))
-                {
-                    StreamReader sr = new StreamReader(fs, Encoding.UTF8);
-                    int lineNumber = 0;
-                    String line;
-                    while ((line = sr.ReadLine()) != null)
+                ProcessTSV("families_map.txt", 1, row =>
                     {
-                        lineNumber++;
-                        String[] fields = line.Split('\t');
-                        if (fields.Length == 0) continue;
-                        int[] fieldsInt = fields.Select(s => Convert.ToInt32(s)).ToArray();
+                        // todo: allow for comments by stopping consumption of fields once one fails to parse.
+                        int[] fieldsInt = row.Fields.Select(s => Convert.ToInt32(s)).ToArray();
                         familyList.Add(fieldsInt);
                         foreach (int x in fieldsInt)
                         {
                             // lineNumber is one-based, unlike familyList index.
                             // species is the key, family ID is the value.
                             // If any species is repeated in family_map.txt, this ought to fail.
-                            familyMap.Add(x, lineNumber);
+                            familyMap.Add(x, row.ValidLineNumber + 1);
                         }
-                    }
-                }
+                    });
 
                 // families from families.txt override default behaviour.
                 List<Family> overrideFamilies = new List<Family>();
-                using (FileStream fs = File.Open("families.txt", FileMode.Open))
-                {
-                    StreamReader sr = new StreamReader(fs, Encoding.UTF8);
-                    String line;
-                    while ((line = sr.ReadLine()) != null)
+                ProcessTSV("families.txt", 7, row =>
                     {
-                        String[] fields = line.Split('\t');
+                        String[] fields = row.Fields;
                         overrideFamilies.Add(new Family(null,
                             Convert.ToInt32(fields[0]),
                             Convert.ToInt32(fields[1]),
@@ -99,8 +87,7 @@ namespace VeekunImport
                             Convert.ToInt32(fields[5]),
                             Convert.ToByte(fields[6])
                             ));
-                    }
-                }
+                    });
                 // already sorted
                 //someFamilies.Sort((f, other) => f.ID.CompareTo(other.ID));
 
@@ -127,7 +114,7 @@ namespace VeekunImport
                         f = new Family(null, familyId, basicSpeciesId, basicSpeciesId, 0, 0, 0, genderRatio);
                     }
                     db.PokedexInsertFamily(f);
-                    String basic = (f.BasicMaleID != f.BasicFemaleID) ? 
+                    String basic = (f.BasicMaleID != f.BasicFemaleID) ?
                         String.Format(" {0}/{1}", f.BasicMaleID, f.BasicFemaleID) :
                         String.Format(" {0}", f.BasicMaleID);
                     String baby;
@@ -170,7 +157,7 @@ namespace VeekunImport
                     byte has_gender_differences = Convert.ToByte(rdPokemon["has_gender_differences"]);
 
                     // todo: Family ID
-                    Species s = new Species(null, id, 
+                    Species s = new Species(null, id,
                         familyMap[id],
                         GetLocalizedString(rdPokemon, "name_"),
                         (GrowthRates)growth_rate_id,
@@ -182,50 +169,18 @@ namespace VeekunImport
                         );
 
                     db.PokedexInsertSpecies(s);
-                    Console.WriteLine("Inserted {0} {1} {2} {3} {4} {5}", 
+                    Console.WriteLine("Inserted {0} {1} {2} {3} {4} {5}",
                         s.NationalDex, s.Name.ToString(), s.GrowthRate, s.GenderRatio, s.EggSteps, s.GenderVariations);
                 }
                 rdPokemon.Close();
 
                 // pkmncf_pokedex_pokemon_forms
-                /*
-                 *                 List<Family> overrideFamilies = new List<Family>();
-                using (FileStream fs = File.Open("families.txt", FileMode.Open))
-                {
-                    StreamReader sr = new StreamReader(fs, Encoding.UTF8);
-                    String line;
-                    while ((line = sr.ReadLine()) != null)
-                    {
-                        String[] fields = line.Split('\t');
-                        overrideFamilies.Add(new Family(null,
-                            Convert.ToInt32(fields[0]),
-                            Convert.ToInt32(fields[1]),
-                            Convert.ToInt32(fields[2]),
-                            Convert.ToInt32(fields[3]),
-                            Convert.ToInt32(fields[4]),
-                            Convert.ToInt32(fields[5]),
-                            Convert.ToByte(fields[6])
-                            ));
-                    }
-                }
-
-                 */
-
-                // xxx: DRY these file parsers up by adding a helper that takes
-                // a filename and a lambda of what to run for each line in the document.
                 Dictionary<int, byte> formValueMap = new Dictionary<int, byte>();
-                using (FileStream fs = File.Open("form_values.txt", FileMode.Open))
-                {
-                    StreamReader sr = new StreamReader(fs, Encoding.UTF8);
-                    String line;
-                    while ((line = sr.ReadLine()) != null)
+                ProcessTSV("form_values.txt", 3, row =>
                     {
-                        String[] fields = line.Split('\t');
-                        if (fields.Length == 0) continue;
-                        if (fields.Length != 3) throw new Exception("form_values.txt has a line with unexpected number of tabs.");
+                        String[] fields = row.Fields;
                         formValueMap.Add(Convert.ToInt32(fields[1]), Convert.ToByte(fields[2]));
-                    }
-                }
+                    });
 
                 SQLiteDataReader rdForms = (SQLiteDataReader)connVeekun.ExecuteReader("SELECT id, " +
                     "(SELECT species_id FROM pokemon WHERE id = pokemon_id) AS NationalDex, " +
@@ -275,22 +230,9 @@ namespace VeekunImport
                 for (int generation = 1; generation <= GENERATIONS; generation++)
                 {
                     String filename = String.Format("form_stats{0}.txt", generation);
-                    if (!File.Exists(filename))
-                    {
-                        Console.WriteLine("File {0} not found, skipped.", filename);
-                        continue;
-                    }
-                    using (FileStream fs = File.Open(filename, FileMode.Open))
-                    {
-                        StreamReader sr = new StreamReader(fs, Encoding.UTF8);
-                        String line;
-                        while ((line = sr.ReadLine()) != null)
+                    ProcessTSV(filename, 15, row =>
                         {
-                            String[] fields = line.Split('\t');
-                            if (fields.Length <= 1) continue;
-                            if (fields.Length != 15) throw new Exception(filename + " has a line with unexpected number of tabs.");
-
-                            int[] fieldsInt = fields.Select(s => Convert.ToInt32(s)).ToArray();
+                            int[] fieldsInt = row.Fields.Select(s => Convert.ToInt32(s)).ToArray();
                             FormStats f = new FormStats(null, fieldsInt[0], (Generations)generation, fieldsInt[1], fieldsInt[2],
                                 new IntStatValues(fieldsInt[3],
                                     fieldsInt[4],
@@ -307,8 +249,8 @@ namespace VeekunImport
                                 );
 
                             db.PokedexInsertFormStats(f);
-                        }
-                    }
+                            Console.WriteLine("Inserted stats for {0} gen {1}", f.FormID, (int)f.MinGeneration);
+                        });
                 }
 
                 // todo: pkmncf_pokedex_pokemon_evolutions
@@ -335,7 +277,7 @@ namespace VeekunImport
                         GetDamageClass(rdTypes));
 
                     db.PokedexInsertType(t);
-                    Console.WriteLine("Inserted {0} {1} {2}", t.ID, t.Name.ToString(), t.DamageClass);
+                    Console.WriteLine("Inserted type {0} {1} {2}", t.ID, t.Name.ToString(), t.DamageClass);
                 }
                 rdTypes.Close();
 
@@ -374,7 +316,7 @@ namespace VeekunImport
                         );
 
                     db.PokedexInsertMove(m);
-                    Console.WriteLine("Inserted {0} {1}", m.ID, m.Name.ToString());
+                    Console.WriteLine("Inserted move {0} {1}", m.ID, m.Name.ToString());
                 }
 
                 // pkmncf_pokedex_abilities
@@ -396,7 +338,7 @@ namespace VeekunImport
                         );
 
                     db.PokedexInsertAbility(a);
-                    Console.WriteLine("Inserted {0} {1}", a.Value, a.Name.ToString());
+                    Console.WriteLine("Inserted ability {0} {1}", a.Value, a.Name.ToString());
                 }
                 rdAbilities.Close();
 
@@ -406,32 +348,16 @@ namespace VeekunImport
                 for (int generation = 3; generation <= GENERATIONS; generation++)
                 {
                     String filename = String.Format("items{0}.txt", generation);
-                    if (!File.Exists(filename))
-                    {
-                        Console.WriteLine("File {0} not found, skipped.", filename);
-                        continue;
-                    }
-                    using (FileStream fs = File.Open(filename, FileMode.Open))
-                    {
-                        StreamReader sr = new StreamReader(fs, Encoding.UTF8);
-                        int lineNumber = -1;
-                        String line;
-                        while ((line = sr.ReadLine()) != null)
+                    ProcessTSV(filename, 3, row =>
                         {
-                            lineNumber++;
-                            String[] fields = line.Split('\t');
-                            if (fields.Length != 3)
-                            {
-                                Console.WriteLine("{0} line {1} has bad format, skipped.", filename, lineNumber);
-                                continue;
-                            }
+                            String[] fields = row.Fields;
                             int id, thisGenId;
                             String name = fields[1];
                             if (!Int32.TryParse(fields[0], out thisGenId) ||
                                 !Int32.TryParse(fields[2], out id))
                             {
-                                Console.WriteLine("{0} line {1} has bad format, skipped.", filename, lineNumber);
-                                continue;
+                                Console.WriteLine("{0} line {1} has bad format, skipped.", filename, row.LineNumber);
+                                return;
                             }
                             ItemLoading theItem = null;
                             if (!items.ContainsKey(id))
@@ -441,26 +367,8 @@ namespace VeekunImport
                             }
                             theItem = theItem ?? items[id];
                             theItem.Name = name; // prefer newer names where available
-                            switch (generation)
-                            {
-                                // todo: maybe use an array or dictionary for these fields.
-                                // todo: this can be a lambda declared outside of this inner loop
-                                // which executes here.
-                                case 3:
-                                    theItem.Value3 = thisGenId;
-                                    break;
-                                case 4:
-                                    theItem.Value4 = thisGenId;
-                                    break;
-                                case 5:
-                                    theItem.Value5 = thisGenId;
-                                    break;
-                                case 6:
-                                    theItem.Value6 = thisGenId;
-                                    break;
-                            }
-                        }
-                    }
+                            theItem.SetGenerationValue(thisGenId, generation);
+                        });
                 }
 
                 // lookup Veekun ID number against some generation or another.
@@ -527,92 +435,59 @@ namespace VeekunImport
                     }
                     Item i = new Item(null, il.ID, il.Value3, il.Value4, il.Value5, il.Value6, il.Price, name);
                     db.PokedexInsertItem(i);
-
-                    Console.WriteLine("Inserted {0} {1}", i.ID, i.Name.ToString());
+                    Console.WriteLine("Inserted item {0} {1}", i.ID, i.Name.ToString());
                 }
 
                 // pkmncf_pokedex_ribbons
-                if (!File.Exists("ribbons.txt"))
+                Dictionary<int, RibbonLoading> ribbons = new Dictionary<int, RibbonLoading>();
+                if (!ProcessTSV("ribbons.txt", 3, row =>
+                    {
+                        String[] fields = row.Fields;
+                        int id = Convert.ToInt32(fields[0]);
+                        ribbons.Add(id, new RibbonLoading(id, fields[1], fields[2]));
+                    }))
                     Console.WriteLine("ribbons.txt not found. Not inserting any ribbons.");
                 else
                 {
-                    Dictionary<int, RibbonLoading> ribbons = new Dictionary<int, RibbonLoading>();
-                    using (FileStream fs = File.Open("ribbons.txt", FileMode.Open))
-                    {
-                        StreamReader sr = new StreamReader(fs, Encoding.UTF8);
-                        String line;
-                        while ((line = sr.ReadLine()) != null)
-                        {
-                            String[] fields = line.Split('\t');
-                            if (fields.Length <= 2) continue;
-                            int id = Convert.ToInt32(fields[0]);
-                            ribbons.Add(id, new RibbonLoading(id, fields[1], fields[2]));
-                        }
-                    }
-
                     for (int generation = 3; generation <= GENERATIONS; generation++)
                     {
                         String filename = String.Format("ribbon_positions{0}.txt", generation);
-                        if (!File.Exists(filename))
-                        {
-                            Console.WriteLine("File {0} not found, skipped.", filename);
-                            continue;
-                        }
-                        using (FileStream fs = File.Open(filename, FileMode.Open))
-                        {
-                            StreamReader sr = new StreamReader(fs, Encoding.UTF8);
-                            String line;
-                            while ((line = sr.ReadLine()) != null)
+                        ProcessTSV(filename, 2, row =>
                             {
-                                String[] fields = line.Split('\t');
-                                if (fields.Length <= 1) continue;
-
+                                String[] fields = row.Fields;
                                 int id = Convert.ToInt32(fields[0]);
                                 int position = Convert.ToInt32(fields[1]);
                                 if (!ribbons.ContainsKey(id))
                                 {
                                     Console.WriteLine("Error: Ribbon ID {0} contained in {1} but not in ribbons.txt!", id, filename);
-                                    continue;
+                                    return;
                                 }
                                 RibbonLoading r = ribbons[id];
-                                switch (generation)
-                                {
-                                    case 3:
-                                        r.Position3 = position;
-                                        break;
-                                    case 4:
-                                        r.Position4 = position;
-                                        break;
-                                    case 5:
-                                        r.Position5 = position;
-                                        break;
-                                    case 6:
-                                        r.Position6 = position;
-                                        break;
-                                }
-                            }
-                        }
+                                r.SetGenerationPosition(position, generation);
+                            });
                     }
 
                     foreach (KeyValuePair<int, RibbonLoading> pair in ribbons)
                     {
                         RibbonLoading r = pair.Value;
-                        Console.WriteLine("Inserted {0} {1}", r.ID, r.Name);
                         db.PokedexInsertRibbon(new Ribbon(null, r.ID,
                             new LocalizedString() { { "EN", r.Name } },
                             new LocalizedString() { { "EN", r.Description } },
                             r.Position3, r.Position4, r.Position5, r.Position6,
                             null, null, null, null
                             ));
+                        Console.WriteLine("Inserted ribbon {0} {1}", r.ID, r.Name);
                     }
                 }
 
                 // pkmncf_pokedex_regions
-                ProcessTSV("regions.txt", fields =>
+                ProcessTSV("regions.txt", 2, row =>
                 {
-                    if (fields.Length < 2) return;
+                    String[] fields = row.Fields;
                     int id = Convert.ToInt32(fields[0]);
-                    db.PokedexInsertRegion(new Region(null, id, new LocalizedString(){{"EN", fields[1]}}));
+                    Region r = new Region(null, id, new LocalizedString() { { "EN", fields[1] } });
+                    db.PokedexInsertRegion(r);
+                    Console.WriteLine("Inserted region {0} {1}", r.ID, r.Name);
                 });
 
                 connVeekun.Close();
@@ -642,7 +517,7 @@ namespace VeekunImport
             return (DamageClass)(Convert.ToInt32(reader["damage_class_id"]) - 1);
         }
 
-        private static bool ProcessTSV(String filename, Action<String[]> action)
+        private static bool ProcessTSV(String filename, int requiredFields, Action<TsvRow> action)
         {
             if (!File.Exists(filename))
             {
@@ -653,10 +528,20 @@ namespace VeekunImport
             {
                 StreamReader sr = new StreamReader(fs, Encoding.UTF8);
                 String line;
+                int lineNumber = 0;
+                int validLineNumber = 0;
                 while ((line = sr.ReadLine()) != null)
                 {
                     String[] fields = line.Split('\t');
-                    action(fields);
+                    if (fields.Length < requiredFields)
+                    {
+                        Console.WriteLine("File {0} line {1} has too few fields, skipped.", filename, lineNumber);
+                        lineNumber++;
+                        continue;
+                    }
+                    action(new TsvRow(lineNumber, validLineNumber, fields));
+                    lineNumber++;
+                    validLineNumber++;
                 }
                 fs.Close();
             }
@@ -679,6 +564,25 @@ namespace VeekunImport
         public LocalizedString NameLocalized;
         public int? Value3, Value4, Value5, Value6;
         public int Price;
+
+        public void SetGenerationValue(int ? value, int generation)
+        {
+            switch (generation)
+            {
+                case 3:
+                    Value3 = value;
+                    break;
+                case 4:
+                    Value4 = value;
+                    break;
+                case 5:
+                    Value5 = value;
+                    break;
+                case 6:
+                    Value6 = value;
+                    break;
+            }
+        }
     }
 
     internal class RibbonLoading
@@ -695,5 +599,38 @@ namespace VeekunImport
         public String Name;
         public String Description;
         public int? Position3, Position4, Position5, Position6;
+
+        public void SetGenerationPosition(int? position, int generation)
+        {
+            switch (generation)
+            {
+                case 3:
+                    Position3 = position;
+                    break;
+                case 4:
+                    Position4 = position;
+                    break;
+                case 5:
+                    Position5 = position;
+                    break;
+                case 6:
+                    Position6 = position;
+                    break;
+            }
+        }
+    }
+
+    internal class TsvRow
+    {
+        public TsvRow(int lineNumber, int validLineNumber, String[] fields)
+        {
+            LineNumber = lineNumber;
+            ValidLineNumber = validLineNumber;
+            Fields = fields;
+        }
+
+        public int LineNumber;
+        public int ValidLineNumber;
+        public String[] Fields;
     }
 }
