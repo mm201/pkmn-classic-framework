@@ -492,19 +492,10 @@ namespace PkmnFoundations.Data
         }
         #endregion
 
-        /// <summary>
-        /// Coalesces nulls and DBNulls down to a default value
-        /// </summary>
-        /// <typeparam name="T">Return type</typeparam>
-        /// <param name="value"></param>
-        /// <param name="_default"></param>
-        /// <returns></returns>
-        /// <exception cref="System.InvalidCastException">value is neither null, DBNull, nor of type T</exception>
-        public static T Coalesce<T>(object value, T _default)
+        public static T Cast<T>(object value)
         {
-            if (value == null) return _default;
-            if (value is DBNull) return _default;
-            return (T)value; // allow InvalidCastException to escape
+            if (value is DBNull) return default(T);
+            return (T)value;
         }
     }
 }

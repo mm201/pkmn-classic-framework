@@ -297,9 +297,9 @@ namespace VeekunImport
                     int id = Convert.ToInt32(rdMoves["id"]);
                     int type_id = Convert.ToInt32(rdMoves["type_id"]);
                     int damage_class_id = Convert.ToInt32(rdMoves["damage_class_id"]);
-                    short power = DatabaseExtender.Coalesce(rdMoves["power"], (short)0);
-                    short pp = DatabaseExtender.Coalesce(rdMoves["pp"], (short)0);
-                    short accuracy = DatabaseExtender.Coalesce(rdMoves["accuracy"], (short)0);
+                    short power = DatabaseExtender.Cast<short ?>(rdMoves["power"]) ?? 0;
+                    short pp = DatabaseExtender.Cast<short?>(rdMoves["pp"]) ?? 0;
+                    short accuracy = DatabaseExtender.Cast<short?>(rdMoves["accuracy"]) ?? 0;
                     short priority = Convert.ToInt16(rdMoves["priority"]);
                     int target_id = Convert.ToInt32(rdMoves["target_id"]);
 
