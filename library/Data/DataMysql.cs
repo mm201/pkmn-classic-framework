@@ -3051,6 +3051,31 @@ namespace PkmnFoundations.Data
             WithTransaction(tran => PokedexInsertRegion(tran, r));
         }
 
+        public void PokedexInsertLocation(MySqlTransaction tran, Location l)
+        {
+            List<MySqlParameter> insertParams = new List<MySqlParameter>();
+            insertParams.Add(new MySqlParameter("@id", l.ID));
+            insertParams.Add(new MySqlParameter("@region_id", l.RegionID));
+            insertParams.Add(new MySqlParameter("@value3", l.Value3));
+            insertParams.Add(new MySqlParameter("@value_colo", l.ValueColo));
+            insertParams.Add(new MySqlParameter("@value_xd", l.ValueXd));
+            insertParams.Add(new MySqlParameter("@value4", l.Value4));
+            insertParams.Add(new MySqlParameter("@value5", l.Value5));
+            insertParams.Add(new MySqlParameter("@value6", l.Value6));
+            CreateLocalizedStringQueryPieces(l.Name, insertParams);
+
+            tran.ExecuteNonQuery("INSERT INTO pkmncf_pokedex_locations (ID, region_id, " +
+                "Value3, Value_Colo, Value_XD, Value4, Value5, Value6, " + INSERT_COLUMNS + 
+                ") VALUES (@id, @region_id, @value3, @value_colo, @value_xd, @value4, @value5, @value6, " +
+                INSERT_VALUES + ")",
+                insertParams.ToArray());
+        }
+
+        public override void PokedexInsertLocation(Location l)
+        {
+            WithTransaction(tran => PokedexInsertLocation(tran, l));
+        }
+
         #endregion
 
         #region Pokedex retrieval
@@ -3221,6 +3246,35 @@ namespace PkmnFoundations.Data
         public override List<Ribbon> PokedexGetAllRibbons(Pokedex.Pokedex pokedex)
         {
             return WithTransaction(tran => PokedexGetAllRibbons(tran, pokedex));
+        }
+
+        public List<Region> PokedexGetAllRegions(MySqlTransaction tran, Pokedex.Pokedex pokedex)
+        {
+            using (MySqlDataReader reader = (MySqlDataReader)tran.ExecuteReader("SELECT " +
+                "ID, " + INSERT_COLUMNS + " FROM pkmncf_pokedex_regions"))
+            {
+                return ReaderToList(reader, pokedex, () => new Region(pokedex, reader));
+            }
+        }
+
+        public override List<Region> PokedexGetAllRegions(Pokedex.Pokedex pokedex)
+        {
+            return WithTransaction(tran => PokedexGetAllRegions(tran, pokedex));
+        }
+
+        public List<Location> PokedexGetAllLocations(MySqlTransaction tran, Pokedex.Pokedex pokedex)
+        {
+            using (MySqlDataReader reader = (MySqlDataReader)tran.ExecuteReader("SELECT " +
+                "id, region_id, Value3, Value_Colo, Value_XD, Value4, Value5, Value6, " +
+                INSERT_COLUMNS + " FROM pkmncf_pokedex_locations"))
+            {
+                return ReaderToList(reader, pokedex, () => new Location(pokedex, reader));
+            }
+        }
+
+        public override List<Location> PokedexGetAllLocations(Pokedex.Pokedex pokedex)
+        {
+            return WithTransaction(tran => PokedexGetAllLocations(tran, pokedex));
         }
 
         #endregion

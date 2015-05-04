@@ -26,6 +26,17 @@ namespace PkmnFoundations.Structures
         Generation6 = 32
     }
 
+    public enum LocationNumbering
+    {
+        Generation2 = 1,
+        Generation3 = 2,
+        Colosseum = 3,
+        XD = 4,
+        Generation4 = 5,
+        Generation5 = 6,
+        Generation6 = 7,
+    }
+
     public enum Versions : byte
     {
         // todo: fact check that these GenIII values

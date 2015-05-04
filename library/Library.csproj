@@ -62,6 +62,7 @@
     <Compile Include="Pokedex\Evolution.cs" />
     <Compile Include="Pokedex\FormStats.cs" />
     <Compile Include="Pokedex\Item.cs" />
+    <Compile Include="Pokedex\Location.cs" />
     <Compile Include="Pokedex\Move.cs" />
     <Compile Include="Pokedex\Pokedex.cs" />
     <Compile Include="Pokedex\PokedexRecordBase.cs" />

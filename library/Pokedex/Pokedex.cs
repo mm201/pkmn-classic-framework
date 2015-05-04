@@ -29,6 +29,8 @@ namespace PkmnFoundations.Pokedex
             m_types = db.PokedexGetAllTypes(this).ToDictionary(t => t.ID, t => t);
             m_abilities = db.PokedexGetAllAbilities(this).ToDictionary(a => a.Value, a => a);
             m_ribbons = db.PokedexGetAllRibbons(this).ToDictionary(r => r.ID, r => r);
+            m_regions = db.PokedexGetAllRegions(this).ToDictionary(r => r.ID, r => r);
+            m_locations = db.PokedexGetAllLocations(this).ToDictionary(l => l.ID, l => l);
 
             List<FormStats> form_stats = db.PokedexGetAllFormStats(this);
             form_stats.Sort(delegate(FormStats f, FormStats other) 
@@ -99,9 +101,15 @@ namespace PkmnFoundations.Pokedex
             AddGeneration(m_ribbon_values_generations, m_ribbons, Generations.Generation4, r => r.Value4);
             AddGeneration(m_ribbon_values_generations, m_ribbons, Generations.Generation5, r => r.Value5);
             AddGeneration(m_ribbon_values_generations, m_ribbons, Generations.Generation6, r => r.Value6);
+
+            m_location_values_generations = new Dictionary<LocationNumbering, Dictionary<int, Location>>();
+            AddGeneration(m_location_values_generations, m_locations, LocationNumbering.Generation3, l => l.Value3);
+            AddGeneration(m_location_values_generations, m_locations, LocationNumbering.Generation4, l => l.Value4);
+            AddGeneration(m_location_values_generations, m_locations, LocationNumbering.Generation5, l => l.Value5);
+            AddGeneration(m_location_values_generations, m_locations, LocationNumbering.Generation6, l => l.Value6);
         }
 
-        private void AddGeneration<TKey, TValue>(Dictionary<Generations, Dictionary<TKey, TValue>> dest, Dictionary<TKey, TValue> src, Generations generation, Func<TValue, TKey ?> keyGetter)
+        private void AddGeneration<TGen, TKey, TValue>(Dictionary<TGen, Dictionary<TKey, TValue>> dest, Dictionary<TKey, TValue> src, TGen generation, Func<TValue, TKey?> keyGetter)
             where TKey : struct
         {
             dest.Add(generation,
@@ -130,6 +138,10 @@ namespace PkmnFoundations.Pokedex
                 k.Value.PrefetchRelations();
             foreach (var k in m_ribbons)
                 k.Value.PrefetchRelations();
+            foreach (var k in m_regions)
+                k.Value.PrefetchRelations();
+            foreach (var k in m_locations)
+                k.Value.PrefetchRelations();
 
             foreach (var k in m_form_stats)
             {
@@ -154,6 +166,11 @@ namespace PkmnFoundations.Pokedex
         private Dictionary<Generations, Dictionary<int, Item>> m_items_generations;
         private Dictionary<Generations, Dictionary<int, Ribbon>> m_ribbon_positions_generations;
         private Dictionary<Generations, Dictionary<int, Ribbon>> m_ribbon_values_generations;
+
+        private Dictionary<int, Region> m_regions;
+        private Dictionary<int, Location> m_locations;
+
+        private Dictionary<LocationNumbering, Dictionary<int, Location>> m_location_values_generations;
 
         // todo: add ReadOnlyIndexer1d class, replace these methods with them
         public Species Species(int national_dex)
@@ -222,6 +239,21 @@ namespace PkmnFoundations.Pokedex
         public IDictionary<int, Ribbon> Ribbons(Generations generation)
         {
             return m_ribbon_positions_generations[generation];
+        }
+
+        public Region Regions(int id)
+        {
+            return m_regions[id];
+        }
+
+        public Location Locations(int id)
+        {
+            return m_locations[id];
+        }
+
+        public IDictionary<int, Location> Locations(LocationNumbering generation)
+        {
+            return m_location_values_generations[generation];
         }
     }
 }

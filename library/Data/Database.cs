@@ -176,6 +176,7 @@ namespace PkmnFoundations.Data
         public abstract void PokedexInsertRibbon(Ribbon r);
 
         public abstract void PokedexInsertRegion(Region r);
+        public abstract void PokedexInsertLocation(Location l);
 
         #endregion
 
@@ -191,6 +192,9 @@ namespace PkmnFoundations.Data
         public abstract List<Move> PokedexGetAllMoves(Pokedex.Pokedex pokedex);
         public abstract List<Ability> PokedexGetAllAbilities(Pokedex.Pokedex pokedex);
         public abstract List<Ribbon> PokedexGetAllRibbons(Pokedex.Pokedex pokedex);
+
+        public abstract List<Region> PokedexGetAllRegions(Pokedex.Pokedex pokedex);
+        public abstract List<Location> PokedexGetAllLocations(Pokedex.Pokedex pokedex);
         #endregion
     }
 }
