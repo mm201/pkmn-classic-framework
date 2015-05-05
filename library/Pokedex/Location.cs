@@ -34,12 +34,12 @@ namespace PkmnFoundations.Pokedex
             : this(pokedex, 
             Convert.ToInt32(reader["id"]), 
             Convert.ToInt32(reader["region_id"]), 
-            DatabaseExtender.Cast<int ?>(reader["Value3"]),
-            DatabaseExtender.Cast<int ?>(reader["Value_Colo"]),
-            DatabaseExtender.Cast<int ?>(reader["Value_XD"]),
-            DatabaseExtender.Cast<int ?>(reader["Value4"]),
-            DatabaseExtender.Cast<int ?>(reader["Value5"]),
-            DatabaseExtender.Cast<int ?>(reader["Value6"]),
+            (int ?)DatabaseExtender.Cast<uint ?>(reader["Value3"]),
+            (int?)DatabaseExtender.Cast<uint?>(reader["Value_Colo"]),
+            (int?)DatabaseExtender.Cast<uint?>(reader["Value_XD"]),
+            (int?)DatabaseExtender.Cast<uint?>(reader["Value4"]),
+            (int?)DatabaseExtender.Cast<uint?>(reader["Value5"]),
+            (int?)DatabaseExtender.Cast<uint?>(reader["Value6"]),
             LocalizedStringFromReader(reader, "Name_"))
         {
         }
