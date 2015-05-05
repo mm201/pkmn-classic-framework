@@ -59,6 +59,7 @@ namespace PkmnFoundations.Structures
         public Markings Markings { get; set; }
         public ConditionValues ContestStats { get; set; }
         public bool IsEgg { get; set; }
+        public bool IsBadEgg { get; set; }
 
         /// <summary>
         /// this field decides whether or not its name gets reverted when it evolves.
@@ -137,6 +138,12 @@ namespace PkmnFoundations.Structures
             }
         }
 
+        public virtual TrainerMemo TrainerMemo
+        {
+            get;
+            set;
+        }
+
         public static bool HasRibbon(byte[] ribbons, int value)
         {
             if (value >= 96 || value < 0) throw new ArgumentOutOfRangeException();
@@ -145,10 +152,18 @@ namespace PkmnFoundations.Structures
             return (ribbons[offset] & mask) != 0;
         }
 
-        public virtual TrainerMemo TrainerMemo
+        public static ushort ComputeChecksum(byte[] data)
         {
-            get;
-            set;
+            ushort result = 0;
+            for (int x = 0; x < data.Length; x += 2)
+                result += BitConverter.ToUInt16(data, x);
+
+            return result;
+        }
+
+        public static ushort ComputeChecksum(byte[][] data)
+        {
+            return (ushort)data.Sum(inner => ComputeChecksum(inner));
         }
     }
 }

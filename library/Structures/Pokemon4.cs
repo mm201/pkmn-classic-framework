@@ -71,6 +71,8 @@ namespace PkmnFoundations.Structures
                 blocks = blocks2;
             }
 
+            IsBadEgg = ComputeChecksum(blocks) != checksum;
+
             int ribbons1, ribbons2, ribbons3;
 
             {
