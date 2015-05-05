@@ -264,6 +264,42 @@ namespace PkmnFoundations.Structures
         public ushort LocationID_Plat { get; set; }
         public byte EncounterLevel { get; set; }
 
+        public override TrainerMemo TrainerMemo
+        {
+            get
+            {
+                // fixme: Pal Park memos are just saying Pal Park. We should be able to get the region too.
+                ushort eggLocationId, locationId;
+                bool plat = IsPlatHgss();
+                eggLocationId = (plat && EggLocationID_Plat != 0) ? EggLocationID_Plat : EggLocationID;
+                locationId = (plat && LocationID_Plat != 0) ? LocationID_Plat : LocationID;
+
+                return new TrainerMemo(m_pokedex, LocationNumbering.Generation4, 
+                    TrainerMemoDateTime(EggDate), TrainerMemoDateTime(Date), 
+                    eggLocationId, locationId, EncounterLevel == 0, EncounterLevel);
+            }
+            set
+            {
+                base.TrainerMemo = value;
+            }
+        }
+
+        private DateTime ? TrainerMemoDateTime(byte[] data)
+        {
+            // todo: merge with GtsRecordBase datetime helper.
+            if (data.Length != 3) throw new ArgumentException();
+            if (data[1] == 0 && data[2] == 0 && data[0] == 0) return null;
+
+            try
+            {
+                return new DateTime(2000 + data[0], data[1], data[2]);
+            }
+            catch (ArgumentOutOfRangeException)
+            {
+                return null;
+            }
+        }
+
         // this is the notorious genIV encounter type flag, not used for much besides validation
         public byte EncounterType { get; set; }
         public byte Unknown4 { get; set; } // appears just after HGSS pokeball
@@ -306,6 +342,11 @@ namespace PkmnFoundations.Structures
                 PokeBallID = (byte)(is_hgss_pokeball ? 4 : pokeballId);
                 PokeBallID_Hgss = (byte)(is_hgss ? pokeballId : 0);
             }
+        }
+
+        private bool IsPlatHgss()
+        {
+            return (Version == Versions.Platinum || Version == Versions.HeartGold || Version == Versions.SoulSilver);
         }
 
         private bool IsHgss()

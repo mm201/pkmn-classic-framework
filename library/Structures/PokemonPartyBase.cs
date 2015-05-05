@@ -144,5 +144,11 @@ namespace PkmnFoundations.Structures
             byte mask = (byte)(1 << (value & 0x07));
             return (ribbons[offset] & mask) != 0;
         }
+
+        public virtual TrainerMemo TrainerMemo
+        {
+            get;
+            set;
+        }
     }
 }

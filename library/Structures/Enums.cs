@@ -28,13 +28,14 @@ namespace PkmnFoundations.Structures
 
     public enum LocationNumbering
     {
-        Generation2 = 1,
-        Generation3 = 2,
-        Colosseum = 3,
-        XD = 4,
-        Generation4 = 5,
-        Generation5 = 6,
-        Generation6 = 7,
+        Generation1,
+        Generation2,
+        Generation3,
+        Colosseum,
+        XD,
+        Generation4,
+        Generation5,
+        Generation6
     }
 
     public enum Versions : byte

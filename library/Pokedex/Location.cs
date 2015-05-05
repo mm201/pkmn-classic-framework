@@ -70,21 +70,74 @@ namespace PkmnFoundations.Pokedex
 
         public int? Value(Generations generation)
         {
+            LocationNumbering numbering = GenerationToLocationNumbering(generation);
+            return Value(numbering);
+        }
+
+        public int ? Value(LocationNumbering numbering)
+        {
+            switch (numbering)
+            {
+                case LocationNumbering.Generation1:
+                case LocationNumbering.Generation2:
+                    throw new NotSupportedException();
+                case LocationNumbering.Generation3:
+                    return Value3;
+                case LocationNumbering.Colosseum:
+                    return ValueColo;
+                case LocationNumbering.XD:
+                    return ValueXd;
+                case LocationNumbering.Generation4:
+                    return Value4;
+                case LocationNumbering.Generation5:
+                    return Value5;
+                case LocationNumbering.Generation6:
+                    return Value6;
+                default:
+                    throw new ArgumentException();
+            }
+        }
+
+        public static LocationNumbering GenerationToLocationNumbering(Generations generation)
+        {
             switch (generation)
             {
                 case Generations.Generation1:
+                    return LocationNumbering.Generation1;
                 case Generations.Generation2:
-                    throw new NotSupportedException();
+                    return LocationNumbering.Generation2;
                 case Generations.Generation3:
-                    return Value3;
+                    return LocationNumbering.Generation3;
                 case Generations.Generation4:
-                    return Value4;
+                    return LocationNumbering.Generation4;
                 case Generations.Generation5:
-                    return Value5;
+                    return LocationNumbering.Generation5;
                 case Generations.Generation6:
+                    return LocationNumbering.Generation6;
                 default:
-                    return Value6;
+                    throw new ArgumentException();
             }
+        }
+
+        public static LazyKeyValuePair<int, Location> CreatePair(Pokedex pokedex)
+        {
+            return new LazyKeyValuePair<int, Location>(
+                k => k == 0 ? null : (pokedex == null ? null : pokedex.Locations(k)),
+                v => v == null ? 0 : v.ID);
+        }
+
+        public static LazyKeyValuePair<int, Location> CreatePairForGeneration(Pokedex pokedex, Func<Generations> generationGetter)
+        {
+            return new LazyKeyValuePair<int, Location>(
+                k => k == 0 ? null : (pokedex == null ? null : pokedex.Locations(GenerationToLocationNumbering(generationGetter()))[k]),
+                v => v == null ? 0 : (v.Value(generationGetter()) ?? -1));
+        }
+
+        public static LazyKeyValuePair<int, Location> CreatePairForLocationNumbering(Pokedex pokedex, Func<LocationNumbering> generationGetter)
+        {
+            return new LazyKeyValuePair<int, Location>(
+                k => k == 0 ? null : (pokedex == null ? null : pokedex.Locations(generationGetter())[k]),
+                v => v == null ? 0 : (v.Value(generationGetter()) ?? -1));
         }
     }
 }
