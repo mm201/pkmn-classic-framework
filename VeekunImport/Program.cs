@@ -490,6 +490,43 @@ namespace VeekunImport
                     Console.WriteLine("Inserted region {0} {1}", r.ID, r.Name);
                 });
 
+                // pkmncf_pokedex_locations
+                SQLiteDataReader rdLocations = (SQLiteDataReader)connVeekun.ExecuteReader("SELECT id, region_id, " +
+                    "(SELECT game_index FROM location_game_indices WHERE location_id = locations.id AND generation_id = 3) AS value3, " +
+                    "(SELECT game_index FROM location_game_indices WHERE location_id = locations.id AND generation_id = 4) AS value4, " +
+                    "(SELECT game_index FROM location_game_indices WHERE location_id = locations.id AND generation_id = 5) AS value5, " +
+                    "(SELECT game_index FROM location_game_indices WHERE location_id = locations.id AND generation_id = 6) AS value6, " +
+                    "(SELECT name FROM location_names WHERE location_names.location_id = locations.id AND local_language_id = 1) AS name_ja, " +
+                    "(SELECT name FROM location_names WHERE location_names.location_id = locations.id AND local_language_id = 9) AS name_en, " +
+                    "(SELECT name FROM location_names WHERE location_names.location_id = locations.id AND local_language_id = 5) AS name_fr, " +
+                    "(SELECT name FROM location_names WHERE location_names.location_id = locations.id AND local_language_id = 8) AS name_it, " +
+                    "(SELECT name FROM location_names WHERE location_names.location_id = locations.id AND local_language_id = 6) AS name_de, " +
+                    "(SELECT name FROM location_names WHERE location_names.location_id = locations.id AND local_language_id = 7) AS name_es, " +
+                    "(SELECT name FROM location_names WHERE location_names.location_id = locations.id AND local_language_id = 3) AS name_ko " +
+                    "FROM locations WHERE id NOT IN (522, 523, 524)");
+                // 522, 523, and 524 are duplicates of Kanto routes 19, 20, and 21.
+
+                // todo: gba/colo/xd encounter location values
+                
+                while (rdLocations.Read())
+                {
+                    Location l = new Location(null, 
+                        Convert.ToInt32(rdLocations["id"]),
+                        VeekunLocationToRegion(rdLocations),
+                        (int ?)DatabaseExtender.Cast<long?>(rdLocations["value3"]),
+                        null,
+                        null,
+                        (int?)DatabaseExtender.Cast<long?>(rdLocations["value4"]),
+                        (int?)DatabaseExtender.Cast<long?>(rdLocations["value5"]),
+                        (int?)DatabaseExtender.Cast<long?>(rdLocations["value6"]),
+                        GetLocalizedString(rdLocations, "name_")
+                        );
+
+                    db.PokedexInsertLocation(l);
+                    Console.WriteLine("Inserted location {0} {1}", l.ID, l.Name);
+                }
+                rdLocations.Close();
+
                 connVeekun.Close();
             }
 
@@ -547,6 +584,42 @@ namespace VeekunImport
             }
             return true;
         }
+
+        private static int VeekunLocationToRegion(SQLiteDataReader reader)
+        {
+            int id = Convert.ToInt32(reader["id"]);
+            long? region = DatabaseExtender.Cast<long?>(reader["region_id"]);
+
+            if (region == null) // not set, usually event
+            {
+                if (id == 256) return 2; // kanto
+                if (id == 257) return 3; // johto
+                if (id == 258) return 4; // hoenn
+                if (id == 259) return 7; // sinnoh
+                if (id == 260) return 5; // "distant land" (only used for orre?)
+                if (id == 261) return 7; // traveling man (happini?)
+                if (id == 262) return 7; // riley
+                if (id == 263) return 7; // cynthia
+                if (id == 342) return 3; // mr. pokemon
+                if (id == 343) return 3; // primo
+                return 1;
+            }
+            if (region == 1) // kanto and seviis
+            {
+                if (id >= 491 && id <= 497) return 6; // seven island unown chambers
+                if (id >= 500 && id <= 521) return 6; // sevii islands
+                if (id >= 526 && id <= 529) return 6; // sevii islands
+                return 2;
+            }
+            if (region == 2) return 3; // johto
+            if (region == 3) return 4; // hoenn
+            if (region == 4) return 7; // sinnoh
+            if (region == 5) return 8; // unova
+            if (region == 6) return 9; // kalos
+
+            return (int)region + 3; // for now, assume veekun won't skip more regions.
+        }
+
     }
 
     internal class ItemLoading

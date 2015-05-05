@@ -20,6 +20,13 @@ namespace PkmnFoundations.Pokedex
             m_lazy_pairs.Add(m_region_pair);
 
             ID = id;
+            m_region_pair.Key = region_id;
+            Value3 = value3;
+            ValueColo = value_colo;
+            ValueXd = value_xd;
+            Value4 = value4;
+            Value5 = value5;
+            Value6 = value6;
             Name = name;
         }
 
