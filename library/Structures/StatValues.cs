@@ -45,5 +45,10 @@ namespace PkmnFoundations.Structures
                 Stats[index] = value;
             }
         }
+
+        public override string ToString()
+        {
+            return String.Format("{0}/{1}/{2}/{4}/{5}/{3}", Hp, Attack, Defense, Speed, SpecialAttack, SpecialDefense);
+        }
     }
 }
