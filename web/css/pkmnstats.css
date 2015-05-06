@@ -111,6 +111,8 @@
 .pfFormGroup .type
 {
     border-bottom: none;
+    background-color: #f2f2f2;
+    width: 64px;
 }
 
 .gtsPokemonSummary .pfFormKey
@@ -147,7 +149,7 @@
     display: table-cell;
     border-radius: 0;
     text-align: left;
-    padding: 4px 2px 4px 8px;
+    padding: 4px 8px;
 }
 
 .pfFormGroup .move .pp
