@@ -40,13 +40,13 @@ namespace PkmnFoundations.Structures
         protected override void Load(BinaryReader reader)
         {
             // header (unencrypted)
-            Personality = reader.ReadUInt32();
-            ushort zero = reader.ReadUInt16();
-            ushort checksum = reader.ReadUInt16();
+            Personality = reader.ReadUInt32();                           // 0000
+            ushort zero = reader.ReadUInt16();                           // 0004
+            ushort checksum = reader.ReadUInt16();                       // 0006
 
             // read out the main payload, apply xor decryption
             byte[][] blocks = new byte[4][];
-            for (int x = 0; x < 4; x++)
+            for (int x = 0; x < 4; x++)                                  // 0008
                 blocks[x] = reader.ReadBytes(32);
 
             DecryptBlocks(blocks, checksum);

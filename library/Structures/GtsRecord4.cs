@@ -130,54 +130,54 @@ namespace PkmnFoundations.Structures
             // todo: enclose in properties and validate these when assigning.
             if (TrainerNameEncoded.RawData.Length != 0x10) throw new FormatException("Trainer name length is incorrect");
 
-            writer.Write(DataActual, 0, 0xEC);                         // 0x0000
-            writer.Write(Species);                                     // 0x00EC
-            writer.Write((byte)Gender);                                // 0x00EE
-            writer.Write(Level);                                       // 0x00EF
-            writer.Write(RequestedSpecies);                            // 0x00F0
-            writer.Write((byte)RequestedGender);                       // 0x00F2
-            writer.Write(RequestedMinLevel);                           // 0x00F3
-            writer.Write(RequestedMaxLevel);                           // 0x00F4
-            writer.Write(Unknown1);                                    // 0x00F5
-            writer.Write((byte)TrainerGender);                         // 0x00F6
-            writer.Write(Unknown2);                                    // 0x00F7
-            writer.Write(DateToTimestamp(TimeDeposited));              // 0x00F8
-            writer.Write(DateToTimestamp(TimeExchanged));              // 0x0100
-            writer.Write(PID);                                         // 0x0108
-            writer.Write(TrainerNameEncoded.RawData, 0, 0x10);         // 0x010C
-            writer.Write(TrainerOT);                                   // 0x011C
-            writer.Write(TrainerCountry);                              // 0x011E
-            writer.Write(TrainerRegion);                               // 0x011F
-            writer.Write(TrainerClass);                                // 0x0120
-            writer.Write(IsExchanged);                                 // 0x0121
-            writer.Write(TrainerVersion);                              // 0x0122
-            writer.Write(TrainerLanguage);                             // 0x0123
+            writer.Write(DataActual, 0, 0xEC);                           // 0000
+            writer.Write(Species);                                       // 00EC
+            writer.Write((byte)Gender);                                  // 00EE
+            writer.Write(Level);                                         // 00EF
+            writer.Write(RequestedSpecies);                              // 00F0
+            writer.Write((byte)RequestedGender);                         // 00F2
+            writer.Write(RequestedMinLevel);                             // 00F3
+            writer.Write(RequestedMaxLevel);                             // 00F4
+            writer.Write(Unknown1);                                      // 00F5
+            writer.Write((byte)TrainerGender);                           // 00F6
+            writer.Write(Unknown2);                                      // 00F7
+            writer.Write(DateToTimestamp(TimeDeposited));                // 00F8
+            writer.Write(DateToTimestamp(TimeExchanged));                // 0100
+            writer.Write(PID);                                           // 0108
+            writer.Write(TrainerNameEncoded.RawData, 0, 0x10);           // 010C
+            writer.Write(TrainerOT);                                     // 011C
+            writer.Write(TrainerCountry);                                // 011E
+            writer.Write(TrainerRegion);                                 // 011F
+            writer.Write(TrainerClass);                                  // 0120
+            writer.Write(IsExchanged);                                   // 0121
+            writer.Write(TrainerVersion);                                // 0122
+            writer.Write(TrainerLanguage);                               // 0123
         }
 
         protected override void Load(BinaryReader reader)
         {
-            DataActual = reader.ReadBytes(0xEC);                       // 0x0000
-            Species = reader.ReadUInt16();                             // 0x00EC
-            Gender = (Genders)reader.ReadByte();                       // 0x00EE
-            Level = reader.ReadByte();                                 // 0x00EF
-            RequestedSpecies = reader.ReadUInt16();                    // 0x00F0
-            RequestedGender = (Genders)reader.ReadByte();              // 0x00F2
-            RequestedMinLevel = reader.ReadByte();                     // 0x00F3
-            RequestedMaxLevel = reader.ReadByte();                     // 0x00F4
-            Unknown1 = reader.ReadByte();                              // 0x00F5
-            TrainerGender = (TrainerGenders)reader.ReadByte();         // 0x00F6
-            Unknown2 = reader.ReadByte();                              // 0x00F7
-            TimeDeposited = TimestampToDate(reader.ReadUInt64());      // 0x00F8
-            TimeExchanged = TimestampToDate(reader.ReadUInt64());      // 0x0100
-            PID = reader.ReadInt32();                                  // 0x0108
-            TrainerNameEncoded = new EncodedString4(reader.ReadBytes(0x10)); // 0x010C
-            TrainerOT = reader.ReadUInt16();                           // 0x011C
-            TrainerCountry = reader.ReadByte();                        // 0x011E
-            TrainerRegion = reader.ReadByte();                         // 0x011F
-            TrainerClass = reader.ReadByte();                          // 0x0120
-            IsExchanged = reader.ReadByte();                           // 0x0121
-            TrainerVersion = reader.ReadByte();                        // 0x0122
-            TrainerLanguage = reader.ReadByte();                       // 0x0123
+            DataActual = reader.ReadBytes(0xEC);                         // 0000
+            Species = reader.ReadUInt16();                               // 00EC
+            Gender = (Genders)reader.ReadByte();                         // 00EE
+            Level = reader.ReadByte();                                   // 00EF
+            RequestedSpecies = reader.ReadUInt16();                      // 00F0
+            RequestedGender = (Genders)reader.ReadByte();                // 00F2
+            RequestedMinLevel = reader.ReadByte();                       // 00F3
+            RequestedMaxLevel = reader.ReadByte();                       // 00F4
+            Unknown1 = reader.ReadByte();                                // 00F5
+            TrainerGender = (TrainerGenders)reader.ReadByte();           // 00F6
+            Unknown2 = reader.ReadByte();                                // 00F7
+            TimeDeposited = TimestampToDate(reader.ReadUInt64());        // 00F8
+            TimeExchanged = TimestampToDate(reader.ReadUInt64());        // 0100
+            PID = reader.ReadInt32();                                    // 0108
+            TrainerNameEncoded = new EncodedString4(reader.ReadBytes(0x10)); // 010C
+            TrainerOT = reader.ReadUInt16();                             // 011C
+            TrainerCountry = reader.ReadByte();                          // 011E
+            TrainerRegion = reader.ReadByte();                           // 011F
+            TrainerClass = reader.ReadByte();                            // 0120
+            IsExchanged = reader.ReadByte();                             // 0121
+            TrainerVersion = reader.ReadByte();                          // 0122
+            TrainerLanguage = reader.ReadByte();                         // 0123
         }
 
         public override int Size
