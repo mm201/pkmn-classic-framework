@@ -101,6 +101,7 @@
     <Compile Include="Structures\PokemonBase.cs" />
     <Compile Include="Structures\IntStatValues.cs" />
     <Compile Include="Structures\PokemonParty4.cs" />
+    <Compile Include="Structures\PokemonParty5.cs" />
     <Compile Include="Structures\PokemonPartyBase.cs" />
     <Compile Include="Structures\StatValues.cs" />
     <Compile Include="Structures\StatValuesBase.cs" />

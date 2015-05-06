@@ -6,26 +6,26 @@ using System.Text;
 
 namespace PkmnFoundations.Structures
 {
-    public class PokemonParty4 : Pokemon4
+    public class PokemonParty5 : Pokemon5
     {
-        public PokemonParty4(Pokedex.Pokedex pokedex) : base(pokedex)
+        public PokemonParty5(Pokedex.Pokedex pokedex) : base(pokedex)
         {
             Initialize();
         }
 
-        public PokemonParty4(Pokedex.Pokedex pokedex, BinaryReader data) : base(pokedex)
-        {
-            Initialize();
-            Load(data);
-        }
-
-        public PokemonParty4(Pokedex.Pokedex pokedex, byte[] data) : base(pokedex)
+        public PokemonParty5(Pokedex.Pokedex pokedex, BinaryReader data) : base(pokedex)
         {
             Initialize();
             Load(data);
         }
 
-        public PokemonParty4(Pokedex.Pokedex pokedex, byte[] data, int offset)
+        public PokemonParty5(Pokedex.Pokedex pokedex, byte[] data) : base(pokedex)
+        {
+            Initialize();
+            Load(data);
+        }
+
+        public PokemonParty5(Pokedex.Pokedex pokedex, byte[] data, int offset)
             : base(pokedex)
         {
             Initialize();
@@ -57,6 +57,7 @@ namespace PkmnFoundations.Structures
                 //Level = block[4];
                 CapsuleIndex = block[5];
                 HP = BitConverter.ToUInt16(block, 6);
+                // todo: validate this against computed stats
                 m_stats = new IntStatValues(BitConverter.ToUInt16(block, 8),
                     BitConverter.ToUInt16(block, 10),
                     BitConverter.ToUInt16(block, 12),
@@ -64,26 +65,25 @@ namespace PkmnFoundations.Structures
                     BitConverter.ToUInt16(block, 16),
                     BitConverter.ToUInt16(block, 18));
 
-                Unknown7 = new byte[56];
-                Array.Copy(block, 20, Unknown7, 0, 56);
-                Seals = new byte[24];
-                Array.Copy(block, 76, Seals, 0, 24);
+                Mail = new byte[56];
+                Array.Copy(block, 20, Mail, 0, 56);
+                Unknown7 = new byte[8];
+                Array.Copy(block, 76, Unknown7, 0, 8);
+                Padding = new byte[16];
+                Array.Copy(block, 84, Padding, 0, 16);
             }
         }
 
         // todo: parse status afflictions (enum + sleep turns)
         public byte StatusAffliction { get; set; }
-        // todo: Parse ball seals
         public byte Unknown5 { get; set; }
         public ushort Unknown6 { get; set; }
         public byte CapsuleIndex { get; set; }
         public ushort HP { get; set; } // remaining hp
-        public byte[] Unknown7 { get; set; } // 56 bytes
-        public byte[] Seals { get; set; } // 24 bytes
+        public byte[] Mail { get; set; } // 56 bytes
+        public byte[] Unknown7 { get; set; } // 8 bytes
+        public byte[] Padding { get; set; } // 16 bytes. Pads the length to match the gen4 structure.
 
-        // cached stats on the party structure. This gives rise to the
-        // "box trick" on Gens 1-4 whereby putting the pokemon into the box
-        // recalculates its stats.
         private IntStatValues m_stats;
         public override IntStatValues Stats
         {
