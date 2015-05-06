@@ -97,6 +97,7 @@
     <Compile Include="Structures\MoveSlot.cs" />
     <Compile Include="Structures\MusicalRecord5.cs" />
     <Compile Include="Structures\Pokemon4.cs" />
+    <Compile Include="Structures\Pokemon5.cs" />
     <Compile Include="Structures\PokemonBase.cs" />
     <Compile Include="Structures\IntStatValues.cs" />
     <Compile Include="Structures\PokemonParty4.cs" />
