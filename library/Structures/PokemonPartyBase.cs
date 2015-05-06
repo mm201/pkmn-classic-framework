@@ -18,6 +18,7 @@ namespace PkmnFoundations.Structures
         private void Initialize()
         {
             Ribbons = new HashSet<Ribbon>();
+            UnknownRibbons = new HashSet<int>();
         }
 
         private int m_experience;
@@ -56,6 +57,23 @@ namespace PkmnFoundations.Structures
             }
         }
 
+        protected bool m_female;
+        protected bool m_genderless;
+        public override Genders Gender
+        {
+            get
+            {
+                if (m_genderless) return Genders.None;
+                if (m_female) return Genders.Female;
+                return Genders.Male;
+            }
+            set
+            {
+                m_female = value == Genders.Female;
+                m_genderless = value == Genders.None;
+            }
+        }
+
         public Markings Markings { get; set; }
         public ConditionValues ContestStats { get; set; }
         public bool IsEgg { get; set; }
@@ -73,9 +91,10 @@ namespace PkmnFoundations.Structures
 
         public Versions Version { get; set; }
 
-        // todo: create database-driven TrainerMemo class
-        // Should expose route, region, encounter type, level, date
-        //public abstract TrainerMemo TrainerMemo { get; }
+        public virtual TrainerMemo TrainerMemo { get; set; }
+        
+        // this is the notorious genIV encounter type flag, not used for much besides validation
+        public byte EncounterType { get; set; }
 
         public abstract String TrainerName { get; set; }
         public TrainerGenders TrainerGender { get; set; }
@@ -83,6 +102,11 @@ namespace PkmnFoundations.Structures
         public abstract Item Pokeball { get; set; }
 
         public HashSet<Ribbon> Ribbons { get; private set; }
+
+        /// <summary>
+        /// This allows preservation of unknown ribbon flags when saving.
+        /// </summary>
+        public HashSet<int> UnknownRibbons { get; private set; }
 
         private IntStatValues m_stats = null;
         public virtual IntStatValues Stats
@@ -138,20 +162,6 @@ namespace PkmnFoundations.Structures
             }
         }
 
-        public virtual TrainerMemo TrainerMemo
-        {
-            get;
-            set;
-        }
-
-        public static bool HasRibbon(byte[] ribbons, int value)
-        {
-            if (value >= 96 || value < 0) throw new ArgumentOutOfRangeException();
-            int offset = value >> 3;
-            byte mask = (byte)(1 << (value & 0x07));
-            return (ribbons[offset] & mask) != 0;
-        }
-
         public static ushort ComputeChecksum(byte[] data)
         {
             ushort result = 0;
@@ -164,6 +174,67 @@ namespace PkmnFoundations.Structures
         public static ushort ComputeChecksum(byte[][] data)
         {
             return (ushort)data.Sum(inner => ComputeChecksum(inner));
+        }
+
+        protected static int DecryptRNG(int prev)
+        {
+            return prev * 0x41c64e6d + 0x6073;
+        }
+
+        protected static void DecryptBlocks(byte[][] blocks, ushort checksum)
+        {
+            int rand = (int)checksum;
+
+            for (int x = 0; x < 4; x++)
+            {
+                byte[] block = blocks[x];
+                for (int pos = 0; pos < 32; pos += 2)
+                {
+                    rand = DecryptRNG(rand);
+                    block[pos] ^= (byte)(rand >> 16);
+                    block[pos + 1] ^= (byte)(rand >> 24);
+                }
+            }
+        }
+
+        protected static void ShuffleBlocks(byte[][] blocks, uint personality, bool unshuffle)
+        {
+            // shuffle blocks to their correct order
+            List<int> blockSequence = BlockScramble((personality & 0x0003e000) >> 0x0d);
+            if (unshuffle) blockSequence = Invert(blockSequence);
+
+            AssertHelper.Equals(blockSequence.Count, 4);
+            {
+                byte[][] blocks2 = new byte[4][];
+                for (int x = 0; x < 4; x++)
+                    blocks2[x] = blocks[blockSequence[x]];
+                for (int x = 0; x < 4; x++)
+                    blocks[x] = blocks2[x];
+            }
+        }
+
+        public static bool HasRibbon(byte[] ribbons, int value)
+        {
+            if (value >= 96 || value < 0) throw new ArgumentOutOfRangeException();
+            int offset = value >> 3;
+            byte mask = (byte)(1 << (value & 0x07));
+            return (ribbons[offset] & mask) != 0;
+        }
+
+        protected static DateTime? TrainerMemoDateTime(byte[] data)
+        {
+            // todo: merge with GtsRecordBase datetime helper.
+            if (data.Length != 3) throw new ArgumentException();
+            if (data[1] == 0 && data[2] == 0 && data[0] == 0) return null;
+
+            try
+            {
+                return new DateTime(2000 + data[0], data[1], data[2]);
+            }
+            catch (ArgumentOutOfRangeException)
+            {
+                return null;
+            }
         }
     }
 }

@@ -35,7 +35,6 @@ namespace PkmnFoundations.Structures
 
         private void Initialize()
         {
-            UnknownRibbons = new HashSet<int>();
         }
 
         protected override void Load(BinaryReader reader)
@@ -47,29 +46,11 @@ namespace PkmnFoundations.Structures
 
             // read out the main payload, apply xor decryption
             byte[][] blocks = new byte[4][];
-            int rand = (int)checksum;
-
             for (int x = 0; x < 4; x++)
-            {
-                byte[] block = blocks[x] = reader.ReadBytes(32);
-                // todo: extract to method
-                for (int pos = 0; pos < 32; pos += 2)
-                {
-                    rand = DecryptRNG(rand);
-                    block[pos] ^= (byte)(rand >> 16);
-                    block[pos + 1] ^= (byte)(rand >> 24);
-                }
-            }
+                blocks[x] = reader.ReadBytes(32);
 
-            // shuffle blocks to their correct order
-            List<int> blockSequence = Invert(BlockScramble((Personality & 0x0003e000) >> 0x0d));
-            AssertHelper.Equals(blockSequence.Count, 4);
-            {
-                byte[][] blocks2 = new byte[4][];
-                for (int x = 0; x < 4; x++)
-                    blocks2[x] = blocks[blockSequence[x]];
-                blocks = blocks2;
-            }
+            DecryptBlocks(blocks, checksum);
+            ShuffleBlocks(blocks, Personality, true);
 
             IsBadEgg = ComputeChecksum(blocks) != checksum;
 
@@ -201,23 +182,6 @@ namespace PkmnFoundations.Structures
             get { return Generations.Generation4; }
         }
 
-        private bool m_female;
-        private bool m_genderless;
-        public override Genders Gender
-        {
-            get 
-            {
-                if (m_genderless) return Genders.None;
-                if (m_female) return Genders.Female;
-                return Genders.Male;
-            }
-            set
-            {
-                m_female = value == Genders.Female;
-                m_genderless = value == Genders.None;
-            }
-        }
-
         public ShinyLeaves ShinyLeaves { get; set; }
         public ushort Unknown1 { get; set; } // appears just after a flags region storing gender, forme, shiny leaves, etc.
 
@@ -253,7 +217,6 @@ namespace PkmnFoundations.Structures
             }
         }
 
-        // todo: Implement trainer memo structure
         // Dates encoding seems to be 1 byte for year, starting in 2000,
         // 1 byte for month (1-12), and 1 byte for day of month (1-31, depending)
         // EggDate is all 0s if not hatched.
@@ -282,28 +245,10 @@ namespace PkmnFoundations.Structures
             }
             set
             {
-                base.TrainerMemo = value;
+                throw new NotImplementedException();
             }
         }
 
-        private DateTime ? TrainerMemoDateTime(byte[] data)
-        {
-            // todo: merge with GtsRecordBase datetime helper.
-            if (data.Length != 3) throw new ArgumentException();
-            if (data[1] == 0 && data[2] == 0 && data[0] == 0) return null;
-
-            try
-            {
-                return new DateTime(2000 + data[0], data[1], data[2]);
-            }
-            catch (ArgumentOutOfRangeException)
-            {
-                return null;
-            }
-        }
-
-        // this is the notorious genIV encounter type flag, not used for much besides validation
-        public byte EncounterType { get; set; }
         public byte Unknown4 { get; set; } // appears just after HGSS pokeball
 
         // todo: obtain complete list of Pokeball IDs in HGSS
@@ -359,16 +304,6 @@ namespace PkmnFoundations.Structures
         private static bool IsHgssPokeball(int pokeballId)
         {
             return pokeballId > 16;
-        }
-
-        /// <summary>
-        /// This allows preservation of unknown ribbon flags when saving.
-        /// </summary>
-        public HashSet<int> UnknownRibbons { get; private set; }
-
-        protected static int DecryptRNG(int prev)
-        {
-            return prev * 0x41c64e6d + 0x6073;
         }
 
         public override int Size
