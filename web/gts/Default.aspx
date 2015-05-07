@@ -32,7 +32,7 @@
                 <th class="pfFormKey" rowspan="3">Version</th>
                 <td class="pfFormValue" rowspan="3">
                     <div class="pfRadListItem">
-                    <asp:RadioButton ID="rbGen4" GroupName="grpGeneration" Checked="true" runat="server" />
+                    <asp:RadioButton ID="rbGen4" GroupName="grpGeneration" runat="server" />
                     <asp:Label ID="lblGen4" AssociatedControlID="rbGen4" runat="server">
                         <asp:Image ImageUrl="~/images/ver-icon/10.png" CssClass="sprite" 
                             Width="32" Height="32" AlternateText="Diamond" runat="server" />
@@ -47,7 +47,7 @@
                     </asp:Label>
                     </div>
                     <div class="pfRadListItem">
-                    <asp:RadioButton ID="rbGen5" GroupName="grpGeneration" runat="server" />
+                    <asp:RadioButton ID="rbGen5" GroupName="grpGeneration" Checked="true" runat="server" />
                     <asp:Label ID="lblGen5" AssociatedControlID="rbGen5" runat="server">
                         <asp:Image ImageUrl="~/images/ver-icon/21.png" CssClass="sprite" 
                             Width="32" Height="32" AlternateText="Black" runat="server" />
