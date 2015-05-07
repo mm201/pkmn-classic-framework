@@ -461,7 +461,7 @@ namespace PkmnFoundations.Data
         {
             MySqlParameter[] result = new MySqlParameter[22];
 
-            result[0] = new MySqlParameter("@Data", record.Data);
+            result[0] = new MySqlParameter("@Data", record.Data.ToArray());
             result[1] = new MySqlParameter("@Species", record.Species);
             result[2] = new MySqlParameter("@Gender", (byte)record.Gender);
             result[3] = new MySqlParameter("@Level", record.Level);
