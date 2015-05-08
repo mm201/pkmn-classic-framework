@@ -3580,6 +3580,7 @@
       <DependentUpon>Web.config</DependentUpon>
     </None>
     <Content Include="packages.config" />
+    <Content Include="controls\PokemonSource.ashx" />
     <None Include="Properties\PublishProfiles\pkmnclassic.net.pubxml" />
     <None Include="Web.config">
       <SubType>Designer</SubType>
@@ -3635,6 +3636,9 @@
     </Compile>
     <Compile Include="controls\PokemonPicker.ascx.designer.cs">
       <DependentUpon>PokemonPicker.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="controls\PokemonSource.ashx.cs">
+      <DependentUpon>PokemonSource.ashx</DependentUpon>
     </Compile>
     <Compile Include="Default.aspx.cs">
       <DependentUpon>Default.aspx</DependentUpon>

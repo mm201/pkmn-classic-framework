@@ -37,5 +37,51 @@ namespace PkmnFoundations.Structures
                     return "";
             }
         }
+
+        public static String ToIso639_1(Languages lang)
+        {
+            switch (lang)
+            {
+                case Languages.Japanese:
+                    return "JA";
+                case Languages.English:
+                    return "EN";
+                case Languages.French:
+                    return "FR";
+                case Languages.Italian:
+                    return "IT";
+                case Languages.German:
+                    return "DE";
+                case Languages.Spanish:
+                    return "ES";
+                case Languages.Korean:
+                    return "KO";
+                default:
+                    throw new ArgumentException();
+            }
+        }
+
+        public static Languages FromIso639_1(String lang)
+        {
+            switch (lang.ToUpperInvariant())
+            {
+                case "JA":
+                    return Languages.Japanese;
+                case "EN":
+                    return Languages.English;
+                case "FR":
+                    return Languages.French;
+                case "IT":
+                    return Languages.Italian;
+                case "DE":
+                    return Languages.German;
+                case "ES":
+                    return Languages.Spanish;
+                case "KO":
+                    return Languages.Korean;
+                default:
+                    throw new ArgumentException();
+            }
+        }
     }
 }

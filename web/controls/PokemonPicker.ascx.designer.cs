@@ -13,12 +13,12 @@ namespace PkmnFoundations.Web.controls {
     public partial class PokemonPicker {
         
         /// <summary>
-        /// txtSpecies control.
+        /// theLookup control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtSpecies;
+        protected global::PkmnFoundations.Web.controls.ForeignLookup theLookup;
     }
 }

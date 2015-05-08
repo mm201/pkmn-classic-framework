@@ -114,7 +114,6 @@ input[type=submit].large, button.large
 
 .pfFormGroup
 {
-    overflow: hidden;
     border-spacing: 0;
     height: 100%;
 }
@@ -243,18 +242,21 @@ input[type=submit].large, button.large
     left: 0;
     right: 0;
     overflow: auto;
+    background-color: white;
 }
 
 .pfLookup .results .result
 {
-    padding: 0
+    padding: 0;
 }
 
-.pfLookup .results .result.default, .iaLookup .results:hover .result:hover, .pfLookup .results:hover .result.default:hover
+.pfLookup .results .result.default, .pfLookup .results:hover .result:hover, .pfLookup .results:hover .result.default:hover
 {
+    background-color: #ddd;
 }
 
-.iaLookup .results:hover .result.default
+.pfLookup .results:hover .result.default
 {
+    background-color: white;
 }
 

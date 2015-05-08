@@ -18,7 +18,7 @@ namespace PkmnFoundations.GTS
         {
             Pokedex.Pokedex pokedex = AppStateHelper.Pokedex(Application);
 
-            int species; Int32.TryParse(ppSpecies.Value, out species);
+            int species = ppSpecies.Value ?? 0;
             int minLevel = Convert.ToInt32(txtLevelMin.Text);
             int maxLevel = Convert.ToInt32(txtLevelMax.Text);
             Genders gender = Genders.Either;

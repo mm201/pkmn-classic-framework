@@ -6,6 +6,7 @@ using System.Data;
 using System.Text;
 using Newtonsoft.Json;
 using PkmnFoundations.Data;
+using PkmnFoundations.Structures;
 
 namespace PkmnFoundations.Web
 {
@@ -51,7 +52,7 @@ namespace PkmnFoundations.Web
                 return;
             }
 
-            bool french = (context.Request.QueryString["lang"] ?? "EN").ToUpperInvariant() == "FR";
+            Languages lang = Format.FromIso639_1(context.Request.QueryString["lang"] ?? "EN");
             String format = context.Request.Form["f"] ?? "h";
 
             if (!new[]{"h", "j"}.Contains(format))
@@ -63,7 +64,7 @@ namespace PkmnFoundations.Web
             DataTable data;
             try
             {
-                data = GetData(context.Request.Form["q"], rows, french);
+                data = GetData(context, context.Request.Form["q"], rows, lang);
             }
             catch (Exception ex)
             {
@@ -144,20 +145,27 @@ namespace PkmnFoundations.Web
                 String value = Common.HtmlEncode(row["Value"].ToString());
 
                 builder.Remove(0, builder.Length);
-                builder.Append("<div class=\"result\" ");
+                builder.Append("<div class=\"result");
 
+                // When I enabled this, I started trying to use arrow keys to change my selection.
+                // todo: add arrow key support and bring this back.
+                //if (index == 0)
+                //{
+                //    builder.Append(" default\"");
+                //}
+                builder.Append("\" ");
                 if (index == 0)
                 {
                     builder.Append("id=\"");
                     builder.Append(control_id);
-                    builder.Append("_result1\" ");
+                    builder.Append("_result1\" class=\"default\" ");
                 }
 
                 builder.Append("data-value=\"");
                 builder.Append(Common.HtmlEncode(value));
                 builder.Append("\" data-text=\"");
                 builder.Append(Common.HtmlEncode(text));
-                builder.Append("\" onclick=\"iaSelectResult('");
+                builder.Append("\" onclick=\"pfSelectLookupResult('");
                 builder.Append(control_id);
                 builder.Append("_main', '"); // slight hack to avoid passing all client ids in here
                 builder.Append(control_id);
@@ -192,7 +200,7 @@ namespace PkmnFoundations.Web
             context.Response.Write(JsonConvert.SerializeObject(results));
         }
 
-        protected virtual DataTable GetData(String query, int rows, bool french)
+        protected virtual DataTable GetData(HttpContext context, String query, int rows, Languages lang)
         {
             return null;
         }

@@ -125,7 +125,6 @@ li
     background-image: linear-gradient(to bottom, #fcfcfc 0%,#f8f8f8 100%); /* W3C */
     background-size: 100%;
     border-radius: 4px;
-    overflow: hidden;
 }
 
 .gtsNav, .gtsNav ul, .gtsNav li

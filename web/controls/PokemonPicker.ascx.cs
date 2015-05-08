@@ -14,15 +14,17 @@ namespace PkmnFoundations.Web.controls
 
         }
 
-        public String Value
+        public int ? Value
         {
             get
             {
-                return txtSpecies.Text;
+                String value = theLookup.Value;
+                return String.IsNullOrEmpty(value) ? null : (int ?)Convert.ToInt32(value);
             }
             set
             {
-                txtSpecies.Text = value;
+                if (value == null) theLookup.Value = null;
+                theLookup.Value = value.ToString();
             }
         }
     }

@@ -89,8 +89,15 @@ function pfHandleLookup(id_outer, id_value, id_results, count, url)
         if (ctrl_results.pfLookupBlocked) return; // todo: timeout this to deal with slow server performance
         ctrl_results.pfLastLookup = search;
 
-        var request = new ajaxObject(url, function (response, status) { pfReceiveLookupResults(response, status, id_outer, id_value, id_results, count, url); });
-        request.update("n=" + count + "&q=" + search + "&c=" + id_outer, "POST");
+        var request = $.ajax(url, 
+            {
+                complete: function (response, status, xhr)
+                {
+                    pfReceiveLookupResults(response.responseText, response.status, id_outer, id_value, id_results, count, url);
+                },
+                data: { n: count, q: search, c: id_outer },
+                method: "POST"
+            })
         ctrl_results.pfLookupBlocked = true;
     }
 }
@@ -115,7 +122,7 @@ function pfReceiveLookupResults(response, status, id_outer, id_value, id_results
     if (ctrl_results.pfLastLookup == undefined) ctrl_results.pfLastLookup = "";
     ctrl_results.pfLookupBlocked = false;
 
-    if (status == 200)
+    if (status == "200")
     {
         ctrl_results.innerHTML = response;
     }
