@@ -90,7 +90,7 @@ namespace PkmnFoundations.Pokedex
             // since we want the Pokemon4/5 ctor to succeed regardless of how
             // broken the underlying data is.
             return new LazyKeyValuePair<int, Species>(
-                k => k == 0 ? null : (pokedex == null ? null : pokedex.Species(k)),
+                k => k == 0 ? null : (pokedex == null ? null : pokedex.Species[k]),
                 v => v == null ? 0 : v.NationalDex);
         }
     }

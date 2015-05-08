@@ -172,10 +172,13 @@ namespace PkmnFoundations.Pokedex
 
         private Dictionary<LocationNumbering, Dictionary<int, Location>> m_location_values_generations;
 
-        // todo: add ReadOnlyIndexer1d class, replace these methods with them
-        public Species Species(int national_dex)
+        // todo: use readonly wrappers
+        public IDictionary<int, Species> Species
         {
-            return m_species[national_dex];
+            get
+            {
+                return m_species;
+            }
         }
 
         public Family Families(int id)

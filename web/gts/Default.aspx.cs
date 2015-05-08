@@ -142,7 +142,7 @@ namespace PkmnFoundations.GTS
             {
                 Pokedex.Pokedex pokedex = AppStateHelper.Pokedex(Application);
                 GtsRecordBase record = (GtsRecordBase)DataItem;
-                return Common.HtmlEncode(pokedex.Species(record.Species).Name.ToString());
+                return Common.HtmlEncode(pokedex.Species[record.Species].Name.ToString());
             }
             catch
             {
@@ -216,7 +216,7 @@ namespace PkmnFoundations.GTS
         {
             Pokedex.Pokedex pokedex = AppStateHelper.Pokedex(Application);
             GtsRecordBase record = (GtsRecordBase)DataItem;
-            Species species = pokedex.Species(record.RequestedSpecies);
+            Species species = pokedex.Species[record.RequestedSpecies];
 
             return "<img src=\"" + ResolveUrl(WebFormat.SpeciesImageSmall(species)) +
                 "\" alt=\"" + Common.HtmlEncode(species.Name.ToString()) + 
