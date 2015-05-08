@@ -138,11 +138,14 @@ namespace PkmnFoundations.Web
 
             StringBuilder builder = new StringBuilder();
             int index = 0;
+            bool hasHtml = data.Columns.Contains("html");
+
             foreach (DataRow row in data.Rows)
             {
-                String text = Common.HtmlEncode(row["Text"].ToString());
+                String text = row["Text"].ToString();
                 // this breaks if value contains html control chars but is fine since all values will be int
-                String value = Common.HtmlEncode(row["Value"].ToString());
+                String value = row["Value"].ToString();
+                String html = hasHtml ? row["html"].ToString() : Common.HtmlEncode(text);
 
                 builder.Remove(0, builder.Length);
                 builder.Append("<div class=\"result");
@@ -176,7 +179,7 @@ namespace PkmnFoundations.Web
                 builder.Append("_txtInput', '");
                 builder.Append(Common.HtmlEncode(Common.JsEncode(text)));
                 builder.Append("')\">");
-                builder.Append(Common.HtmlEncode(text));
+                builder.Append(html);
                 builder.Append("</div>\n");
 
                 context.Response.Write(builder.ToString());
