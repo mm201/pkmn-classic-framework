@@ -44,6 +44,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\MySql.Data.6.9.5\lib\net40\MySql.Data.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Newtonsoft.Json.6.0.8\lib\net40\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -66,6 +70,7 @@
     <Content Include="admin\AddDressup.aspx" />
     <Content Include="admin\AddMusical.aspx" />
     <Content Include="battlevideo\Default.aspx" />
+    <Content Include="controls\ForeignLookup.ascx" />
     <Content Include="controls\LabelTextBox.ascx" />
     <Content Include="controls\PokemonPicker.ascx" />
     <Content Include="css\form.css" />
@@ -3609,6 +3614,14 @@
     <Compile Include="battlevideo\Default.aspx.designer.cs">
       <DependentUpon>Default.aspx</DependentUpon>
     </Compile>
+    <Compile Include="controls\ForeignLookup.ascx.cs">
+      <DependentUpon>ForeignLookup.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="controls\ForeignLookup.ascx.designer.cs">
+      <DependentUpon>ForeignLookup.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
     <Compile Include="controls\LabelTextBox.ascx.cs">
       <DependentUpon>LabelTextBox.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -3679,6 +3692,7 @@
     <Compile Include="src\AppStateHelper.cs" />
     <Compile Include="src\Common.cs" />
     <Compile Include="src\DependencyNode.cs" />
+    <Compile Include="src\ForeignLookupSource.cs" />
     <Compile Include="src\HeaderColour.cs" />
     <Compile Include="src\OnceTemplate.cs" />
     <Compile Include="src\RequireCss.cs" />

@@ -226,3 +226,35 @@ input[type=submit].large, button.large
     bottom: 0;
     border-bottom-right-radius: 2px;
 }
+
+.pfLookup
+{
+    position: relative;
+}
+
+.pfLookup input
+{
+}
+
+.pfLookup .results
+{
+    position: absolute;
+    z-index: 1;
+    left: 0;
+    right: 0;
+    overflow: auto;
+}
+
+.pfLookup .results .result
+{
+    padding: 0
+}
+
+.pfLookup .results .result.default, .iaLookup .results:hover .result:hover, .pfLookup .results:hover .result.default:hover
+{
+}
+
+.iaLookup .results:hover .result.default
+{
+}
+
