@@ -20,12 +20,18 @@ namespace PkmnFoundations.Web.controls
             query = query.ToLowerInvariant();
             int natDex = 0;
             Int32.TryParse(query, out natDex);
+            int limit = 0;
+            if (context.Request.QueryString["limit"] != null)
+            {
+                limit = Convert.ToInt32(context.Request.QueryString["limit"]);
+                if (natDex > limit) return null;
+            }
 
             Func<KeyValuePair<int, Species>, bool> filter;
             if (natDex > 0)
                 filter = pair => pair.Key == natDex;
             else
-                filter = pair => pair.Value.Name[iso].ToLowerInvariant().Contains(query);
+                filter = pair => pair.Key <= limit && pair.Value.Name[iso].ToLowerInvariant().Contains(query);
 
             IEnumerable<Species> data;
             data = pokedex.Species.Where(filter).OrderBy(pair => pair.Key).Take(rows).Select(pair => pair.Value);

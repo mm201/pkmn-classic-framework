@@ -26,7 +26,8 @@
             <tr class="pfFormPair">
                 <th class="pfFormKey">Species</th>
                 <td class="pfFormValue">
-                    <pf:PokemonPicker ID="ppSpecies" runat="server" />
+                    <%-- todo: limit pokemon to gen4 when gen4 is checked --%>
+                    <pf:PokemonPicker ID="ppSpecies" MaxGeneration="Generation5" runat="server" />
                 </td>
 
                 <th class="pfFormKey" rowspan="3">Version</th>

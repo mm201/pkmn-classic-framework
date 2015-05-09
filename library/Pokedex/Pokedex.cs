@@ -258,5 +258,26 @@ namespace PkmnFoundations.Pokedex
         {
             return m_location_values_generations[generation];
         }
+
+        public static int SpeciesAtGeneration(Generations generation)
+        {
+            switch (generation)
+            {
+                case Generations.Generation1:
+                    return 151;
+                case Generations.Generation2:
+                    return 251;
+                case Generations.Generation3:
+                    return 386;
+                case Generations.Generation4:
+                    return 493;
+                case Generations.Generation5:
+                    return 649;
+                case Generations.Generation6:
+                    return 721;
+                default:
+                    throw new NotSupportedException();
+            }
+        }
     }
 }
