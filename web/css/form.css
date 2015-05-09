@@ -243,11 +243,19 @@ input[type=submit].large, button.large
     right: 0;
     overflow: auto;
     background-color: white;
+    border: 1px solid #999;
+    box-shadow: 0 1px 2px 0 rgba(0,0,0,0.1);
+    margin-top: -1px;
+    border-radius: 0 0 2px 2px;
+}
+
+.pfLookup .results_inner
+{
+    overflow: hidden;
 }
 
 .pfLookup .results .result
 {
-    padding: 0;
 }
 
 .pfLookup .results .result.default, .pfLookup .results:hover .result:hover, .pfLookup .results:hover .result.default:hover
@@ -260,3 +268,13 @@ input[type=submit].large, button.large
     background-color: white;
 }
 
+.pfPokemonPicker .result
+{
+    padding: 4px 8px;
+    height: 20px;
+}
+
+.pfPokemonPicker .result img.speciesSmall
+{
+    margin: -6px -4px -10px -10px;
+}

@@ -124,7 +124,7 @@ function pfReceiveLookupResults(response, status, id_outer, id_value, id_results
 
     if (status == "200")
     {
-        ctrl_results.innerHTML = response;
+        ctrl_results.innerHTML = "<div class=\"results_inner\">" + response + "</div>";
     }
     else
     {

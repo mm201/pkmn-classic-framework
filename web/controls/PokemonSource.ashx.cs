@@ -23,10 +23,19 @@ namespace PkmnFoundations.Web.controls
             DataTable dt = new DataTable();
             dt.Columns.Add("Text", typeof(String));
             dt.Columns.Add("Value", typeof(int));
+            dt.Columns.Add("html", typeof(String));
 
             foreach (Species s in data)
             {
-                dt.Rows.Add(s.Name[iso], s.NationalDex);
+                String name = s.Name[iso];
+                String html = "<img src=\"" + Common.ResolveUrl(WebFormat.SpeciesImageSmall(s)) +
+                    "\" alt=\"" + Common.HtmlEncode(name) +
+                    "\" class=\"sprite speciesSmall\" width=\"40px\" height=\"32px\" />" +
+                    String.Format("{0} (#{1})",
+                    Common.HtmlEncode(name),
+                    s.NationalDex);
+
+                dt.Rows.Add(name, s.NationalDex, html);
             }
 
             return dt;

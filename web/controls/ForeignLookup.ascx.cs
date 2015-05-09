@@ -81,6 +81,20 @@ namespace PkmnFoundations.Web.controls
             }
         }
 
+        private String m_css_class;
+        public String CssClass 
+        {
+            get
+            {
+                return m_css_class;
+            }
+            set
+            {
+                m_css_class = value;
+                main.Attributes["class"] = "pfLookup " + Common.HtmlEncode(m_css_class);
+            }
+        }
+
         protected override void LoadViewState(object savedState)
         {
             ForeignLookupViewState viewstate = (ForeignLookupViewState)savedState;
@@ -88,6 +102,7 @@ namespace PkmnFoundations.Web.controls
             SourceUrl = viewstate.SourceUrl;
             MaxRows = viewstate.MaxRows;
             OnClientValueChanged = viewstate.OnClientValueChanged;
+            CssClass = viewstate.CssClass;
         }
 
         protected override object SaveViewState()
@@ -97,6 +112,7 @@ namespace PkmnFoundations.Web.controls
             viewstate.SourceUrl = SourceUrl;
             viewstate.MaxRows = MaxRows;
             viewstate.OnClientValueChanged = OnClientValueChanged;
+            viewstate.CssClass = CssClass;
             return viewstate;
         }
 
@@ -107,6 +123,7 @@ namespace PkmnFoundations.Web.controls
             public String SourceUrl;
             public int MaxRows;
             public String OnClientValueChanged;
+            public String CssClass;
         }
     }
 }
