@@ -16,9 +16,40 @@
     <script type="text/javascript">
         $(document).ready(function ()
         {
-            $("#<%= txtLevelMin.ClientID %>").spinner();
-            $("#<%= txtLevelMax.ClientID %>").spinner();
+            betterSpinner($("#<%= txtLevelMin.ClientID %>"));
+            betterSpinner($("#<%= txtLevelMax.ClientID %>"));
         });
+
+        function betterSpinner(input)
+        {
+            input.spinner(
+            {
+                spin: function(event, ui)
+                {
+                    input.val(ui.value);
+                    input.change();
+                }
+            });
+        }
+
+        function changedMax(idMin, idMax)
+        {
+            var minValue = parseInt($("#" + idMin).val(), 10);
+            var maxValue = parseInt($("#" + idMax).val(), 10);
+
+            if (minValue > maxValue)
+                $("#" + idMin).val(maxValue);
+        }
+
+        function changedMin(idMin, idMax)
+        {
+            var minValue = parseInt($("#" + idMin).val(), 10);
+            var maxValue = parseInt($("#" + idMax).val(), 10);
+
+            if (minValue > maxValue)
+                $("#" + idMax).val(minValue);
+        }
+
     </script>
 
     <form id="theForm" runat="server">

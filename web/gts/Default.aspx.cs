@@ -37,6 +37,9 @@ namespace PkmnFoundations.GTS
                 rptPokemon.DataSource = records5;
                 rptPokemon.DataBind();
             }
+
+            txtLevelMin.Attributes["onchange"] = "changedMin(\'" + txtLevelMin.ClientID + "\', \'" + txtLevelMax.ClientID + "\');";
+            txtLevelMax.Attributes["onchange"] = "changedMax(\'" + txtLevelMin.ClientID + "\', \'" + txtLevelMax.ClientID + "\');";
         }
 
         private String FormatLevels(byte min, byte max)
