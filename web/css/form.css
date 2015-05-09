@@ -270,8 +270,9 @@ input[type=submit].large, button.large
 
 .pfPokemonPicker .result
 {
-    padding: 4px 8px;
+    padding: 4px;
     height: 20px;
+    white-space: nowrap;
 }
 
 .pfPokemonPicker .result img.speciesSmall
