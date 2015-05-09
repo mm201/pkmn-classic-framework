@@ -82,6 +82,8 @@ namespace PkmnFoundations.GTS
             try
             {
                 GtsRecordBase record = (GtsRecordBase)DataItem;
+                // Hide pokeballs with incorrect numbers until we catalog them.
+                if (record.Pokemon.Pokeball.Value4 > 15) return "";
                 String itemName = Common.HtmlEncode(record.Pokemon.Pokeball.Name.ToString());
                 return "<img src=\"" + ResolveUrl(WebFormat.ItemImage(record.Pokemon.Pokeball)) +
                     "\" alt=\"" + itemName + "\" title=\"" + itemName + 
