@@ -14,6 +14,13 @@ namespace PkmnFoundations.Web.gts
 {
     public partial class Pokemon : System.Web.UI.Page
     {
+        protected void Page_Init(object sender, EventArgs e)
+        {
+#if !DEBUG
+            throw new WebException(403);
+#endif
+        }
+
         protected void Page_Load(object sender, EventArgs e)
         {
             Pokedex.Pokedex pokedex = AppStateHelper.Pokedex(Application);

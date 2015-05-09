@@ -115,6 +115,10 @@
         </table>
     </form>
     <div class="clear"></div>
+
+    <asp:PlaceHolder ID="phNone" runat="server">
+        <p>No Pokémon were found matching these terms.</p>
+    </asp:PlaceHolder>
 <asp:Repeater ID="rptPokemon" runat="server">
 <ItemTemplate>
 

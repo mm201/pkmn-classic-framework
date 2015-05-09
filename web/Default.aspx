@@ -71,6 +71,10 @@
 
     <hr />
 
+    <h1>Update - May 9:</h1>
+    <p>A new and improved <asp:HyperLink NavigateUrl="~/gts/" runat="server">search page</asp:HyperLink> is available!
+    </p>
+
     <h1>Update - August 29:</h1>
     <p>Wi-fi Battle Tower and Battle Subway are now available!
     </p>

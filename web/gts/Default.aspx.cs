@@ -30,12 +30,14 @@ namespace PkmnFoundations.GTS
                 GtsRecord4[] records4 = Database.Instance.GtsSearch4(pokedex, 0, (ushort)species, gender, (byte)minLevel, (byte)maxLevel, 0, -1);
                 rptPokemon.DataSource = records4;
                 rptPokemon.DataBind();
+                phNone.Visible = records4.Length == 0;
             }
             else if (rbGen5.Checked)
             {
                 GtsRecord5[] records5 = Database.Instance.GtsSearch5(pokedex, 0, (ushort)species, gender, (byte)minLevel, (byte)maxLevel, 0, -1);
                 rptPokemon.DataSource = records5;
                 rptPokemon.DataBind();
+                phNone.Visible = records5.Length == 0;
             }
 
             txtLevelMin.Attributes["onchange"] = "changedMin(\'" + txtLevelMin.ClientID + "\', \'" + txtLevelMax.ClientID + "\');";
