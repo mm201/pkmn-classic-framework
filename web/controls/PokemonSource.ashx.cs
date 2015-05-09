@@ -18,7 +18,17 @@ namespace PkmnFoundations.Web.controls
             Pokedex.Pokedex pokedex = AppStateHelper.Pokedex(context.Application);
             String iso = Format.ToIso639_1(lang);
             query = query.ToLowerInvariant();
-            IEnumerable<Species> data = pokedex.Species.Where(pair => pair.Value.Name[iso].ToLowerInvariant().Contains(query)).OrderBy(pair => pair.Key).Take(rows).Select(pair => pair.Value);
+            int natDex = 0;
+            Int32.TryParse(query, out natDex);
+
+            Func<KeyValuePair<int, Species>, bool> filter;
+            if (natDex > 0)
+                filter = pair => pair.Key == natDex;
+            else
+                filter = pair => pair.Value.Name[iso].ToLowerInvariant().Contains(query);
+
+            IEnumerable<Species> data;
+            data = pokedex.Species.Where(filter).OrderBy(pair => pair.Key).Take(rows).Select(pair => pair.Value);
 
             DataTable dt = new DataTable();
             dt.Columns.Add("Text", typeof(String));
