@@ -59,12 +59,14 @@ namespace PkmnFoundations.Support
 
             for (int i = start; i < start + count * 2; i += 2)
 			{
-				ushort gamecode = BitConverter.ToUInt16(data, i);
-                // todo: convert some characters via lookup table
-                // http://projectpokemon.org/wiki/Pokemon_Black/White_NDS_Structure#Characters_that_can_be_replaced_in_Unicode
-				if (gamecode == 0xffff) { break; }
-				sb.Append((char)gamecode);
-			}
+                ushort gamecode = BitConverter.ToUInt16(data, i);
+                if (gamecode == 0xffff) { break; }
+                char ch = Generation5TextLookupTable.ContainsKey(gamecode) ?
+                    Generation5TextLookupTable[gamecode] :
+                    (char)gamecode;
+
+                sb.Append(ch);
+            }
 
 			return sb.ToString();
 		}
@@ -83,7 +85,9 @@ namespace PkmnFoundations.Support
             MemoryStream m = new MemoryStream(result);
 
             foreach (char c in str.ToCharArray())
-                m.Write(BitConverter.GetBytes(c), 0, 2);
+            {
+                m.Write(BitConverter.GetBytes(LookupReverse.ContainsKey(c) ? LookupReverse[c] : c), 0, 2);
+            }
 
             m.WriteByte(0xff);
             m.WriteByte(0xff);
@@ -155,5 +159,35 @@ namespace PkmnFoundations.Support
 		{
 			return Text;
 		}
+
+        private static Dictionary<char, ushort> m_lookup_reverse = null;
+        private static Dictionary<char, ushort> LookupReverse
+        {
+            get
+            {
+                if (m_lookup_reverse == null)
+                {
+                    Dictionary<char, ushort> reverse = new Dictionary<char, ushort>(Generation5TextLookupTable.Count);
+
+                    foreach (KeyValuePair<ushort, char> pair in Generation5TextLookupTable)
+                    {
+                        //if (!reverse.ContainsKey(pair.Value))
+                            reverse.Add(pair.Value, pair.Key);
+                    }
+
+                    m_lookup_reverse = reverse;
+                }
+                return m_lookup_reverse;
+            }
+        }
+
+        private static Dictionary<ushort, char> Generation5TextLookupTable = new Dictionary<ushort, char>
+        {
+            {0x2467, '\u00d7'}, {0x2468, '\u00f7'}, {0x246c, '\u2026'}, {0x246d, '\u2642'}, 
+            {0x246e, '\u2640'}, {0x246f, '\u2660'}, {0x2470, '\u2663'}, {0x2471, '\u2665'}, 
+            {0x2472, '\u2666'}, {0x2473, '\u2605'}, {0x2474, '\u25ce'}, {0x2475, '\u25cb'}, 
+            {0x2476, '\u25a1'}, {0x2477, '\u25b3'}, {0x2478, '\u25c7'}, {0x2479, '\u266a'}, 
+            {0x247a, '\u2600'}, {0x247b, '\u2601'}, {0x247d, '\u2602'}, 
+        };
     }
 }
