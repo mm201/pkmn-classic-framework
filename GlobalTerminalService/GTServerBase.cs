@@ -35,7 +35,7 @@ namespace PkmnFoundations.GlobalTerminalService
         // real point in securing it.
         public GTServerBase(int port, bool useSsl, int threads, int timeout)
             : this(port, useSsl, threads, timeout,
-            useSsl ? new X509Certificate2(AppDomain.CurrentDomain.BaseDirectory + Path.DirectorySeparatorChar + "cert.pfx", "letmein") : null)
+            useSsl ? GetDefaultCertificate() : null)
         {
         }
 
@@ -47,6 +47,19 @@ namespace PkmnFoundations.GlobalTerminalService
             Certificate = certificate;
             m_workers = new List<Thread>(threads);
             m_listener = new TcpListener(IPAddress.Any, port);
+        }
+
+        private static X509Certificate2 GetDefaultCertificate()
+        {
+            X509Store store = new X509Store(StoreLocation.LocalMachine);
+            store.Open(OpenFlags.ReadOnly);
+            X509Certificate2Collection cers = store.Certificates.Find(X509FindType.FindBySubjectName, "pkgdsprod.nintendo.co.jp", false);
+
+            if (cers.Count > 0)
+                return cers[0];
+
+            LogHelper.Write("X.509 certificate not found. Please add a certificate with subject \"pkgdsprod.nintendo.co.jp\" to the store. Using dummy certificate.");
+            return new X509Certificate2(AppDomain.CurrentDomain.BaseDirectory + Path.DirectorySeparatorChar + "cert.pfx", "letmein");
         }
 
         public int Threads
