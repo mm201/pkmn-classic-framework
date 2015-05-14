@@ -58,6 +58,10 @@ namespace PkmnFoundations.GTS
             {
                 return String.Format("Lv. {0} and up", min);
             }
+            else if (min == max)
+            {
+                return String.Format("Lv. {0}", min);
+            }
             else
             {
                 return String.Format("Lv. {0} to {1}", min, max);
