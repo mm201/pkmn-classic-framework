@@ -49,5 +49,16 @@ namespace PkmnFoundations.Support
             }
             return readBytes;
         }
+
+        public static void CompatibleCopyTo(this Stream src, Stream dest)
+        {
+            const int BUFFER_LENGTH = 256;
+            byte[] buffer = new byte[BUFFER_LENGTH];
+
+            int lastProgress;
+
+            while ((lastProgress = src.Read(buffer, 0, BUFFER_LENGTH)) > 0)
+                dest.Write(buffer, 0, lastProgress);
+        }
     }
 }
