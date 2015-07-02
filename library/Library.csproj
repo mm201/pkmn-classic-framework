@@ -58,6 +58,8 @@
     <Compile Include="Data\DatabaseExtender.cs" />
     <Compile Include="Data\DataMysql.cs" />
     <Compile Include="Data\DataSqlite.cs" />
+    <Compile Include="Data\MySqlDatabaseExtender.cs" />
+    <Compile Include="Data\SqlDatabaseExtender.cs" />
     <Compile Include="Pokedex\Ability.cs" />
     <Compile Include="Pokedex\Evolution.cs" />
     <Compile Include="Pokedex\FormStats.cs" />
