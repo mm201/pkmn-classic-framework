@@ -4,8 +4,6 @@ using System.Linq;
 using System.Web;
 using System.Data;
 using System.Data.Common;
-using System.Data.SqlClient;
-using MySql.Data.MySqlClient;
 using System.IO;
 
 namespace PkmnFoundations.Data
