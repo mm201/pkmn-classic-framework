@@ -3477,7 +3477,12 @@
     <Content Include="images\pkmn-sm\716.png" />
     <Content Include="images\pkmn-sm\717.png" />
     <Content Include="images\pkmn-sm\718.png" />
+    <Content Include="images\pkmn-sm\719-1.png" />
+    <Content Include="images\pkmn-sm\719.png" />
     <Content Include="images\pkmn-sm\72.png" />
+    <Content Include="images\pkmn-sm\720-1.png" />
+    <Content Include="images\pkmn-sm\720.png" />
+    <Content Include="images\pkmn-sm\721.png" />
     <Content Include="images\pkmn-sm\73.png" />
     <Content Include="images\pkmn-sm\74.png" />
     <Content Include="images\pkmn-sm\75.png" />
@@ -3512,6 +3517,7 @@
     <Content Include="images\pkmn-sm\97.png" />
     <Content Include="images\pkmn-sm\98.png" />
     <Content Include="images\pkmn-sm\99.png" />
+    <Content Include="images\pkmn-sm\egg.png" />
     <Content Include="images\ribbon-sm\3001.png" />
     <Content Include="images\ribbon-sm\3002.png" />
     <Content Include="images\ribbon-sm\3003.png" />
