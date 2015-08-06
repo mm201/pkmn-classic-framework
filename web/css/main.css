@@ -127,6 +127,13 @@ li
     border-radius: 4px;
 }
 
+.pfToolTip
+{
+    border-bottom: 1px dotted #999;
+    margin-bottom: -1px;
+    cursor: help;
+}
+
 .gtsNav, .gtsNav ul, .gtsNav li
 {
     margin: 0; padding: 0;
@@ -513,6 +520,78 @@ li
 #gtsFooter *:first-child *
 {
     margin-top: 0;
+}
+
+.pfChoiceGroup
+{
+    position: relative;
+    overflow: hidden;
+    margin: 0 -8px;
+}
+
+.pfChoice
+{
+    float: left;
+    width: 180px;
+    height: 80px;
+    border: 2px solid #eeeeee;
+    background-color: white;
+    cursor: pointer;
+    margin: 8px;
+    position: relative;
+}
+
+.pfChoice img
+{
+    position: absolute;
+    left: 8px;
+    top: 8px;
+}
+
+.pfChoice .pfChoiceLabel
+{
+    display: table;
+    margin: 8px 8px 8px 80px;
+    width: 92px;
+    height: 64px;
+}
+
+.pfChoice .pfChoiceLabel .inner
+{
+    display: table-cell;
+    vertical-align: middle;
+    text-align: center;
+}
+
+.pfChoice:hover
+{
+    background-color: #f6f6f6;
+    border-color: #dddddd;
+}
+
+.pfChoiceActive
+{
+    border-color: #ff8063;
+}
+
+.home .pfChoiceActive {border-color: #ff8063;}
+.gts .pfChoiceActive {border-color: #43c4ff;}
+.bv .pfChoiceActive {border-color: #9761e9;}
+.dw .pfChoiceActive {border-color: #fa79d4;}
+.dex .pfChoiceActive {border-color: #2dd350;}
+.stat .pfChoiceActive {border-color: #ffc321;}
+.test .pfChoiceActive {border-color: #82d2e0;}
+.admin .pfChoiceActive {border-color: #555555;}
+
+.pfSplitList
+{
+    margin-top: 0; margin-bottom: 0;
+}
+
+.pfRight
+{
+    float: right;
+    margin-left: 16px;
 }
 
 @media (min--moz-device-pixel-ratio: 1.01), (-o-min-device-pixel-ratio: 97/96), 

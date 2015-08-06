@@ -162,6 +162,7 @@
         <div class="setWidth">
     <asp:ContentPlaceHolder ID="cpMain" runat="server" />
         </div>
+        <div class="clear"></div>
     </div>
 
     <div id="gtsFooter">
