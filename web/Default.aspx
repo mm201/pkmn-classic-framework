@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/masters/ThreeColumn.master" AutoEventWireup="true" CodeBehind="Default.aspx.cs" Inherits="PkmnFoundations.GTS.Default" %>
+﻿<%@ Page Title="Pokémon Classic Network" Language="C#" MasterPageFile="~/masters/ThreeColumn.master" AutoEventWireup="true" CodeBehind="Default.aspx.cs" Inherits="PkmnFoundations.GTS.Default" %>
 <%@ Register TagPrefix="pf" Namespace="PkmnFoundations.Web" Assembly="PkmnFoundations.Web" %>
 <%@ Register TagPrefix="pf" TagName="LabelTextBox" Src="~/controls/LabelTextBox.ascx" %>
 
@@ -24,7 +24,7 @@
 
     <div class="gtsSection gtsInfo">
         <p>Maintenance periods are <strong>Thursdays</strong> at
-           <strong>UTC 0500</strong>.</p>
+           <strong>UTC 0300</strong>.</p>
     </div>
 
     <div class="gtsSection gtsInfo">
