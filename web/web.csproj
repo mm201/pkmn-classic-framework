@@ -70,6 +70,7 @@
     <Content Include="admin\AddDressup.aspx" />
     <Content Include="admin\AddMusical.aspx" />
     <Content Include="battlevideo\Default.aspx" />
+    <Content Include="controls\DnsAddress.ascx" />
     <Content Include="controls\ForeignLookup.ascx" />
     <Content Include="controls\LabelTextBox.ascx" />
     <Content Include="controls\PokemonPicker.ascx" />

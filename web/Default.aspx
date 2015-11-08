@@ -1,6 +1,7 @@
 ﻿<%@ Page Title="Pokémon Classic Network" Language="C#" MasterPageFile="~/masters/ThreeColumn.master" AutoEventWireup="true" CodeBehind="Default.aspx.cs" Inherits="PkmnFoundations.GTS.Default" %>
 <%@ Register TagPrefix="pf" Namespace="PkmnFoundations.Web" Assembly="PkmnFoundations.Web" %>
 <%@ Register TagPrefix="pf" TagName="LabelTextBox" Src="~/controls/LabelTextBox.ascx" %>
+<%@ Register TagPrefix="pf" TagName="DnsAddress" Src="~/controls/DnsAddress.ascx" %>
 
 <asp:Content ID="conHead" ContentPlaceHolderID="cpHead" runat="server">
     <pf:HeaderColour ID="HeaderColour1" CssClass="home" runat="server" />

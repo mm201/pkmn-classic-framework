@@ -1,5 +1,6 @@
 ﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="MasterPage.master.cs" Inherits="PkmnFoundations.GTS.MasterPage" %>
 <%@ Register TagPrefix="pf" Namespace="PkmnFoundations.Web" Assembly="PkmnFoundations.Web" %>
+<%@ Register TagPrefix="pf" TagName="DnsAddress" Src="~/controls/DnsAddress.ascx" %>
 
 <!DOCTYPE html>
 
@@ -30,13 +31,13 @@
                 </span>
                 </asp:HyperLink>
                 <div class="clear"></div>
-                Custom servers for classic Pokémon
+                Unofficial server for classic Pokémon
             </div>
 
             <div id="gtsHeadMain">
             <ul class="gtsHeadContent">
                 <li>Powered by <a href="http://altwfc.net/">AltWFC</a></li>
-                <li>DNS: <strong>104.131.93.87</strong></li>
+                <li>DNS: <strong><pf:DnsAddress runat="server" /></strong></li>
                 <li><asp:Literal ID="litPokemon" runat="server" />
                 Pokémon available for offer.</li>
                 <li><asp:Literal ID="litVideos" runat="server" />
