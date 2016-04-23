@@ -7,81 +7,99 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace PkmnFoundations.GTS {
+namespace PkmnFoundations.Main {
     
     
-    public partial class Default {
+    public partial class Instructions {
         
         /// <summary>
-        /// HeaderColour1 control.
+        /// hlAltWfc control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::PkmnFoundations.Web.HeaderColour HeaderColour1;
+        protected global::System.Web.UI.WebControls.HyperLink hlAltWfc;
         
         /// <summary>
-        /// theForm control.
+        /// imgDiamond control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlForm theForm;
+        protected global::System.Web.UI.WebControls.Image imgDiamond;
         
         /// <summary>
-        /// txtUsername control.
+        /// imgPearl control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::PkmnFoundations.GTS.controls.LabelTextBox txtUsername;
+        protected global::System.Web.UI.WebControls.Image imgPearl;
         
         /// <summary>
-        /// txtPassword control.
+        /// imgPlatinum control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::PkmnFoundations.GTS.controls.LabelTextBox txtPassword;
+        protected global::System.Web.UI.WebControls.Image imgPlatinum;
         
         /// <summary>
-        /// btnSubmit control.
+        /// imgHeartGold control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnSubmit;
+        protected global::System.Web.UI.WebControls.Image imgHeartGold;
         
         /// <summary>
-        /// hlRegister control.
+        /// imgSoulSilver control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.HyperLink hlRegister;
+        protected global::System.Web.UI.WebControls.Image imgSoulSilver;
         
         /// <summary>
-        /// hlActionReplay control.
+        /// imgBlack control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.HyperLink hlActionReplay;
+        protected global::System.Web.UI.WebControls.Image imgBlack;
         
         /// <summary>
-        /// hlBattleVideos control.
+        /// imgWhite control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.HyperLink hlBattleVideos;
+        protected global::System.Web.UI.WebControls.Image imgWhite;
+        
+        /// <summary>
+        /// imgBlack2 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Image imgBlack2;
+        
+        /// <summary>
+        /// imgWhite2 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Image imgWhite2;
     }
 }

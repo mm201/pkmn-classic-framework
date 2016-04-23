@@ -537,30 +537,30 @@ li
     border: 2px solid #eeeeee;
     background-color: white;
     cursor: pointer;
-    margin: 8px;
+    margin: 4px 8px 4px 0;
     position: relative;
+    display: table;
+    border-spacing: 8px;
 }
 
-.pfChoice img
+.pfChoiceGroupVersions .pfChoice
 {
-    position: absolute;
-    left: 8px;
-    top: 8px;
+    width: 128px;
+    height: 48px;
+}
+
+.pfChoice .pfChoiceIcon
+{
+    display: table-cell;
+    vertical-align: middle;
+    width: 0;
 }
 
 .pfChoice .pfChoiceLabel
 {
-    display: table;
-    margin: 8px 8px 8px 80px;
-    width: 92px;
-    height: 64px;
-}
-
-.pfChoice .pfChoiceLabel .inner
-{
     display: table-cell;
     vertical-align: middle;
-    text-align: center;
+    text-align: left;
 }
 
 .pfChoice:hover

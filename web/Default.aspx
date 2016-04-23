@@ -58,15 +58,18 @@
 
     <h1>How to connect</h1>
     <ol>
-        <li>Obtain an Action Replay code for your game. (complete list coming
-            soon)<br />If you are using an emulator, you can patch your game with
-            <a href="https://github.com/AdmiralCurtiss/WfcPatcher/releases">WfcPatcher</a>.</li>
-        <li>If applicable, enable the code and launch your game.</li>
-        <li>On your DS, set the DNS to <strong>104.131.93.87</strong>.</li>
-        <li>Connect!</li>
+        <li>
+            Find and install your <asp:HyperLink ID="hlActionReplay" NavigateUrl="~/main/Instructions.aspx" runat="server">Action Replay code</asp:HyperLink>
+        </li>
+        <li>
+            Erase your Nintendo WFC configuration.
+        </li>
+        <li>
+            Set your primary DNS to <code><pf:DnsAddress runat="server" /></code>
+        </li>
     </ol>
 
-    <p>Complete instructions can be found at
+    <p>Other connection methods can be found at the
         <a href="https://github.com/polaris-/dwc_network_server_emulator/wiki#nintendo-dsdsi3ds2ds-configuration">the
             AltWFC Wiki</a>.</p>
 

@@ -83,13 +83,14 @@
     <Content Include="favicon.ico" />
     <Content Include="gts\Default.aspx" />
     <Content Include="gts\Pokemon.aspx" />
+    <Content Include="main\Instructions.aspx" />
     <Content Include="images\heading-backdrop%402x.png" />
     <Content Include="images\heading-backdrop%403x.png" />
     <Content Include="images\heading-backdrop.png" />
     <Content Include="images\heading-icon%402x.png" />
     <Content Include="images\heading-icon%403x.png" />
     <Content Include="images\heading-icon.png" />
-    <Content Include="images\instructions.png" />
+    <Content Include="images\help\shot-wifi-settings.png" />
     <Content Include="images\item-sm\0000.png" />
     <Content Include="images\item-sm\3001.png" />
     <Content Include="images\item-sm\3002.png" />
@@ -3675,6 +3676,13 @@
     <Compile Include="battlevideo\Default.aspx.designer.cs">
       <DependentUpon>Default.aspx</DependentUpon>
     </Compile>
+    <Compile Include="controls\DnsAddress.ascx.cs">
+      <DependentUpon>DnsAddress.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="controls\DnsAddress.ascx.designer.cs">
+      <DependentUpon>DnsAddress.ascx</DependentUpon>
+    </Compile>
     <Compile Include="controls\ForeignLookup.ascx.cs">
       <DependentUpon>ForeignLookup.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -3723,6 +3731,13 @@
     </Compile>
     <Compile Include="gts\Pokemon.aspx.designer.cs">
       <DependentUpon>Pokemon.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="main\Instructions.aspx.cs">
+      <DependentUpon>Instructions.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="main\Instructions.aspx.designer.cs">
+      <DependentUpon>Instructions.aspx</DependentUpon>
     </Compile>
     <Compile Include="masters\LeftColumn.master.cs">
       <DependentUpon>LeftColumn.master</DependentUpon>
