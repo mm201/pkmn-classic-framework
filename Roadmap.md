@@ -1,21 +1,21 @@
-#Roadmap
+# Roadmap
 
 This is a complete list of all the features I want the PCN server to have for me to consider it complete.
 
-##IV and V
+## IV and V
 
 * GTS: cheat filter, legal request filter, search, history, player history, push notifications
 * Battle tower: room leaders, room history, player history, player's last party used, player's highest floor reached
 * Battle videos: Search, history, watch
 * Mystery gift: monthly rotation
 * Player profiles: login, view, permissions
-* PokÈdex
-* Friend list management? I donít know whether to handle this at the Trainer or User level.
-* I guess we can show friends lists in oneís own trainer profiles after game sync has happened, and have an Add as Friend button. (Add as Dream Pal?)
-* Permissions: Game progress (badges, medals, pokedex, battle tower, Ö), Friends, GTS history, uploaded shit
+* Pok√©dex
+* Friend list management? I don‚Äôt know whether to handle this at the Trainer or User level.
+* I guess we can show friends lists in one‚Äôs own trainer profiles after game sync has happened, and have an Add as Friend button. (Add as Dream Pal?)
+* Permissions: Game progress (badges, medals, pokedex, battle tower, ‚Ä¶), Friends, GTS history, uploaded shit
 * Permission levels: Everyone, friends, nobody
 
-##IV
+## IV
 
 * Dressups: search
 * Box uploads: search
@@ -24,7 +24,7 @@ This is a complete list of all the features I want the PCN server to have for me
 * Stat checking: check via GTS, check via battle videos
 * Player profiles: link via GTS
 
-##V
+## V
 
 * Musicals: search
 * Stat checking: check via Game Sync
@@ -35,7 +35,7 @@ This is a complete list of all the features I want the PCN server to have for me
 * Rating battles
 * Battle competitions 
 
-##Stat checking
+## Stat checking
 
 * All the features of Pokecheck.
 * GenIV links in a Pokecheck style way: Search for Ditto lv9 and under, get a secret code from the search results.
@@ -49,9 +49,9 @@ You can add tags to your pokemon summaries, works much the same as pokecheck box
 * Set individual pokemon to public/friends/private.
 * Delete button. (this is a 100% real delete)
 
-##Administration
+## Administration
 
-* Can see full ìpokecheckî pages for any pokemon in the GTS or history.
+* Can see full ‚Äúpokecheck‚Äù pages for any pokemon in the GTS or history.
 * Can eject pokemon from the system.
 * Can see all trainer profiles
 * Can see all user profiles
