@@ -27,7 +27,7 @@
         <li><a href="http://www.amazon.com/gp/product/B00A1AQJAO/">Action Replay</a> for DS or DSi</li>
         <li>One of the <span class="pfToolTip" title="Diamond, Pearl, Platinum, Heart Gold, Soul Silver, Black, White, Black 2, White 2">supported
             games</span></li>
-        <li>Wi-Fi acess point (unprotected or WEP only), or Nintendo Wi-Fi
+        <li>Wi-Fi access point (unprotected or WEP only), or Nintendo Wi-Fi
             USB Connector
         </li>
     </ul>
