@@ -6,19 +6,18 @@ using System.Threading;
 
 namespace PkmnFoundations.Support
 {
-    public class LocalizedString : Dictionary<String, String>
+    public class LocalizedString : Dictionary<string, string>
     {
         public LocalizedString()
         {
-            
+
         }
 
-        public override string ToString()
+        public string ToString(string lang)
         {
             if (Count == 0) return null;
 
-            String lang = Thread.CurrentThread.CurrentUICulture.TwoLetterISOLanguageName.ToUpperInvariant();
-            // fixme: this is not O(1) but should be
+            lang = lang.ToUpperInvariant();
             try
             {
                 return this[lang];
@@ -38,6 +37,11 @@ namespace PkmnFoundations.Support
             }
 
             return Values.First();
+        }
+
+        public override string ToString()
+        {
+            return ToString(Thread.CurrentThread.CurrentUICulture.TwoLetterISOLanguageName);
         }
     }
 }
