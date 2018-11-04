@@ -15,6 +15,7 @@ at their wiki to connect.
 
 * GTS
 * Battle Videos
+* Wi-Fi Plaza (PtHGSS) - when connected via Wiimmfi
 * Dressup (PtHGSS)
 * Box uploads (PtHGSS)
 * Musical photos (BW1/2)
@@ -28,7 +29,6 @@ haven't been tested that thoroughly.
 ## What doesn't
 
 * Trainer Rankings (PtHGSS)
-* Wi-Fi Plaza (PtHGSS)
 * Game Sync
 * Rating Battles / Competitions
 
