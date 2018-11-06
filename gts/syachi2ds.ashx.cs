@@ -222,7 +222,7 @@ namespace PkmnFoundations.GTS
                     // appears to be 4 bytes of 00, 128 bytes of stuff, 4 bytes of 80 00 00 00
                     // probably a pkvldtprod signature
 
-                    if (!record.Validate())
+                    if (!record.Validate(false))
                     {
                         // hack check failed
                         // todo: test that 0c 00 is the correct code for GenV
@@ -356,7 +356,7 @@ namespace PkmnFoundations.GTS
                     }
 
                     // enforce request requirements server side
-                    if (!upload.Validate() || !upload.CanTrade(result))
+                    if (!upload.Validate(true) || !upload.CanTrade(result))
                     {
                         // todo: find the correct codes for these
                         SessionManager.Remove(session);

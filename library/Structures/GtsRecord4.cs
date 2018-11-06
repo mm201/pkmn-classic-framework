@@ -191,7 +191,7 @@ namespace PkmnFoundations.Structures
             return new GtsRecord4(m_pokedex, Save());
         }
 
-        public bool Validate()
+        public override bool Validate(bool is_exchanged)
         {
             // todo: a. legitimacy check, and b. check that pkm data matches metadata
             return true;

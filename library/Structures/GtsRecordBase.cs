@@ -69,7 +69,7 @@ namespace PkmnFoundations.Structures
         public byte TrainerRegion;
         public byte TrainerClass;
 
-        public abstract String TrainerName
+        public abstract string TrainerName
         {
             get;
             set;
@@ -79,6 +79,8 @@ namespace PkmnFoundations.Structures
 
         public byte TrainerVersion;
         public byte TrainerLanguage;
+
+        public abstract bool Validate(bool is_exchanged);
 
         public static bool CheckLevels(byte min, byte max, byte other)
         {
