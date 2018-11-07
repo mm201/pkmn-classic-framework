@@ -225,8 +225,23 @@ namespace PkmnFoundations.GTS
                     if (!record.Validate(false))
                     {
                         // hack check failed
-                        // todo: test that 0c 00 is the correct code for GenV
                         SessionManager.Remove(session);
+
+                        // responses:
+                        // 0x00: bsod
+                        // 0x01: successful deposit
+                        // 0x02: Communication error 13265
+                        // 0x03: Communication error 13264
+                        // 0x04-0x06: bsod
+                        // 0x07: The GTS is very crowded now. Please try again later (13261). (and it boots you)
+                        // 0x08: That Pokémon may not be offered for trade (13268)!
+                        // 0x09: That Pokémon may not be offered for trade (13269)!
+                        // 0x0a: That Pokémon may not be offered for trade (13270)!
+                        // 0x0b: That Pokémon may not be offered for trade (13271)!
+                        // 0x0c: That Pokémon may not be offered for trade (13266)!
+                        // 0x0d: That Pokémon may not be offered for trade (13267)!
+                        // 0x0e: You were disconnected from the GTS. Error code: 13262 (and it boots you)
+                        // 0x0f: bsod
                         response.Write(new byte[] { 0x0c, 0x00 }, 0, 2);
                         break;
                     }
@@ -360,6 +375,19 @@ namespace PkmnFoundations.GTS
                     {
                         // todo: find the correct codes for these
                         SessionManager.Remove(session);
+
+                        // responses:
+                        // 0x00-0x01: bsod
+                        // 0x02: Unfortunately, it was traded to another Trainer.
+                        // 0x03-0x07: bsod
+                        // 0x08: That Pokémon may not be offered for trade (13268)!
+                        // 0x09: That Pokémon may not be offered for trade (13269)!
+                        // 0x0a: That Pokémon may not be offered for trade (13270)!
+                        // 0x0b: That Pokémon may not be offered for trade (13271)!
+                        // 0x0c: That Pokémon may not be offered for trade (13266)!
+                        // 0x0d: That Pokémon may not be offered for trade (13267)!
+                        // 0x0e: You were disconnected from the GTS. Error code: 13262
+                        // 0x0f: bsod
                         response.Write(new byte[] { 0x0c, 0x00 }, 0, 2);
                         return;
                     }

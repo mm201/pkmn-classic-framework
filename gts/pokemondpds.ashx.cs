@@ -230,6 +230,16 @@ namespace PkmnFoundations.GTS
                     {
                         // hack check failed
                         SessionManager.Remove(session);
+
+                        // responses:
+                        // 0x00: Appears to start depositing? todo: test if this code leads to a normal deposit.
+                        // 0x01: successful deposit
+                        // 0x02-0x03: Communication error...
+                        // 0x04-0x06: bsod
+                        // 0x07: The GTS is very crowded now. Please try again later. (and it boots you!)
+                        // 0x08-0x0d: That Pokémon may not be offered for trade!
+                        // 0x0e: You were disconnected from the GTS. Returning to the reception counter.
+                        // 0x0f: Blue screen of death
                         response.Write(new byte[] { 0x0c, 0x00 }, 0, 2);
                         break;
                     }
@@ -361,6 +371,14 @@ namespace PkmnFoundations.GTS
                     {
                         // todo: find the correct codes for these
                         SessionManager.Remove(session);
+
+                        // responses:
+                        // 0x00-0x01: bsod
+                        // 0x02: Unfortunately, it was traded to another Trainer.
+                        // 0x03-0x07: bsod
+                        // 0x08-0x0d: That Pokémon may not be offered for trade!
+                        // 0x0e: You were disconnected from the GTS. Returning to the reception counter.
+                        // 0x0f: bsod
                         response.Write(new byte[] { 0x0c, 0x00 }, 0, 2);
                         return;
                     }

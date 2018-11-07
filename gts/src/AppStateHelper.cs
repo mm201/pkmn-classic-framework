@@ -8,6 +8,12 @@ namespace PkmnFoundations.GTS
 {
     public static class AppStateHelper
     {
+        /// <summary>
+        /// Gets the Pokédex stored in Application State or else instances a
+        /// new one from the default database.
+        /// </summary>
+        /// <param name="application">App State reference for this request</param>
+        /// <returns>Pokédex</returns>
         public static Pokedex.Pokedex Pokedex(HttpApplicationState application)
         {
             return GetTypedApplicationObject(application, "pkmncfPokedex", () => new Pokedex.Pokedex(Database.Instance, false));
