@@ -208,8 +208,9 @@ namespace PkmnFoundations.GTS
                     if (Database.Instance.GtsDataForUser5(pokedex, pid) != null)
                     {
                         // there's already a pokemon inside
+                        // Force the player out so they'll recheck its status.
                         SessionManager.Remove(session);
-                        response.Write(new byte[] { 0x00, 0x00 }, 0, 2);
+                        response.Write(new byte[] { 0x0e, 0x00 }, 0, 2);
                         break;
                     }
 
