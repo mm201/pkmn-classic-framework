@@ -3645,9 +3645,10 @@
     </None>
     <Content Include="packages.config" />
     <Content Include="controls\PokemonSource.ashx" />
-    <None Include="Web.config">
+    <None Include="Properties\PublishProfiles\Public.pubxml" />
+    <Content Include="Web.config">
       <SubType>Designer</SubType>
-    </None>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="admin\AddBoxes.aspx.cs">
@@ -3818,14 +3819,6 @@
     <Compile Include="test\VideoId.aspx.designer.cs">
       <DependentUpon>VideoId.aspx</DependentUpon>
     </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Web.Debug.config">
-      <DependentUpon>Web.config</DependentUpon>
-    </None>
-    <None Include="Web.Release.config">
-      <DependentUpon>Web.config</DependentUpon>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Global.asax" />

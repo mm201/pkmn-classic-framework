@@ -14,7 +14,7 @@
     <RootNamespace>PkmnFoundations.GTS</RootNamespace>
     <AssemblyName>PkmnFoundations.GTS</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <UseIISExpress>false</UseIISExpress>
+    <UseIISExpress>true</UseIISExpress>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <UpgradeBackupLocation>
@@ -88,15 +88,9 @@
     <Content Include="pokemondpds_web.ashx" />
     <Content Include="masters\MasterPage.master" />
     <None Include="Properties\PublishProfiles\Public.pubxml" />
-    <None Include="Web.config">
+    <Content Include="Web.config">
       <SubType>Designer</SubType>
-    </None>
-    <None Include="Web.Debug.config">
-      <DependentUpon>Web.config</DependentUpon>
-    </None>
-    <None Include="Web.Release.config">
-      <DependentUpon>Web.config</DependentUpon>
-    </None>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="admin\Sessions.aspx.cs">
