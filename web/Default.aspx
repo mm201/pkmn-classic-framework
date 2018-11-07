@@ -59,38 +59,15 @@
     <h1>How to connect</h1>
     <ol>
         <li>
-            Find and install your <asp:HyperLink ID="hlActionReplay" NavigateUrl="~/main/Instructions.aspx" runat="server">Action Replay code</asp:HyperLink>
-        </li>
-        <li>
-            Erase your Nintendo WFC configuration.
-        </li>
-        <li>
             Set your primary DNS to <code><pf:DnsAddress runat="server" /></code>
+        </li>
+        <li>
+            If this is your first time connecting or you see error 60000, please delete your WFC configuration and try again.
         </li>
     </ol>
 
     <p>Other connection methods can be found at the
         <a href="https://github.com/polaris-/dwc_network_server_emulator/wiki#nintendo-dsdsi3ds2ds-configuration">the
             AltWFC Wiki</a>.</p>
-
-    <hr />
-
-    <h1>Update - May 9:</h1>
-    <p>A new and improved <asp:HyperLink NavigateUrl="~/gts/" runat="server">search page</asp:HyperLink> is available!
-    </p>
-
-    <h1>Update - August 29:</h1>
-    <p>Wi-fi Battle Tower and Battle Subway are now available!
-    </p>
-
-    <h1>Update - July 11:</h1>
-    <p>The battle video server is up and running! View any of the
-        thousands of battle videos from Nintendo WFC 
-        <asp:HyperLink ID="hlBattleVideos" NavigateUrl="~/BattleVideo.aspx" runat="server">
-            which I was able to save</asp:HyperLink>
-        and upload your own!
-    </p>
-    <p>Dressup photos, box uploads, and musical photos are also available.</p>
-
 
 </asp:Content>

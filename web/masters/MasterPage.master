@@ -6,7 +6,7 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
-    <title>Pokémon Classic Network</title>
+    <title>Poké Classic Network</title>
     <pf:HeaderColour ID="HeaderColour1" CssClass="home" runat="server" />
     <asp:ContentPlaceHolder ID="cpHead" runat="server" />
     <link rel="shortcut icon" href="~/favicon.ico" type="image/vnd.microsoft.icon" />
@@ -25,7 +25,7 @@
                     Width="96" Height="96"
                     AlternateSizes="2,3" runat="server" />
                 <span class="gtsLogoWords">
-                <span class="gtsLogoWord">Pokémon</span>
+                <span class="gtsLogoWord">Poké</span>
                 <span class="gtsLogoWord">Classic</span>
                 <span class="gtsLogoWord">Network</span>
                 </span>
@@ -36,7 +36,6 @@
 
             <div id="gtsHeadMain">
             <ul class="gtsHeadContent">
-                <li>Powered by <a href="http://altwfc.net/">AltWFC</a></li>
                 <li>DNS: <strong><pf:DnsAddress runat="server" /></strong></li>
                 <li><asp:Literal ID="litPokemon" runat="server" />
                 Pokémon available for offer.</li>
@@ -68,6 +67,8 @@
                         </span>
                     </asp:HyperLink>
                 </li>
+
+                <asp:PlaceHolder Visible="false" runat="server">
                 <li class="bv">
                     <asp:HyperLink ID="hlBattleVideos" NavigateUrl="~/battlevideo/" runat="server">
                         <span class="inner">
@@ -76,7 +77,6 @@
                     </asp:HyperLink>
                 </li>
 
-                <asp:PlaceHolder Visible="false" runat="server">
                 <li class="dw">
                     <asp:HyperLink ID="hlDreamWorld" NavigateUrl="~/dreamworld/" runat="server">
                         <span class="inner">
@@ -101,10 +101,6 @@
                 </asp:PlaceHolder>
             </ul>
 
-        </div>
-
-        <div class="github-contain">
-        <a class="github" href="https://github.com/mm201/pkmnFoundations" target="_blank">Fork me on GitHub!</a>
         </div>
 
     </div>
@@ -177,7 +173,7 @@
                 </div>
                 <div id="gtsFooterRight">
                     <ul class="gtsFooterNav">
-                        <li><asp:HyperLink ID="hlFooterGithub" Text="GitHub" NavigateUrl="https://github.com/mm201/pkmnFoundations" runat="server" /></li>
+                        <li><asp:HyperLink ID="hlFooterGithub" Text="GitHub" NavigateUrl="https://github.com/mm201/pkmn-classic-framework" runat="server" /></li>
                     </ul>
                 </div>
                 <div class="clear"></div>
