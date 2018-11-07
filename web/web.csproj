@@ -3630,6 +3630,7 @@
     <Content Include="test\BoxUp.aspx" />
     <Content Include="test\Decode.aspx" />
     <Content Include="test\NameDecode.aspx" />
+    <Content Include="test\NameEncode.aspx" />
     <Content Include="test\VideoId.aspx" />
     <Content Include="test\Web.config" />
     <Content Include="masters\LeftColumn.master" />
@@ -3802,6 +3803,13 @@
     </Compile>
     <Compile Include="test\NameDecode.aspx.designer.cs">
       <DependentUpon>NameDecode.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="test\NameEncode.aspx.cs">
+      <DependentUpon>NameEncode.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="test\NameEncode.aspx.designer.cs">
+      <DependentUpon>NameEncode.aspx</DependentUpon>
     </Compile>
     <Compile Include="test\VideoId.aspx.cs">
       <DependentUpon>VideoId.aspx</DependentUpon>

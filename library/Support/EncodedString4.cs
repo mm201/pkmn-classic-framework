@@ -171,7 +171,7 @@ namespace PkmnFoundations.Support
 
                     foreach (KeyValuePair<ushort, char> pair in Generation4TextLookupTable)
                     {
-                        //if (!reverse.ContainsKey(pair.Value))
+                        if (!reverse.ContainsKey(pair.Value))
                             reverse.Add(pair.Value, pair.Key);
                     }
 
