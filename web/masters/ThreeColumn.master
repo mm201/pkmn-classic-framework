@@ -5,6 +5,9 @@
 </asp:Content>
 
 <asp:Content ID="Content2" ContentPlaceHolderID="cpMain" runat="server">
+    <div class="gtsHeadingArea">
+<asp:ContentPlaceHolder ID="cpHeadingArea" runat="server" />
+    </div>
     <div class="gtsColumn gtsLeftColumn">
 <asp:ContentPlaceHolder ID="cpLeft" runat="server" />
     </div>

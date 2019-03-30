@@ -4,7 +4,7 @@
 body
 {
     margin: 0; padding: 0;
-    font-family: Lato,Candara,'Meiryo UI',Arial,sans-serif;
+    font-family: Lato,Candara,'Segoe UI','Hiragino Sans','Meiryo','Arial Unicode MS','Yu Gothic UI',Arial,sans-serif;
     font-size: 10pt;
     font-weight: 400;
     background-color: #666666;
@@ -355,6 +355,11 @@ li
     color: #111111;
 }
 
+#gtsMain .gtsHeaderArea
+{
+    clear: both;
+}
+
 #gtsMain .gtsColumn
 {
     width: 236px;
@@ -478,6 +483,7 @@ li
     padding: 16px 0;
     text-shadow: 0 1px 1px rgba(0,0,0,0.5);
     box-shadow: 0 12px 12px -12px rgba(0,0,0,0.5) inset;
+    text-align: center;
 }
 
 #gtsFooter a
@@ -491,30 +497,25 @@ li
     text-decoration: underline;
 }
 
-#gtsFooter #gtsFooterLeft
-{
-    float: left;
-    width: 240px;
-    margin-right: 16px;
-    margin-left: 242px;
-}
-
-#gtsFooter #gtsFooterRight
-{
-    float: left;
-    width: 240px;
-}
-
-#gtsFooter #gtsFooterBottom
-{
-    margin-top: 16px;
-    text-align: center;
-}
-
 #gtsFooter .gtsFooterNav
 {
     list-style-type: none;
     margin-left: 0; padding-left: 0;
+}
+
+#gtsFooter .gtsFooterNav li
+{
+    display: inline;
+}
+
+#gtsFooter .gtsFooterNav li::after
+{
+    content: ' • ';
+}
+
+#gtsFooter .gtsFooterNav li:last-child::after
+{
+    content: none;
 }
 
 #gtsFooter *:first-child *

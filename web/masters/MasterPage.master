@@ -118,22 +118,6 @@
                             </span>
                         </asp:HyperLink>
                     </li>
-                    <%-- 
-                    <li>
-                        <asp:HyperLink ID="hlMain_Instructions" NavigateUrl="~/Instructions.aspx" runat="server">
-                            <span class="inner">
-                                How to connect
-                            </span>
-                        </asp:HyperLink>
-                    </li>
-                    <li>
-                        <asp:HyperLink ID="hlMain_Status" NavigateUrl="~/Status.aspx" runat="server">
-                            <span class="inner">
-                                Server status
-                            </span>
-                        </asp:HyperLink>
-                    </li>
-                    --%>
                 </ul>
 
             <% break;
@@ -165,22 +149,16 @@
     <div id="gtsFooter">
         <div id="gtsFooterBkg">
             <div class="setWidth">
-                <div id="gtsFooterLeft">
-                    <ul class="gtsFooterNav">
-                        <li><asp:HyperLink ID="hlFooterHome" Text="Main" NavigateUrl="~/" runat="server" /></li>
-                        <li><asp:HyperLink ID="hlFooterAllPokemon" Text="GTS" NavigateUrl="~/gts/" runat="server" /></li>
-                    </ul>
-                </div>
-                <div id="gtsFooterRight">
-                    <ul class="gtsFooterNav">
-                        <li><asp:HyperLink ID="hlFooterGithub" Text="GitHub" NavigateUrl="https://github.com/mm201/pkmn-classic-framework" runat="server" /></li>
-                    </ul>
-                </div>
-                <div class="clear"></div>
+                <ul class="gtsFooterNav">
+                    <li><asp:HyperLink ID="hlFooterGithub" Text="GitHub" NavigateUrl="https://github.com/mm201/pkmn-classic-framework" runat="server" /></li>
+                    <li><asp:HyperLink ID="hlFooterTwitter" Text="Twitter" NavigateUrl="https://twitter.com/pcnstatus" runat="server" /></li>
+                    <li><asp:HyperLink ID="hlWiimmfi" Text="Wiimmfi" NavigateUrl="https://wiimmfi.de/" runat="server" /></li>
+                    <li><asp:HyperLink ID="hlKaeru" Text="Kaeru WFC" NavigateUrl="http://wfc.kaeru.world/" runat="server" /></li>
+                </ul>
 
-                <div id="gtsFooterBottom">
-                Pokémon is © 1995-2014 Nintendo / Creatures / GAME FREAK.
-                This service is not affiliated with Nintendo or GAME FREAK in any way.               </div>
+                <p>Maintenance periods are <strong>Thursdays</strong> at <strong>UTC 0300</strong>.</p>
+                <p>Pokémon is © 1995-2014 Nintendo / Creatures / GAME FREAK.
+                This service is not affiliated with Nintendo or GAME FREAK in any way.</p>
             </div>
         </div>
     </div>
