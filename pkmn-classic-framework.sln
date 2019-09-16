@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.779
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Library", "library\Library.csproj", "{408EFC7E-C6B0-4160-8628-2679E34385CE}"
 EndProject
@@ -26,6 +26,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MakeBaseStatTables", "MakeBaseStatTables\MakeBaseStatTables.csproj", "{99FCBB1C-D94F-458D-ABD2-8800FBDC65DA}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "web", "web\web.csproj", "{3DE4D97F-57A8-4324-B5B8-164B45E2DF9A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PKHeX.Core", "PKHeX.Core\PKHeX.Core.csproj", "{26ED48C1-A850-46F6-BF94-68CC4D935A29}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -157,8 +159,23 @@ Global
 		{3DE4D97F-57A8-4324-B5B8-164B45E2DF9A}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{3DE4D97F-57A8-4324-B5B8-164B45E2DF9A}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{3DE4D97F-57A8-4324-B5B8-164B45E2DF9A}.Release|x86.ActiveCfg = Release|Any CPU
+		{26ED48C1-A850-46F6-BF94-68CC4D935A29}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{26ED48C1-A850-46F6-BF94-68CC4D935A29}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{26ED48C1-A850-46F6-BF94-68CC4D935A29}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{26ED48C1-A850-46F6-BF94-68CC4D935A29}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{26ED48C1-A850-46F6-BF94-68CC4D935A29}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{26ED48C1-A850-46F6-BF94-68CC4D935A29}.Debug|x86.Build.0 = Debug|Any CPU
+		{26ED48C1-A850-46F6-BF94-68CC4D935A29}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{26ED48C1-A850-46F6-BF94-68CC4D935A29}.Release|Any CPU.Build.0 = Release|Any CPU
+		{26ED48C1-A850-46F6-BF94-68CC4D935A29}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{26ED48C1-A850-46F6-BF94-68CC4D935A29}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{26ED48C1-A850-46F6-BF94-68CC4D935A29}.Release|x86.ActiveCfg = Release|Any CPU
+		{26ED48C1-A850-46F6-BF94-68CC4D935A29}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {499FEC36-7454-439E-B93C-836643934DC9}
 	EndGlobalSection
 EndGlobal

@@ -1,0 +1,36 @@
+0x800	Received Starter Pokemon
+0x801	Received Pokedex
+0x802	Received PokeNav
+0x804	Entered Hall of Fame
+0x805	Used Easy Chat
+0x806	Met The Hipster
+
+0x807	Received Stone Badge
+0x808	Received Knuckle Badge
+0x809	Received Dynamo Badge
+0x80A	Received Heat Badge
+0x80B	Received Balance Badge
+0x80C	Received Feather Badge
+0x80D	Received Mind Badge
+0x80E	Received Rain Badge
+
+0x830	Watched TV at Home
+0x834	Mixed Records
+0x835	Set Clock
+0x836	Received National Dex
+0x83A	Shoal Cave Tide
+0x83B	Received a Ribbon
+
+0x84B	Unlocked Lanette's PC
+0x84C	Mystery Gift Enabled
+0x84D	Used White Flute
+0x84E	Used Black Flute
+0x84F	Completed Sealed Chamber Puzzle
+0x850	Completed Regirock Puzzle
+0x851	Completed Regice Puzzle
+0x852	Completed Registeel Puzzle
+
+0x85F	Can Receive Shell Bell
+0x860	Received Running Shoes
+0x861	SYS_CTRL_OBJ_DELETE
+0x862	Reset RTC Enabled

@@ -9,6 +9,7 @@ using PkmnFoundations.Support;
 using System.IO;
 using System.Threading;
 using GamestatsBase;
+using PKHex.Core;
 
 namespace PkmnFoundations.GTS
 {
@@ -227,7 +228,7 @@ namespace PkmnFoundations.GTS
                     byte[] recordBinary = new byte[292];
                     Array.Copy(data, 0, recordBinary, 0, 292);
                     GtsRecord4 record = new GtsRecord4(pokedex, recordBinary);
-                    if (!record.Validate(false))
+                    if (!VerifyPokemon(PKX.DecryptArray45(recordBinary),0,"INSERT PLAYERID VARIABLE HERE", true, false))//!record.Validate(false))
                     {
                         // hack check failed
                         SessionManager.Remove(session);
@@ -368,8 +369,8 @@ namespace PkmnFoundations.GTS
                     }
 
                     // enforce request requirements server side
-                    if (!upload.Validate(true) || !upload.CanTrade(result))
-                    {
+                    if (!VerifyPokemon(PKX.DecryptArray45(recordBinary), 0, "INSERT PLAYERID VARIABLE HERE", true, false) || !upload.CanTrade(result))//!upload.Validate(true) || !upload.CanTrade(result))
+                        {
                         // todo: find the correct codes for these
                         SessionManager.Remove(session);
 
@@ -547,5 +548,60 @@ namespace PkmnFoundations.GTS
                 #endregion
             }
         }
+        #region Sanity/Legitimacy Checks;
+        private bool VerifyPokemon(byte[] rawBytes, Generation gen, string playerID, bool legitCheck,bool isExchange)//isExchange is not used in the code but I dunno what it's needed for, so I added it in case it's needed.
+        {
+            string report = "Priority checks failed before it could be illegitimized. Check advanced log for error specified.";
+            int i = 0;
+            if (gen == 1)//1 is gen V. Have to change from the enum thing for now since this isn't Shiny2.5
+                i = 1;
+            byte[] rawData = rawBytes;
+            PKM[] myMon = { new PK4(), new PK5() };
+            myMon[i].Data = rawData;
+            int[] dataSize = { 236, 220 };
+            bool lg = false;
+
+            
+            if (myMon[i].Data.Length != dataSize[i])//Sanity check: Party size.
+            {
+                logEntry.AppendFormat("Bad file size of {0} from {1}.", myMon[i].Data.Length, playerID);
+                return false;
+            }
+            else if (!myMon[i].ChecksumValid)//Sanity check: Bad Egg.
+            {
+                logEntry.AppendFormat("Bad Egg from {0}.", playerID);
+                return false;
+            }
+            else if (myMon[i].IsEgg)//Sanity check: Actually Egg.
+            {
+                logEntry.AppendFormat("Pokemon sent as an egg from {0}.", playerID);
+                return false;
+            }
+            else if (myMon[i].GetBallCapsuleData() != 0)//Sanity check: Ball seals removed (requires special method to be made in PKHex Core).
+            {
+                logEntry.AppendFormat("Ball Capsule Data present on Pokemon sent from {0}.", playerID);
+                return false;
+            }
+            else
+            {
+                if (legitCheck)//NOTE: You should turn this off if you plan on allowing romhack games through, 
+                {
+                    var la = new LegalityAnalysis(myMon[i]);//Legality analysis.
+                    report = la.Report();
+                    lg = report == "Legal!";
+                    if (!lg)
+                    {
+                        logEntry.AppendFormat("Illegal Pokemon sent from {0}. Details of illegality below:\n{1}", playerID, report);
+                    }
+                    //WriteLog("LG Check: " + report, !lg);
+                }
+                else//Only check legit if checked true. Other things above are chaos prevention since they're things that make Pokemon unremovable.
+                {
+                    lg = true;
+                }
+            }
+            return (lg);
+        }
+        #endregion
     }
 }

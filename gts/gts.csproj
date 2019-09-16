@@ -139,6 +139,10 @@
       <Project>{408EFC7E-C6B0-4160-8628-2679E34385CE}</Project>
       <Name>Library</Name>
     </ProjectReference>
+    <ProjectReference Include="..\PKHeX.Core\PKHeX.Core.csproj">
+      <Project>{26ed48c1-a850-46f6-bf94-68cc4d935a29}</Project>
+      <Name>PKHeX.Core</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="syachi2ds.ashx" />
