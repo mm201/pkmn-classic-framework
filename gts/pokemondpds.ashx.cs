@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Web;
 using System.Web.SessionState;
 using PkmnFoundations.Data;
@@ -9,7 +10,7 @@ using PkmnFoundations.Support;
 using System.IO;
 using System.Threading;
 using GamestatsBase;
-using PKHex.Core;
+using PKHeX.Core;
 
 namespace PkmnFoundations.GTS
 {
@@ -369,7 +370,7 @@ namespace PkmnFoundations.GTS
                     }
 
                     // enforce request requirements server side
-                    if (!VerifyPokemon(PKX.DecryptArray45(recordBinary), 0, "INSERT PLAYERID VARIABLE HERE", true, false) || !upload.CanTrade(result))//!upload.Validate(true) || !upload.CanTrade(result))
+                    if (!VerifyPokemon(PKX.DecryptArray45(uploadData), 0, "INSERT PLAYERID VARIABLE HERE", true, false) || !upload.CanTrade(result))//!upload.Validate(true) || !upload.CanTrade(result))
                         {
                         // todo: find the correct codes for these
                         SessionManager.Remove(session);
@@ -549,14 +550,17 @@ namespace PkmnFoundations.GTS
             }
         }
         #region Sanity/Legitimacy Checks;
-        private bool VerifyPokemon(byte[] rawBytes, Generation gen, string playerID, bool legitCheck,bool isExchange)//isExchange is not used in the code but I dunno what it's needed for, so I added it in case it's needed.
+        private bool VerifyPokemon(byte[] rawBytes, int gen, string playerID, bool legitCheck,bool isExchange)//isExchange is not used in the code but I dunno what it's needed for, so I added it in case it's needed.
         {
+            StringBuilder logEntry = new StringBuilder();
+            
+
             string report = "Priority checks failed before it could be illegitimized. Check advanced log for error specified.";
             int i = 0;
             if (gen == 1)//1 is gen V. Have to change from the enum thing for now since this isn't Shiny2.5
                 i = 1;
             byte[] rawData = rawBytes;
-            PKM[] myMon = { new PK4(), new PK5() };
+            PKM[] myMon = { new PK4(), new PK5() };//
             myMon[i].Data = rawData;
             int[] dataSize = { 236, 220 };
             bool lg = false;
@@ -577,14 +581,14 @@ namespace PkmnFoundations.GTS
                 logEntry.AppendFormat("Pokemon sent as an egg from {0}.", playerID);
                 return false;
             }
-            else if (myMon[i].GetBallCapsuleData() != 0)//Sanity check: Ball seals removed (requires special method to be made in PKHex Core).
+            else if (myMon[i].Data[0x8D] != 0)//(myMon[i].GetBallCapsuleData() != 0)//Sanity check: Ball seals removed (requires special method to be made in PKHex Core).
             {
                 logEntry.AppendFormat("Ball Capsule Data present on Pokemon sent from {0}.", playerID);
                 return false;
             }
             else
             {
-                if (legitCheck)//NOTE: You should turn this off if you plan on allowing romhack games through, 
+                if (legitCheck)//NOTE: You should turn this off if you plan on allowing romhack games through. Don't turn off stuff above this though since it can potentially break vanilla games.
                 {
                     var la = new LegalityAnalysis(myMon[i]);//Legality analysis.
                     report = la.Report();
