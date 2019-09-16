@@ -581,7 +581,7 @@ namespace PkmnFoundations.GTS
                 logEntry.AppendFormat("Pokemon sent as an egg from {0}.", playerID);
                 return false;
             }
-            else if (myMon[i].Data[0x8D] != 0)//(myMon[i].GetBallCapsuleData() != 0)//Sanity check: Ball seals removed (requires special method to be made in PKHex Core).
+            else if (myMon[i].Data[0x8D] != 0)//Sanity check: Ball seals removed (requires special method to be made in PKHex Core).
             {
                 logEntry.AppendFormat("Ball Capsule Data present on Pokemon sent from {0}.", playerID);
                 return false;
