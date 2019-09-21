@@ -244,9 +244,8 @@ namespace PkmnFoundations.GTS
                         // 0x0e: You were disconnected from the GTS. Returning to the reception counter.
                         // 0x0f: Blue screen of death
                         response.Write(new byte[] { 0x0c, 0x00 }, 0, 2);
-                        break;
+                        return;
                     }
-
                     // the following two fields are blank in the uploaded record.
                     // The server must provide them instead.
                     record.TimeDeposited = DateTime.UtcNow;
@@ -258,6 +257,7 @@ namespace PkmnFoundations.GTS
                     // todo: delete any other post.asp sessions registered under this PID
 
                     response.Write(new byte[] { 0x01, 0x00 }, 0, 2);
+                    
 
                 } break;
 
@@ -371,7 +371,7 @@ namespace PkmnFoundations.GTS
 
                     // enforce request requirements server side
                     if (!VerifyPokemon(PKX.DecryptArray45(uploadData), 0, "INSERT PLAYERID VARIABLE HERE", true, false) || !upload.CanTrade(result))//!upload.Validate(true) || !upload.CanTrade(result))
-                        {
+                    {
                         // todo: find the correct codes for these
                         SessionManager.Remove(session);
 
@@ -410,7 +410,7 @@ namespace PkmnFoundations.GTS
                     // under the wrong species and you can't trade it
 
                     response.Write(result.Save(), 0, 292);
-
+                    
                 } break;
 
                 case "/pokemondpds/worldexchange/exchange_finish.asp":
@@ -549,16 +549,14 @@ namespace PkmnFoundations.GTS
                 #endregion
             }
         }
-        #region Sanity/Legitimacy Checks;
-        private bool VerifyPokemon(byte[] rawBytes, int gen, string playerID, bool legitCheck,bool isExchange)//isExchange is not used in the code but I dunno what it's needed for, so I added it in case it's needed.
+        #region Sanity/Legitimacy Checks; Public static so Gen V can access it without needing to duplicate it.
+        public static bool VerifyPokemon(byte[] rawBytes, int gen, string playerID, bool legitCheck,bool isExchange)//isExchange is not used in the code but I dunno what it's needed for, so I added it in case it's needed.
         {
             StringBuilder logEntry = new StringBuilder();
             
 
             string report = "Priority checks failed before it could be illegitimized. Check advanced log for error specified.";
-            int i = 0;
-            if (gen == 1)//1 is gen V. Have to change from the enum thing for now since this isn't Shiny2.5
-                i = 1;
+            int i = gen;//1 is gen V. Have to change from the enum thing for now since this isn't Shiny2.5
             byte[] rawData = rawBytes;
             PKM[] myMon = { new PK4(), new PK5() };//
             myMon[i].Data = rawData;
