@@ -85,7 +85,6 @@
     <Content Include="favicon.ico" />
     <Content Include="gts\Default.aspx" />
     <Content Include="gts\Pokemon.aspx" />
-    <Content Include="main\Instructions.aspx" />
     <Content Include="images\heading-backdrop%402x.png" />
     <Content Include="images\heading-backdrop%403x.png" />
     <Content Include="images\heading-backdrop.png" />
@@ -3734,13 +3733,6 @@
     </Compile>
     <Compile Include="gts\Pokemon.aspx.designer.cs">
       <DependentUpon>Pokemon.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="main\Instructions.aspx.cs">
-      <DependentUpon>Instructions.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="main\Instructions.aspx.designer.cs">
-      <DependentUpon>Instructions.aspx</DependentUpon>
     </Compile>
     <Compile Include="masters\LeftColumn.master.cs">
       <DependentUpon>LeftColumn.master</DependentUpon>
