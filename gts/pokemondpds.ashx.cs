@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Web;
 using System.Web.SessionState;
 using PkmnFoundations.Data;
@@ -9,6 +10,7 @@ using PkmnFoundations.Support;
 using System.IO;
 using System.Threading;
 using GamestatsBase;
+using PKHeX.Core;
 
 namespace PkmnFoundations.GTS
 {
@@ -227,7 +229,7 @@ namespace PkmnFoundations.GTS
                     byte[] recordBinary = new byte[292];
                     Array.Copy(data, 0, recordBinary, 0, 292);
                     GtsRecord4 record = new GtsRecord4(pokedex, recordBinary);
-                    if (!record.Validate(false))
+                    if (!VerifyPokemon(PKX.DecryptArray45(recordBinary),0,"INSERT PLAYERID VARIABLE HERE", true, false))//!record.Validate(false))
                     {
                         // hack check failed
                         SessionManager.Remove(session);
@@ -242,9 +244,8 @@ namespace PkmnFoundations.GTS
                         // 0x0e: You were disconnected from the GTS. Returning to the reception counter.
                         // 0x0f: Blue screen of death
                         response.Write(new byte[] { 0x0c, 0x00 }, 0, 2);
-                        break;
+                        return;
                     }
-
                     // the following two fields are blank in the uploaded record.
                     // The server must provide them instead.
                     record.TimeDeposited = DateTime.UtcNow;
@@ -256,6 +257,7 @@ namespace PkmnFoundations.GTS
                     // todo: delete any other post.asp sessions registered under this PID
 
                     response.Write(new byte[] { 0x01, 0x00 }, 0, 2);
+                    
 
                 } break;
 
@@ -368,7 +370,7 @@ namespace PkmnFoundations.GTS
                     }
 
                     // enforce request requirements server side
-                    if (!upload.Validate(true) || !upload.CanTrade(result))
+                    if (!VerifyPokemon(PKX.DecryptArray45(uploadData), 0, "INSERT PLAYERID VARIABLE HERE", true, false) || !upload.CanTrade(result))//!upload.Validate(true) || !upload.CanTrade(result))
                     {
                         // todo: find the correct codes for these
                         SessionManager.Remove(session);
@@ -408,7 +410,7 @@ namespace PkmnFoundations.GTS
                     // under the wrong species and you can't trade it
 
                     response.Write(result.Save(), 0, 292);
-
+                    
                 } break;
 
                 case "/pokemondpds/worldexchange/exchange_finish.asp":
@@ -547,5 +549,61 @@ namespace PkmnFoundations.GTS
                 #endregion
             }
         }
+        #region Sanity/Legitimacy Checks; Public static so Gen V can access it without needing to duplicate it.
+        public static bool VerifyPokemon(byte[] rawBytes, int gen, string playerID, bool legitCheck,bool isExchange)//isExchange is not used in the code but I dunno what it's needed for, so I added it in case it's needed.
+        {
+            StringBuilder logEntry = new StringBuilder();
+            
+
+            string report = "Priority checks failed before it could be illegitimized. Check advanced log for error specified.";
+            int i = gen;//1 is gen V. Have to change from the enum thing for now since this isn't Shiny2.5
+            byte[] rawData = rawBytes;
+            PKM[] myMon = { new PK4(), new PK5() };//
+            myMon[i].Data = rawData;
+            int[] dataSize = { 236, 220 };
+            bool lg = false;
+
+            
+            if (myMon[i].Data.Length != dataSize[i])//Sanity check: Party size.
+            {
+                logEntry.AppendFormat("Bad file size of {0} from {1}.", myMon[i].Data.Length, playerID);
+                return false;
+            }
+            else if (!myMon[i].ChecksumValid)//Sanity check: Bad Egg.
+            {
+                logEntry.AppendFormat("Bad Egg from {0}.", playerID);
+                return false;
+            }
+            else if (myMon[i].IsEgg)//Sanity check: Actually Egg.
+            {
+                logEntry.AppendFormat("Pokemon sent as an egg from {0}.", playerID);
+                return false;
+            }
+            else if (myMon[i].Data[0x8D] != 0)//Sanity check: Ball seals removed (requires special method to be made in PKHex Core).
+            {
+                logEntry.AppendFormat("Ball Capsule Data present on Pokemon sent from {0}.", playerID);
+                return false;
+            }
+            else
+            {
+                if (legitCheck)//NOTE: You should turn this off if you plan on allowing romhack games through. Don't turn off stuff above this though since it can potentially break vanilla games.
+                {
+                    var la = new LegalityAnalysis(myMon[i]);//Legality analysis.
+                    report = la.Report();
+                    lg = report == "Legal!";
+                    if (!lg)
+                    {
+                        logEntry.AppendFormat("Illegal Pokemon sent from {0}. Details of illegality below:\n{1}", playerID, report);
+                    }
+                    //WriteLog("LG Check: " + report, !lg);
+                }
+                else//Only check legit if checked true. Other things above are chaos prevention since they're things that make Pokemon unremovable.
+                {
+                    lg = true;
+                }
+            }
+            return (lg);
+        }
+        #endregion
     }
 }

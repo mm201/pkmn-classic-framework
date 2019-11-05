@@ -8,6 +8,7 @@ using PkmnFoundations.Structures;
 using PkmnFoundations.Support;
 using System.IO;
 using GamestatsBase;
+using PKHeX.Core;
 
 namespace PkmnFoundations.GTS
 {
@@ -218,16 +219,13 @@ namespace PkmnFoundations.GTS
                     byte[] recordBinary = new byte[296];
                     Array.Copy(request, 0, recordBinary, 0, 296);
                     GtsRecord5 record = new GtsRecord5(pokedex, recordBinary);
-
                     // todo: figure out what bytes 296-431 do:
                     // appears to be 4 bytes of 00, 128 bytes of stuff, 4 bytes of 80 00 00 00
                     // probably a pkvldtprod signature
-
-                    if (!record.Validate(false))
+                    if (!pokemondpds.VerifyPokemon(PKX.DecryptArray45(recordBinary), 1, "INSERT PLAYERID VARIABLE HERE", true, false))//!record.Validate(false))
                     {
                         // hack check failed
                         SessionManager.Remove(session);
-
                         // responses:
                         // 0x00: bsod
                         // 0x01: successful deposit
@@ -244,9 +242,8 @@ namespace PkmnFoundations.GTS
                         // 0x0e: You were disconnected from the GTS. Error code: 13262 (and it boots you)
                         // 0x0f: bsod
                         response.Write(new byte[] { 0x0c, 0x00 }, 0, 2);
-                        break;
+                        return;
                     }
-
                     // the following two fields are blank in the uploaded record.
                     // The server must provide them instead.
                     record.TimeDeposited = DateTime.UtcNow;
@@ -258,7 +255,7 @@ namespace PkmnFoundations.GTS
                     // todo: delete any other post.asp sessions registered under this PID
 
                     response.Write(new byte[] { 0x01, 0x00 }, 0, 2);
-
+                    
                 } break;
 
                 case "/syachi2ds/web/worldexchange/post_finish.asp":
@@ -372,7 +369,7 @@ namespace PkmnFoundations.GTS
                     }
 
                     // enforce request requirements server side
-                    if (!upload.Validate(true) || !upload.CanTrade(result))
+                    if (!!pokemondpds.VerifyPokemon(PKX.DecryptArray45(uploadData), 1, "INSERT PLAYERID VARIABLE HERE", true, false) || !upload.CanTrade(result))//upload.Validate(true) || !upload.CanTrade(result))
                     {
                         // todo: find the correct codes for these
                         SessionManager.Remove(session);
@@ -392,7 +389,7 @@ namespace PkmnFoundations.GTS
                         response.Write(new byte[] { 0x0c, 0x00 }, 0, 2);
                         return;
                     }
-
+                    
                     object[] tag = new GtsRecord5[2];
                     tag[0] = upload;
                     tag[1] = result;
