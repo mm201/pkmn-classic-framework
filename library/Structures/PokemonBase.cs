@@ -123,7 +123,7 @@ namespace PkmnFoundations.Structures
         public IList<MoveSlot> Moves { get { return m_moves; } }
         public uint TrainerID { get; set; }
         public uint Personality { get; set; }
-        public Natures Nature { get { return (Natures)(Personality % 25u); } }
+        public virtual Natures Nature { get { return (Natures)(Personality % 25u); } }
         public byte Happiness { get; set; }
         public Languages Language { get; set; }
         public IvStatValues IVs { get; set; }

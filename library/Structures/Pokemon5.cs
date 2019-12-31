@@ -105,7 +105,7 @@ namespace PkmnFoundations.Structures
                 m_genderless = (forme & 0x04) != 0;
                 FormID = (byte)(forme >> 3);
 
-                byte nature = block[25]; // todo: which nature is real? Do they both need to match?
+                m_nature = block[25]; // todo: which nature is real? Do they both need to match?
                 m_bw_flags = BitConverter.ToUInt16(block, 26);
                 HiddenAbility = (m_bw_flags & 0x01) != 0;
                 N = (m_bw_flags & 0x02) != 0;
@@ -182,6 +182,15 @@ namespace PkmnFoundations.Structures
         public override Generations Generation
         {
             get { return Generations.Generation5; }
+        }
+
+        private byte m_nature;
+        public override Natures Nature
+        {
+            get
+            {
+                return (Natures)(m_nature % 25u);
+            }
         }
 
         private ushort m_bw_flags;
