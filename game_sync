@@ -1,0 +1,201 @@
+
+import time
+import urlparse
+import BaseHTTPServer
+import os
+import traceback
+
+#address = ("0.0.0.0", 80)
+address = ("127.0.0.1", 9020)
+
+class PokemonDW(object):
+	def start(self):
+		httpd = PokemonDWHTTPServer((address[0], address[1]), PokemonDWHTTPServerHandler)
+		print "Now listening for connections on %s:%d..." % (address[0], address[1])
+		httpd.serve_forever()
+
+class PokemonDWHTTPServer(BaseHTTPServer.HTTPServer):
+	def __init__(self, server_address, RequestHandlerClass):
+		self.db = None
+		BaseHTTPServer.HTTPServer.__init__(self, server_address, RequestHandlerClass)
+
+class PokemonDWHTTPServerHandler(BaseHTTPServer.BaseHTTPRequestHandler):
+	def version_string(self):
+		return "Nintendo Wii (http)"
+
+	def do_GET(self):
+		try:
+			self.send_response(200)
+			self.send_header("Content-type", "text/plain")
+
+			ret = ""
+			params = self.str_to_dict(self.path)
+				
+			if "p" in params:
+				print "Received %s command" % params['p']
+				
+				if params['p'] == "sleepily.bitlist":
+					# 21d890e
+					# \x00 - Success?
+					# \x02 - ?
+					# Error codes: \xf0\xff\x00\x00, \xf1\xff\x00\x00, \xf2\xff\x00\x00
+					# Append 0x7c padding bytes followed by 0x80 bytes for the bitlist
+					ret = "\x00\x00\x00\x00" + ("\x00" * 0x7c) + ("\xff" * 0x80)
+				
+				if params['p'] == "savedata.getbw":
+					# 021C2784
+					# \x00 - Get save data. (Error: "The save data could not be accessed.")
+					# \x05 - "Please use Game Sync to tuck in a Pokemon in Pokemon Black Version or Pokemon White Version. You can use the Memory Link after tucking in a Pokemon."
+					# \x08 - "That Game Sync ID is invalid."
+					# \x0a - "That Game Sync ID is not from Pokemon Black Version or Pokemon White Version."
+					# Where does it read the save data?
+					ret = "\x00\x00\x00\x00"
+					
+				elif params['p'] == "account.playstatus":
+					# 21D87B0
+					# 21D8670
+					# \x00 - Success + 0x7c padding + command code + extra data?
+					# The command codes only work if is sleeping.
+					# Command codes:
+					#	\x00 - Wake up normally
+					#	\x01 - "This Pokemon is not dreaming yet."
+					#	\x02 - "This Pokemon is dreaming."
+					#	\x03 - Wake up + download new changes from server
+					#	\x04 - Wake up normally?
+					# \x05 - ? (Does not work with sleeping pokemon)
+					# \x08 - Leads to account.create.upload
+					ret = "\x00\x00\x00\x00" + ("\x00" * 0x7c) + ("\x03\x00\x00\x00") + ("\x00" * 0x40)
+					
+				elif params['p'] == "savedata.download":
+					# 21D7E78
+					# Must start with \x00\x00\x00\x00 or it'll error
+					ret = "\x00\x00\x00\x00" + ("\x00" * 0x7c)
+					#ret += "\x00\x00\x00\x00"  # Stops parsing data if \xff\xff\xff\xff. savedata.download.finish?
+					ret += "\xff\xff\xff\xff"  # Stops parsing data if \xff\xff\xff\xff. savedata.download.finish?
+					ret += "\x00" * (0x57)
+					ret += "\x00"  # Stops parsing data if \xff\xff\xff\xff. savedata.download.finish?
+					ret += "\x00" * 0x10c
+					
+					# Reads byte from:
+					# 0x57 - 1 byte
+					# 0x58 - 1 byte
+					# 0x59 - 1 byte
+					# 0x54 - 2 bytes
+					# 
+					# If byte at 0x58 is *NOT* 0x00:
+					# 	Toggle bitmask 0x01 in some field
+					# If byte at 0x57 is *NOT* 0x00:
+					# 	Toggle bitmask 0x02 in some field
+					# If byte at 0x59 is *NOT* 0x00:
+					# 	Toggle bitmask 0x04 in some field
+					
+					# After above checks are completed:
+					# Loop up to 10 times:
+					#	If the 2 bytes at [(i * 0x08) + 0x04] are \x00\x00, break loop.
+					#	Else if number is less than or equal to maximum packet size (0x1ed), do something with the data.
+					
+					# After the above loops have been completed:
+					# Loop up to 20 times:
+					#	If the 2 bytes at [(i * 4) + 0x5c] are \x00\x00, continue loop without parsing data.
+					#	Else if 2 bytes are less than or equal to 0x272, set return code to 1???
+					
+					# After the above loops have been completed:
+					# Loop up to 20 times:
+					#	If the 2 bytes at [(i * 4) + 0x5c] are \x00\x00, continue loop without parsing data.
+					#	Else if 2 bytes are less than or equal to 0x272:
+					#		If byte at [(i * 4) + 0x84] is equal to 0, continue loop
+					#		Else if byte at [(i * 4) + 0x5c] is greater than 0x272, set variable in game sync to be 0x272???
+					#		Else continue loop
+					#	Else continue loop
+					
+					# Do more other stuff after this, I'm too lazy to trace this code any longer since it seems to get pretty deep into things
+
+					
+				elif params['p'] == "worldbattle.download":
+					# Stub.
+					# Most likely this just downloads the save data that was uploaded with savedata.upload for the associated gsid.
+					#ret = "\x00\x00\x00\x00"
+					if os.path.isfile("pokemondw-worldbattle_upload_%d.bin" % int(params['gsid'])):
+						with open("pokemondw-worldbattle_upload_%d.bin" % int(params['gsid']), "rb") as file:
+							ret = file.read()
+					else:
+						ret = "\x00\x00\x00\x00"
+
+			self.send_header("Content-Length", str(len(ret)))
+			self.end_headers()
+			self.wfile.write(ret)
+		except:
+			print "Unknown exception: %s" % traceback.format_exc()
+
+	def do_POST(self):
+		try:
+			self.send_response(200)
+			self.send_header("Content-type", "text/plain")
+
+			ret = ""
+			params = self.str_to_dict(self.path)
+			length = int(self.headers['content-length'])
+			post = self.rfile.read(length)
+
+			if "p" in params:
+				print "Received %s command" % params['p']
+				print "Downloading file with a size of %d bytes..." % length
+				
+				if params['p'] == "account.createdata":
+					file = open("pokemondw-account_createdata_command_%d.bin" % int(params['gsid']), "wb")
+					file.write(post)
+					file.close()
+					
+					# Don't know the valid responses, return 0
+					ret = "\x00\x00\x00\x00"
+					
+				elif params['p'] == "account.create.upload":
+					file = open("pokemondw-account_create_upload_%d.bin" % int(params['gsid']), "wb")
+					file.write(post)
+					file.close()
+					
+					# Don't know the valid responses, return 0
+					ret = "\x00\x00\x00\x00"
+					
+				elif params['p'] == "savedata.upload":
+					file = open("pokemondw-savedata_upload_%d.bin" % int(params['gsid']), "wb")
+					file.write(post)
+					file.close()
+					
+					# Don't know the valid responses, return 0
+					ret = "\x00\x00\x00\x00"
+					
+				elif params['p'] == "worldbattle.upload":
+					file = open("pokemondw-worldbattle_upload_%d.bin" % int(params['gsid']), "wb")
+					file.write(post)
+					file.close()
+					
+					# Don't know the valid responses, return 0
+					ret = "\x00\x00\x00\x00"
+					
+				elif params['p'] == "savedata.download.finish":
+					file = open("pokemondw-savedata_download_finish_%d.bin" % int(params['gsid']), "wb")
+					file.write(post)
+					file.close()
+					
+					# Response is never checked
+					ret = "\x00\x00\x00\x00"
+
+			self.send_header("Content-Length", str(len(ret)))
+			self.end_headers()
+			self.wfile.write(ret)
+		except:
+			print "Unknown exception: %s" % traceback.format_exc()
+
+	def str_to_dict(self, str):
+		ret = urlparse.parse_qs(urlparse.urlparse(str).query)
+
+		for k, v in ret.iteritems():
+			ret[k] = v[0]
+
+		return ret
+
+
+if __name__ == "__main__":
+	pokemon_dw = PokemonDW()
+	pokemon_dw.start()
