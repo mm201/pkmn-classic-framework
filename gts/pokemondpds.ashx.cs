@@ -54,7 +54,6 @@ namespace PkmnFoundations.GTS
                     try
                     {
 #endif
-                        // todo: Figure out what fun stuff is contained in this blob!
                         byte[] profileBinary = new byte[100];
                         Array.Copy(data, 0, profileBinary, 0, 100);
                         TrainerProfile4 profile = new TrainerProfile4(pid, profileBinary);
@@ -63,10 +62,58 @@ namespace PkmnFoundations.GTS
                     }
                     catch { }
 #endif
+                        short clientSecret = BitConverter.ToInt16(data, 96);
+                        short mailSecret = BitConverter.ToInt16(data, 98);
 
-                    response.Write(new byte[] { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 },
-                        0, 8);
-                } break;
+                        // response:
+                        // 4 bytes of response code A
+                        // 4 bytes of response code B
+                        // Response code A values:
+                        // 0: Continues normally.
+                        // 1: The data was corrupted. It could not be sent.
+                        // 2: The server is undergoing maintenance. Please connect again later.
+                        // 3: BSOD
+                        if (mailSecret == -1)
+                        {
+                            // Register wii mail
+                            // Response code B values:
+                            // 0: There was a communication error.
+                            // 1: The Registration Code has been sent to your Wii console. Please enter the Registration Code.
+                            // 2: There was an error while attempting to send an authentication Wii message.
+                            // 3: There was a communication error.
+                            // 4: BSOD
+                            response.Write(new byte[] { 0x00, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00 },
+                                0, 8);
+                        }
+                        else if (mailSecret != 0 || clientSecret != 0)
+                        {
+                            // Send wii mail confirmation code OR GTS when mail is configured (we can't tell them apart T__T)
+                            // (We could use database to tell them apart.
+                            // If the previously stored profile has mailSecret == -1 then this is a wii mail confirmation.
+                            // If the previously stored profile has mailSecret == this mailSecret then this is GTS.
+                            // Response code B values:
+                            // 0: Your Wii Number has been registered.
+                            // 1: There was a communication error.
+                            // 2: There was a communication error.
+                            // 3: Incorrect Registration Code.
+                            // 4: BSOD
+                            response.Write(new byte[] { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 },
+                                0, 8);
+                        }
+                        else
+                        {
+                            // GTS
+                            // Response code B values:
+                            // 0: Continues normally
+                            // 1: There was a communication error.
+                            // 2: There was a communication error.
+                            // 3: There was a Wii message authentication error.
+                            // 4: BSOD
+                            response.Write(new byte[] { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 },
+                                0, 8);
+                        }
+                    }
+                    break;
                 #endregion
 
                 #region GTS
@@ -95,7 +142,7 @@ namespace PkmnFoundations.GTS
                     * in the GTS, it responds with 0x0004; if not, it responds 
                     * with 0x0005. */
 
-                    GtsRecord4 record = Database.Instance.GtsDataForUser4(pokedex, pid);
+                        GtsRecord4 record = Database.Instance.GtsDataForUser4(pokedex, pid);
 
                     if (record == null)
                     {
@@ -116,6 +163,7 @@ namespace PkmnFoundations.GTS
                     // other responses:
                     // 0-2 causes a BSOD but it flashes siezure. Scary
                     // 3 causes it to be "checking GTS's status" forever.
+                    // 6 is also the flashy BSOD. So probably all invalid values do that.
 
                 } break;
 

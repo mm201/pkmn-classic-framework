@@ -51,7 +51,9 @@ namespace PkmnFoundations.GTS
                     try
                     {
 #endif
-                        // todo: Figure out what fun stuff is contained in this blob!
+                    // this blob appears to share the same format with GenIV only with (obviously) a GenV string for the trainer name
+                    // and the email-related fields dummied out.
+                    // Specifically, email, notification status, and the two secrets appear to always be 0.
                         byte[] profileBinary = new byte[100];
                         Array.Copy(request, 0, profileBinary, 0, 100);
                         TrainerProfile5 profile = new TrainerProfile5(pid, profileBinary);
