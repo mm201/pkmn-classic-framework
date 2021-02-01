@@ -122,6 +122,9 @@ namespace PkmnFoundations.GTS
                     {
                         // No pokemon in the system
                         // what do here?
+                        // todo: we should probably repeat the previous record
+                        // that was in here before delete.asp was called.
+                        // That is... if we still had it. -__-;
                         ShowError(context, 400);
                         return;
                     }

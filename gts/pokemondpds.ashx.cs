@@ -88,9 +88,9 @@ namespace PkmnFoundations.GTS
                         else if (mailSecret != 0 || clientSecret != 0)
                         {
                             // Send wii mail confirmation code OR GTS when mail is configured (we can't tell them apart T__T)
-                            // (We could use database to tell them apart.
+                            // (todo: We could use database to tell them apart.
                             // If the previously stored profile has mailSecret == -1 then this is a wii mail confirmation.
-                            // If the previously stored profile has mailSecret == this mailSecret then this is GTS.
+                            // If the previously stored profile has mailSecret == this mailSecret then this is GTS.)
                             // Response code B values:
                             // 0: Your Wii Number has been registered.
                             // 1: There was a communication error.

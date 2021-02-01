@@ -110,6 +110,7 @@
     <Compile Include="Structures\TrainerMemo.cs" />
     <Compile Include="Structures\TrainerProfile4.cs" />
     <Compile Include="Structures\TrainerProfile5.cs" />
+    <Compile Include="Structures\TrainerProfileBase.cs" />
     <Compile Include="Structures\TrainerProfilePlaza.cs" />
     <Compile Include="Support\AssertHelper.cs" />
     <Compile Include="Support\EncodedString4.cs" />
