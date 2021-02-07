@@ -282,9 +282,10 @@ namespace PkmnFoundations.Structures
                 // although the structure won't be valid
                 // todo: fact check how hgss responds in this situation.
 
-                // todo: fact check these two values:
+                // todo: fact check these 3 values:
                 // 1. a pokemon in an HGSS ball has a DPPt value of 4
                 // 2. any pokemon from DPPt has an HGSS value of 0
+                // 3. a pokemon from HGSS in a DPPt ball has equal HGSS and DPPt values? Or is its HGSS value 0?
                 // (investigating pokemon in the system should be enough)
                 PokeBallID = (byte)(is_hgss_pokeball ? 4 : pokeballId);
                 PokeBallID_Hgss = (byte)(is_hgss ? pokeballId : 0);

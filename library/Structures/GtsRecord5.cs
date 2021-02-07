@@ -198,9 +198,11 @@ namespace PkmnFoundations.Structures
             return new GtsRecord5(m_pokedex, Save());
         }
 
-        public override bool Validate(bool is_exchanged)
+        public override bool Validate()
         {
-            // todo: a. legitimacy check, and b. check that pkm data matches metadata
+            if (!base.Validate()) return false;
+
+            // todo: legitimacy check
             return true;
         }
 

@@ -223,12 +223,13 @@ namespace PkmnFoundations.GTS
                     byte[] recordBinary = new byte[296];
                     Array.Copy(request, 0, recordBinary, 0, 296);
                     GtsRecord5 record = new GtsRecord5(pokedex, recordBinary);
+                    record.IsExchanged = 0;
 
                     // todo: figure out what bytes 296-431 do:
                     // appears to be 4 bytes of 00, 128 bytes of stuff, 4 bytes of 80 00 00 00
                     // probably a pkvldtprod signature
 
-                    if (!record.Validate(false))
+                    if (!record.Validate())
                     {
                         // hack check failed
                         SessionManager.Remove(session);
@@ -256,7 +257,6 @@ namespace PkmnFoundations.GTS
                     // The server must provide them instead.
                     record.TimeDeposited = DateTime.UtcNow;
                     record.TimeExchanged = null;
-                    record.IsExchanged = 0;
                     record.PID = pid;
 
                     session.Tag = record;
@@ -377,7 +377,7 @@ namespace PkmnFoundations.GTS
                     }
 
                     // enforce request requirements server side
-                    if (!upload.Validate(true) || !upload.CanTrade(result))
+                    if (!upload.Validate() || !upload.CanTrade(result))
                     {
                         // todo: find the correct codes for these
                         SessionManager.Remove(session);

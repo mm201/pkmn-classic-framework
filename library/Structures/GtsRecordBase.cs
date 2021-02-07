@@ -80,7 +80,31 @@ namespace PkmnFoundations.Structures
         public byte TrainerVersion;
         public byte TrainerLanguage;
 
-        public abstract bool Validate(bool is_exchanged);
+        public virtual bool Validate()
+        {
+            // note that IsExchanged only becomes true after FlagTraded is
+            // called, which currently happens right as the exchanged record
+            // is written to the database. So both post.asp and exchange.asp
+            // validation is with IsExchanged == 0.
+            bool isExchanged = IsExchanged != 0;
+            ushort species = isExchanged ? RequestedSpecies : Species;
+            Genders gender = isExchanged ? RequestedGender : Gender;
+            byte minLevel = isExchanged ? RequestedMinLevel : Level;
+            byte maxLevel = isExchanged ? RequestedMaxLevel : Level;
+
+            PokemonPartyBase thePokemon = Pokemon;
+            if (thePokemon.IsEgg) return false;
+            if (thePokemon.SpeciesID != species) return false;
+            if (gender != Genders.Either && thePokemon.Gender != gender) return false;
+            if (!CheckLevels(minLevel, maxLevel, thePokemon.Level)) return false;
+
+            // todo: move these checks to PokemonBase.Validate()
+            if (thePokemon.IsBadEgg) return false;
+            if (thePokemon.Level > 100) return false;
+            if (thePokemon.EVs.ToArray().Select(i => (int)i).Sum() > 510) return false;
+
+            return true;
+        }
 
         public static bool CheckLevels(byte min, byte max, byte other)
         {

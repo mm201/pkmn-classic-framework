@@ -275,7 +275,8 @@ namespace PkmnFoundations.GTS
                     byte[] recordBinary = new byte[292];
                     Array.Copy(data, 0, recordBinary, 0, 292);
                     GtsRecord4 record = new GtsRecord4(pokedex, recordBinary);
-                    if (!record.Validate(false))
+                    record.IsExchanged = 0;
+                    if (!record.Validate())
                     {
                         // hack check failed
                         SessionManager.Remove(session);
@@ -297,7 +298,6 @@ namespace PkmnFoundations.GTS
                     // The server must provide them instead.
                     record.TimeDeposited = DateTime.UtcNow;
                     record.TimeExchanged = null;
-                    record.IsExchanged = 0;
                     record.PID = pid;
 
                     session.Tag = record;
@@ -416,7 +416,7 @@ namespace PkmnFoundations.GTS
                     }
 
                     // enforce request requirements server side
-                    if (!upload.Validate(true) || !upload.CanTrade(result))
+                    if (!upload.Validate() || !upload.CanTrade(result))
                     {
                         // todo: find the correct codes for these
                         SessionManager.Remove(session);
