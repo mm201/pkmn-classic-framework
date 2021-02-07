@@ -1,13 +1,13 @@
 # ************************************************************
 # Sequel Pro SQL dump
-# Version 4096
+# Version 4541
 #
 # http://www.sequelpro.com/
-# http://code.google.com/p/sequel-pro/
+# https://github.com/sequelpro/sequelpro
 #
-# Host: 127.0.0.1 (MySQL 5.5.40)
+# Host: hoenn.local (MySQL 5.5.5-10.3.10-MariaDB)
 # Database: gts
-# Generation Time: 2015-05-02 20:12:33 +0000
+# Generation Time: 2021-02-01 07:35:50 +0000
 # ************************************************************
 
 
@@ -108,7 +108,7 @@ CREATE TABLE `GtsBattleSubway5` (
   `Unknown5` bigint(20) DEFAULT NULL,
   `ParseVersion` int(10) unsigned DEFAULT NULL,
   `Rank` tinyint(3) unsigned DEFAULT NULL,
-  `RoomNum` tinyint(3) unsigned NOT NULL DEFAULT '0',
+  `RoomNum` tinyint(3) unsigned NOT NULL DEFAULT 0,
   `BattlesWon` tinyint(3) unsigned DEFAULT NULL,
   `Position` int(10) unsigned DEFAULT NULL,
   `TimeAdded` datetime DEFAULT NULL,
@@ -127,7 +127,7 @@ DROP TABLE IF EXISTS `GtsBattleSubwayLeaders5`;
 
 CREATE TABLE `GtsBattleSubwayLeaders5` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `pid` int(11) NOT NULL DEFAULT '0',
+  `pid` int(11) NOT NULL DEFAULT 0,
   `Name` binary(16) DEFAULT NULL,
   `Version` tinyint(3) unsigned DEFAULT NULL,
   `Language` tinyint(3) unsigned DEFAULT NULL,
@@ -139,7 +139,7 @@ CREATE TABLE `GtsBattleSubwayLeaders5` (
   `Unknown2` tinyint(3) unsigned DEFAULT NULL,
   `ParseVersion` int(10) unsigned DEFAULT NULL,
   `Rank` tinyint(3) unsigned DEFAULT NULL,
-  `RoomNum` tinyint(3) unsigned NOT NULL DEFAULT '0',
+  `RoomNum` tinyint(3) unsigned NOT NULL DEFAULT 0,
   `TimeAdded` datetime DEFAULT NULL,
   `TimeUpdated` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
@@ -202,7 +202,7 @@ CREATE TABLE `GtsBattleTower4` (
   `Unknown5` bigint(20) DEFAULT NULL,
   `ParseVersion` int(10) unsigned DEFAULT NULL,
   `Rank` tinyint(3) unsigned DEFAULT NULL,
-  `RoomNum` tinyint(3) unsigned NOT NULL DEFAULT '0',
+  `RoomNum` tinyint(3) unsigned NOT NULL DEFAULT 0,
   `BattlesWon` tinyint(3) unsigned DEFAULT NULL,
   `Position` int(10) unsigned DEFAULT NULL,
   `TimeAdded` datetime DEFAULT NULL,
@@ -221,7 +221,7 @@ DROP TABLE IF EXISTS `GtsBattleTowerLeaders4`;
 
 CREATE TABLE `GtsBattleTowerLeaders4` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `pid` int(11) NOT NULL DEFAULT '0',
+  `pid` int(11) NOT NULL DEFAULT 0,
   `Name` binary(16) DEFAULT NULL,
   `Version` tinyint(3) unsigned DEFAULT NULL,
   `Language` tinyint(3) unsigned DEFAULT NULL,
@@ -233,7 +233,7 @@ CREATE TABLE `GtsBattleTowerLeaders4` (
   `Unknown2` tinyint(3) unsigned DEFAULT NULL,
   `ParseVersion` int(10) unsigned DEFAULT NULL,
   `Rank` tinyint(3) unsigned DEFAULT NULL,
-  `RoomNum` tinyint(3) unsigned NOT NULL DEFAULT '0',
+  `RoomNum` tinyint(3) unsigned NOT NULL DEFAULT 0,
   `TimeAdded` datetime DEFAULT NULL,
   `TimeUpdated` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
@@ -446,13 +446,18 @@ DROP TABLE IF EXISTS `GtsProfiles4`;
 
 CREATE TABLE `GtsProfiles4` (
   `pid` int(11) NOT NULL,
-  `Data` blob,
+  `Data` blob DEFAULT NULL,
   `Version` tinyint(3) unsigned DEFAULT NULL,
   `Language` tinyint(3) unsigned DEFAULT NULL,
   `Country` tinyint(3) unsigned DEFAULT NULL,
   `Region` tinyint(3) unsigned DEFAULT NULL,
   `OT` int(10) unsigned DEFAULT NULL,
   `Name` binary(16) DEFAULT NULL,
+  `MacAddress` binary(6) DEFAULT NULL,
+  `Email` varchar(64) DEFAULT NULL,
+  `HasNotifications` bit(1) DEFAULT NULL,
+  `ClientSecret` smallint(6) DEFAULT NULL,
+  `MailSecret` smallint(6) DEFAULT NULL,
   `ParseVersion` int(10) unsigned DEFAULT NULL,
   `TimeAdded` datetime NOT NULL,
   `TimeUpdated` datetime NOT NULL,
@@ -469,13 +474,18 @@ DROP TABLE IF EXISTS `GtsProfiles5`;
 
 CREATE TABLE `GtsProfiles5` (
   `pid` int(11) NOT NULL,
-  `Data` blob,
+  `Data` blob DEFAULT NULL,
   `Version` tinyint(3) unsigned DEFAULT NULL,
   `Language` tinyint(3) unsigned DEFAULT NULL,
   `Country` tinyint(3) unsigned DEFAULT NULL,
   `Region` tinyint(3) unsigned DEFAULT NULL,
   `OT` int(10) unsigned DEFAULT NULL,
   `Name` binary(16) DEFAULT NULL,
+  `MacAddress` binary(6) DEFAULT NULL,
+  `Email` varchar(64) DEFAULT NULL,
+  `HasNotifications` bit(1) DEFAULT NULL,
+  `ClientSecret` smallint(6) DEFAULT NULL,
+  `MailSecret` smallint(6) DEFAULT NULL,
   `ParseVersion` int(10) unsigned DEFAULT NULL,
   `TimeAdded` datetime NOT NULL,
   `TimeUpdated` datetime NOT NULL,
@@ -492,8 +502,8 @@ DROP TABLE IF EXISTS `pkmncf_plaza_profiles`;
 
 CREATE TABLE `pkmncf_plaza_profiles` (
   `pid` int(11) NOT NULL,
-  `DataPrefix` blob,
-  `Data` blob,
+  `DataPrefix` blob DEFAULT NULL,
+  `Data` blob DEFAULT NULL,
   `Version` tinyint(3) unsigned DEFAULT NULL,
   `Language` tinyint(3) unsigned DEFAULT NULL,
   `Country` tinyint(3) unsigned DEFAULT NULL,
@@ -533,8 +543,8 @@ CREATE TABLE `pkmncf_pokedex_abilities` (
 DROP TABLE IF EXISTS `pkmncf_pokedex_countries`;
 
 CREATE TABLE `pkmncf_pokedex_countries` (
-  `id` int(10) unsigned NOT NULL DEFAULT '0',
-  `Value4` tinyint(3) unsigned DEFAULT '0',
+  `id` int(10) unsigned NOT NULL DEFAULT 0,
+  `Value4` tinyint(3) unsigned DEFAULT 0,
   `Value5` tinyint(3) unsigned DEFAULT NULL,
   `iso-3166-1` char(2) DEFAULT NULL,
   `Name_JA` varchar(30) DEFAULT '',
@@ -558,9 +568,9 @@ CREATE TABLE `pkmncf_pokedex_countries` (
 DROP TABLE IF EXISTS `pkmncf_pokedex_country_regions`;
 
 CREATE TABLE `pkmncf_pokedex_country_regions` (
-  `id` int(10) unsigned NOT NULL DEFAULT '0',
-  `country_id` int(10) unsigned NOT NULL DEFAULT '0',
-  `Value4` tinyint(3) unsigned NOT NULL DEFAULT '0',
+  `id` int(10) unsigned NOT NULL DEFAULT 0,
+  `country_id` int(10) unsigned NOT NULL DEFAULT 0,
+  `Value4` tinyint(3) unsigned NOT NULL DEFAULT 0,
   `Value5` tinyint(3) unsigned DEFAULT NULL,
   `iso-3166-2` varchar(4) DEFAULT NULL,
   `Name_JA` varchar(30) DEFAULT '',
@@ -931,8 +941,8 @@ CREATE TABLE `TerminalBattleVideos4` (
   `Metagame` tinyint(3) unsigned NOT NULL,
   `Country` tinyint(3) unsigned NOT NULL,
   `Region` tinyint(3) unsigned NOT NULL,
-  `Views` int(10) unsigned NOT NULL DEFAULT '0',
-  `Saves` int(10) unsigned NOT NULL DEFAULT '0',
+  `Views` int(10) unsigned NOT NULL DEFAULT 0,
+  `Saves` int(10) unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`),
   KEY `SerialNumber` (`SerialNumber`),
   KEY `TimeAdded` (`TimeAdded`),
@@ -963,8 +973,8 @@ CREATE TABLE `TerminalBattleVideos5` (
   `Metagame` tinyint(3) unsigned NOT NULL,
   `Country` tinyint(3) unsigned NOT NULL,
   `Region` tinyint(3) unsigned NOT NULL,
-  `Views` int(10) unsigned NOT NULL DEFAULT '0',
-  `Saves` int(10) unsigned NOT NULL DEFAULT '0',
+  `Views` int(10) unsigned NOT NULL DEFAULT 0,
+  `Saves` int(10) unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`),
   KEY `SerialNumber` (`SerialNumber`),
   KEY `TimeAdded` (`TimeAdded`),

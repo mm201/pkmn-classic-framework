@@ -1085,24 +1085,33 @@ namespace PkmnFoundations.Data
                 new MySqlParameter("@country", profile.Country),
                 new MySqlParameter("@region", profile.Region),
                 new MySqlParameter("@ot", profile.OT),
-                new MySqlParameter("@name", profile.Name.RawData)
+                new MySqlParameter("@name", profile.Name.RawData),
+                new MySqlParameter("@mac_address", profile.MacAddress),
+                new MySqlParameter("@email", profile.Email),
+                new MySqlParameter("@has_notifications", profile.HasNotifications),
+                new MySqlParameter("@client_secret", profile.ClientSecret),
+                new MySqlParameter("@mail_secret", profile.MailSecret)
             };
 
             if (exists != 0)
             {
                 return tran.ExecuteNonQuery("UPDATE GtsProfiles4 SET Data = @data, " +
                     "Version = @version, Language = @language, Country = @country, " +
-                    "Region = @region, OT = @ot, Name = @name, ParseVersion = 1, " +
-                    "TimeUpdated = UTC_TIMESTAMP() " +
+                    "Region = @region, OT = @ot, Name = @name, MacAddress = @mac_address, " +
+                    "Email = @email, HasNotifications = @has_notifications, " +
+                    "ClientSecret = @client_secret, MailSecret = @mail_secret, " +
+                    "ParseVersion = 2, TimeUpdated = UTC_TIMESTAMP() " +
                     "WHERE pid = @pid", _params) > 0;
             }
             else
             {
                 return tran.ExecuteNonQuery("INSERT INTO GtsProfiles4 " +
                     "(pid, Data, Version, Language, Country, Region, OT, Name, " +
+                    "MacAddress, Email, HasNotifications, ClientSecret, MailSecret, " +
                     "ParseVersion, TimeAdded, TimeUpdated) VALUES " +
                     "(@pid, @data, @version, @language, @country, @region, @ot, " +
-                    "@name, 1, UTC_TIMESTAMP(), UTC_TIMESTAMP())", _params) > 0;
+                    "@name, @mac_address, @email, @has_notifications, " +
+                    "@client_secret, @mail_secret, 2, UTC_TIMESTAMP(), UTC_TIMESTAMP())", _params) > 0;
             }
         }
         #endregion
@@ -1982,6 +1991,11 @@ namespace PkmnFoundations.Data
 
         public bool GamestatsSetProfile5(MySqlTransaction tran, TrainerProfile5 profile)
         {
+            // Although GenV doesn't actually support email notifications,
+            // we're using the same database structure here as for GenIV
+            // as a rule of least surprise and maybe in the hopes of
+            // removing this code duplication eventually.
+
             if (profile.Data.Length != 100) throw new FormatException("Profile data must be 100 bytes.");
 
             long exists = (long)tran.ExecuteScalar("SELECT EXISTS(SELECT * FROM GtsProfiles5 WHERE pid = @pid)", new MySqlParameter("@pid", profile.PID));
@@ -1994,24 +2008,33 @@ namespace PkmnFoundations.Data
                 new MySqlParameter("@country", profile.Country),
                 new MySqlParameter("@region", profile.Region),
                 new MySqlParameter("@ot", profile.OT),
-                new MySqlParameter("@name", profile.Name.RawData)
+                new MySqlParameter("@name", profile.Name.RawData),
+                new MySqlParameter("@mac_address", profile.MacAddress),
+                new MySqlParameter("@email", profile.Email),
+                new MySqlParameter("@has_notifications", profile.HasNotifications),
+                new MySqlParameter("@client_secret", profile.ClientSecret),
+                new MySqlParameter("@mail_secret", profile.MailSecret)
             };
 
             if (exists != 0)
             {
                 return tran.ExecuteNonQuery("UPDATE GtsProfiles5 SET Data = @data, " +
                     "Version = @version, Language = @language, Country = @country, " +
-                    "Region = @region, OT = @ot, Name = @name, ParseVersion = 1, " +
-                    "TimeUpdated = UTC_TIMESTAMP() " +
+                    "Region = @region, OT = @ot, Name = @name, MacAddress = @mac_address, " +
+                    "Email = @email, HasNotifications = @has_notifications, " +
+                    "ClientSecret = @client_secret, MailSecret = @mail_secret, " +
+                    "ParseVersion = 2, TimeUpdated = UTC_TIMESTAMP() " +
                     "WHERE pid = @pid", _params) > 0;
             }
             else
             {
                 return tran.ExecuteNonQuery("INSERT INTO GtsProfiles5 " +
                     "(pid, Data, Version, Language, Country, Region, OT, Name, " +
+                    "MacAddress, Email, HasNotifications, ClientSecret, MailSecret, " +
                     "ParseVersion, TimeAdded, TimeUpdated) VALUES " +
                     "(@pid, @data, @version, @language, @country, @region, @ot, " +
-                    "@name, 1, UTC_TIMESTAMP(), UTC_TIMESTAMP())", _params) > 0;
+                    "@name, @mac_address, @email, @has_notifications, " +
+                    "@client_secret, @mail_secret, 2, UTC_TIMESTAMP(), UTC_TIMESTAMP())", _params) > 0;
             }
         }
         #endregion
