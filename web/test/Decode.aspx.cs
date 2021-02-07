@@ -61,6 +61,17 @@ namespace PkmnFoundations.GTS.debug
 
             if (data == null) try
             {
+                GamestatsHandler gsDungeonWii = new GamestatsHandler("zjzrhOVXZKLHNspYpGoR0001c7850000620b0000000820556356pokedngnwii",
+                    GamestatsRequestVersions.Version3, GamestatsResponseVersions.Version2);
+                data = gsDungeonWii.DecryptData(txtData.Text);
+                litGeneration.Text = "Mystery Dungeon Wii";
+            }
+            catch (FormatException)
+            {
+            }
+
+            if (data == null) try
+            {
                 data = DecryptData(txtData.Text);
 
                 int checkedsum = 0;
