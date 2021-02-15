@@ -1,6 +1,6 @@
 # Poké Classic Framework
 
-http://pkmnclassic.net/
+https://pkmnclassic.net/
 
 Poké Classic Framework is a replacement server and class library for Pokémon
 Generations 4 and 5. Poké Classic Network is the name of the server itself.
@@ -43,7 +43,7 @@ haven't been tested that thoroughly.
 
 If there's something you want to see, the best thing is to discuss it with me
 and prepare a pull request. You should also check for open issues marked
-[Help Wanted](https://github.com/mm201/pkmnFoundations/labels/help%20wanted).
+[Help Wanted](https://github.com/mm201/pkmn-classic-framework/labels/help%20wanted).
 Not all of them require programming skill.
 
 The most significant way you can help is simply by using it. The GTS is nothing
@@ -51,18 +51,20 @@ without users. Get on there and start trading!
 
 ## Credits
 
-* [Project Pokémon](http://projectpokemon.org/) for most of the original fake
+* [Project Pokémon](https://projectpokemon.org/) for most of the original fake
 GTS reverse engineering work, file format and data structure descriptions, and
 many ID number tables, including items and trendy phrases.
 * [Pipian](http://www.pipian.net/ierukana/) for more reverse engineering help,
 including the Battle Tower and Wi-fi Plaza.
 * [Nagato](https://github.com/polaris-), for help reverse engineering the Game
 Sync protocol.
+* [Billy](https://billy.wales/) for help with GameSpy protocols and interfacing
+with Wiimmfi.
 * Nagato and other contributors to the
-[AltWFC](https://github.com/polaris-/dwc_network_server_emulator) project,
-which this project depends on for basic Nintendo WiFi fuctionality.
-* [Veekun](http://veekun.com/) for his Pokédex and large sprites.
-* [Bulbapedia](http://bulbapedia.bulbagarden.net/wiki/Main_Page) for most item
+[AltWFC](https://github.com/barronwaffles/dwc_network_server_emulator) project,
+which this project depends on for basic Nintendo Wi-Fi fuctionality.
+* [Eevee](https://veekun.com/) for her Veekun Pokédex and large sprite rips.
+* [Bulbapedia](https://bulbapedia.bulbagarden.net/wiki/Main_Page) for most item
 sprites and Generation 3 item/text conversion tables.
 * [kaphotics](https://twitter.com/kaphotics) for the Pokémon mini sprite rips
 from ORAS.
