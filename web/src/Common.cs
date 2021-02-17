@@ -62,6 +62,11 @@ namespace PkmnFoundations.Web
             }
         }
 
+        public static string FormatReturns(string text, string ending)
+        {
+            return text.Replace("\r\n", "\n").Replace("\r", "\n").Replace("\n", ending);
+        }
+
         private static byte[] m_pad = null;
 
         /// <summary>

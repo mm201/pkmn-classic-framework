@@ -3628,6 +3628,7 @@
     <Content Include="scripts\retina.js" />
     <Content Include="test\BoxUp.aspx" />
     <Content Include="test\Decode.aspx" />
+    <Content Include="test\Gsid.aspx" />
     <Content Include="test\NameDecode.aspx" />
     <Content Include="test\NameEncode.aspx" />
     <Content Include="test\VideoId.aspx" />
@@ -3792,6 +3793,13 @@
     </Compile>
     <Compile Include="test\Decode.aspx.designer.cs">
       <DependentUpon>Decode.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="test\Gsid.aspx.cs">
+      <DependentUpon>Gsid.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="test\Gsid.aspx.designer.cs">
+      <DependentUpon>Gsid.aspx</DependentUpon>
     </Compile>
     <Compile Include="test\NameDecode.aspx.cs">
       <DependentUpon>NameDecode.aspx</DependentUpon>
