@@ -87,6 +87,7 @@
     <Content Include="pkvldtprod.ashx" />
     <Content Include="pokemondpds_web.ashx" />
     <Content Include="masters\MasterPage.master" />
+    <Content Include="pgl.ashx" />
     <None Include="Properties\PublishProfiles\Public.pubxml" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
@@ -106,6 +107,9 @@
     </Compile>
     <Compile Include="masters\MasterPage.master.designer.cs">
       <DependentUpon>MasterPage.master</DependentUpon>
+    </Compile>
+    <Compile Include="pgl.ashx.cs">
+      <DependentUpon>pgl.ashx</DependentUpon>
     </Compile>
     <Compile Include="pkvldtprod.ashx.cs">
       <DependentUpon>pkvldtprod.ashx</DependentUpon>

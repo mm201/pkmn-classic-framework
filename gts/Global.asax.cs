@@ -102,6 +102,11 @@ namespace PkmnFoundations.GTS
                 pathInfo = "/pokemon/validate";
                 return VirtualPathUtility.ToAbsolute("~/pkvldtprod.ashx");
             }
+            else if (split.Length > 1 && split[1] == "dsio" && split[2] == "gw")
+            {
+                pathInfo = "/dsio/gw";
+                return VirtualPathUtility.ToAbsolute("~/pgl.ashx");
+            }
             else return null;
         }
     }
