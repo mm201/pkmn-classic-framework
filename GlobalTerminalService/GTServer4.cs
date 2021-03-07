@@ -33,6 +33,7 @@ namespace PkmnFoundations.GlobalTerminalService
 
         private void Initialize()
         {
+            // todo: Customizable pads is an antifeature. Store pad in code here instead of a file.
             m_pad = new byte[256];
 
             using (FileStream s = File.OpenRead(AppDomain.CurrentDomain.BaseDirectory + Path.DirectorySeparatorChar + "pad.bin"))
@@ -330,6 +331,18 @@ namespace PkmnFoundations.GlobalTerminalService
                             logEntry.AppendLine();
                         }
                     } break;
+                    #endregion
+
+                    #region Trainer Rankings
+                    case RequestTypes4.TrainerRankingsHead:
+                        logEntry.AppendLine("Not supported.");
+                        response.Write(new byte[] { 0x02, 0x00 }, 0, 2);
+                        break;
+
+                    case RequestTypes4.TrainerRankingsSearch:
+                        logEntry.AppendLine("Not supported.");
+                        response.Write(new byte[] { 0x02, 0x00 }, 0, 2);
+                        break;
                     #endregion
 
                     default:

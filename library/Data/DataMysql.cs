@@ -2307,6 +2307,11 @@ namespace PkmnFoundations.Data
                     where += (hasSearch ? " AND " : " WHERE ") + "Metagame BETWEEN 8 AND 13";
                     hasSearch = true;
                 }
+                else if (metagame == BattleVideoMetagames4.SearchNoBattleFrontier)
+                {
+                    where += (hasSearch ? " AND " : " WHERE ") + "Metagame BETWEEN 0 AND 14";
+                    hasSearch = true;
+                }
                 else if (metagame != BattleVideoMetagames4.SearchLatest30)
                 {
                     where += (hasSearch ? " AND " : " WHERE ") + "Metagame = @metagame";

@@ -307,8 +307,7 @@ namespace PkmnFoundations.Structures
         SearchColosseumSingleCupMatch = 0xfb,
         SearchColosseumDoubleNoRestrictions = 0xfc,
         SearchColosseumDoubleCupMatch = 0xfd,
-        // fixme: There's a search type 0xfe showing in my logs.
-        // https://github.com/mm201/pkmnFoundations/issues/9
+        SearchNoBattleFrontier = 0xfe,
         SearchLatest30 = 0xff,
     }
 
