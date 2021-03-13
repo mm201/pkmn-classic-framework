@@ -60,5 +60,12 @@ namespace PkmnFoundations.Support
             while ((lastProgress = src.Read(buffer, 0, BUFFER_LENGTH)) > 0)
                 dest.Write(buffer, 0, lastProgress);
         }
+
+        public static void WriteBytes(this Stream s, byte[] buffer)
+        {
+            // Lack of a Stream.Write overload that just writes the whole array
+            // seems like a huge omission to me.
+            s.Write(buffer, 0, buffer.Length);
+        }
     }
 }
