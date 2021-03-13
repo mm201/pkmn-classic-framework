@@ -34,11 +34,20 @@ namespace PkmnFoundations.GTS.debug
 
             CryptMessage(data);
 
-            litDecoded.Text = RenderHex(data.ToHexStringLower());
+            switch (rblFormat.SelectedValue)
+            {
+                case "hd":
+                default:
+                    litDecoded.Text = RenderHex(data.ToHexStringLower());
+                    break;
+                case "ca":
+                    litDecoded.Text = RenderCArray(data.ToHexStringLower());
+                    break;
+            }
             phDecoded.Visible = true;
         }
 
-        private String RenderHex(String hex)
+        private string RenderHex(string hex)
         {
             StringBuilder builder = new StringBuilder();
             for (int x = 0; x < hex.Length; x += 16)
@@ -51,6 +60,22 @@ namespace PkmnFoundations.GTS.debug
 
                 builder.Append(hex.Substring(x, Math.Min(16, hex.Length - x)));
                 builder.Append((x % 32 == 0) ? " " : "<br />");
+            }
+            return builder.ToString();
+        }
+
+        private string RenderCArray(string hex)
+        {
+            StringBuilder builder = new StringBuilder();
+            for (int x = 0; x < hex.Length; x += 2)
+            {
+                if (x > 0)
+                {
+                    builder.Append(", ");
+                    if (x % 16 == 0) builder.Append("<br />\r\n");
+                }
+                builder.Append("0x");
+                builder.Append(hex.Substring(x, Math.Min(2, hex.Length - x)));
             }
             return builder.ToString();
         }

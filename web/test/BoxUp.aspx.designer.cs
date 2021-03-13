@@ -7,11 +7,13 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace PkmnFoundations.GTS.debug {
-    
-    
-    public partial class BoxUp {
-        
+namespace PkmnFoundations.GTS.debug
+{
+
+
+    public partial class BoxUp
+    {
+
         /// <summary>
         /// HeaderColour1 control.
         /// </summary>
@@ -20,7 +22,7 @@ namespace PkmnFoundations.GTS.debug {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::PkmnFoundations.Web.HeaderColour HeaderColour1;
-        
+
         /// <summary>
         /// theForm control.
         /// </summary>
@@ -29,7 +31,16 @@ namespace PkmnFoundations.GTS.debug {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlForm theForm;
-        
+
+        /// <summary>
+        /// rblFormat control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RadioButtonList rblFormat;
+
         /// <summary>
         /// fuBox control.
         /// </summary>
@@ -38,7 +49,7 @@ namespace PkmnFoundations.GTS.debug {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.FileUpload fuBox;
-        
+
         /// <summary>
         /// btnSend control.
         /// </summary>
@@ -47,7 +58,7 @@ namespace PkmnFoundations.GTS.debug {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btnSend;
-        
+
         /// <summary>
         /// litMessage control.
         /// </summary>
@@ -56,7 +67,7 @@ namespace PkmnFoundations.GTS.debug {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Literal litMessage;
-        
+
         /// <summary>
         /// phDecoded control.
         /// </summary>
@@ -65,7 +76,7 @@ namespace PkmnFoundations.GTS.debug {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.PlaceHolder phDecoded;
-        
+
         /// <summary>
         /// litDecoded control.
         /// </summary>
