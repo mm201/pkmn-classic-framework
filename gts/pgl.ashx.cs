@@ -15,7 +15,8 @@ namespace PkmnFoundations.GTS
         public void ProcessRequest(HttpContext context)
         {
             context.Response.ContentType = "text/plain";
-            context.Response.StatusCode = 200;
+            context.Response.StatusCode = 502;// 200;
+            return;
 
             // error messages by status code:
             // 403, 404, 500: Comm error (13209)
