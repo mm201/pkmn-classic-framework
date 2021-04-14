@@ -97,6 +97,7 @@ namespace PkmnFoundations.Structures
             if (thePokemon.SpeciesID != species) return false;
             if (gender != Genders.Either && thePokemon.Gender != gender) return false;
             if (!CheckLevels(minLevel, maxLevel, thePokemon.Level)) return false;
+            if (thePokemon.HeldItemID < 1 || (thePokemon.HeldItemID >= 113 && thePokemon.HeldItemID <= 134) || thePokemon.HeldItemID > 536) return false;
 
             // todo: move these checks to PokemonBase.Validate()
             if (thePokemon.IsBadEgg) return false;
