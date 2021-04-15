@@ -202,6 +202,19 @@ namespace PkmnFoundations.Structures
         {
             if (!base.Validate()) return false;
 
+            // todo: this check belongs in the database
+            var thePokemon = (PokemonParty5)Pokemon;
+            if (thePokemon.HeldItemID <= 0 || 
+                (thePokemon.HeldItemID >= 113 && thePokemon.HeldItemID <= 115) || 
+                (thePokemon.HeldItemID >= 120 && thePokemon.HeldItemID <= 133) || 
+                (thePokemon.HeldItemID >= 328 && thePokemon.HeldItemID <= 503) || 
+                (thePokemon.HeldItemID >= 505 && thePokemon.HeldItemID <= 536) ||
+                thePokemon.HeldItemID == 574 ||
+                thePokemon.HeldItemID == 576 ||
+                (thePokemon.HeldItemID >= 578 && thePokemon.HeldItemID <= 579) || 
+                thePokemon.HeldItemID >= 592)
+                return false;
+
             // todo: legitimacy check
             return true;
         }

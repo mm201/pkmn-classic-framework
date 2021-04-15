@@ -88,7 +88,7 @@ namespace PkmnFoundations.Structures
         private ReadOnlyCollection<byte> m_data_readonly;
         private PokemonParty4 m_pokemon;
 
-        public override PokemonPartyBase Pokemon
+        public new PokemonPartyBase Pokemon
         {
             get
             {
@@ -194,6 +194,13 @@ namespace PkmnFoundations.Structures
         public override bool Validate()
         {
             if (!base.Validate()) return false;
+
+            // todo: this check belongs in the database
+            var thePokemon = (PokemonParty4)Pokemon;
+            if (thePokemon.HeldItemID <= 0 || 
+                (thePokemon.HeldItemID >= 112 && thePokemon.HeldItemID <= 134) || 
+                thePokemon.HeldItemID >= 428) 
+                return false;
 
             // todo: legitimacy check
             return true;
