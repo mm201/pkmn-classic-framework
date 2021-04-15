@@ -88,7 +88,7 @@ namespace PkmnFoundations.Structures
         private ReadOnlyCollection<byte> m_data_readonly;
         private PokemonParty4 m_pokemon;
 
-        public new PokemonPartyBase Pokemon
+        public override PokemonPartyBase Pokemon
         {
             get
             {
