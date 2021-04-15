@@ -97,13 +97,34 @@ namespace PkmnFoundations.Structures
             if (thePokemon.SpeciesID != species) return false;
             if (gender != Genders.Either && thePokemon.Gender != gender) return false;
             if (!CheckLevels(minLevel, maxLevel, thePokemon.Level)) return false;
-            if (thePokemon.HeldItemID < 1 || (thePokemon.HeldItemID >= 113 && thePokemon.HeldItemID <= 134) || thePokemon.HeldItemID > 536) return false;
+            if (!IsItemHoldable(thePokemon.Generation,thePokemon.Version, thePokemon.HeldItemID)) return false;
 
             // todo: move these checks to PokemonBase.Validate()
             if (thePokemon.IsBadEgg) return false;
             if (thePokemon.Level > 100) return false;
             if (thePokemon.EVs.ToArray().Select(i => (int)i).Sum() > 510) return false;
 
+            return true;
+        }
+
+        // todo: instead of validating by item ID, validate by item type.
+        public static bool IsItemHoldable(Generations generation, Versions version, int heldItemID)
+        {
+            if (generation.Equals(Generations.Generation4))
+            {
+                if(version.Equals(Versions.Diamond) || version.Equals(Versions.Pearl) || version.Equals(Versions.Platinum))
+                {
+                    if (heldItemID < 1 || (heldItemID >= 113 && heldItemID <= 134) || heldItemID > 427) return false;
+                }
+                else
+                {
+                    if (heldItemID < 1 || (heldItemID >= 113 && heldItemID <= 134) || (heldItemID >= 428 && heldItemID <= 484) || (heldItemID >= 501 && heldItemID <= 504) || heldItemID >= 532) return false;
+                }
+            }
+            else if (generation.Equals(Generations.Generation5))
+            {
+                if (heldItemID < 1 || (heldItemID >= 113 && heldItemID <= 115) || (heldItemID >= 120 && heldItemID <= 133) || (heldItemID >= 426 && heldItemID <= 484) || (heldItemID >= 501 && heldItemID <= 503) || (heldItemID >= 532 && heldItemID <= 536) || heldItemID.Equals(574) || (heldItemID >= 578 && heldItemID <= 579) || (heldItemID >= 616 && heldItemID <= 617) || heldItemID >= 621) return false;
+            }
             return true;
         }
 
