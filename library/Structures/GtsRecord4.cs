@@ -219,7 +219,7 @@ namespace PkmnFoundations.Structures
             if (thePokemon.Form.Suffix == "primal") return false;
             if (thePokemon.SpeciesID == 25 && thePokemon.FormID > 0) return false; // cosplay pikachu
 
-            if (thePokemon.HeldItemID <= 0) return false;
+            if (thePokemon.HeldItemID < 0) return false;
             if (thePokemon.HeldItemID >= 112 && thePokemon.HeldItemID <= 134) return false;
             if (thePokemon.HeldItemID >= 428) return false;
 
