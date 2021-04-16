@@ -202,20 +202,52 @@ namespace PkmnFoundations.Structures
         {
             if (!base.Validate()) return false;
 
-            // todo: this check belongs in the database
+            // todo: these checks belong on the pokemon class based on database fields.
             var thePokemon = (PokemonParty5)Pokemon;
-            if (thePokemon.HeldItemID <= 0 || 
-                (thePokemon.HeldItemID >= 113 && thePokemon.HeldItemID <= 115) || 
-                (thePokemon.HeldItemID >= 120 && thePokemon.HeldItemID <= 133) || 
-                (thePokemon.HeldItemID >= 328 && thePokemon.HeldItemID <= 503) || 
-                (thePokemon.HeldItemID >= 505 && thePokemon.HeldItemID <= 536) ||
-                thePokemon.HeldItemID == 574 ||
-                thePokemon.HeldItemID == 576 ||
-                (thePokemon.HeldItemID >= 578 && thePokemon.HeldItemID <= 579) || 
-                thePokemon.HeldItemID >= 592)
-                return false;
 
-            // todo: legitimacy check
+            if (thePokemon.SpeciesID < 1 || thePokemon.SpeciesID > 649) return false;
+
+            try
+            {
+                if (thePokemon.Form == null) return false;
+            }
+            catch (KeyNotFoundException)
+            {
+                return false; // form not in pokedex
+            }
+            if (thePokemon.SpeciesID == 641 && thePokemon.FormID != 0) return false; // therian tornadus
+            if (thePokemon.SpeciesID == 642 && thePokemon.FormID != 0) return false; // therian thundrus
+            if (thePokemon.SpeciesID == 645 && thePokemon.FormID != 0) return false; // therian landorus
+            if (thePokemon.SpeciesID == 646 && thePokemon.FormID != 0) return false; // black/white kyurem
+            if (thePokemon.SpeciesID == 647 && thePokemon.FormID != 0) return false; // resolute keldeo
+            if (thePokemon.Form.Suffix == "spiky-eared") return false;
+            if (thePokemon.Form.Suffix == "fairy") return false;
+            if (thePokemon.Form.Suffix == "mega") return false;
+            if (thePokemon.Form.Suffix == "mega-x") return false;
+            if (thePokemon.Form.Suffix == "mega-y") return false;
+            if (thePokemon.Form.Suffix == "primal") return false;
+            if (thePokemon.SpeciesID == 25 && thePokemon.FormID > 0) return false; // cosplay pikachu
+
+            if (thePokemon.HeldItemID <= 0) return false;
+            if (thePokemon.HeldItemID >= 113 && thePokemon.HeldItemID <= 115) return false;
+            if (thePokemon.HeldItemID >= 120 && thePokemon.HeldItemID <= 133) return false;
+            if (thePokemon.HeldItemID >= 328 && thePokemon.HeldItemID <= 503) return false;
+            if (thePokemon.HeldItemID >= 505 && thePokemon.HeldItemID <= 536) return false;
+            if (thePokemon.HeldItemID == 574) return false;
+            if (thePokemon.HeldItemID == 576) return false;
+            if (thePokemon.HeldItemID >= 578 && thePokemon.HeldItemID <= 579) return false;
+            if (thePokemon.HeldItemID >= 592) return false;
+
+            if (thePokemon.AbilityID <= 0) return false;
+            if (thePokemon.AbilityID > 164) return false;
+
+            foreach (MoveSlot move in thePokemon.Moves)
+            {
+                if (move.MoveID < 0) return false;
+                if (move.MoveID == 165) return false; // struggle
+                if (move.MoveID > 559) return false;
+            }
+
             return true;
         }
 
