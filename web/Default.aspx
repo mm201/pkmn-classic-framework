@@ -8,17 +8,10 @@
 </asp:Content>
 
 <asp:Content ID="conHeadingArea" ContentPlaceHolderID="cpHeadingArea" runat="server">
-    <h1>
-        Private server for Pokémon Generation IV and V games
-    </h1>
-    <p>Poké Classic Network provides GTS, battle videos, and other related
-        services for Generation IV and V. It runs in combination with Wiimmfi
-        and Kaeru WFC which provide general purpose NWFC emulation and SSL
-        offloading, respectively.</p>
 </asp:Content>
 
 <asp:Content ID="conLeft" ContentPlaceHolderID="cpLeft" runat="server">
-
+    &nbsp;
     <pf:RequireCss Key="login" CssUrl="~/css/login.css" After="main" runat="server" />
     <asp:PlaceHolder Visible="false" runat="server">
     <div class="gtsSection gtsLogin">
@@ -36,10 +29,8 @@
 
 <asp:Content ID="conRight" ContentPlaceHolderID="cpRight" runat="server">
 
-    <div class="gtsSection gtsTwitter" style="height: 400px;">
-        <a class="twitter-timeline" data-dnt="true" 
-            href="https://twitter.com/pcnstatus" data-widget-id="559566696667561986"
-            height="400px">Tweets by @pcnstatus</a>
+    <div class="gtsSection gtsTwitter">
+        <a class="twitter-timeline" data-width="236" data-height="600" href="https://twitter.com/pcnstatus?ref_src=twsrc%5Etfw">Tweets by pcnstatus</a> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script> 
         <script>!function (d, s, id) { var js, fjs = d.getElementsByTagName(s)[0], p = /^http:/.test(d.location) ? 'http' : 'https'; if (!d.getElementById(id)) { js = d.createElement(s); js.id = id; js.src = p + "://platform.twitter.com/widgets.js"; fjs.parentNode.insertBefore(js, fjs); } }(document, "script", "twitter-wjs");</script>
     </div>
 
@@ -47,9 +38,14 @@
 
 <asp:Content ID="conMain" ContentPlaceHolderID="cpMain" runat="server">
 
-    <h2>
-        Getting started
-    </h2>
+    <h2>About</h2>
+    <p>Poké Classic Network provides GTS, battle videos, and other related
+    services for Generation IV and V games. It runs in combination with Wiimmfi
+    and Kaeru WFC which provide general purpose NWFC emulation and SSL
+    offloading, respectively. (For reasons beyond my control, I cannot
+    guarantee compatibility with AltWFC servers at this time.)</p>
+
+    <h2>Getting started</h2>
     <div class="gtsFloatRight">
         
     </div>
