@@ -207,8 +207,14 @@ namespace PkmnFoundations.GlobalTerminalService
         {
             if (UseSsl)
             {
+                // todo: If we target .NET Core 3+, we can manually enable RC4 cipher suites.
+                // https://github.com/dotnet/runtime/issues/23818
+                // The DS wants to use SSLv3 and one of the following ciphers:
+                // 0x0004 TLS_RSA_WITH_RC4_128_MD5
+                // 0x0005 TLS_RSA_WITH_RC4_128_SHA
+                // For now, the only functional approach is to enable these ciphers in the registry or via e.g. IISCrypto.
                 SslStream sslClient = new SslStream(c.GetStream());
-                sslClient.AuthenticateAsServer(Certificate);
+                sslClient.AuthenticateAsServer(Certificate, false, System.Security.Authentication.SslProtocols.Ssl3, false);
                 return sslClient;
             }
             else return c.GetStream();
