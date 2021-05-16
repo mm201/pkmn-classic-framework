@@ -555,6 +555,21 @@ namespace PkmnFoundations.GTS
                         response.Write(leader.Save(), 0, 34);
                     }
 
+                    if (leaders.Length < 30)
+                    {
+                        byte[] fakeLeader = new BattleTowerProfile4
+                        (
+                            new EncodedString4("-----", 16), 
+                            Versions.Platinum, Languages.English, 
+                            0, 0, 0x00000000, new TrendyPhrase4(5, 0, 0, 0), 0, 0
+                        ).Save();
+
+                        for (int x = leaders.Length; x < 30; x++)
+                        {
+                            response.Write(fakeLeader, 0, 34);
+                        }
+                    }
+
                     // This is completely insane. The game crashes when you
                     // use Check Leaders if the response arrives too fast,
                     // so we artificially delay it.

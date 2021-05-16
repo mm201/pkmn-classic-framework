@@ -24,6 +24,25 @@ namespace PkmnFoundations.Structures
             Load(data, start);
         }
 
+        public BattleSubwayProfile5(EncodedString5 name, Versions version,
+            Languages language, byte country, byte region, uint ot,
+            TrendyPhrase5 phrase_leader, byte gender, byte unknown)
+        {
+            if (name == null) throw new ArgumentNullException("name");
+            if (name.Size != 16) throw new ArgumentException("name");
+            if (phrase_leader == null) throw new ArgumentNullException("phrase_leader");
+
+            Name = name; // todo: clone
+            Version = version;
+            Language = language;
+            Country = country;
+            Region = region;
+            OT = ot;
+            PhraseLeader = phrase_leader; // todo: clone
+            Gender = gender;
+            Unknown = unknown;
+        }
+
         public EncodedString5 Name;
         public Versions Version;
         public Languages Language;

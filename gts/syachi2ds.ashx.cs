@@ -515,6 +515,21 @@ namespace PkmnFoundations.GTS
                         response.Write(leader.Save(), 0, 34);
                     }
 
+                    if (leaders.Length < 30)
+                    {
+                        byte[] fakeLeader = new BattleSubwayProfile5
+                        (
+                            new EncodedString5("-----", 16),
+                            Versions.Platinum, Languages.English,
+                            0, 0, 0x00000000, new TrendyPhrase5(0, 20, 0, 0), 0, 0
+                        ).Save();
+
+                        for (int x = leaders.Length; x < 30; x++)
+                        {
+                            response.Write(fakeLeader, 0, 34);
+                        }
+                    }
+
                 } break;
 
                 case "/syachi2ds/web/battletower/upload.asp":
