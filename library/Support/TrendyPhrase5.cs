@@ -43,8 +43,9 @@ namespace PkmnFoundations.Support
             ushort word1 = BitConverter.ToUInt16(data, 4);
             ushort word2 = BitConverter.ToUInt16(data, 6);
 
-            if (mood >= 5) return "";
-            if (index >= 20) return "";
+            // moods higher than 6 seem to say "no answer" but indexes higher than 20 are blank. 
+            if (mood >= 7) return "";
+            if (index >= 21) return "";
             return String.Format(PHRASES[mood, index],
                 String.Format(wordFormat, RenderWord(word1)),
                 String.Format(wordFormat, RenderWord(word2))
@@ -100,6 +101,7 @@ namespace PkmnFoundations.Support
                 "Recently, {0}\nseems {1}.",
                 "I wonder if\n{0} is yummy...",
                 "I never miss {0}.\nIt's part of what I do every day.",
+                "",
             },
             {   // Mood 1: Start of battle /173          
                 "Please!\n{0}",
@@ -122,6 +124,7 @@ namespace PkmnFoundations.Support
                 "You'll choose {0}\nif I choose {1}, right?",
                 "I beg you, {0}.\nPlease go with {1}!",
                 "May {0} safely\nland on {0}!",
+                "",
             },
             {   // Mood 2: Victory /176
                 "I win!\n{0}!",
@@ -144,6 +147,7 @@ namespace PkmnFoundations.Support
                 "Huh?\n{0}?!",
                 "The power of {0}\nis awesome!",
                 "Everyone!\n{0}!",
+                "",
             },
             {   // Mood 3: Defeat /170
                 "You win...\n{0}!",
@@ -166,6 +170,7 @@ namespace PkmnFoundations.Support
                 "Is it because {0}\nwas lacking?",
                 "Isn't {0}\n{1}?",
                 "Aww... That's really\n{0}...",
+                "",
             },
             {   // Mood 4: Other /175
                 "Yo!\nI'm {1}.",
@@ -188,12 +193,59 @@ namespace PkmnFoundations.Support
                 "I don't want to\n{0}...",
                 "That was fun! I hope we can\n{0} again sometime.",
                 "See ya!\n{0}!",
-            }
+                "",
+            },
+            {   // Mood 5: Greetings /172 New to GenV. Seems to be locked by default?
+                "Glad to meet you!\nI am {0}!",
+                "I'm a {0}-loving\n{1} Trainer.",
+                "Let's {0} sometime.\nKeep in touch!",
+                "{0} is the best!\nI love it!",
+                "It's great because it's\n{0}. Don't you agree?",
+                "Tell me your favorite\n{0}.",
+                "Hi!\nDo you know {0}?",
+                "It's very {0}\nand {1}!",
+                "Let's {0} soon!",
+                "Thank you for taking your time\nwith {0}.",
+                "It was so {0}.\nI was moved!",
+                "What do you think of\n{0}?",
+                "It's {0},\nif you ask me.",
+                "It bothers us, doesn't it?\nI'm talking about {0}.",
+                "Do you know what\nthey call {0}?",
+                "This {0} is\nsurprisingly {1}!",
+                "{0} sure is something.\nYou should try it!",
+                "Thank you for taking your time\nwith {0}.",
+                "{0} is\n{1}, don't you think?",
+                "That means {0}.\nThanks!",
+                "We should {0} together\nagain. {1}!",
+            },
+            { // Mood 6: Placeholder to hold a single trendy word
+                "{0}",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+            },
         };
 
         private static String[] WORDS_POKEMON = new String[]
         {
-            "―――――","BULBASAUR","IVYSAUR","VENUSAUR",           // 0
+            "POKÉMON","BULBASAUR","IVYSAUR","VENUSAUR",           // 0
             "CHARMANDER","CHARMELEON","CHARIZARD","SQUIRTLE",
             "WARTORTLE","BLASTOISE","CATERPIE","METAPOD",
             "BUTTERFREE","WEEDLE","KAKUNA","BEEDRILL",
