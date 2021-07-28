@@ -12,6 +12,14 @@ namespace PkmnFoundations.Structures
         {
         }
 
+        public IvStatValues(IEnumerable<byte> s) : base(s)
+        {
+            foreach (byte b in s)
+            {
+                if (b > 31) throw new ArgumentOutOfRangeException();
+            }
+        }
+
         public IvStatValues(int ivs) : base(new byte[6])
         {
             for (int x = 0; x < 6; x++)

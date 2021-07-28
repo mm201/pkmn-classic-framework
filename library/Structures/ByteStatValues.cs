@@ -12,9 +12,8 @@ namespace PkmnFoundations.Structures
         {
         }
 
-        protected ByteStatValues(byte[] s) : base(s)
+        public ByteStatValues(IEnumerable<byte> s) : base(s)
         {
-
         }
     }
 }

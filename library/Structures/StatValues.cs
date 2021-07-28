@@ -13,9 +13,8 @@ namespace PkmnFoundations.Structures
 
         }
 
-        protected StatValues(T[] s) : base(s)
+        public StatValues(IEnumerable<T> s) : base(s)
         {
-            if (s.Length != 6) throw new ArgumentException();
         }
 
         public T Hp { get { return Stats[0]; } set { Stats[0] = value; } }

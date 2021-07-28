@@ -12,6 +12,8 @@ namespace PkmnFoundations.Structures
         {
         }
 
-
+        public IntStatValues(IEnumerable<int> s) : base(s)
+        {
+        }
     }
 }
