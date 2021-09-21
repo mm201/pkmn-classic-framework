@@ -520,7 +520,7 @@ namespace PkmnFoundations.GTS
                         byte[] fakeLeader = new BattleSubwayProfile5
                         (
                             new EncodedString5("-----", 16),
-                            Versions.Platinum, Languages.English,
+                            Versions.White, Languages.English,
                             0, 0, 0x00000000, new TrendyPhrase5(0, 20, 0, 0), 0, 0
                         ).Save();
 

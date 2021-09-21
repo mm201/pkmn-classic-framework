@@ -10,9 +10,9 @@ namespace PkmnFoundations.Structures
         protected StatValuesBase(IEnumerable<T> s)
         {
             // fail without enumerating if possible
-            if (s is IList<T> && ((IList<T>)s).Count != 6) throw new ArgumentException("s must have exactly 6 elements.", "s");
+            if (s is IList<T> && ((IList<T>)s).Count != 6) throw new ArgumentException("Collection must have exactly 6 elements.", "s");
             var arr = s.ToArray();
-            if (arr.Length != 6) throw new ArgumentException("s must have exactly 6 elements.", "s");
+            if (arr.Length != 6) throw new ArgumentException("Collection must have exactly 6 elements.", "s");
             Stats = arr;
         }
 

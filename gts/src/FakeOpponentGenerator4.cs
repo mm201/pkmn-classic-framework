@@ -219,7 +219,7 @@ namespace PkmnFoundations.GTS
                             104, // Double team
                             329 // Sheer cold
                         },
-                        5, 5, // Bold
+                        5, 5, // Bold, shiny
                         BattleTowerPokemon4.PackIVs(31, 10, 20, 31, 10, 31),
                         new byte[] { 252, 0, 0, 252, 0, 6 },
                         0, Languages.English, 47, // Thick fat
@@ -249,7 +249,7 @@ namespace PkmnFoundations.GTS
                             89, // EQ
                             444 // Stone edge
                         },
-                        13, 13, // Jolly
+                        13, 13, // Jolly, shiny
                         BattleTowerPokemon4.PackIVs(31, 31, 20, 31, 10, 20),
                         new byte[] { 6, 252, 0, 252, 0, 0 },
                         0, Languages.English, 45, // Sand stream
@@ -346,7 +346,7 @@ namespace PkmnFoundations.GTS
                             8, // Ice punch
                             67 // Low kick
                         },
-                        13, 13, // Jolly
+                        13, 13, // Jolly, shiny
                         BattleTowerPokemon4.PackIVs(31, 31, 20, 31, 10, 20),
                         new byte[] { 40, 252, 0, 218, 0, 0 },
                         0, Languages.English, 46, // Pressure
@@ -376,7 +376,7 @@ namespace PkmnFoundations.GTS
                             95, // Hypnosis
                             153 // Explosion
                         },
-                        22, 22, // Sassy
+                        22, 22, // Sassy, shiny
                         BattleTowerPokemon4.PackIVs(31, 20, 31, 0, 10, 20),
                         new byte[] { 252, 0, 252, 0, 0, 6 },
                         0, Languages.English, 26, // Levitate
@@ -438,7 +438,7 @@ namespace PkmnFoundations.GTS
                             411, // Focus blast
                             324 // Signal beam
                         },
-                        15, 15, // Modest
+                        15, 15, // Modest, shiny
                         BattleTowerPokemon4.PackIVs(31, 10, 20, 31, 31, 20),
                         new byte[] { 6, 0, 0, 252, 252, 6 },
                         0, Languages.English, 39, // Inner focus

@@ -55,6 +55,9 @@ namespace PkmnFoundations.GlobalTerminalService
             store.Open(OpenFlags.ReadOnly);
             X509Certificate2Collection cers = store.Certificates.Find(X509FindType.FindBySubjectName, "pkgdsprod.nintendo.co.jp", false);
 
+            // fixme: Screen any found certificates for errors like "The
+            // credentials supplied to the package were not recognized" and use
+            // the dummy if none are good.
             if (cers.Count > 0)
                 return cers[0];
 
