@@ -98,7 +98,14 @@ namespace PkmnFoundations.GTS
                 {
                     response.Write(new byte[] { 0x00, 0x00, 0x00, 0x00 }, 0, 4);
 
-                } break;
+                        foreach (var i in new[] { 600403373, 601315647 })
+                        {
+                            response.Write(BitConverter.GetBytes(i), 0, 4);
+                            response.Write(new byte[] { 0x00, 0x00, 0x00, 0x00 }, 0, 4);
+                        }
+
+                    }
+                break;
 
                 case "/pokemondpds/web/enc/lobby/getQuestionnaire.asp":
                 {
