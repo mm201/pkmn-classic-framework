@@ -44,7 +44,7 @@ namespace PkmnFoundations.GTS
 					    // \x02 - "This Pokemon is dreaming."
 					    // \x03 - Wake up + download new changes from server
 					    // \x04 - Wake up normally?
-					    // \x05 - ? (Does not work with sleeping pokemon)
+					    // \x05 - Put Pokemon to sleep if none is sleeping
 					    // \x08 - Leads to account.create.upload
 
                         context.Response.OutputStream.WriteBytes(new byte[] { 0x00, 0x00, 0x00, 0x00 });
