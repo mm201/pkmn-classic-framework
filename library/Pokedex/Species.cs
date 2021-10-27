@@ -59,6 +59,9 @@ namespace PkmnFoundations.Pokedex
         public int NationalDex { get; private set; }
         public LocalizedString Name { get; private set; }
         public GrowthRates GrowthRate { get; private set; }
+        /// <summary>
+        /// Represents the odds, out of 8, of the Pokémon being female. 255 is reserved for genderless Pokémon.
+        /// </summary>
         public byte GenderRatio { get; private set; }
         public EggGroups EggGroup1 { get; private set; }
         public EggGroups EggGroup2 { get; private set; }

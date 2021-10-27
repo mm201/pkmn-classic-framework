@@ -18,30 +18,6 @@ namespace PkmnFoundations.Structures
             Initialize();
         }
 
-        public PokemonBase(Pokedex.Pokedex pokedex, BinaryReader data)
-            : base()
-        {
-            m_pokedex = pokedex;
-            Initialize();
-            Load(data);
-        }
-
-        public PokemonBase(Pokedex.Pokedex pokedex, byte[] data)
-            : base()
-        {
-            m_pokedex = pokedex;
-            Initialize();
-            Load(data);
-        }
-
-        public PokemonBase(Pokedex.Pokedex pokedex, byte[] data, int offset)
-            : base()
-        {
-            m_pokedex = pokedex;
-            Initialize();
-            Load(data, offset);
-        }
-
         private void Initialize()
         {
             m_species_pair = Species.CreatePair(m_pokedex);
@@ -130,7 +106,37 @@ namespace PkmnFoundations.Structures
         public ByteStatValues EVs { get; set; }
 
         public abstract byte Level { get; set; }
-        public abstract Genders Gender { get; set; }
+        public virtual Genders Gender 
+        { 
+            get
+            {
+                // https://bulbapedia.bulbagarden.net/wiki/Gender#In_Generations_III_to_V
+                var ratio = Species.GenderRatio;
+                switch (ratio)
+                {
+                    case 0:
+                        return Genders.Male;
+                    case 8:
+                        return Genders.Female;
+                    case 255:
+                        return Genders.None;
+                    default:
+                    {
+                        // massage gender value into the corresponding value in bulbapedia table.
+                        // This is off-by-one in true Game Freak fashion, causing a slight bias towards male Pokémon.
+                        uint mangledRatio = ratio * 32u - 1;
+                        uint pGender = Personality & 0xffu;
+                        return pGender >= mangledRatio ? Genders.Male : Genders.Female;
+                    }
+                }
+            }
+            set
+            {
+                // xxx: we don't really want this setter at all but we need to be able to override and provide a setter
+                // https://github.com/dotnet/csharplang/issues/1568
+                throw new NotSupportedException();
+            }
+        }
         public abstract String Nickname { get; set; }
 
         public virtual bool IsShiny
