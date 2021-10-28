@@ -79,6 +79,7 @@
     <Compile Include="Structures\BattleSubwayProfile5.cs" />
     <Compile Include="Structures\BattleSubwayRecord5.cs" />
     <Compile Include="Structures\BattleTowerPokemon4.cs" />
+    <Compile Include="Structures\BattleTowerPokemonBase.cs" />
     <Compile Include="Structures\BattleTowerRecord4.cs" />
     <Compile Include="Structures\BattleTowerProfile4.cs" />
     <Compile Include="Structures\BattleVideoHeader4.cs" />

@@ -54,6 +54,22 @@ namespace PkmnFoundations.Structures
             return result;
         }
 
+        public static byte UnpackIV(uint ivs, Stats stat)
+        {
+            int shift = (int)stat * 5 - 5;
+            return (byte)(ivs << shift & 0x1f);
+        }
+
+        public static uint PackIVs(byte HP, byte Attack, byte Defense, byte Speed, byte SpAttack, byte SpDefense)
+        {
+            return (uint)((HP & 31) |
+                ((Attack & 31) << 5) |
+                ((Defense & 31) << 10) |
+                ((Speed & 31) << 15) |
+                ((SpAttack & 31) << 20) |
+                ((SpDefense & 31) << 25));
+        }
+
         public JudgeSummary JudgeSummary
         {
             get

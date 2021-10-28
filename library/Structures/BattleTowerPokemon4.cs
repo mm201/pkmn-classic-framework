@@ -7,15 +7,15 @@ using PkmnFoundations.Support;
 
 namespace PkmnFoundations.Structures
 {
-    public class BattleTowerPokemon4
+    public class BattleTowerPokemon4 : BattleTowerPokemonBase
     {
-        public BattleTowerPokemon4()
+        public BattleTowerPokemon4(Pokedex.Pokedex pokedex) : base(pokedex)
         {
         }
 
-        public BattleTowerPokemon4(ushort species, ushort held_item, ushort[] moveset,
+        public BattleTowerPokemon4(Pokedex.Pokedex pokedex, ushort species, ushort held_item, ushort[] moveset,
             uint ot, uint personality, uint ivs, byte[] evs, byte unknown1,
-            Languages language, byte ability, byte happiness, EncodedString4 nickname)
+            Languages language, byte ability, byte happiness, EncodedString4 nickname) : base(pokedex)
         {
             if (moveset == null) throw new ArgumentNullException("moveset");
             if (moveset.Length != 4) throw new ArgumentException("moveset");
@@ -24,142 +24,141 @@ namespace PkmnFoundations.Structures
             if (nickname == null) throw new ArgumentNullException("nickname");
             if (nickname.Size != 22) throw new ArgumentException("nickname");
 
-            Species = species;
-            HeldItem = held_item;
+            SpeciesID = species;
+            HeldItemID = held_item;
             Moveset = moveset.ToArray();
-            OT = ot;
+            TrainerID = ot;
             Personality = personality;
-            IVs = ivs;
-            EVs = evs.ToArray();
+            IVs = new IvStatValues((int)ivs & 0x3fffffff);
+            IvFlags = ivs & 0xc0000000u;
+            EVs = new ByteStatValues(evs);
             Unknown1 = unknown1;
             Language = language;
-            Ability = ability;
+            AbilityID = ability;
             Happiness = happiness;
-            Nickname = nickname; // todo: clone
+            NicknameEncoded = nickname; // todo: clone
         }
 
-        public BattleTowerPokemon4(byte[] data)
+        public BattleTowerPokemon4(Pokedex.Pokedex pokedex, BinaryReader data) : base(pokedex)
         {
-            Load(data, 0);
+            Load(data);
         }
 
-        public BattleTowerPokemon4(byte[] data, int start)
+        public BattleTowerPokemon4(Pokedex.Pokedex pokedex, byte[] data) : base(pokedex)
         {
-            Load(data, start);
+            Load(data);
         }
 
-        public ushort Species;
-        public ushort HeldItem;
-        public ushort[] Moveset;
-        public uint OT;
-        public uint Personality;
-        public uint IVs;
-        public byte[] EVs;
-        public byte Unknown1; // probably a bitmask of applied PP ups
-        public Languages Language;
-        public byte Ability;
-        public byte Happiness;
-        public EncodedString4 Nickname;
+        public BattleTowerPokemon4(Pokedex.Pokedex pokedex, byte[] data, int offset) : base(pokedex)
+        {
+            Load(data, offset);
+        }
 
-        // todo: add IVs class with indexer?
-        // byte myHp = myPokemon.IVs[Stats.HP];
+        public EncodedString4 NicknameEncoded;
+        public override string Nickname
+        {
+            get
+            {
+                return (NicknameEncoded == null) ? null : NicknameEncoded.Text;
+            }
+            set
+            {
+                // xxx: This comes straight from Pokemon4. What we logically need here is an inheritance diamond.
+                if (Nickname == value) return;
+                if (NicknameEncoded == null) NicknameEncoded = new EncodedString4(value, 22);
+                else NicknameEncoded.Text = value;
+            }
+        }
+
+        [Obsolete("Use IVs[] indexer.")]
         public byte IV(Stats stat)
         {
-            return UnpackIV(IVs, stat);
+            return IVs[stat];
         }
 
-        public byte[] Save()
+        protected override void Save(BinaryWriter writer)
         {
-            byte[] data = new byte[0x38];
-            MemoryStream ms = new MemoryStream(data);
-            BinaryWriter writer = new BinaryWriter(ms);
-
-            writer.Write(Species);
-            writer.Write(HeldItem);
+            writer.Write((ushort)SpeciesID);
+            writer.Write((ushort)HeldItemID);
             for (int x = 0; x < 4; x++)
             {
                 writer.Write(Moveset[x]);
             }
-            writer.Write(OT);
+            writer.Write(TrainerID);
             writer.Write(Personality);
-            writer.Write(IVs);
-            for (int x = 0; x < 6; x++)
-            {
-                writer.Write(EVs[x]);
-            }
+            writer.Write(IVs.ToInt32() | (int)IvFlags);
+            writer.Write(EVs.ToArray(), 0, 6);
             writer.Write(Unknown1);
             writer.Write((byte)Language);
-            writer.Write(Ability);
+            writer.Write((byte)AbilityID);
             writer.Write(Happiness);
-            writer.Write(Nickname.RawData, 0, 0x16);
+            writer.Write(NicknameEncoded.RawData, 0, 22);
 
             writer.Flush();
-            ms.Flush();
-            return data;
         }
 
-        public void Load(byte[] data, int start)
+        protected override void Load(BinaryReader reader)
         {
-            if (start + 0x38 > data.Length) throw new ArgumentOutOfRangeException("start");
-
-            Species = BitConverter.ToUInt16(data, 0x00 + start);
-            HeldItem = BitConverter.ToUInt16(data, 0x02 + start);
+            SpeciesID = reader.ReadUInt16();
+            HeldItemID = reader.ReadUInt16();
             Moveset = new ushort[4];
             for (int x = 0; x < 4; x++)
             {
-                Moveset[x] = BitConverter.ToUInt16(data, 0x04 + x * 2 + start);
+                Moveset[x] = reader.ReadUInt16();
             }
-            OT = BitConverter.ToUInt32(data, 0x0c + start);
-            Personality = BitConverter.ToUInt32(data, 0x10 + start);
-            IVs = BitConverter.ToUInt32(data, 0x14 + start);
+            TrainerID = reader.ReadUInt32();
+            Personality = reader.ReadUInt32();
+            uint ivs = reader.ReadUInt32();
+            IVs = new IvStatValues((int)ivs & 0x3fffffff);
+            IvFlags = ivs & 0xc0000000u;
 
-            EVs = new byte[6];
-            for (int x = 0; x < 6; x++)
-            {
-                EVs[x] = data[0x18 + x + start];
-            }
-            Unknown1 = data[0x1e + start];
-            Language = (Languages)data[0x1f + start];
-            Ability = data[0x20 + start];
-            Happiness = data[0x21 + start];
-            Nickname = new EncodedString4(data, 0x22 + start, 0x16);
+            EVs = new ByteStatValues(reader.ReadBytes(6));
+            Unknown1 = reader.ReadByte();
+            Language = (Languages)reader.ReadByte();
+            AbilityID = reader.ReadByte();
+            Happiness = reader.ReadByte();
+            NicknameEncoded = new EncodedString4(reader.ReadBytes(22));
         }
 
         public BattleTowerPokemon4 Clone()
         {
-            BattleTowerPokemon4 result = new BattleTowerPokemon4();
-            result.Species = Species;
-            result.HeldItem = HeldItem;
-            result.Moveset = Moveset.ToArray();
-            result.OT = OT;
-            result.Personality = Personality;
-            result.IVs = IVs;
-            result.EVs = EVs.ToArray();
-            result.Unknown1 = Unknown1;
-            result.Language = Language;
-            result.Ability = Ability;
-            result.Happiness = Happiness;
-            result.Nickname = new EncodedString4(Nickname.RawData.ToArray());
+            uint ivsField = (uint)(IVs.ToInt32() & 0x3fffffffu) | (IvFlags & 0xc0000000u);
+            BattleTowerPokemon4 result = new BattleTowerPokemon4(m_pokedex,
+                (ushort)SpeciesID, (ushort)HeldItemID, Moveset.ToArray(),
+                TrainerID, Personality, ivsField, EVs.ToArray(), Unknown1,
+                Language, (byte)AbilityID, Happiness, NicknameEncoded);
 
             return result;
         }
 
-        // todo: move me to the actual pokemon class once it's made.
-        public static byte UnpackIV(uint ivs, Stats stat)
+        public override Generations Generation
         {
-            int shift = (int)stat * 5 - 5;
-            return (byte)(ivs << shift & 0x1f);
+            get
+            {
+                return Generations.Generation4;
+            }
         }
 
+        public override int Size
+        {
+            get
+            {
+                return 56;
+            }
+        }
+
+        // todo: move me to the actual pokemon class once it's made.
+        [Obsolete("Use IvStatValues.UnpackIV or IvStatValues indexer, depending on context.")]
+        public static byte UnpackIV(uint ivs, Stats stat)
+        {
+            return IvStatValues.UnpackIV(ivs, stat);
+        }
+
+        [Obsolete("Use IvStatValues.PackIVs")]
         // todo: Move to IVs class
         public static uint PackIVs(byte HP, byte Attack, byte Defense, byte Speed, byte SpAttack, byte SpDefense)
         {
-            return (uint)((HP & 31) |
-                ((Attack & 31) << 5) |
-                ((Defense & 31) << 10) |
-                ((Speed & 31) << 15) |
-                ((SpAttack & 31) << 20) |
-                ((SpDefense & 31) << 25));
+            return IvStatValues.PackIVs(HP, Attack, Defense, Speed, SpAttack, SpDefense);
         }
     }
 }

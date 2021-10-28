@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using PkmnFoundations.Data;
+using PkmnFoundations.Pokedex;
 using PkmnFoundations.Structures;
 using PkmnFoundations.Support;
 
@@ -33,6 +34,8 @@ namespace towerRestorer
             int opponentFailureCount = 0;
             int leaderSuccessCount = 0;
             int leaderFailureCount = 0;
+
+            Pokedex pokedex = new Pokedex(db, false);
 
             foreach (String s in filenames)
             {
@@ -95,7 +98,7 @@ namespace towerRestorer
                         {
                             try
                             {
-                                BattleTowerRecord4 record = new BattleTowerRecord4(data, 0xe4 * x);
+                                BattleTowerRecord4 record = new BattleTowerRecord4(pokedex, data, 0xe4 * x);
                                 record.PID = 0;
                                 record.Rank = rank;
                                 record.RoomNum = room;
@@ -115,7 +118,7 @@ namespace towerRestorer
                             try
                             {
                                 BattleTowerProfile4 profile = new BattleTowerProfile4(data, 0x63c + 0x22 * x);
-                                BattleTowerRecord4 record = new BattleTowerRecord4();
+                                BattleTowerRecord4 record = new BattleTowerRecord4(pokedex);
                                 record.Profile = profile;
                                 record.PID = 0;
                                 record.Rank = rank;
@@ -152,7 +155,7 @@ namespace towerRestorer
                         {
                             try
                             {
-                                BattleSubwayRecord5 record = new BattleSubwayRecord5(data, 0xf0 * x);
+                                BattleSubwayRecord5 record = new BattleSubwayRecord5(pokedex, data, 0xf0 * x);
                                 record.PID = 0;
                                 record.Rank = rank;
                                 record.RoomNum = room;
@@ -173,7 +176,7 @@ namespace towerRestorer
                             try
                             {
                                 BattleSubwayProfile5 profile = new BattleSubwayProfile5(data, 0x690 + 0x22 * x);
-                                BattleSubwayRecord5 record = new BattleSubwayRecord5();
+                                BattleSubwayRecord5 record = new BattleSubwayRecord5(pokedex);
                                 record.Profile = profile;
                                 record.PID = 0;
                                 record.Rank = rank;

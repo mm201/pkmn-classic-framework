@@ -9,20 +9,24 @@ namespace PkmnFoundations.Structures
 {
     public class BattleTowerRecord4
     {
-        public BattleTowerRecord4()
+        public BattleTowerRecord4(Pokedex.Pokedex pokedex)
         {
-
+            Pokedex = pokedex;
         }
 
-        public BattleTowerRecord4(byte[] data)
+        public BattleTowerRecord4(Pokedex.Pokedex pokedex, byte[] data)
         {
+            Pokedex = pokedex;
             Load(data, 0);
         }
 
-        public BattleTowerRecord4(byte[] data, int start)
+        public BattleTowerRecord4(Pokedex.Pokedex pokedex, byte[] data, int start)
         {
+            Pokedex = pokedex;
             Load(data, start);
         }
+
+        public Pokedex.Pokedex Pokedex { get; set; }
 
         public BattleTowerPokemon4[] Party;
         public BattleTowerProfile4 Profile;
@@ -66,7 +70,7 @@ namespace PkmnFoundations.Structures
             Party = new BattleTowerPokemon4[3];
             for (int x = 0; x < 3; x++)
             {
-                Party[x] = new BattleTowerPokemon4(data, start + x * 0x38);
+                Party[x] = new BattleTowerPokemon4(Pokedex, data, start + x * 0x38);
             }
             Profile = new BattleTowerProfile4(data, 0xa8 + start);
 

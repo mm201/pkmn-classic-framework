@@ -536,8 +536,8 @@ namespace PkmnFoundations.GTS
                         return;
                     }
 
-                    BattleTowerRecord4[] opponents = Database.Instance.BattleTowerGetOpponents4(pid, rank, roomNum);
-                    BattleTowerProfile4[] leaders = Database.Instance.BattleTowerGetLeaders4(rank, roomNum);
+                    BattleTowerRecord4[] opponents = Database.Instance.BattleTowerGetOpponents4(pokedex, pid, rank, roomNum);
+                    BattleTowerProfile4[] leaders = Database.Instance.BattleTowerGetLeaders4(pokedex, rank, roomNum);
                     BattleTowerRecord4[] fakeOpponents = FakeOpponentGenerator4.GenerateFakeOpponents(7 - opponents.Length);
 
                     foreach (BattleTowerRecord4 record in fakeOpponents)
@@ -590,7 +590,7 @@ namespace PkmnFoundations.GTS
                         return;
                     }
 
-                    BattleTowerRecord4 record = new BattleTowerRecord4(data, 0);
+                    BattleTowerRecord4 record = new BattleTowerRecord4(pokedex, data, 0);
 
                     record.Rank = data[0xe4];
                     record.RoomNum = data[0xe5];

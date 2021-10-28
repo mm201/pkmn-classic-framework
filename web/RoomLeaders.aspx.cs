@@ -8,6 +8,7 @@ using System.Web.UI.WebControls;
 using PkmnFoundations.Data;
 using PkmnFoundations.Structures;
 using PkmnFoundations.Support;
+using PkmnFoundations.Web;
 
 namespace PkmnFoundations.GTS
 {
@@ -42,11 +43,13 @@ namespace PkmnFoundations.GTS
             rank--;
             room--;
 
+            Pokedex.Pokedex pokedex = AppStateHelper.Pokedex(Context.Application);
+
             switch (rbGeneration.SelectedValue)
             {
                 case "4":
                 {
-                    BattleTowerProfile4[] results = Database.Instance.BattleTowerGetLeaders4(rank, room);
+                    BattleTowerProfile4[] results = Database.Instance.BattleTowerGetLeaders4(pokedex, rank, room);
 
                     StringBuilder builder = new StringBuilder();
 
@@ -60,7 +63,7 @@ namespace PkmnFoundations.GTS
                     }
                     builder.Append("</ul><p>Opponents:</p><ul>");
 
-                    BattleTowerRecord4[] opponents = Database.Instance.BattleTowerGetOpponents4(-1, rank, room);
+                    BattleTowerRecord4[] opponents = Database.Instance.BattleTowerGetOpponents4(pokedex, -1, rank, room);
                     foreach (BattleTowerRecord4 record in opponents)
                     {
                         builder.Append("<li>");
@@ -79,7 +82,7 @@ namespace PkmnFoundations.GTS
                 } break;
                 case "5":
                     {
-                        BattleSubwayProfile5[] results = Database.Instance.BattleSubwayGetLeaders5(rank, room);
+                        BattleSubwayProfile5[] results = Database.Instance.BattleSubwayGetLeaders5(pokedex, rank, room);
 
                         StringBuilder builder = new StringBuilder();
 
@@ -93,7 +96,7 @@ namespace PkmnFoundations.GTS
                         }
                         builder.Append("</ul><p>Opponents:</p><ul>");
 
-                        BattleSubwayRecord5[] opponents = Database.Instance.BattleSubwayGetOpponents5(-1, rank, room);
+                        BattleSubwayRecord5[] opponents = Database.Instance.BattleSubwayGetOpponents5(pokedex, -1, rank, room);
                         foreach (BattleSubwayRecord5 record in opponents)
                         {
                             builder.Append("<li>");

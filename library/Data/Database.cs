@@ -83,8 +83,8 @@ namespace PkmnFoundations.Data
         #region Battle Tower 4
         public abstract ulong BattleTowerUpdateRecord4(BattleTowerRecord4 record);
         public abstract ulong BattleTowerAddLeader4(BattleTowerRecord4 record);
-        public abstract BattleTowerRecord4[] BattleTowerGetOpponents4(int pid, byte rank, byte roomNum);
-        public abstract BattleTowerProfile4[] BattleTowerGetLeaders4(byte rank, byte roomNum);
+        public abstract BattleTowerRecord4[] BattleTowerGetOpponents4(Pokedex.Pokedex pokedex, int pid, byte rank, byte roomNum);
+        public abstract BattleTowerProfile4[] BattleTowerGetLeaders4(Pokedex.Pokedex pokedex, byte rank, byte roomNum);
         #endregion
 
         #region Wi-fi Plaza
@@ -124,8 +124,8 @@ namespace PkmnFoundations.Data
         #region Battle Subway 5
         public abstract ulong BattleSubwayUpdateRecord5(BattleSubwayRecord5 record);
         public abstract ulong BattleSubwayAddLeader5(BattleSubwayRecord5 record);
-        public abstract BattleSubwayRecord5[] BattleSubwayGetOpponents5(int pid, byte rank, byte roomNum);
-        public abstract BattleSubwayProfile5[] BattleSubwayGetLeaders5(byte rank, byte roomNum);
+        public abstract BattleSubwayRecord5[] BattleSubwayGetOpponents5(Pokedex.Pokedex pokedex, int pid, byte rank, byte roomNum);
+        public abstract BattleSubwayProfile5[] BattleSubwayGetLeaders5(Pokedex.Pokedex pokedex, byte rank, byte roomNum);
         #endregion
 
         #region Global Terminal 4

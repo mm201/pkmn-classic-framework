@@ -495,8 +495,8 @@ namespace PkmnFoundations.GTS
                         return;
                     }
 
-                    BattleSubwayRecord5[] opponents = Database.Instance.BattleSubwayGetOpponents5(pid, rank, roomNum);
-                    BattleSubwayProfile5[] leaders = Database.Instance.BattleSubwayGetLeaders5(rank, roomNum);
+                    BattleSubwayRecord5[] opponents = Database.Instance.BattleSubwayGetOpponents5(pokedex, pid, rank, roomNum);
+                    BattleSubwayProfile5[] leaders = Database.Instance.BattleSubwayGetLeaders5(pokedex, rank, roomNum);
 
                     if (opponents.Length != 7)
                     {
@@ -542,7 +542,7 @@ namespace PkmnFoundations.GTS
                         return;
                     }
 
-                    BattleSubwayRecord5 record = new BattleSubwayRecord5(request, 0);
+                    BattleSubwayRecord5 record = new BattleSubwayRecord5(pokedex, request, 0);
 
                     record.Rank = request[0xf0];
                     record.RoomNum = request[0xf1];

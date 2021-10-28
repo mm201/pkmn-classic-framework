@@ -30,23 +30,24 @@ namespace PkmnFoundations.GTS
             BattleTowerRecord4[] result = new BattleTowerRecord4[count];
 
             Random rand = new Random();
+            var pokedex = AppStateHelper.Pokedex(HttpContext.Current.Application);
 
             for (int x = 0; x < count; x++)
             {
                 int index = rand.Next(values.Count);
                 int index2 = values[index];
                 values.RemoveAt(index);
-                result[x] = GenerateFakeOpponent(index2);
+                result[x] = GenerateFakeOpponent(pokedex, index2);
             }
 
             return result;
         }
 
-        public static BattleTowerRecord4 GenerateFakeOpponent(int index)
+        public static BattleTowerRecord4 GenerateFakeOpponent(Pokedex.Pokedex pokedex, int index)
         {
             if (index >= FAKE_OPPONENTS_COUNT) throw new ArgumentOutOfRangeException("index");
 
-            BattleTowerRecord4 record = new BattleTowerRecord4();
+            BattleTowerRecord4 record = new BattleTowerRecord4(pokedex);
             record.Party = new BattleTowerPokemon4[3];
             record.Unknown3 = 7983;
 
@@ -54,7 +55,7 @@ namespace PkmnFoundations.GTS
             {
                 case 0:
                 default:
-                    record.Party[0] = new BattleTowerPokemon4(
+                    record.Party[0] = new BattleTowerPokemon4(pokedex,
                         9, // Blastoise
                         234, // Leftovers
                         new ushort[] { 
@@ -64,13 +65,13 @@ namespace PkmnFoundations.GTS
                             156 // Rest
                         },
                         0x01020304, 15, // Modest
-                        BattleTowerPokemon4.PackIVs(31, 10, 20, 31, 31, 20),
+                        IvStatValues.PackIVs(31, 10, 20, 31, 31, 20),
                         new byte[] { 6, 0, 0, 252, 252, 0 },
                         0, Languages.English, 67, // Torrent
                         255, new EncodedString4("Leonardo", 22)
                     );
 
-                    record.Party[1] = new BattleTowerPokemon4(
+                    record.Party[1] = new BattleTowerPokemon4(pokedex,
                         389, // Torterra
                         287, // Choice scarf
                         new ushort[] { 
@@ -80,13 +81,13 @@ namespace PkmnFoundations.GTS
                             242 // Crunch
                         },
                         0x01020304, 13, // Jolly
-                        BattleTowerPokemon4.PackIVs(31, 31, 20, 31, 10, 20),
+                        IvStatValues.PackIVs(31, 31, 20, 31, 10, 20),
                         new byte[] { 6, 252, 0, 252, 0, 0 },
                         0, Languages.English, 65, // Overgrow
                         255, new EncodedString4("Donatello", 22)
                     );
 
-                    record.Party[2] = new BattleTowerPokemon4(
+                    record.Party[2] = new BattleTowerPokemon4(pokedex,
                         324, // Torkoal
                         217, // Quick claw
                         new ushort[] { 
@@ -96,7 +97,7 @@ namespace PkmnFoundations.GTS
                             90 // Fissure
                         },
                         0x01020304, 23, // Careful
-                        BattleTowerPokemon4.PackIVs(31, 10, 31, 20, 10, 31),
+                        IvStatValues.PackIVs(31, 10, 31, 20, 10, 31),
                         new byte[] { 252, 0, 6, 0, 0, 252 },
                         0, Languages.English, 73, // White smoke
                         255, new EncodedString4("Raphael", 22)
@@ -111,12 +112,12 @@ namespace PkmnFoundations.GTS
                         );
 
                     record.PhraseChallenged = new TrendyPhrase4(0, 16, 291, 7);
-                    record.PhraseWon = new TrendyPhrase4(1, 11, 766, 65535);
-                    record.PhraseLost = new TrendyPhrase4(2, 8, 1406, 65535);
+                    record.PhraseWon = new TrendyPhrase4(1, 11, 766, 65535); // I might have won with HELPING HAND!
+                    record.PhraseLost = new TrendyPhrase4(2, 8, 1406, 65535); // You're INCREDIBLE, aren't you?
                     break;
 
                 case 1:
-                    record.Party[0] = new BattleTowerPokemon4(
+                    record.Party[0] = new BattleTowerPokemon4(pokedex,
                         376, // Metagross
                         268, // Expert belt
                         new ushort[] { 
@@ -132,7 +133,7 @@ namespace PkmnFoundations.GTS
                         255, new EncodedString4("Goldfinger", 22)
                     );
 
-                    record.Party[1] = new BattleTowerPokemon4(
+                    record.Party[1] = new BattleTowerPokemon4(pokedex,
                         282, // Gardevoir
                         297, // Choice specs
                         new ushort[] { 
@@ -148,7 +149,7 @@ namespace PkmnFoundations.GTS
                         255, new EncodedString4("Curly", 22)
                     );
 
-                    record.Party[2] = new BattleTowerPokemon4(
+                    record.Party[2] = new BattleTowerPokemon4(pokedex,
                         134, // Vaporeon
                         234, // Leftovers
                         new ushort[] { 
@@ -165,7 +166,7 @@ namespace PkmnFoundations.GTS
                     );
 
                     record.Profile = new BattleTowerProfile4(
-                        new EncodedString4("Kate", 16),
+                        new EncodedString4("Megan", 16),
                         Versions.Platinum, Languages.English,
                         0, 0, 0x02030405,
                         new TrendyPhrase4(3, 8, 1487, 65535), // There's only WI-FI left!
@@ -173,12 +174,12 @@ namespace PkmnFoundations.GTS
                         );
 
                     record.PhraseChallenged = new TrendyPhrase4(3, 8, 1487, 65535);
-                    record.PhraseWon = new TrendyPhrase4(3, 3, 1439, 65535); // This BATTLE TOWER is DIFFICULT, isn't it?
+                    record.PhraseWon = new TrendyPhrase4(3, 3, 1492, 1439); // This BATTLE TOWER is DIFFICULT, isn't it?
                     record.PhraseLost = new TrendyPhrase4(3, 2, 1493, 1492); // I love GTS! I love BATTLE TOWER too!
                     break;
 
                 case 2:
-                    record.Party[0] = new BattleTowerPokemon4(
+                    record.Party[0] = new BattleTowerPokemon4(pokedex,
                         392, // Infernape
                         275, // Focus sash
                         new ushort[] { 
@@ -188,13 +189,13 @@ namespace PkmnFoundations.GTS
                             7 // Fire punch
                         },
                         0x02030405, 13, // Jolly
-                        BattleTowerPokemon4.PackIVs(31, 31, 20, 31, 10, 20),
+                        IvStatValues.PackIVs(31, 31, 20, 31, 10, 20),
                         new byte[] { 6, 252, 0, 252, 0, 0 },
                         0, Languages.English, 66, // Blaze
                         255, new EncodedString4("FunkyMunky", 22)
                     );
 
-                    record.Party[1] = new BattleTowerPokemon4(
+                    record.Party[1] = new BattleTowerPokemon4(pokedex,
                         235, // Smeargle
                         210, // Custap
                         new ushort[] { 
@@ -204,13 +205,13 @@ namespace PkmnFoundations.GTS
                             144 // Transform
                         },
                         0x02030405, 10, // Timid
-                        BattleTowerPokemon4.PackIVs(31, 10, 31, 31, 10, 20),
+                        IvStatValues.PackIVs(31, 10, 31, 31, 10, 20),
                         new byte[] { 252, 0, 6, 252, 0, 0 },
                         0, Languages.English, 101, // Technician
                         255, new EncodedString4("Yourself", 22)
                     );
 
-                    record.Party[2] = new BattleTowerPokemon4(
+                    record.Party[2] = new BattleTowerPokemon4(pokedex,
                         365, // Walrein
                         217, // Quick claw
                         new ushort[] { 
@@ -220,7 +221,7 @@ namespace PkmnFoundations.GTS
                             329 // Sheer cold
                         },
                         5, 5, // Bold, shiny
-                        BattleTowerPokemon4.PackIVs(31, 10, 20, 31, 10, 31),
+                        IvStatValues.PackIVs(31, 10, 20, 31, 10, 31),
                         new byte[] { 252, 0, 0, 252, 0, 6 },
                         0, Languages.English, 47, // Thick fat
                         255, new EncodedString4("Problem?", 22)
@@ -240,7 +241,7 @@ namespace PkmnFoundations.GTS
                     break;
 
                 case 3:
-                    record.Party[0] = new BattleTowerPokemon4(
+                    record.Party[0] = new BattleTowerPokemon4(pokedex,
                         248, // Tyranitar
                         189, // Chople
                         new ushort[] { 
@@ -250,13 +251,13 @@ namespace PkmnFoundations.GTS
                             444 // Stone edge
                         },
                         13, 13, // Jolly, shiny
-                        BattleTowerPokemon4.PackIVs(31, 31, 20, 31, 10, 20),
+                        IvStatValues.PackIVs(31, 31, 20, 31, 10, 20),
                         new byte[] { 6, 252, 0, 252, 0, 0 },
                         0, Languages.English, 45, // Sand stream
                         255, new EncodedString4("Tyranitar", 22)
                     );
 
-                    record.Party[1] = new BattleTowerPokemon4(
+                    record.Party[1] = new BattleTowerPokemon4(pokedex,
                         212, // Scizor
                         270, // Life orb
                         new ushort[] { 
@@ -266,13 +267,13 @@ namespace PkmnFoundations.GTS
                             355 // Roost
                         },
                         0x03040506, 3, // Adamant
-                        BattleTowerPokemon4.PackIVs(31, 31, 20, 31, 10, 20),
+                        IvStatValues.PackIVs(31, 31, 20, 31, 10, 20),
                         new byte[] { 6, 252, 0, 252, 0, 0 },
                         0, Languages.English, 101, // Technician
                         255, new EncodedString4("Scizor", 22)
                     );
 
-                    record.Party[2] = new BattleTowerPokemon4(
+                    record.Party[2] = new BattleTowerPokemon4(pokedex,
                         485, // Heatran
                         234, // Leftovers
                         new ushort[] { 
@@ -283,7 +284,7 @@ namespace PkmnFoundations.GTS
                         },
                         0x03040506, 3, // Modest
                         // fixme: these IVs are unreasonably high for Soft Resetting.
-                        BattleTowerPokemon4.PackIVs(31, 10, 20, 20, 31, 31),
+                        IvStatValues.PackIVs(31, 10, 20, 20, 31, 31),
                         new byte[] { 250, 0, 0, 0, 56, 204 },
                         0, Languages.English, 18, // Flash fire
                         255, new EncodedString4("Heatran", 22)
@@ -303,7 +304,7 @@ namespace PkmnFoundations.GTS
                     break;
 
                 case 4:
-                    record.Party[0] = new BattleTowerPokemon4(
+                    record.Party[0] = new BattleTowerPokemon4(pokedex,
                         460, // Abomasnow
                         287, // Scarf
                         new ushort[] { 
@@ -313,7 +314,7 @@ namespace PkmnFoundations.GTS
                             89 // EQ
                         },
                         0x04050607, 11, // Hasty
-                        BattleTowerPokemon4.PackIVs(19, 31, 18, 30, 28, 19), // HP:fire base 59
+                        IvStatValues.PackIVs(19, 31, 18, 30, 28, 19), // HP:fire base 59
                         // Original EVs: 228Spe/164Atk/116SAtk
                         // Adjusted for Hidden Power IVs, sacrificing some Attack
                         new byte[] { 0, 148, 0, 234, 128, 0 },
@@ -321,7 +322,7 @@ namespace PkmnFoundations.GTS
                         255, new EncodedString4("Abomasnow", 22)
                     );
 
-                    record.Party[1] = new BattleTowerPokemon4(
+                    record.Party[1] = new BattleTowerPokemon4(pokedex,
                         471, // Glaceon
                         246, // Nevermeltice
                         new ushort[] { 
@@ -331,13 +332,13 @@ namespace PkmnFoundations.GTS
                             182 // Protect
                         },
                         15, 15, // Modest, shiny
-                        BattleTowerPokemon4.PackIVs(31, 10, 20, 31, 31, 20),
+                        IvStatValues.PackIVs(31, 10, 20, 31, 31, 20),
                         new byte[] { 6, 0, 0, 252, 252, 0 },
                         0, Languages.English, 81, // Snow cloak
                         255, new EncodedString4("Glaceon", 22)
                     );
 
-                    record.Party[2] = new BattleTowerPokemon4(
+                    record.Party[2] = new BattleTowerPokemon4(pokedex,
                         461, // Weavile
                         275, // Focus sash
                         new ushort[] { 
@@ -347,7 +348,7 @@ namespace PkmnFoundations.GTS
                             67 // Low kick
                         },
                         13, 13, // Jolly, shiny
-                        BattleTowerPokemon4.PackIVs(31, 31, 20, 31, 10, 20),
+                        IvStatValues.PackIVs(31, 31, 20, 31, 10, 20),
                         new byte[] { 40, 252, 0, 218, 0, 0 },
                         0, Languages.English, 46, // Pressure
                         255, new EncodedString4("Weavile", 22)
@@ -367,7 +368,7 @@ namespace PkmnFoundations.GTS
                     break;
 
                 case 5:
-                    record.Party[0] = new BattleTowerPokemon4(
+                    record.Party[0] = new BattleTowerPokemon4(pokedex,
                         437, // Bronzong
                         234, // Leftovers
                         new ushort[] { 
@@ -377,13 +378,13 @@ namespace PkmnFoundations.GTS
                             153 // Explosion
                         },
                         22, 22, // Sassy, shiny
-                        BattleTowerPokemon4.PackIVs(31, 20, 31, 0, 10, 20),
+                        IvStatValues.PackIVs(31, 20, 31, 0, 10, 20),
                         new byte[] { 252, 0, 252, 0, 0, 6 },
                         0, Languages.English, 26, // Levitate
                         255, new EncodedString4("Bronzong", 22)
                     );
 
-                    record.Party[1] = new BattleTowerPokemon4(
+                    record.Party[1] = new BattleTowerPokemon4(pokedex,
                         464, // Rhyperior
                         270, // Life orb
                         new ushort[] { 
@@ -393,13 +394,13 @@ namespace PkmnFoundations.GTS
                             224 // Megahorn
                         },
                         0x05060708, 2, // Brave
-                        BattleTowerPokemon4.PackIVs(31, 31, 31, 10, 10, 20),
+                        IvStatValues.PackIVs(31, 31, 31, 10, 10, 20),
                         new byte[] { 248, 252, 10, 0, 0, 0 },
                         0, Languages.English, 116, // Solid rock
                         255, new EncodedString4("Rhyperior", 22)
                     );
 
-                    record.Party[2] = new BattleTowerPokemon4(
+                    record.Party[2] = new BattleTowerPokemon4(pokedex,
                         462, // Magnezone
                         268, // Expert belt
                         new ushort[] { 
@@ -409,7 +410,7 @@ namespace PkmnFoundations.GTS
                             393 // Magnet rise
                         },
                         0x05060708, 17, // Quiet
-                        BattleTowerPokemon4.PackIVs(31, 10, 31, 10, 31, 20),
+                        IvStatValues.PackIVs(31, 10, 31, 10, 31, 20),
                         new byte[] { 252, 0, 6, 0, 252, 0 },
                         0, Languages.English, 42, // Magnet pull
                         255, new EncodedString4("Magnezone", 22)
@@ -429,7 +430,7 @@ namespace PkmnFoundations.GTS
                     break;
 
                 case 6:
-                    record.Party[0] = new BattleTowerPokemon4(
+                    record.Party[0] = new BattleTowerPokemon4(pokedex,
                         65, // Alakazam
                         275, // Focus sash
                         new ushort[] { 
@@ -439,13 +440,13 @@ namespace PkmnFoundations.GTS
                             324 // Signal beam
                         },
                         15, 15, // Modest, shiny
-                        BattleTowerPokemon4.PackIVs(31, 10, 20, 31, 31, 20),
+                        IvStatValues.PackIVs(31, 10, 20, 31, 31, 20),
                         new byte[] { 6, 0, 0, 252, 252, 6 },
                         0, Languages.English, 39, // Inner focus
                         255, new EncodedString4("Alakazam", 22)
                     );
 
-                    record.Party[1] = new BattleTowerPokemon4(
+                    record.Party[1] = new BattleTowerPokemon4(pokedex,
                         445, // Garchomp
                         270, // Life orb
                         new ushort[] { 
@@ -455,13 +456,13 @@ namespace PkmnFoundations.GTS
                             424 // Fire fang
                         },
                         0x06070809, 13, // Jolly
-                        BattleTowerPokemon4.PackIVs(31, 31, 20, 31, 10, 20),
+                        IvStatValues.PackIVs(31, 31, 20, 31, 10, 20),
                         new byte[] { 6, 252, 0, 252, 0, 0 },
                         0, Languages.English, 8, // Sand veil
                         255, new EncodedString4("Garchomp", 22)
                     );
 
-                    record.Party[2] = new BattleTowerPokemon4(
+                    record.Party[2] = new BattleTowerPokemon4(pokedex,
                         242, // Blissey
                         234, // Leftovers
                         new ushort[] { 
@@ -471,7 +472,7 @@ namespace PkmnFoundations.GTS
                             69 // Seismic toss
                         },
                         0x06070809, 5, // Bold
-                        BattleTowerPokemon4.PackIVs(31, 10, 31, 31, 20, 20),
+                        IvStatValues.PackIVs(31, 10, 31, 31, 20, 20),
                         new byte[] { 252, 0, 252, 6, 0, 0 },
                         0, Languages.English, 30, // Natural cure
                         255, new EncodedString4("Blissey", 22)

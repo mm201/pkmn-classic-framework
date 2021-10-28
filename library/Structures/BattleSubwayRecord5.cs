@@ -9,20 +9,24 @@ namespace PkmnFoundations.Structures
 {
     public class BattleSubwayRecord5
     {
-        public BattleSubwayRecord5()
+        public BattleSubwayRecord5(Pokedex.Pokedex pokedex)
         {
-
+            Pokedex = pokedex;
         }
 
-        public BattleSubwayRecord5(byte[] data)
+        public BattleSubwayRecord5(Pokedex.Pokedex pokedex, byte[] data)
         {
+            Pokedex = pokedex;
             Load(data, 0);
         }
 
-        public BattleSubwayRecord5(byte[] data, int start)
+        public BattleSubwayRecord5(Pokedex.Pokedex pokedex, byte[] data, int start)
         {
+            Pokedex = pokedex;
             Load(data, start);
         }
+
+        public Pokedex.Pokedex Pokedex { get; set; }
 
         public BattleSubwayPokemon5[] Party;
         public BattleSubwayProfile5 Profile;
@@ -67,7 +71,7 @@ namespace PkmnFoundations.Structures
             Party = new BattleSubwayPokemon5[3];
             for (int x = 0; x < 3; x++)
             {
-                Party[x] = new BattleSubwayPokemon5(data, start + x * 0x3c);
+                Party[x] = new BattleSubwayPokemon5(Pokedex, data, start + x * 0x3c);
             }
             Profile = new BattleSubwayProfile5(data, 0xb4 + start);
 

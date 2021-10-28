@@ -739,21 +739,21 @@ namespace PkmnFoundations.Data
         private List<MySqlParameter> ParamsFromBattleTowerPokemon4(BattleTowerPokemon4 pokemon)
         {
             List<MySqlParameter> result = new List<MySqlParameter>(15);
-            result.Add(new MySqlParameter("@species", pokemon.Species));
-            result.Add(new MySqlParameter("@held_item", pokemon.HeldItem));
+            result.Add(new MySqlParameter("@species", pokemon.SpeciesID));
+            result.Add(new MySqlParameter("@held_item", pokemon.HeldItemID));
             result.Add(new MySqlParameter("@move1", pokemon.Moveset[0]));
             result.Add(new MySqlParameter("@move2", pokemon.Moveset[1]));
             result.Add(new MySqlParameter("@move3", pokemon.Moveset[2]));
             result.Add(new MySqlParameter("@move4", pokemon.Moveset[3]));
-            result.Add(new MySqlParameter("@trainer_id", pokemon.OT));
+            result.Add(new MySqlParameter("@trainer_id", pokemon.TrainerID));
             result.Add(new MySqlParameter("@personality", pokemon.Personality));
-            result.Add(new MySqlParameter("@ivs", pokemon.IVs));
-            result.Add(new MySqlParameter("@evs", pokemon.EVs));
+            result.Add(new MySqlParameter("@ivs", pokemon.IVs.ToInt32() | (int)pokemon.IvFlags));
+            result.Add(new MySqlParameter("@evs", pokemon.EVs.ToArray()));
             result.Add(new MySqlParameter("@unknown1", pokemon.Unknown1));
             result.Add(new MySqlParameter("@language", (byte)pokemon.Language));
-            result.Add(new MySqlParameter("@ability", pokemon.Ability));
+            result.Add(new MySqlParameter("@ability", pokemon.AbilityID));
             result.Add(new MySqlParameter("@happiness", pokemon.Happiness));
-            result.Add(new MySqlParameter("@nickname", pokemon.Nickname.RawData));
+            result.Add(new MySqlParameter("@nickname", pokemon.NicknameEncoded.RawData));
             return result;
         }
 
@@ -847,7 +847,7 @@ namespace PkmnFoundations.Data
             return (ulong)(oPkey ?? 0UL);
         }
 
-        public BattleTowerRecord4[] BattleTowerGetOpponents4(MySqlTransaction tran, int pid, byte rank, byte roomNum)
+        public BattleTowerRecord4[] BattleTowerGetOpponents4(MySqlTransaction tran, Pokedex.Pokedex pokedex, int pid, byte rank, byte roomNum)
         {
             List<BattleTowerRecord4> records = new List<BattleTowerRecord4>(7);
             List<ulong> keys = new List<ulong>(7);
@@ -864,7 +864,7 @@ namespace PkmnFoundations.Data
             {
                 while (reader.Read())
                 {
-                    BattleTowerRecord4 record = BattleTowerRecord4FromReader(reader);
+                    BattleTowerRecord4 record = BattleTowerRecord4FromReader(reader, pokedex);
                     record.Party = new BattleTowerPokemon4[3];
                     records.Add(record);
                     keys.Add(reader.GetUInt64(0));
@@ -884,7 +884,7 @@ namespace PkmnFoundations.Data
                 while (reader.Read())
                 {
                     BattleTowerRecord4 record = records[keys.IndexOf(reader.GetUInt64(0))];
-                    record.Party[reader.GetByte(1)] = BattleTowerPokemon4FromReader(reader);
+                    record.Party[reader.GetByte(1)] = BattleTowerPokemon4FromReader(reader, pokedex);
                 }
                 reader.Close();
             }
@@ -892,15 +892,15 @@ namespace PkmnFoundations.Data
             return Enumerable.Reverse(records).ToArray();
         }
 
-        public override BattleTowerRecord4[] BattleTowerGetOpponents4(int pid, byte rank, byte roomNum)
+        public override BattleTowerRecord4[] BattleTowerGetOpponents4(Pokedex.Pokedex pokedex, int pid, byte rank, byte roomNum)
         {
-            return WithTransaction(tran => BattleTowerGetOpponents4(tran, pid, rank, roomNum));
+            return WithTransaction(tran => BattleTowerGetOpponents4(tran, pokedex, pid, rank, roomNum));
         }
 
-        private BattleTowerRecord4 BattleTowerRecord4FromReader(MySqlDataReader reader)
+        private BattleTowerRecord4 BattleTowerRecord4FromReader(MySqlDataReader reader, Pokedex.Pokedex pokedex)
         {
             // xxx: Stop using ordinals everywhere.
-            BattleTowerRecord4 result = new BattleTowerRecord4();
+            BattleTowerRecord4 result = new BattleTowerRecord4(pokedex);
             result.PID = reader.GetInt32(1);
 
             if (reader.FieldCount > 11) result.PhraseChallenged = new TrendyPhrase4(reader.GetByteArray(11, 8));
@@ -924,30 +924,31 @@ namespace PkmnFoundations.Data
             return result;
         }
 
-        private BattleTowerPokemon4 BattleTowerPokemon4FromReader(MySqlDataReader reader)
+        private BattleTowerPokemon4 BattleTowerPokemon4FromReader(MySqlDataReader reader, Pokedex.Pokedex pokedex)
         {
-            BattleTowerPokemon4 result = new BattleTowerPokemon4();
-            result.Species = reader.GetUInt16(2);
-            result.HeldItem = reader.GetUInt16(3);
+            BattleTowerPokemon4 result = new BattleTowerPokemon4(pokedex);
+            result.SpeciesID = reader.GetUInt16(2);
+            result.HeldItemID = reader.GetUInt16(3);
             result.Moveset = new ushort[4];
             result.Moveset[0] = reader.GetUInt16(4);
             result.Moveset[1] = reader.GetUInt16(5);
             result.Moveset[2] = reader.GetUInt16(6);
             result.Moveset[3] = reader.GetUInt16(7);
-            result.OT = reader.GetUInt32(8);
+            result.TrainerID = reader.GetUInt32(8);
             result.Personality = reader.GetUInt32(9);
-            result.IVs = reader.GetUInt32(10);
-            result.EVs = reader.GetByteArray(11, 6);
+            result.IVs = new IvStatValues((int)(reader.GetUInt32(10) & 0x3fffffff));
+            result.IvFlags = reader.GetUInt32(10) & 0xc0000000u;
+            result.EVs = new ByteStatValues(reader.GetByteArray(11, 6));
             result.Unknown1 = reader.GetByte(12);
             result.Language = (Languages)reader.GetByte(13);
-            result.Ability = reader.GetByte(14);
+            result.AbilityID = reader.GetByte(14);
             result.Happiness = reader.GetByte(15);
-            result.Nickname = new EncodedString4(reader.GetByteArray(16, 22));
+            result.NicknameEncoded = new EncodedString4(reader.GetByteArray(16, 22));
 
             return result;
         }
 
-        public BattleTowerProfile4[] BattleTowerGetLeaders4(MySqlTransaction tran, byte rank, byte roomNum)
+        public BattleTowerProfile4[] BattleTowerGetLeaders4(MySqlTransaction tran, Pokedex.Pokedex pokedex, byte rank, byte roomNum)
         {
             List<BattleTowerProfile4> profiles = new List<BattleTowerProfile4>(30);
             using (MySqlDataReader reader = (MySqlDataReader)tran.ExecuteReader(
@@ -960,7 +961,7 @@ namespace PkmnFoundations.Data
                 new MySqlParameter("@room", roomNum)))
             {
                 while (reader.Read())
-                    profiles.Add(BattleTowerRecord4FromReader(reader).Profile);
+                    profiles.Add(BattleTowerRecord4FromReader(reader, pokedex).Profile);
 
                 reader.Close();
             }
@@ -968,9 +969,9 @@ namespace PkmnFoundations.Data
             return profiles.ToArray();
         }
 
-        public override BattleTowerProfile4[] BattleTowerGetLeaders4(byte rank, byte roomNum)
+        public override BattleTowerProfile4[] BattleTowerGetLeaders4(Pokedex.Pokedex pokedex, byte rank, byte roomNum)
         {
-            return WithTransaction(tran => BattleTowerGetLeaders4(tran, rank, roomNum));
+            return WithTransaction(tran => BattleTowerGetLeaders4(tran, pokedex, rank, roomNum));
         }
 
         #endregion
@@ -1742,21 +1743,21 @@ namespace PkmnFoundations.Data
         private List<MySqlParameter> ParamsFromBattleSubwayPokemon5(BattleSubwayPokemon5 pokemon)
         {
             List<MySqlParameter> result = new List<MySqlParameter>(15);
-            result.Add(new MySqlParameter("@species", pokemon.Species));
-            result.Add(new MySqlParameter("@held_item", pokemon.HeldItem));
+            result.Add(new MySqlParameter("@species", pokemon.SpeciesID));
+            result.Add(new MySqlParameter("@held_item", pokemon.HeldItemID));
             result.Add(new MySqlParameter("@move1", pokemon.Moveset[0]));
             result.Add(new MySqlParameter("@move2", pokemon.Moveset[1]));
             result.Add(new MySqlParameter("@move3", pokemon.Moveset[2]));
             result.Add(new MySqlParameter("@move4", pokemon.Moveset[3]));
-            result.Add(new MySqlParameter("@trainer_id", pokemon.OT));
+            result.Add(new MySqlParameter("@trainer_id", pokemon.TrainerID));
             result.Add(new MySqlParameter("@personality", pokemon.Personality));
-            result.Add(new MySqlParameter("@ivs", pokemon.IVs));
-            result.Add(new MySqlParameter("@evs", pokemon.EVs));
+            result.Add(new MySqlParameter("@ivs", pokemon.IVs.ToInt32() | (int)pokemon.IvFlags));
+            result.Add(new MySqlParameter("@evs", pokemon.EVs.ToArray()));
             result.Add(new MySqlParameter("@unknown1", pokemon.Unknown1));
             result.Add(new MySqlParameter("@language", (byte)pokemon.Language));
-            result.Add(new MySqlParameter("@ability", pokemon.Ability));
+            result.Add(new MySqlParameter("@ability", pokemon.AbilityID));
             result.Add(new MySqlParameter("@happiness", pokemon.Happiness));
-            result.Add(new MySqlParameter("@nickname", pokemon.Nickname.RawData));
+            result.Add(new MySqlParameter("@nickname", pokemon.NicknameEncoded.RawData));
             result.Add(new MySqlParameter("@unknown2", pokemon.Unknown2));
             return result;
         }
@@ -1851,12 +1852,12 @@ namespace PkmnFoundations.Data
             return (ulong)(oPkey ?? 0UL);
         }
 
-        public override BattleSubwayRecord5[] BattleSubwayGetOpponents5(int pid, byte rank, byte roomNum)
+        public override BattleSubwayRecord5[] BattleSubwayGetOpponents5(Pokedex.Pokedex pokedex, int pid, byte rank, byte roomNum)
         {
-            return WithTransaction(tran => BattleSubwayGetOpponents5(tran, pid, rank, roomNum));
+            return WithTransaction(tran => BattleSubwayGetOpponents5(tran, pokedex, pid, rank, roomNum));
         }
 
-        public BattleSubwayRecord5[] BattleSubwayGetOpponents5(MySqlTransaction tran, int pid, byte rank, byte roomNum)
+        public BattleSubwayRecord5[] BattleSubwayGetOpponents5(MySqlTransaction tran, Pokedex.Pokedex pokedex, int pid, byte rank, byte roomNum)
         {
             List<BattleSubwayRecord5> records = new List<BattleSubwayRecord5>(7);
             List<ulong> keys = new List<ulong>(7);
@@ -1874,7 +1875,7 @@ namespace PkmnFoundations.Data
             {
                 while (reader.Read())
                 {
-                    BattleSubwayRecord5 record = BattleSubwayRecord5FromReader(reader);
+                    BattleSubwayRecord5 record = BattleSubwayRecord5FromReader(reader, pokedex);
                     record.Party = new BattleSubwayPokemon5[3];
                     records.Add(record);
                     keys.Add(reader.GetUInt64(0));
@@ -1894,7 +1895,7 @@ namespace PkmnFoundations.Data
                 while (reader.Read())
                 {
                     BattleSubwayRecord5 record = records[keys.IndexOf(reader.GetUInt64(0))];
-                    record.Party[reader.GetByte(1)] = BattleSubwayPokemon5FromReader(reader);
+                    record.Party[reader.GetByte(1)] = BattleSubwayPokemon5FromReader(reader, pokedex);
                 }
                 reader.Close();
             }
@@ -1902,10 +1903,10 @@ namespace PkmnFoundations.Data
             return Enumerable.Reverse(records).ToArray();
         }
 
-        private BattleSubwayRecord5 BattleSubwayRecord5FromReader(MySqlDataReader reader)
+        private BattleSubwayRecord5 BattleSubwayRecord5FromReader(MySqlDataReader reader, Pokedex.Pokedex pokedex)
         {
             // todo: Stop using ordinals everywhere.
-            BattleSubwayRecord5 result = new BattleSubwayRecord5();
+            BattleSubwayRecord5 result = new BattleSubwayRecord5(pokedex);
             result.PID = reader.GetInt32(1);
             // this is unsustainable. What happens if I add columns to Leaders?
             if (reader.FieldCount > 11) result.PhraseChallenged = new TrendyPhrase5(reader.GetByteArray(11, 8));
@@ -1930,37 +1931,38 @@ namespace PkmnFoundations.Data
             return result;
         }
 
-        private BattleSubwayPokemon5 BattleSubwayPokemon5FromReader(MySqlDataReader reader)
+        private BattleSubwayPokemon5 BattleSubwayPokemon5FromReader(MySqlDataReader reader, Pokedex.Pokedex pokedex)
         {
             // xxx: Don't use ordinals
-            BattleSubwayPokemon5 result = new BattleSubwayPokemon5();
-            result.Species = reader.GetUInt16(2);
-            result.HeldItem = reader.GetUInt16(3);
+            BattleSubwayPokemon5 result = new BattleSubwayPokemon5(pokedex);
+            result.SpeciesID = reader.GetUInt16(2);
+            result.HeldItemID = reader.GetUInt16(3);
             result.Moveset = new ushort[4];
             result.Moveset[0] = reader.GetUInt16(4);
             result.Moveset[1] = reader.GetUInt16(5);
             result.Moveset[2] = reader.GetUInt16(6);
             result.Moveset[3] = reader.GetUInt16(7);
-            result.OT = reader.GetUInt32(8);
+            result.TrainerID = reader.GetUInt32(8);
             result.Personality = reader.GetUInt32(9);
-            result.IVs = reader.GetUInt32(10);
-            result.EVs = reader.GetByteArray(11, 6);
+            result.IVs = new IvStatValues((int)(reader.GetUInt32(10) & 0x3fffffff));
+            result.IvFlags = reader.GetUInt32(10) & 0xc0000000u;
+            result.EVs = new ByteStatValues(reader.GetByteArray(11, 6));
             result.Unknown1 = reader.GetByte(12);
             result.Language = (Languages)reader.GetByte(13);
-            result.Ability = reader.GetByte(14);
+            result.AbilityID = reader.GetByte(14);
             result.Happiness = reader.GetByte(15);
-            result.Nickname = new EncodedString5(reader.GetByteArray(16, 22));
+            result.NicknameEncoded = new EncodedString5(reader.GetByteArray(16, 22));
             result.Unknown2 = reader.GetUInt32(17);
 
             return result;
         }
 
-        public override BattleSubwayProfile5[] BattleSubwayGetLeaders5(byte rank, byte roomNum)
+        public override BattleSubwayProfile5[] BattleSubwayGetLeaders5(Pokedex.Pokedex pokedex, byte rank, byte roomNum)
         {
-            return WithTransaction(tran => BattleSubwayGetLeaders5(tran, rank, roomNum));
+            return WithTransaction(tran => BattleSubwayGetLeaders5(tran, pokedex, rank, roomNum));
         }
 
-        public BattleSubwayProfile5[] BattleSubwayGetLeaders5(MySqlTransaction tran, byte rank, byte roomNum)
+        public BattleSubwayProfile5[] BattleSubwayGetLeaders5(MySqlTransaction tran, Pokedex.Pokedex pokedex, byte rank, byte roomNum)
         {
             List<BattleSubwayProfile5> profiles = new List<BattleSubwayProfile5>(30);
             using (MySqlDataReader reader = (MySqlDataReader)tran.ExecuteReader(
@@ -1973,7 +1975,7 @@ namespace PkmnFoundations.Data
                 new MySqlParameter("@room", roomNum)))
             {
                 while (reader.Read())
-                    profiles.Add(BattleSubwayRecord5FromReader(reader).Profile);
+                    profiles.Add(BattleSubwayRecord5FromReader(reader, pokedex).Profile);
 
                 reader.Close();
             }
