@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PkmnFoundations.Support;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -102,6 +103,9 @@ namespace PkmnFoundations.Structures
             if (thePokemon.IsBadEgg) return false;
             if (thePokemon.Level > 100) return false;
             if (thePokemon.EVs.ToArray().Select(i => (int)i).Sum() > 510) return false;
+
+            ValidationSummary summary = Pokemon.Validate();
+            if (!summary.IsValid) return false;
 
             return true;
         }

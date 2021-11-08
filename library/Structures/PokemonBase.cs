@@ -137,7 +137,7 @@ namespace PkmnFoundations.Structures
                 throw new NotSupportedException();
             }
         }
-        public abstract String Nickname { get; set; }
+        public abstract string Nickname { get; set; }
 
         public virtual bool IsShiny
         {
@@ -175,6 +175,24 @@ namespace PkmnFoundations.Structures
                 }
 
                 return new Characteristic(bestStat, (byte)(bestStatValue % (byte)5));
+            }
+        }
+
+        public virtual ValidationSummary Validate()
+        {
+            // xxx: this is another one of those inheritance diamond things.
+            // Since we specialize by generation after specializing by
+            // structure type, we have to roll our own vtable here to be able
+            // to have generation-specific validation in each inheritance
+            // branch.
+            switch (this.Generation)
+            {
+                case Generations.Generation4:
+                    return Pokemon4.ValidateActual(this);
+                case Generations.Generation5:
+                    return Pokemon5.ValidateActual(this);
+                default:
+                    return new ValidationSummary() { IsValid = true };
             }
         }
 

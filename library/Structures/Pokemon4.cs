@@ -311,5 +311,45 @@ namespace PkmnFoundations.Structures
         {
             get { return 136; }
         }
+
+        public static ValidationSummary ValidateActual(PokemonBase thePokemon)
+        {
+            if (thePokemon.SpeciesID < 1 || thePokemon.SpeciesID > 493) return new ValidationSummary() { IsValid = false };
+
+            try
+            {
+                if (thePokemon.Form == null) return new ValidationSummary() { IsValid = false };
+            }
+            catch (KeyNotFoundException)
+            {
+                return new ValidationSummary() { IsValid = false }; // form not in pokedex
+            }
+            if (thePokemon.SpeciesID == 479 && thePokemon.FormID != 0) return new ValidationSummary() { IsValid = false }; // rotoms
+            if (thePokemon.SpeciesID == 487 && thePokemon.FormID != 0) return new ValidationSummary() { IsValid = false }; // origin giratina
+            if (thePokemon.SpeciesID == 492 && thePokemon.FormID != 0) return new ValidationSummary() { IsValid = false }; // sky shaymin
+            if (thePokemon.Form.Suffix == "spiky-eared") return new ValidationSummary() { IsValid = false };
+            if (thePokemon.Form.Suffix == "fairy") return new ValidationSummary() { IsValid = false };
+            if (thePokemon.Form.Suffix == "mega") return new ValidationSummary() { IsValid = false };
+            if (thePokemon.Form.Suffix == "mega-x") return new ValidationSummary() { IsValid = false };
+            if (thePokemon.Form.Suffix == "mega-y") return new ValidationSummary() { IsValid = false };
+            if (thePokemon.Form.Suffix == "primal") return new ValidationSummary() { IsValid = false };
+            if (thePokemon.SpeciesID == 25 && thePokemon.FormID > 0) return new ValidationSummary() { IsValid = false }; // cosplay pikachu
+
+            if (thePokemon.HeldItemID < 0) return new ValidationSummary() { IsValid = false };
+            if (thePokemon.HeldItemID >= 112 && thePokemon.HeldItemID <= 134) return new ValidationSummary() { IsValid = false };
+            if (thePokemon.HeldItemID >= 428) return new ValidationSummary() { IsValid = false };
+
+            if (thePokemon.AbilityID <= 0) return new ValidationSummary() { IsValid = false };
+            if (thePokemon.AbilityID > 123) return new ValidationSummary() { IsValid = false };
+
+            foreach (MoveSlot move in thePokemon.Moves)
+            {
+                if (move.MoveID < 0) return new ValidationSummary() { IsValid = false };
+                if (move.MoveID == 165) return new ValidationSummary() { IsValid = false }; // struggle
+                if (move.MoveID > 467) return new ValidationSummary() { IsValid = false };
+            }
+
+            return new ValidationSummary() { IsValid = true };
+        }
     }
 }

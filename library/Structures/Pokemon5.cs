@@ -294,5 +294,53 @@ namespace PkmnFoundations.Structures
         {
             get { return 136; }
         }
+
+        public static ValidationSummary ValidateActual(PokemonBase thePokemon)
+        {
+            if (thePokemon.SpeciesID < 1 || thePokemon.SpeciesID > 649) return new ValidationSummary() { IsValid = false };
+
+            try
+            {
+                if (thePokemon.Form == null) return new ValidationSummary() { IsValid = false };
+            }
+            catch (KeyNotFoundException)
+            {
+                return new ValidationSummary() { IsValid = false }; // form not in pokedex
+            }
+            if (thePokemon.SpeciesID == 641 && thePokemon.FormID != 0) return new ValidationSummary() { IsValid = false }; // therian tornadus
+            if (thePokemon.SpeciesID == 642 && thePokemon.FormID != 0) return new ValidationSummary() { IsValid = false }; // therian thundrus
+            if (thePokemon.SpeciesID == 645 && thePokemon.FormID != 0) return new ValidationSummary() { IsValid = false }; // therian landorus
+            if (thePokemon.SpeciesID == 646 && thePokemon.FormID != 0) return new ValidationSummary() { IsValid = false }; // black/white kyurem
+            if (thePokemon.SpeciesID == 647 && thePokemon.FormID != 0) return new ValidationSummary() { IsValid = false }; // resolute keldeo
+            if (thePokemon.Form.Suffix == "spiky-eared") return new ValidationSummary() { IsValid = false };
+            if (thePokemon.Form.Suffix == "fairy") return new ValidationSummary() { IsValid = false };
+            if (thePokemon.Form.Suffix == "mega") return new ValidationSummary() { IsValid = false };
+            if (thePokemon.Form.Suffix == "mega-x") return new ValidationSummary() { IsValid = false };
+            if (thePokemon.Form.Suffix == "mega-y") return new ValidationSummary() { IsValid = false };
+            if (thePokemon.Form.Suffix == "primal") return new ValidationSummary() { IsValid = false };
+            if (thePokemon.SpeciesID == 25 && thePokemon.FormID > 0) return new ValidationSummary() { IsValid = false }; // cosplay pikachu
+
+            if (thePokemon.HeldItemID < 0) return new ValidationSummary() { IsValid = false };
+            if (thePokemon.HeldItemID >= 113 && thePokemon.HeldItemID <= 115) return new ValidationSummary() { IsValid = false };
+            if (thePokemon.HeldItemID >= 120 && thePokemon.HeldItemID <= 133) return new ValidationSummary() { IsValid = false };
+            if (thePokemon.HeldItemID >= 328 && thePokemon.HeldItemID <= 503) return new ValidationSummary() { IsValid = false };
+            if (thePokemon.HeldItemID >= 505 && thePokemon.HeldItemID <= 536) return new ValidationSummary() { IsValid = false };
+            if (thePokemon.HeldItemID == 574) return new ValidationSummary() { IsValid = false };
+            if (thePokemon.HeldItemID == 576) return new ValidationSummary() { IsValid = false };
+            if (thePokemon.HeldItemID >= 578 && thePokemon.HeldItemID <= 579) return new ValidationSummary() { IsValid = false };
+            if (thePokemon.HeldItemID >= 592) return new ValidationSummary() { IsValid = false };
+
+            if (thePokemon.AbilityID <= 0) return new ValidationSummary() { IsValid = false };
+            if (thePokemon.AbilityID > 164) return new ValidationSummary() { IsValid = false };
+
+            foreach (MoveSlot move in thePokemon.Moves)
+            {
+                if (move.MoveID < 0) return new ValidationSummary() { IsValid = false };
+                if (move.MoveID == 165) return new ValidationSummary() { IsValid = false }; // struggle
+                if (move.MoveID > 559) return new ValidationSummary() { IsValid = false };
+            }
+
+            return new ValidationSummary() { IsValid = true };
+        }
     }
 }
