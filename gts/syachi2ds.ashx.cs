@@ -551,7 +551,15 @@ namespace PkmnFoundations.GTS
                     Array.Copy(request, 0xf3, record.Unknown4, 0, 5);
                     record.Unknown5 = BitConverter.ToUInt64(request, 0xf8);
 
-                    // todo: Check pkvldtprod signature and/or revalidate
+                    foreach (var p in record.Party)
+                    {
+                        if (!p.Validate().IsValid)
+                        {
+                            // Tell the client it was successful so they don't keep retrying.
+                            response.Write(new byte[] { 0x01, 0x00 }, 0, 2);
+                            return;
+                        }
+                    }
 
                     // todo: Do we want to store their record anyway if they lost the first round?
                     if (record.BattlesWon > 0)
@@ -559,6 +567,16 @@ namespace PkmnFoundations.GTS
                     if (record.BattlesWon == 7)
                         Database.Instance.BattleSubwayAddLeader5(record);
 
+                    // List of responses:
+                    // 0x00: BSOD
+                    // 0x01: Uploads successfully
+                    // 0x02: That number cannot be specified for the Wi-Fi Train. (13263)
+                    // 0x03: BSOD
+                    // 0x04: The Wi-Fi Train is very crowded. Please try again later. (13261)
+                    // 0x05: Unable to connect to the Wi-Fi Train. Returning to the reception counter. (13262)
+                    // 0x06: BSOD
+                    // 0x07: BSOD
+                    // 0x08: BSOD
                     response.Write(new byte[] { 0x01, 0x00 }, 0, 2);
 
                 } break;

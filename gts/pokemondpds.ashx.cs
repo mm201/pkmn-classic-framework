@@ -597,12 +597,32 @@ namespace PkmnFoundations.GTS
                     record.BattlesWon = data[0xe6];
                     record.Unknown5 = BitConverter.ToUInt64(data, 0xe7);
 
+                    foreach (var p in record.Party)
+                    {
+                        if (!p.Validate().IsValid)
+                        {
+                            // Tell the client it was successful so they don't keep retrying.
+                            response.Write(new byte[] { 0x01, 0x00 }, 0, 2);
+                            return;
+                        }
+                    }
+
                     // todo: Do we want to store their record anyway if they lost the first round?
                     if (record.BattlesWon > 0)
                         Database.Instance.BattleTowerUpdateRecord4(record);
                     if (record.BattlesWon == 7)
                         Database.Instance.BattleTowerAddLeader4(record);
 
+                    // List of responses:
+                    // 0x00: BSOD
+                    // 0x01: Uploads successfully
+                    // 0x02: That number cannot be specified for the Wi-Fi Battle Tower.
+                    // 0x03: BSOD
+                    // 0x04: The Wi-Fi Battle Tower is very crowded. Please try again later.
+                    // 0x05: Unable to connect to the Wi-Fi Battle Tower. Returning to the reception counter.
+                    // 0x06: BSOD
+                    // 0x07: BSOD
+                    // 0x08: BSOD
                     response.Write(new byte[] { 0x01, 0x00 }, 0, 2);
 
                 } break;
