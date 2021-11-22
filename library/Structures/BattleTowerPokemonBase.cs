@@ -15,8 +15,6 @@ namespace PkmnFoundations.Structures
 
         }
 
-        public ushort[] Moveset;
-        public byte Unknown1; // probably a bitmask of applied PP ups
         // In the main PKM structure, the remaining 2 bits on the IVs field
         // represents whether it's nicknamed and if it's an egg. Clearly, eggs
         // shouldn't be brought into Battle Tower.
@@ -34,6 +32,60 @@ namespace PkmnFoundations.Structures
             {
                 throw new NotSupportedException();
             }
+        }
+
+        internal static void GetMovesFromArray(IList<MoveSlot> result, Pokedex.Pokedex pokedex, ushort[] moves, byte ppUps)
+        {
+            if (moves.Length != 4) throw new ArgumentException("moves");
+            if (result.Count != 4) throw new ArgumentException("movesOut");
+
+            for (int i = 0; i < 4; i++)
+            {
+                result[i] = MoveFromValues(pokedex, moves[i], (byte)(ppUps & 0x03));
+
+                ppUps >>= 2;
+            }
+        }
+
+        internal static MoveSlot MoveFromValues(Pokedex.Pokedex pokedex, ushort move, byte ppUps)
+        {
+            MoveSlot result = new MoveSlot(pokedex, move, ppUps, 0);
+            result.RemainingPP = (byte)result.PP;
+            return result;
+        }
+
+        internal static ushort[] GetArrayFromMoves(IList<MoveSlot> moves)
+        {
+            if (moves.Count != 4) throw new ArgumentException("moves");
+            ushort[] result = new ushort[4];
+
+            for (int i = 0; i < 4; i++)
+            {
+                result[i] = (ushort)moves[i].MoveID;
+            }
+            return result;
+        }
+
+        internal static byte GetPpUpsFromMoves(IList<MoveSlot> moves)
+        {
+            // The first move uses the least significant bits, moving up from there.
+            // [1, 3, 0, 0] -> 0x0d
+            byte ppUps = 0;
+            for (int i = 0; i < 4; i++)
+            {
+                ppUps |= (byte)(moves[i].PPUps << (i * 2));
+            }
+            return ppUps;
+        }
+
+        public ushort[] GetMoveIds()
+        {
+            return GetArrayFromMoves(Moves);
+        }
+
+        public byte GetPpUps()
+        {
+            return GetPpUpsFromMoves(Moves);
         }
     }
 }

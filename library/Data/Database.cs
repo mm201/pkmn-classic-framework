@@ -58,6 +58,11 @@ namespace PkmnFoundations.Data
         #endregion
 
         #region Utility
+        public static T Cast<T>(object value)
+        {
+            if (value is DBNull) value = null;
+            return (T)value; // Allow InvalidCastException to escape.
+        }
         #endregion
 
         #region GTS 4

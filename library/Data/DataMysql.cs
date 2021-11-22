@@ -741,15 +741,15 @@ namespace PkmnFoundations.Data
             List<MySqlParameter> result = new List<MySqlParameter>(15);
             result.Add(new MySqlParameter("@species", pokemon.SpeciesID));
             result.Add(new MySqlParameter("@held_item", pokemon.HeldItemID));
-            result.Add(new MySqlParameter("@move1", pokemon.Moveset[0]));
-            result.Add(new MySqlParameter("@move2", pokemon.Moveset[1]));
-            result.Add(new MySqlParameter("@move3", pokemon.Moveset[2]));
-            result.Add(new MySqlParameter("@move4", pokemon.Moveset[3]));
+            result.Add(new MySqlParameter("@move1", (ushort)pokemon.Moves[0].MoveID));
+            result.Add(new MySqlParameter("@move2", (ushort)pokemon.Moves[1].MoveID));
+            result.Add(new MySqlParameter("@move3", (ushort)pokemon.Moves[2].MoveID));
+            result.Add(new MySqlParameter("@move4", (ushort)pokemon.Moves[3].MoveID));
             result.Add(new MySqlParameter("@trainer_id", pokemon.TrainerID));
             result.Add(new MySqlParameter("@personality", pokemon.Personality));
             result.Add(new MySqlParameter("@ivs", pokemon.IVs.ToInt32() | (int)pokemon.IvFlags));
             result.Add(new MySqlParameter("@evs", pokemon.EVs.ToArray()));
-            result.Add(new MySqlParameter("@unknown1", pokemon.Unknown1));
+            result.Add(new MySqlParameter("@unknown1", pokemon.GetPpUps()));
             result.Add(new MySqlParameter("@language", (byte)pokemon.Language));
             result.Add(new MySqlParameter("@ability", pokemon.AbilityID));
             result.Add(new MySqlParameter("@happiness", pokemon.Happiness));
@@ -926,26 +926,23 @@ namespace PkmnFoundations.Data
 
         private BattleTowerPokemon4 BattleTowerPokemon4FromReader(MySqlDataReader reader, Pokedex.Pokedex pokedex)
         {
-            BattleTowerPokemon4 result = new BattleTowerPokemon4(pokedex);
-            result.SpeciesID = reader.GetUInt16(2);
-            result.HeldItemID = reader.GetUInt16(3);
-            result.Moveset = new ushort[4];
-            result.Moveset[0] = reader.GetUInt16(4);
-            result.Moveset[1] = reader.GetUInt16(5);
-            result.Moveset[2] = reader.GetUInt16(6);
-            result.Moveset[3] = reader.GetUInt16(7);
-            result.TrainerID = reader.GetUInt32(8);
-            result.Personality = reader.GetUInt32(9);
-            result.IVs = new IvStatValues((int)(reader.GetUInt32(10) & 0x3fffffff));
-            result.IvFlags = reader.GetUInt32(10) & 0xc0000000u;
-            result.EVs = new ByteStatValues(reader.GetByteArray(11, 6));
-            result.Unknown1 = reader.GetByte(12);
-            result.Language = (Languages)reader.GetByte(13);
-            result.AbilityID = reader.GetByte(14);
-            result.Happiness = reader.GetByte(15);
-            result.NicknameEncoded = new EncodedString4(reader.GetByteArray(16, 22));
-
-            return result;
+            return new BattleTowerPokemon4(pokedex,
+                Database.Cast<ushort>(reader["Species"]),
+                Database.Cast<ushort>(reader["HeldItem"]),
+                Database.Cast<ushort>(reader["Move1"]),
+                Database.Cast<ushort>(reader["Move2"]),
+                Database.Cast<ushort>(reader["Move3"]),
+                Database.Cast<ushort>(reader["Move4"]),
+                Database.Cast<uint>(reader["TrainerID"]),
+                Database.Cast<uint>(reader["Personality"]),
+                Database.Cast<uint>(reader["IVs"]),
+                Database.Cast<byte[]>(reader["EVs"]),
+                Database.Cast<byte>(reader["Unknown1"]),
+                (Languages)Database.Cast<byte>(reader["Language"]),
+                Database.Cast<byte>(reader["Ability"]),
+                Database.Cast<byte>(reader["Happiness"]),
+                new EncodedString4(Database.Cast<byte[]>(reader["Nickname"]), 0, 22)
+                );
         }
 
         public BattleTowerProfile4[] BattleTowerGetLeaders4(MySqlTransaction tran, Pokedex.Pokedex pokedex, byte rank, byte roomNum)
@@ -1745,15 +1742,15 @@ namespace PkmnFoundations.Data
             List<MySqlParameter> result = new List<MySqlParameter>(15);
             result.Add(new MySqlParameter("@species", pokemon.SpeciesID));
             result.Add(new MySqlParameter("@held_item", pokemon.HeldItemID));
-            result.Add(new MySqlParameter("@move1", pokemon.Moveset[0]));
-            result.Add(new MySqlParameter("@move2", pokemon.Moveset[1]));
-            result.Add(new MySqlParameter("@move3", pokemon.Moveset[2]));
-            result.Add(new MySqlParameter("@move4", pokemon.Moveset[3]));
+            result.Add(new MySqlParameter("@move1", pokemon.Moves[0].MoveID));
+            result.Add(new MySqlParameter("@move2", pokemon.Moves[1].MoveID));
+            result.Add(new MySqlParameter("@move3", pokemon.Moves[2].MoveID));
+            result.Add(new MySqlParameter("@move4", pokemon.Moves[3].MoveID));
             result.Add(new MySqlParameter("@trainer_id", pokemon.TrainerID));
             result.Add(new MySqlParameter("@personality", pokemon.Personality));
             result.Add(new MySqlParameter("@ivs", pokemon.IVs.ToInt32() | (int)pokemon.IvFlags));
             result.Add(new MySqlParameter("@evs", pokemon.EVs.ToArray()));
-            result.Add(new MySqlParameter("@unknown1", pokemon.Unknown1));
+            result.Add(new MySqlParameter("@unknown1", pokemon.GetPpUps()));
             result.Add(new MySqlParameter("@language", (byte)pokemon.Language));
             result.Add(new MySqlParameter("@ability", pokemon.AbilityID));
             result.Add(new MySqlParameter("@happiness", pokemon.Happiness));
@@ -1933,28 +1930,24 @@ namespace PkmnFoundations.Data
 
         private BattleSubwayPokemon5 BattleSubwayPokemon5FromReader(MySqlDataReader reader, Pokedex.Pokedex pokedex)
         {
-            // xxx: Don't use ordinals
-            BattleSubwayPokemon5 result = new BattleSubwayPokemon5(pokedex);
-            result.SpeciesID = reader.GetUInt16(2);
-            result.HeldItemID = reader.GetUInt16(3);
-            result.Moveset = new ushort[4];
-            result.Moveset[0] = reader.GetUInt16(4);
-            result.Moveset[1] = reader.GetUInt16(5);
-            result.Moveset[2] = reader.GetUInt16(6);
-            result.Moveset[3] = reader.GetUInt16(7);
-            result.TrainerID = reader.GetUInt32(8);
-            result.Personality = reader.GetUInt32(9);
-            result.IVs = new IvStatValues((int)(reader.GetUInt32(10) & 0x3fffffff));
-            result.IvFlags = reader.GetUInt32(10) & 0xc0000000u;
-            result.EVs = new ByteStatValues(reader.GetByteArray(11, 6));
-            result.Unknown1 = reader.GetByte(12);
-            result.Language = (Languages)reader.GetByte(13);
-            result.AbilityID = reader.GetByte(14);
-            result.Happiness = reader.GetByte(15);
-            result.NicknameEncoded = new EncodedString5(reader.GetByteArray(16, 22));
-            result.Unknown2 = reader.GetUInt32(17);
-
-            return result;
+            return new BattleSubwayPokemon5(pokedex,
+                Database.Cast<ushort>(reader["Species"]),
+                Database.Cast<ushort>(reader["HeldItem"]),
+                Database.Cast<ushort>(reader["Move1"]),
+                Database.Cast<ushort>(reader["Move2"]),
+                Database.Cast<ushort>(reader["Move3"]),
+                Database.Cast<ushort>(reader["Move4"]),
+                Database.Cast<uint>(reader["TrainerID"]),
+                Database.Cast<uint>(reader["Personality"]),
+                Database.Cast<uint>(reader["IVs"]),
+                Database.Cast<byte[]>(reader["EVs"]),
+                Database.Cast<byte>(reader["Unknown1"]),
+                (Languages)Database.Cast<byte>(reader["Language"]),
+                Database.Cast<byte>(reader["Ability"]),
+                Database.Cast<byte>(reader["Happiness"]),
+                new EncodedString5(Database.Cast<byte[]>(reader["Nickname"]), 0, 22),
+                Database.Cast<uint>(reader["Unknown2"])
+                );
         }
 
         public override BattleSubwayProfile5[] BattleSubwayGetLeaders5(Pokedex.Pokedex pokedex, byte rank, byte roomNum)

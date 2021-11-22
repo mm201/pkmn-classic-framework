@@ -50,7 +50,7 @@ namespace PkmnFoundations.Structures
         public uint OT;
         public TrendyPhrase4 PhraseLeader;
         // Different from GTS, 0 = male, 2 = female, 1 = Plato???? 
-        public byte Gender;
+        public byte Gender; // Probably trainer class.
 
         // 3: Lass
         // 6: Bug Catcher

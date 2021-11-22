@@ -34,12 +34,12 @@ namespace PkmnFoundations.Structures
         public TrendyPhrase4 PhraseChallenged;
         public TrendyPhrase4 PhraseWon;
         public TrendyPhrase4 PhraseLost;
-        public ushort Unknown3;
+        public ushort Unknown3; // Seems to be some sort of Elo rating. Goes up to about 8000.
 
         public byte Rank;
         public byte RoomNum;
         public byte BattlesWon;
-        public ulong Unknown5;
+        public ulong Unknown5; // Appears to be zero on AdmiralCurtiss's scraped data, but is very big ints on data being uploaded.
         public int PID;
 
         public byte[] Save()

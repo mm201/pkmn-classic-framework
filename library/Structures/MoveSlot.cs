@@ -40,6 +40,13 @@ namespace PkmnFoundations.Structures
 
         public byte PPUps { get; set; } // todo: validate range
         public byte RemainingPP { get; set; } // todo: validate range (against pokedex data and pp ups)
-        public int PP { get { return Move.PP * (5 + PPUps) / 5; } }
+
+        public int PP 
+        { 
+            get 
+            { 
+                return Move == null ? 0 : Move.PP * (5 + PPUps) / 5; 
+            } 
+        }
     }
 }

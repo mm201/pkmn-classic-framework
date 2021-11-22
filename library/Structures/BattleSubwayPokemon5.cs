@@ -14,7 +14,7 @@ namespace PkmnFoundations.Structures
         }
 
         public BattleSubwayPokemon5(Pokedex.Pokedex pokedex, ushort species, ushort held_item, ushort[] moveset,
-            uint ot, uint personality, uint ivs, byte[] evs, byte unknown1,
+            uint ot, uint personality, uint ivs, byte[] evs, byte pp_ups,
             Languages language, byte ability, byte happiness, EncodedString5 nickname, uint unknown2) : base(pokedex)
         {
             if (moveset == null) throw new ArgumentNullException("moveset");
@@ -26,18 +26,26 @@ namespace PkmnFoundations.Structures
 
             SpeciesID = species;
             HeldItemID = held_item;
-            Moveset = moveset.ToArray();
+            GetMovesFromArray(Moves, pokedex, moveset, pp_ups);
             TrainerID = ot;
             Personality = personality;
             IVs = new IvStatValues((int)ivs & 0x3fffffff);
             IvFlags = ivs & 0xc0000000u;
             EVs = new ByteStatValues(evs);
-            Unknown1 = unknown1;
             Language = language;
             AbilityID = ability;
             Happiness = happiness;
             NicknameEncoded = nickname; // todo: clone
             Unknown2 = unknown2;
+        }
+
+        public BattleSubwayPokemon5(Pokedex.Pokedex pokedex, ushort species, ushort held_item,
+            ushort move1, ushort move2, ushort move3, ushort move4, uint ot, uint personality,
+            uint ivs, byte[] evs, byte pp_ups, Languages language, byte ability, byte happiness,
+            EncodedString5 nickname, uint unknown2) :
+            this(pokedex, species, held_item, new ushort[] { move1, move2, move3, move4 },
+                ot, personality, ivs, evs, pp_ups, language, ability, happiness, nickname, unknown2)
+        {
         }
 
         public BattleSubwayPokemon5(Pokedex.Pokedex pokedex, BinaryReader data) : base(pokedex)
@@ -73,25 +81,22 @@ namespace PkmnFoundations.Structures
             }
         }
 
-        [Obsolete("Use IVs[] indexer.")]
-        public byte IV(Stats stat)
-        {
-            return IVs[stat];
-        }
-
         protected override void Save(BinaryWriter writer)
         {
             writer.Write((ushort)SpeciesID);
             writer.Write((ushort)HeldItemID);
-            for (int x = 0; x < 4; x++)
+
+            ushort[] moveset = GetArrayFromMoves(Moves);
+            for (int i = 0; i < 4; i++)
             {
-                writer.Write(Moveset[x]);
+                writer.Write(moveset[i]);
             }
+
             writer.Write(TrainerID);
             writer.Write(Personality);
             writer.Write(IVs.ToInt32() | (int)IvFlags);
             writer.Write(EVs.ToArray(), 0, 6);
-            writer.Write(Unknown1);
+            writer.Write(GetPpUpsFromMoves(Moves));
             writer.Write((byte)Language);
             writer.Write((byte)AbilityID);
             writer.Write(Happiness);
@@ -105,11 +110,13 @@ namespace PkmnFoundations.Structures
         {
             SpeciesID = reader.ReadUInt16();
             HeldItemID = reader.ReadUInt16();
-            Moveset = new ushort[4];
-            for (int x = 0; x < 4; x++)
+
+            ushort[] moveset = new ushort[4];
+            for (int i = 0; i < 4; i++)
             {
-                Moveset[x] = reader.ReadUInt16();
+                moveset[i] = reader.ReadUInt16();
             }
+
             TrainerID = reader.ReadUInt32();
             Personality = reader.ReadUInt32();
             uint ivs = reader.ReadUInt32();
@@ -117,7 +124,9 @@ namespace PkmnFoundations.Structures
             IvFlags = ivs & 0xc0000000u;
 
             EVs = new ByteStatValues(reader.ReadBytes(6));
-            Unknown1 = reader.ReadByte();
+            byte ppUps = reader.ReadByte();
+            GetMovesFromArray(Moves, m_pokedex, moveset, ppUps);
+
             Language = (Languages)reader.ReadByte();
             AbilityID = reader.ReadByte();
             Happiness = reader.ReadByte();
@@ -128,9 +137,12 @@ namespace PkmnFoundations.Structures
         public BattleSubwayPokemon5 Clone()
         {
             uint ivsField = (uint)(IVs.ToInt32() & 0x3fffffffu) | (IvFlags & 0xc0000000u);
+            ushort[] moveset = GetArrayFromMoves(Moves);
+            byte ppUps = GetPpUpsFromMoves(Moves);
+
             BattleSubwayPokemon5 result = new BattleSubwayPokemon5(m_pokedex,
-                (ushort)SpeciesID, (ushort)HeldItemID, Moveset.ToArray(),
-                TrainerID, Personality, ivsField, EVs.ToArray(), Unknown1,
+                (ushort)SpeciesID, (ushort)HeldItemID, moveset,
+                TrainerID, Personality, ivsField, EVs.ToArray(), ppUps,
                 Language, (byte)AbilityID, Happiness, NicknameEncoded, Unknown2);
 
             return result;

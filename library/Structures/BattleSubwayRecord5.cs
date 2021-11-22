@@ -39,8 +39,8 @@ namespace PkmnFoundations.Structures
         public byte Rank;
         public byte RoomNum;
         public byte BattlesWon;
-        public byte[] Unknown4; // 5 bytes
-        public ulong Unknown5;
+        public byte[] Unknown4; // 5 bytes, appears to always be 00 00 00 00 00?
+        public ulong Unknown5; // Appears to be zero on AdmiralCurtiss's scraped data, but is very big ints on data being uploaded.
         public int PID;
 
         public byte[] Save()

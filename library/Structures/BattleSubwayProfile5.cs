@@ -52,7 +52,7 @@ namespace PkmnFoundations.Structures
         public TrendyPhrase5 PhraseLeader;
         // Different from GTS, 0 = male, 2 = female, 1 = Plato???? 
         public byte Gender;
-        public byte Unknown;
+        public byte Unknown; // Probably trainer class.
 
         public byte[] Save()
         {
