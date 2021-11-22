@@ -550,6 +550,7 @@ namespace PkmnFoundations.GTS
                     record.Unknown4 = new byte[5];
                     Array.Copy(request, 0xf3, record.Unknown4, 0, 5);
                     record.Unknown5 = BitConverter.ToUInt64(request, 0xf8);
+                    record.PID = pid;
 
                     foreach (var p in record.Party)
                     {

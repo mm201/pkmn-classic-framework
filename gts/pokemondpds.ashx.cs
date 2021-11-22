@@ -596,6 +596,7 @@ namespace PkmnFoundations.GTS
                     record.RoomNum = data[0xe5];
                     record.BattlesWon = data[0xe6];
                     record.Unknown5 = BitConverter.ToUInt64(data, 0xe7);
+                    record.PID = pid;
 
                     foreach (var p in record.Party)
                     {
