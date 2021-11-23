@@ -1672,6 +1672,7 @@
     <Content Include="images\pkmn-lg-s\646-black.png" />
     <Content Include="images\pkmn-lg-s\646-white.png" />
     <Content Include="images\pkmn-lg-s\646.png" />
+    <Content Include="images\pkmn-lg-s\647-ordinary.png" />
     <Content Include="images\pkmn-lg-s\647-resolute.png" />
     <Content Include="images\pkmn-lg-s\647.png" />
     <Content Include="images\pkmn-lg-s\648-aria.png" />
@@ -2127,6 +2128,7 @@
     <Content Include="images\pkmn-lg\385.png" />
     <Content Include="images\pkmn-lg\386-attack.png" />
     <Content Include="images\pkmn-lg\386-defense.png" />
+    <Content Include="images\pkmn-lg\386-normal.png" />
     <Content Include="images\pkmn-lg\386-speed.png" />
     <Content Include="images\pkmn-lg\386.png" />
     <Content Include="images\pkmn-lg\387.png" />
@@ -3138,6 +3140,7 @@
     <Content Include="images\pkmn-sm\49.png" />
     <Content Include="images\pkmn-sm\490.png" />
     <Content Include="images\pkmn-sm\491.png" />
+    <Content Include="images\pkmn-sm\492-land.png" />
     <Content Include="images\pkmn-sm\492-sky.png" />
     <Content Include="images\pkmn-sm\492.png" />
     <Content Include="images\pkmn-sm\493-bug.png" />
@@ -3357,6 +3360,7 @@
     <Content Include="images\pkmn-sm\647-ordinary.png" />
     <Content Include="images\pkmn-sm\647-resolute.png" />
     <Content Include="images\pkmn-sm\647.png" />
+    <Content Include="images\pkmn-sm\648-aria.png" />
     <Content Include="images\pkmn-sm\648-pirouette.png" />
     <Content Include="images\pkmn-sm\648.png" />
     <Content Include="images\pkmn-sm\649.png" />

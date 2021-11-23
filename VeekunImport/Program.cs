@@ -156,6 +156,8 @@ namespace VeekunImport
                     int hatch_counter = Convert.ToInt32(rdPokemon["hatch_counter"]);
                     byte has_gender_differences = Convert.ToByte(rdPokemon["has_gender_differences"]);
 
+                    if (id == 255) has_gender_differences = 0; // Torchic doesn't have gender differences.
+
                     // todo: Family ID
                     Species s = new Species(null, id,
                         familyMap[id],
