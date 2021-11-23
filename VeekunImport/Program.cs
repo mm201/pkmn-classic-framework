@@ -21,7 +21,7 @@ namespace VeekunImport
 
         static void Main(string[] args)
         {
-            String veekunFilename;
+            string veekunFilename;
             ConnectionStringSettings css;
 
             if (args.Length < 1) veekunFilename = "pokedex.sqlite";
@@ -77,7 +77,7 @@ namespace VeekunImport
                 List<Family> overrideFamilies = new List<Family>();
                 ProcessTSV("families.txt", 7, row =>
                     {
-                        String[] fields = row.Fields;
+                        string[] fields = row.Fields;
                         overrideFamilies.Add(new Family(null,
                             Convert.ToInt32(fields[0]),
                             Convert.ToInt32(fields[1]),
@@ -114,16 +114,16 @@ namespace VeekunImport
                         f = new Family(null, familyId, basicSpeciesId, basicSpeciesId, 0, 0, 0, genderRatio);
                     }
                     db.PokedexInsertFamily(f);
-                    String basic = (f.BasicMaleID != f.BasicFemaleID) ?
+                    string basic = (f.BasicMaleID != f.BasicFemaleID) ?
                         String.Format(" {0}/{1}", f.BasicMaleID, f.BasicFemaleID) :
                         String.Format(" {0}", f.BasicMaleID);
-                    String baby;
+                    string baby;
                     if (f.BabyMaleID != f.BabyFemaleID)
                         baby = String.Format(" {0}/{1} incense {2}", f.BabyMaleID, f.BabyFemaleID, f.IncenseID);
                     else
                         baby = (f.BabyMaleID == 0) ? "" :
                             String.Format(" {0} incense {1}", f.BabyMaleID, f.IncenseID);
-                    String gender = (f.GenderRatio == 255) ? "genderless" :
+                    string gender = (f.GenderRatio == 255) ? "genderless" :
                         String.Format("{0}% female", (float)f.GenderRatio * 12.5f);
                     Console.WriteLine("Inserted family {0}{1}{2} {3}", f.ID, basic, baby, gender);
                 }
@@ -178,7 +178,7 @@ namespace VeekunImport
                 Dictionary<int, byte> formValueMap = new Dictionary<int, byte>();
                 ProcessTSV("form_values.txt", 3, row =>
                     {
-                        String[] fields = row.Fields;
+                        string[] fields = row.Fields;
                         formValueMap.Add(Convert.ToInt32(fields[1]), Convert.ToByte(fields[2]));
                     });
 
@@ -203,7 +203,7 @@ namespace VeekunImport
                     int id = Convert.ToInt32(rdForms["id"]);
                     int NationalDex = Convert.ToInt32(rdForms["NationalDex"]);
                     byte FormValue = Convert.ToByte(rdForms["FormValue"]);
-                    String form_identifier = rdForms["form_identifier"].ToString();
+                    string form_identifier = rdForms["form_identifier"].ToString();
                     int height = Convert.ToInt32(rdForms["height"]);
                     int weight = Convert.ToInt32(rdForms["weight"]);
                     int experience = Convert.ToInt32(rdForms["experience"]);
@@ -229,7 +229,7 @@ namespace VeekunImport
                 // pkmncf_pokedex_pokemon_form_stats
                 for (int generation = 1; generation <= GENERATIONS; generation++)
                 {
-                    String filename = String.Format("form_stats{0}.txt", generation);
+                    string filename = String.Format("form_stats{0}.txt", generation);
                     ProcessTSV(filename, 15, row =>
                         {
                             int[] fieldsInt = row.Fields.Select(s => Convert.ToInt32(s)).ToArray();
@@ -347,12 +347,12 @@ namespace VeekunImport
 
                 for (int generation = 3; generation <= GENERATIONS; generation++)
                 {
-                    String filename = String.Format("items{0}.txt", generation);
+                    string filename = String.Format("items{0}.txt", generation);
                     ProcessTSV(filename, 3, row =>
                         {
-                            String[] fields = row.Fields;
+                            string[] fields = row.Fields;
                             int id, thisGenId;
-                            String name = fields[1];
+                            string name = fields[1];
                             if (!Int32.TryParse(fields[0], out thisGenId) ||
                                 !Int32.TryParse(fields[2], out id))
                             {
@@ -409,7 +409,7 @@ namespace VeekunImport
 
                     for (int generation = 3; generation <= GENERATIONS; generation++)
                     {
-                        String col = String.Format("value{0}", generation);
+                        string col = String.Format("value{0}", generation);
                         if (!(rdItems[col] is DBNull))
                         {
                             Dictionary<int, ItemLoading> dict = itemsGeneration[generation - 1];
@@ -442,7 +442,7 @@ namespace VeekunImport
                 Dictionary<int, RibbonLoading> ribbons = new Dictionary<int, RibbonLoading>();
                 if (!ProcessTSV("ribbons.txt", 3, row =>
                     {
-                        String[] fields = row.Fields;
+                        string[] fields = row.Fields;
                         int id = Convert.ToInt32(fields[0]);
                         ribbons.Add(id, new RibbonLoading(id, fields[1], fields[2]));
                     }))
@@ -451,10 +451,10 @@ namespace VeekunImport
                 {
                     for (int generation = 3; generation <= GENERATIONS; generation++)
                     {
-                        String filename = String.Format("ribbon_positions{0}.txt", generation);
+                        string filename = String.Format("ribbon_positions{0}.txt", generation);
                         ProcessTSV(filename, 2, row =>
                             {
-                                String[] fields = row.Fields;
+                                string[] fields = row.Fields;
                                 int id = Convert.ToInt32(fields[0]);
                                 int position = Convert.ToInt32(fields[1]);
                                 if (!ribbons.ContainsKey(id))
@@ -483,7 +483,7 @@ namespace VeekunImport
                 // pkmncf_pokedex_regions
                 ProcessTSV("regions.txt", 2, row =>
                 {
-                    String[] fields = row.Fields;
+                    string[] fields = row.Fields;
                     int id = Convert.ToInt32(fields[0]);
                     Region r = new Region(null, id, new LocalizedString() { { "EN", fields[1] } });
                     db.PokedexInsertRegion(r);
@@ -535,15 +535,15 @@ namespace VeekunImport
 #endif
         }
 
-        private static String[] LANGS = { "JA", "EN", "FR", "IT", "DE", "ES", "KO" };
-        private static LocalizedString GetLocalizedString(IDataReader reader, String column)
+        private static string[] LANGS = { "JA", "EN", "FR", "IT", "DE", "ES", "KO" };
+        private static LocalizedString GetLocalizedString(IDataReader reader, string column)
         {
             LocalizedString result = new LocalizedString();
-            foreach (String lang in LANGS)
+            foreach (string lang in LANGS)
             {
-                String col = column + lang.ToLowerInvariant();
+                string col = column + lang.ToLowerInvariant();
                 if (reader[col] is DBNull) continue;
-                result.Add(lang, (String)reader[col]);
+                result.Add(lang, (string)reader[col]);
             }
             return result;
         }
@@ -554,7 +554,7 @@ namespace VeekunImport
             return (DamageClass)(Convert.ToInt32(reader["damage_class_id"]) - 1);
         }
 
-        private static bool ProcessTSV(String filename, int requiredFields, Action<TsvRow> action)
+        private static bool ProcessTSV(string filename, int requiredFields, Action<TsvRow> action)
         {
             if (!File.Exists(filename))
             {
@@ -564,12 +564,12 @@ namespace VeekunImport
             using (FileStream fs = File.Open(filename, FileMode.Open))
             {
                 StreamReader sr = new StreamReader(fs, Encoding.UTF8);
-                String line;
+                string line;
                 int lineNumber = 0;
                 int validLineNumber = 0;
                 while ((line = sr.ReadLine()) != null)
                 {
-                    String[] fields = line.Split('\t');
+                    string[] fields = line.Split('\t');
                     if (fields.Length < requiredFields)
                     {
                         Console.WriteLine("File {0} line {1} has too few fields, skipped.", filename, lineNumber);
@@ -624,7 +624,7 @@ namespace VeekunImport
 
     internal class ItemLoading
     {
-        public ItemLoading(int id, String name)
+        public ItemLoading(int id, string name)
         {
             ID = id;
             Name = name;
@@ -633,7 +633,7 @@ namespace VeekunImport
         }
 
         public int ID;
-        public String Name;
+        public string Name;
         public LocalizedString NameLocalized;
         public int? Value3, Value4, Value5, Value6;
         public int Price;
@@ -660,7 +660,7 @@ namespace VeekunImport
 
     internal class RibbonLoading
     {
-        public RibbonLoading(int id, String name, String description)
+        public RibbonLoading(int id, string name, string description)
         {
             ID = id;
             Name = name;
@@ -669,8 +669,8 @@ namespace VeekunImport
         }
 
         public int ID;
-        public String Name;
-        public String Description;
+        public string Name;
+        public string Description;
         public int? Position3, Position4, Position5, Position6;
 
         public void SetGenerationPosition(int? position, int generation)
@@ -695,7 +695,7 @@ namespace VeekunImport
 
     internal class TsvRow
     {
-        public TsvRow(int lineNumber, int validLineNumber, String[] fields)
+        public TsvRow(int lineNumber, int validLineNumber, string[] fields)
         {
             LineNumber = lineNumber;
             ValidLineNumber = validLineNumber;
@@ -704,6 +704,6 @@ namespace VeekunImport
 
         public int LineNumber;
         public int ValidLineNumber;
-        public String[] Fields;
+        public string[] Fields;
     }
 }
