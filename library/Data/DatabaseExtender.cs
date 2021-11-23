@@ -296,8 +296,8 @@ namespace PkmnFoundations.Data
 
         public static T Cast<T>(object value)
         {
-            if (value is DBNull) return default(T);
-            return (T)value;
+            if (value is DBNull) value = null;
+            return (T)value; // Allow InvalidCastException to escape.
         }
     }
 }

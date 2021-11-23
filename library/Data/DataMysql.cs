@@ -927,21 +927,21 @@ namespace PkmnFoundations.Data
         private BattleTowerPokemon4 BattleTowerPokemon4FromReader(MySqlDataReader reader, Pokedex.Pokedex pokedex)
         {
             return new BattleTowerPokemon4(pokedex,
-                Database.Cast<ushort>(reader["Species"]),
-                Database.Cast<ushort>(reader["HeldItem"]),
-                Database.Cast<ushort>(reader["Move1"]),
-                Database.Cast<ushort>(reader["Move2"]),
-                Database.Cast<ushort>(reader["Move3"]),
-                Database.Cast<ushort>(reader["Move4"]),
-                Database.Cast<uint>(reader["TrainerID"]),
-                Database.Cast<uint>(reader["Personality"]),
-                Database.Cast<uint>(reader["IVs"]),
-                Database.Cast<byte[]>(reader["EVs"]),
-                Database.Cast<byte>(reader["Unknown1"]),
-                (Languages)Database.Cast<byte>(reader["Language"]),
-                Database.Cast<byte>(reader["Ability"]),
-                Database.Cast<byte>(reader["Happiness"]),
-                new EncodedString4(Database.Cast<byte[]>(reader["Nickname"]), 0, 22)
+                DatabaseExtender.Cast<ushort>(reader["Species"]),
+                DatabaseExtender.Cast<ushort>(reader["HeldItem"]),
+                DatabaseExtender.Cast<ushort>(reader["Move1"]),
+                DatabaseExtender.Cast<ushort>(reader["Move2"]),
+                DatabaseExtender.Cast<ushort>(reader["Move3"]),
+                DatabaseExtender.Cast<ushort>(reader["Move4"]),
+                DatabaseExtender.Cast<uint>(reader["TrainerID"]),
+                DatabaseExtender.Cast<uint>(reader["Personality"]),
+                DatabaseExtender.Cast<uint>(reader["IVs"]),
+                DatabaseExtender.Cast<byte[]>(reader["EVs"]),
+                DatabaseExtender.Cast<byte>(reader["Unknown1"]),
+                (Languages)DatabaseExtender.Cast<byte>(reader["Language"]),
+                DatabaseExtender.Cast<byte>(reader["Ability"]),
+                DatabaseExtender.Cast<byte>(reader["Happiness"]),
+                new EncodedString4(DatabaseExtender.Cast<byte[]>(reader["Nickname"]), 0, 22)
                 );
         }
 
@@ -1931,22 +1931,22 @@ namespace PkmnFoundations.Data
         private BattleSubwayPokemon5 BattleSubwayPokemon5FromReader(MySqlDataReader reader, Pokedex.Pokedex pokedex)
         {
             return new BattleSubwayPokemon5(pokedex,
-                Database.Cast<ushort>(reader["Species"]),
-                Database.Cast<ushort>(reader["HeldItem"]),
-                Database.Cast<ushort>(reader["Move1"]),
-                Database.Cast<ushort>(reader["Move2"]),
-                Database.Cast<ushort>(reader["Move3"]),
-                Database.Cast<ushort>(reader["Move4"]),
-                Database.Cast<uint>(reader["TrainerID"]),
-                Database.Cast<uint>(reader["Personality"]),
-                Database.Cast<uint>(reader["IVs"]),
-                Database.Cast<byte[]>(reader["EVs"]),
-                Database.Cast<byte>(reader["Unknown1"]),
-                (Languages)Database.Cast<byte>(reader["Language"]),
-                Database.Cast<byte>(reader["Ability"]),
-                Database.Cast<byte>(reader["Happiness"]),
-                new EncodedString5(Database.Cast<byte[]>(reader["Nickname"]), 0, 22),
-                Database.Cast<uint>(reader["Unknown2"])
+                DatabaseExtender.Cast<ushort>(reader["Species"]),
+                DatabaseExtender.Cast<ushort>(reader["HeldItem"]),
+                DatabaseExtender.Cast<ushort>(reader["Move1"]),
+                DatabaseExtender.Cast<ushort>(reader["Move2"]),
+                DatabaseExtender.Cast<ushort>(reader["Move3"]),
+                DatabaseExtender.Cast<ushort>(reader["Move4"]),
+                DatabaseExtender.Cast<uint>(reader["TrainerID"]),
+                DatabaseExtender.Cast<uint>(reader["Personality"]),
+                DatabaseExtender.Cast<uint>(reader["IVs"]),
+                DatabaseExtender.Cast<byte[]>(reader["EVs"]),
+                DatabaseExtender.Cast<byte>(reader["Unknown1"]),
+                (Languages)DatabaseExtender.Cast<byte>(reader["Language"]),
+                DatabaseExtender.Cast<byte>(reader["Ability"]),
+                DatabaseExtender.Cast<byte>(reader["Happiness"]),
+                new EncodedString5(DatabaseExtender.Cast<byte[]>(reader["Nickname"]), 0, 22),
+                DatabaseExtender.Cast<uint>(reader["Unknown2"])
                 );
         }
 

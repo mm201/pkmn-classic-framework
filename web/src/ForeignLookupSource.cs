@@ -44,7 +44,7 @@ namespace PkmnFoundations.Web
                 return;
             }
 
-            String control_id = context.Request.Form["c"];
+            string control_id = context.Request.Form["c"];
             if (control_id.Contains('<') || control_id.Contains('>') || control_id.Contains('\"')
                 || control_id.Contains('\'') || control_id.Contains('\\'))
             {
@@ -53,7 +53,7 @@ namespace PkmnFoundations.Web
             }
 
             Languages lang = Format.FromIso639_1(context.Request.QueryString["lang"] ?? "EN");
-            String format = context.Request.Form["f"] ?? "h";
+            string format = context.Request.Form["f"] ?? "h";
 
             if (!new[]{"h", "j"}.Contains(format))
             {
@@ -66,7 +66,7 @@ namespace PkmnFoundations.Web
             {
                 data = GetData(context, context.Request.Form["q"], rows, lang);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 // todo: log error
                 ServerError(context);
@@ -114,7 +114,7 @@ namespace PkmnFoundations.Web
             context.Response.StatusCode = 400;
         }
 
-        private void EmptyResult(HttpContext context, String format)
+        private void EmptyResult(HttpContext context, string format)
         {
             switch (format)
             {
@@ -132,7 +132,7 @@ namespace PkmnFoundations.Web
             }
         }
 
-        private void WriteHtml(HttpContext context, DataTable data, String control_id)
+        private void WriteHtml(HttpContext context, DataTable data, string control_id)
         {
             context.Response.ContentType = "text/plain";
 
@@ -142,10 +142,10 @@ namespace PkmnFoundations.Web
 
             foreach (DataRow row in data.Rows)
             {
-                String text = row["Text"].ToString();
+                string text = row["Text"].ToString();
                 // this breaks if value contains html control chars but is fine since all values will be int
-                String value = row["Value"].ToString();
-                String html = hasHtml ? row["html"].ToString() : Common.HtmlEncode(text);
+                string value = row["Value"].ToString();
+                string html = hasHtml ? row["html"].ToString() : Common.HtmlEncode(text);
 
                 builder.Remove(0, builder.Length);
                 builder.Append("<div class=\"result");
@@ -197,13 +197,13 @@ namespace PkmnFoundations.Web
                 DataRow row = data.Rows[x];
                 results[x] = new ForeignLookupResult 
                 { 
-                    t = DatabaseExtender.Cast<String>(row["Text"]) ?? "", 
+                    t = DatabaseExtender.Cast<string>(row["Text"]) ?? "", 
                     v = DatabaseExtender.Cast<int ?>(row["Value"]) ?? 0 };
             }
             context.Response.Write(JsonConvert.SerializeObject(results));
         }
 
-        protected virtual DataTable GetData(HttpContext context, String query, int rows, Languages lang)
+        protected virtual DataTable GetData(HttpContext context, string query, int rows, Languages lang)
         {
             return null;
         }
@@ -211,7 +211,7 @@ namespace PkmnFoundations.Web
 
     internal class ForeignLookupResult
     {
-        public String t;
+        public string t;
         public int v;
     }
 }
