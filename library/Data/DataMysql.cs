@@ -596,11 +596,11 @@ namespace PkmnFoundations.Data
                 // we can optimize this and the next down to a single BETWEEN
                 // query.
                 // This does require retrieving their old rank from the db.
-                tran.ExecuteNonQuery("SELECT @old_rank = Rank, @old_position = Position " +
-                    "FROM GtsBattleTower4 WHERE pid = @pid AND RoomNum = @room); " +
+                tran.ExecuteNonQuery("SELECT Rank, Position INTO @old_rank, @old_position " +
+                    "FROM GtsBattleTower4 WHERE id = @pkey; " +
                     "UPDATE GtsBattleTower4 SET Position = Position - 1 " +
                     "WHERE RoomNum = @room AND Rank = @old_rank AND Position > @old_position",
-                    new MySqlParameter("@pid", record.PID),
+                    new MySqlParameter("@pkey", pkey),
                     new MySqlParameter("@room", record.RoomNum));
             }
 
@@ -836,7 +836,7 @@ namespace PkmnFoundations.Data
                     "AND Language = @language AND TrainerID = @trainer_id",
                     new MySqlParameter("@rank", record.Rank),
                     new MySqlParameter("@room", record.RoomNum),
-                    new MySqlParameter("@name", record.Profile.Name),
+                    new MySqlParameter("@name", record.Profile.Name.RawData),
                     new MySqlParameter("@version", (byte)record.Profile.Version),
                     new MySqlParameter("@language", (byte)record.Profile.Language),
                     new MySqlParameter("@trainer_id", record.Profile.OT)
@@ -1601,11 +1601,11 @@ namespace PkmnFoundations.Data
                 // we can optimize this and the next down to a single BETWEEN
                 // query.
                 // This does require retrieving their old rank from the db.
-                tran.ExecuteNonQuery("SELECT @old_rank = Rank, @old_position = Position " +
-                    "FROM GtsBattleSubway5 WHERE pid = @pid AND RoomNum = @room); " +
+                tran.ExecuteNonQuery("SELECT Rank, Position INTO @old_rank, @old_position " +
+                    "FROM GtsBattleSubway5 WHERE id = @pkey; " +
                     "UPDATE GtsBattleSubway5 SET Position = Position - 1 " +
                     "WHERE RoomNum = @room AND Rank = @old_rank AND Position > @old_position",
-                    new MySqlParameter("@pid", record.PID),
+                    new MySqlParameter("@pkey", pkey),
                     new MySqlParameter("@room", record.RoomNum));
             }
 
@@ -1838,7 +1838,7 @@ namespace PkmnFoundations.Data
                     "AND Language = @language AND TrainerID = @trainer_id",
                     new MySqlParameter("@rank", record.Rank),
                     new MySqlParameter("@room", record.RoomNum),
-                    new MySqlParameter("@name", record.Profile.Name),
+                    new MySqlParameter("@name", record.Profile.Name.RawData),
                     new MySqlParameter("@version", (byte)record.Profile.Version),
                     new MySqlParameter("@language", (byte)record.Profile.Language),
                     new MySqlParameter("@trainer_id", record.Profile.OT)
