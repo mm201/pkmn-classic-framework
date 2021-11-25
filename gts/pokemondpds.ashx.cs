@@ -505,8 +505,16 @@ namespace PkmnFoundations.GTS
                     SessionManager.Remove(session);
 
                     // Probably an availability/status code.
-                    // todo: See how the game reacts to various values.
                     Database.Instance.GamestatsBumpProfile4(pid);
+
+                    // Response codes:
+                    // 0x00: BSOD
+                    // 0x01: Continues normally
+                    // 0x02: BSOD
+                    // 0x03: The Wi-Fi Battle Tower is currently undergoing maintenance. Please try again later.
+                    // 0x04: The Wi-Fi Battle Tower is very crowded. Please try again later.
+                    // 0x05: Unable to connect to the Wi-Fi Battle Tower. Returning to the reception counter.
+                    // 0x06: BSOD
                     response.Write(new byte[] { 0x01, 0x00 }, 0, 2);
                     break;
 
