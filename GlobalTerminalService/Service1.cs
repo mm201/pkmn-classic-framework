@@ -15,18 +15,18 @@ namespace PkmnFoundations.GlobalTerminalService
         public Service1()
         {
             InitializeComponent();
-            m_server_4 = new GTServer4();
-            m_server_5 = new GTServer5();
 #if !DEBUG
             LogHelper.UseEventLog(this.EventLog);
 #endif
         }
 
-        private GTServer4 m_server_4;
-        private GTServer5 m_server_5;
+        private GTServer4 m_server_4 = null;
+        private GTServer5 m_server_5 = null;
 
         protected override void OnStart(string[] args)
         {
+            if (m_server_4 == null) m_server_4 = new GTServer4();
+            if (m_server_5 == null) m_server_5 = new GTServer5();
             Start();
         }
 
