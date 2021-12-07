@@ -195,6 +195,9 @@ namespace PkmnFoundations.Structures
         {
             if (!base.Validate()) return false;
 
+            // Forbid ball capsules. Credit: Gannio
+            if (((PokemonParty4)Pokemon).CapsuleIndex != 0) return false;
+
             return true;
         }
 
