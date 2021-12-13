@@ -25,13 +25,13 @@ namespace PkmnFoundations.GlobalTerminalService
 
         protected override void OnStart(string[] args)
         {
-            if (m_server_4 == null) m_server_4 = new GTServer4();
-            if (m_server_5 == null) m_server_5 = new GTServer5();
             Start();
         }
 
         public void Start()
         {
+            if (m_server_4 == null) m_server_4 = new GTServer4();
+            if (m_server_5 == null) m_server_5 = new GTServer5();
             m_server_4.BeginPolling();
             m_server_5.BeginPolling();
         }
