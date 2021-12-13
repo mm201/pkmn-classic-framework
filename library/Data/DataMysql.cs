@@ -1006,7 +1006,8 @@ namespace PkmnFoundations.Data
             if (profile.DataPrefix.Length != 12) throw new FormatException("Profile data prefix must be 12 bytes.");
             if (profile.Data.Length != 152) throw new FormatException("Profile data must be 152 bytes.");
 
-            long exists = (long)tran.ExecuteScalar("SELECT EXISTS(SELECT * FROM pkmncf_plaza_profiles WHERE pid = @pid)", new MySqlParameter("@pid", profile.PID));
+            bool exists = Convert.ToSByte(tran.ExecuteScalar("SELECT EXISTS(SELECT * FROM pkmncf_plaza_profiles WHERE pid = @pid)", 
+                new MySqlParameter("@pid", profile.PID))) != 0;
 
             MySqlParameter[] _params = new MySqlParameter[]{
                 new MySqlParameter("@pid", profile.PID),
@@ -1020,7 +1021,7 @@ namespace PkmnFoundations.Data
                 new MySqlParameter("@name", profile.Name.RawData)
             };
 
-            if (exists != 0)
+            if (exists)
             {
                 return tran.ExecuteNonQuery("UPDATE pkmncf_plaza_profiles " +
                     "SET DataPrefix = @data_prefix, Data = @data, " +
@@ -1049,9 +1050,10 @@ namespace PkmnFoundations.Data
 
         public bool GamestatsBumpProfile4(MySqlTransaction tran, int pid)
         {
-            long exists = (long)tran.ExecuteScalar("SELECT EXISTS(SELECT * FROM GtsProfiles4 WHERE pid = @pid)", new MySqlParameter("@pid", pid));
+            bool exists = Convert.ToSByte(tran.ExecuteScalar("SELECT EXISTS(SELECT * FROM GtsProfiles4 WHERE pid = @pid)", 
+                new MySqlParameter("@pid", pid))) != 0;
 
-            if (exists != 0)
+            if (exists)
             {
                 return tran.ExecuteNonQuery("UPDATE GtsProfiles4 SET " +
                     "TimeUpdated = UTC_TIMESTAMP() WHERE pid = @pid", new MySqlParameter("@pid", pid)) > 0;
@@ -1073,7 +1075,8 @@ namespace PkmnFoundations.Data
         {
             if (profile.Data.Length != 100) throw new FormatException("Profile data must be 100 bytes.");
 
-            long exists = (long)tran.ExecuteScalar("SELECT EXISTS(SELECT * FROM GtsProfiles4 WHERE pid = @pid)", new MySqlParameter("@pid", profile.PID));
+            bool exists = Convert.ToSByte(tran.ExecuteScalar("SELECT EXISTS(SELECT * FROM GtsProfiles4 WHERE pid = @pid)", 
+                new MySqlParameter("@pid", profile.PID))) != 0;
 
             MySqlParameter[] _params = new MySqlParameter[]{
                 new MySqlParameter("@pid", profile.PID),
@@ -1091,7 +1094,7 @@ namespace PkmnFoundations.Data
                 new MySqlParameter("@mail_secret", profile.MailSecret)
             };
 
-            if (exists != 0)
+            if (exists)
             {
                 return tran.ExecuteNonQuery("UPDATE GtsProfiles4 SET Data = @data, " +
                     "Version = @version, Language = @language, Country = @country, " +
@@ -1993,7 +1996,8 @@ namespace PkmnFoundations.Data
 
             if (profile.Data.Length != 100) throw new FormatException("Profile data must be 100 bytes.");
 
-            long exists = (long)tran.ExecuteScalar("SELECT EXISTS(SELECT * FROM GtsProfiles5 WHERE pid = @pid)", new MySqlParameter("@pid", profile.PID));
+            bool exists = Convert.ToSByte(tran.ExecuteScalar("SELECT EXISTS(SELECT * FROM GtsProfiles5 WHERE pid = @pid)", 
+                new MySqlParameter("@pid", profile.PID))) != 0;
 
             MySqlParameter[] _params = new MySqlParameter[]{
                 new MySqlParameter("@pid", profile.PID),
@@ -2011,7 +2015,7 @@ namespace PkmnFoundations.Data
                 new MySqlParameter("@mail_secret", profile.MailSecret)
             };
 
-            if (exists != 0)
+            if (exists)
             {
                 return tran.ExecuteNonQuery("UPDATE GtsProfiles5 SET Data = @data, " +
                     "Version = @version, Language = @language, Country = @country, " +
@@ -2039,8 +2043,9 @@ namespace PkmnFoundations.Data
         {
             if (record.Data.Length != 224) throw new ArgumentException("Dressup data must be 224 bytes.");
 
-            long exists = (long)tran.ExecuteScalar("SELECT EXISTS(SELECT * FROM TerminalDressup4 WHERE md5 = unhex(md5(@data)) AND Data = @data)", new MySqlParameter("@data", record.Data));
-            if (exists != 0) return 0;
+            bool exists = Convert.ToSByte(tran.ExecuteScalar("SELECT EXISTS(SELECT * FROM TerminalDressup4 WHERE md5 = unhex(md5(@data)) AND Data = @data)", 
+                new MySqlParameter("@data", record.Data))) != 0;
+            if (exists) return 0;
 
             if (record.SerialNumber == 0)
             {
@@ -2107,8 +2112,9 @@ namespace PkmnFoundations.Data
         public ulong BoxUpload4(MySqlTransaction tran, BoxRecord4 record)
         {
             if (record.Data.Length != 540) throw new ArgumentException("Box data must be 540 bytes.");
-            long exists = (long)tran.ExecuteScalar("SELECT EXISTS(SELECT * FROM TerminalBoxes4 WHERE md5 = unhex(md5(@data)) AND Data = @data)", new MySqlParameter("@data", record.Data));
-            if (exists != 0) return 0; // xxx: it would be better to return a null ulong ? than 0
+            bool exists = Convert.ToSByte(tran.ExecuteScalar("SELECT EXISTS(SELECT * FROM TerminalBoxes4 WHERE md5 = unhex(md5(@data)) AND Data = @data)", 
+                new MySqlParameter("@data", record.Data))) != 0;
+            if (exists) return 0; // xxx: it would be better to return a null ulong ? than 0
 
             if (record.SerialNumber == 0)
             {
@@ -2176,12 +2182,12 @@ namespace PkmnFoundations.Data
             if (record.Data.Length != 7272) throw new ArgumentException();
             if (record.Header.Data.Length != 228) throw new ArgumentException();
 
-            long exists = (long)tran.ExecuteScalar("SELECT EXISTS(SELECT * " +
+            bool exists = Convert.ToSByte(tran.ExecuteScalar("SELECT EXISTS(SELECT * " +
                 "FROM TerminalBattleVideos4 WHERE md5 = unhex(md5(CONCAT(@header, @data))) " +
                 "AND Data = @data AND Header = @header)", 
                 new MySqlParameter("@header", record.Header.Data), 
-                new MySqlParameter("@data", record.Data));
-            if (exists != 0) return 0;
+                new MySqlParameter("@data", record.Data))) != 0;
+            if (exists) return 0;
 
             if (record.SerialNumber == 0)
             {
@@ -2435,11 +2441,11 @@ namespace PkmnFoundations.Data
         #region Global Terminal 5
         public ulong MusicalUpload5(MySqlTransaction tran, MusicalRecord5 record)
         {
-            long exists = (long)tran.ExecuteScalar("SELECT EXISTS(SELECT * " +
+            bool exists = Convert.ToSByte(tran.ExecuteScalar("SELECT EXISTS(SELECT * " +
                 "FROM TerminalMusicals5 WHERE md5 = unhex(md5(@data)) " +
                 "AND Data = @data)",
-                new MySqlParameter("@data", record.Data));
-            if (exists != 0) return 0;
+                new MySqlParameter("@data", record.Data))) != 0;
+            if (exists) return 0;
 
             if (record.SerialNumber == 0)
             {
@@ -2539,12 +2545,12 @@ namespace PkmnFoundations.Data
             if (record.Data.Length != 6112) throw new ArgumentException();
             if (record.Header.Data.Length != 196) throw new ArgumentException();
 
-            long exists = (long)tran.ExecuteScalar("SELECT EXISTS(SELECT * " +
+            bool exists = Convert.ToSByte(tran.ExecuteScalar("SELECT EXISTS(SELECT * " +
                 "FROM TerminalBattleVideos5 WHERE md5 = unhex(md5(CONCAT(@header, @data))) " +
                 "AND Data = @data AND Header = @header)",
                 new MySqlParameter("@header", record.Header.Data),
-                new MySqlParameter("@data", record.Data));
-            if (exists != 0) return 0;
+                new MySqlParameter("@data", record.Data))) != 0;
+            if (exists) return 0;
 
             if (record.SerialNumber == 0)
             {
