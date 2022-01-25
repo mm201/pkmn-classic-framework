@@ -53,18 +53,24 @@ namespace PkmnFoundations.Data
         /// </summary>
         private T WithTransaction<T>(Func<MySqlTransaction, T> command)
         {
+            T result;
             using (MySqlConnection db = CreateConnection())
             {
                 db.Open();
                 using (MySqlTransaction tran = db.BeginTransaction())
                 {
-                    T result = command(tran);
+                    result = command(tran);
                     tran.Commit();
-                    return result;
                 }
+                db.Close();
             }
+            return result;
         }
 
+        /// <summary>
+        /// Provides a MySqlConnection and transaction to the command and runs
+        /// it. The transaction always commits unless an exception is thrown.
+        /// </summary>
         private void WithTransaction(Action<MySqlTransaction> command)
         {
             using (MySqlConnection db = CreateConnection())
@@ -75,56 +81,63 @@ namespace PkmnFoundations.Data
                     command(tran);
                     tran.Commit();
                 }
+                db.Close();
             }
         }
 
         /// <summary>
         /// Provides a MySqlConnection and transaction to the command and runs
         /// it. The transaction is committed if success is set to true.
-        /// Otherwise it's rolled back.
+        /// Otherwise it's rolled back. The transaction also rolls back if your
+        /// function throws.
         /// </summary>
         private T WithTransaction<T>(WithMysqlTransactionDelegate<T> command)
         {
+            T result;
             using (MySqlConnection db = CreateConnection())
             {
                 db.Open();
                 using (MySqlTransaction tran = db.BeginTransaction())
                 {
                     bool success;
-                    T result = command(tran, out success);
+                    result = command(tran, out success);
 
                     if (success)
                         tran.Commit();
                     else
                         tran.Rollback();
 
-                    return result;
                 }
+                db.Close();
             }
+            return result;
         }
 
         /// <summary>
         /// Provides a MySqlConnection and transaction to the command and runs
         /// it. The transaction is committed if the function returns true.
-        /// Otherwise it's rolled back.
+        /// Otherwise it's rolled back. The transaction also rolls back if your
+        /// function throws.
         /// </summary>
         private bool WithTransactionSuccessful(Func<MySqlTransaction, bool> command)
         {
+            bool success;
             using (MySqlConnection db = CreateConnection())
             {
                 db.Open();
                 using (MySqlTransaction tran = db.BeginTransaction())
                 {
-                    bool success = command(tran);
+                    success = command(tran);
 
                     if (success)
                         tran.Commit();
                     else
                         tran.Rollback();
 
-                    return success;
                 }
+                db.Close();
             }
+            return success;
         }
 
         #endregion
