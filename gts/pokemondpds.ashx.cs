@@ -142,7 +142,7 @@ namespace PkmnFoundations.GTS
                     * in the GTS, it responds with 0x0004; if not, it responds 
                     * with 0x0005. */
 
-                        GtsRecord4 record = Database.Instance.GtsDataForUser4(pokedex, pid);
+                    GtsRecord4 record = Database.Instance.GtsDataForUser4(pokedex, pid);
 
                     if (record == null)
                     {
@@ -432,6 +432,10 @@ namespace PkmnFoundations.GTS
                         return;
                     }
 
+                    // uncomment these two lines if you're replaying gamestats requests and need to skip the random token
+                    //session = new GamestatsSession(this.GameId, this.Salt, pid, "/pokemondpds/worldexchange/exchange.asp");
+                    //SessionManager.Add(session);
+
                     object[] tag = new GtsRecord4[2];
                     tag[0] = upload;
                     tag[1] = result;
@@ -461,7 +465,8 @@ namespace PkmnFoundations.GTS
 
                 case "/pokemondpds/worldexchange/exchange_finish.asp":
                 {
-                    SessionManager.Remove(session);
+                    //if (session != null)
+                        SessionManager.Remove(session);
 
                     if (data.Length != 8)
                     {
