@@ -13,5 +13,17 @@ namespace PkmnFoundations.Web.controls
         {
 
         }
+
+        public bool ShowAttribution
+        {
+            get
+            {
+                return phAttribution.Visible;
+            }
+            set
+            {
+                phAttribution.Visible = value;
+            }
+        }
     }
 }

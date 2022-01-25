@@ -36,7 +36,7 @@
 
             <div id="gtsHeadMain">
             <ul class="gtsHeadContent">
-                <li>DNS: <strong><pf:DnsAddress runat="server" /></strong></li>
+                <li>DNS: <strong><pf:DnsAddress ShowAttribution="true" runat="server" /></strong></li>
                 <li><asp:Literal ID="litPokemon" runat="server" />
                 Pokémon available for offer.</li>
                 <li><asp:Literal ID="litVideos" runat="server" />
