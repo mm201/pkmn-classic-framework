@@ -1,31 +1,26 @@
-# ************************************************************
-# Sequel Pro SQL dump
-# Version 4541
-#
-# http://www.sequelpro.com/
-# https://github.com/sequelpro/sequelpro
-#
-# Host: hoenn.local (MySQL 5.5.5-10.3.10-MariaDB)
-# Database: gts
-# Generation Time: 2021-02-01 07:35:50 +0000
-# ************************************************************
-
+-- --------------------------------------------------------
+-- Host:                         127.0.0.1
+-- Server version:               10.3.28-MariaDB - mariadb.org binary distribution
+-- Server OS:                    Win64
+-- HeidiSQL Version:             11.3.0.6392
+-- --------------------------------------------------------
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
 /*!40101 SET NAMES utf8 */;
+/*!50503 SET NAMES utf8mb4 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 
-# Dump of table BattleVideoCrawlQueue
-# ------------------------------------------------------------
+-- Dumping database structure for gts
+CREATE DATABASE IF NOT EXISTS `gts` /*!40100 DEFAULT CHARACTER SET utf8 */;
+USE `gts`;
 
-DROP TABLE IF EXISTS `BattleVideoCrawlQueue`;
-
-CREATE TABLE `BattleVideoCrawlQueue` (
+-- Dumping structure for table gts.BattleVideoCrawlQueue
+CREATE TABLE IF NOT EXISTS `BattleVideoCrawlQueue` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `SerialNumber` bigint(11) unsigned DEFAULT NULL,
   `Timestamp` datetime DEFAULT NULL,
@@ -33,14 +28,10 @@ CREATE TABLE `BattleVideoCrawlQueue` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+-- Data exporting was unselected.
 
-
-# Dump of table BattleVideoCrawlQueue5
-# ------------------------------------------------------------
-
-DROP TABLE IF EXISTS `BattleVideoCrawlQueue5`;
-
-CREATE TABLE `BattleVideoCrawlQueue5` (
+-- Dumping structure for table gts.BattleVideoCrawlQueue5
+CREATE TABLE IF NOT EXISTS `BattleVideoCrawlQueue5` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `SerialNumber` bigint(11) unsigned DEFAULT NULL,
   `Timestamp` datetime DEFAULT NULL,
@@ -48,14 +39,10 @@ CREATE TABLE `BattleVideoCrawlQueue5` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+-- Data exporting was unselected.
 
-
-# Dump of table BattleVideoSearchHistory
-# ------------------------------------------------------------
-
-DROP TABLE IF EXISTS `BattleVideoSearchHistory`;
-
-CREATE TABLE `BattleVideoSearchHistory` (
+-- Dumping structure for table gts.BattleVideoSearchHistory
+CREATE TABLE IF NOT EXISTS `BattleVideoSearchHistory` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `Metagame` int(11) DEFAULT NULL,
   `Species` int(11) DEFAULT NULL,
@@ -64,14 +51,10 @@ CREATE TABLE `BattleVideoSearchHistory` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+-- Data exporting was unselected.
 
-
-# Dump of table BattleVideoSearchHistory5
-# ------------------------------------------------------------
-
-DROP TABLE IF EXISTS `BattleVideoSearchHistory5`;
-
-CREATE TABLE `BattleVideoSearchHistory5` (
+-- Dumping structure for table gts.BattleVideoSearchHistory5
+CREATE TABLE IF NOT EXISTS `BattleVideoSearchHistory5` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `Metagame` int(11) DEFAULT NULL,
   `Species` int(11) DEFAULT NULL,
@@ -81,14 +64,10 @@ CREATE TABLE `BattleVideoSearchHistory5` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+-- Data exporting was unselected.
 
-
-# Dump of table GtsBattleSubway5
-# ------------------------------------------------------------
-
-DROP TABLE IF EXISTS `GtsBattleSubway5`;
-
-CREATE TABLE `GtsBattleSubway5` (
+-- Dumping structure for table gts.GtsBattleSubway5
+CREATE TABLE IF NOT EXISTS `GtsBattleSubway5` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `pid` int(11) NOT NULL,
   `Name` binary(16) DEFAULT '\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0',
@@ -116,16 +95,12 @@ CREATE TABLE `GtsBattleSubway5` (
   PRIMARY KEY (`id`),
   KEY `RoomNum` (`RoomNum`,`Rank`,`Position`),
   KEY `pid` (`pid`,`RoomNum`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=7003 DEFAULT CHARSET=utf8;
 
+-- Data exporting was unselected.
 
-
-# Dump of table GtsBattleSubwayLeaders5
-# ------------------------------------------------------------
-
-DROP TABLE IF EXISTS `GtsBattleSubwayLeaders5`;
-
-CREATE TABLE `GtsBattleSubwayLeaders5` (
+-- Dumping structure for table gts.GtsBattleSubwayLeaders5
+CREATE TABLE IF NOT EXISTS `GtsBattleSubwayLeaders5` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `pid` int(11) NOT NULL DEFAULT 0,
   `Name` binary(16) DEFAULT NULL,
@@ -145,16 +120,12 @@ CREATE TABLE `GtsBattleSubwayLeaders5` (
   PRIMARY KEY (`id`),
   KEY `RoomNum` (`RoomNum`,`Rank`,`TimeAdded`),
   KEY `pid` (`pid`,`RoomNum`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=30001 DEFAULT CHARSET=utf8;
 
+-- Data exporting was unselected.
 
-
-# Dump of table GtsBattleSubwayPokemon5
-# ------------------------------------------------------------
-
-DROP TABLE IF EXISTS `GtsBattleSubwayPokemon5`;
-
-CREATE TABLE `GtsBattleSubwayPokemon5` (
+-- Dumping structure for table gts.GtsBattleSubwayPokemon5
+CREATE TABLE IF NOT EXISTS `GtsBattleSubwayPokemon5` (
   `party_id` bigint(20) unsigned NOT NULL,
   `Slot` tinyint(3) unsigned NOT NULL,
   `Species` smallint(5) unsigned DEFAULT NULL,
@@ -176,14 +147,10 @@ CREATE TABLE `GtsBattleSubwayPokemon5` (
   PRIMARY KEY (`party_id`,`Slot`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+-- Data exporting was unselected.
 
-
-# Dump of table GtsBattleTower4
-# ------------------------------------------------------------
-
-DROP TABLE IF EXISTS `GtsBattleTower4`;
-
-CREATE TABLE `GtsBattleTower4` (
+-- Dumping structure for table gts.GtsBattleTower4
+CREATE TABLE IF NOT EXISTS `GtsBattleTower4` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `pid` int(11) NOT NULL,
   `Name` binary(16) DEFAULT '\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0',
@@ -210,16 +177,12 @@ CREATE TABLE `GtsBattleTower4` (
   PRIMARY KEY (`id`),
   KEY `RoomNum` (`RoomNum`,`Rank`,`Position`),
   KEY `pid` (`pid`,`RoomNum`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=6988 DEFAULT CHARSET=utf8;
 
+-- Data exporting was unselected.
 
-
-# Dump of table GtsBattleTowerLeaders4
-# ------------------------------------------------------------
-
-DROP TABLE IF EXISTS `GtsBattleTowerLeaders4`;
-
-CREATE TABLE `GtsBattleTowerLeaders4` (
+-- Dumping structure for table gts.GtsBattleTowerLeaders4
+CREATE TABLE IF NOT EXISTS `GtsBattleTowerLeaders4` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `pid` int(11) NOT NULL DEFAULT 0,
   `Name` binary(16) DEFAULT NULL,
@@ -239,16 +202,12 @@ CREATE TABLE `GtsBattleTowerLeaders4` (
   PRIMARY KEY (`id`),
   KEY `RoomNum` (`RoomNum`,`Rank`,`TimeAdded`),
   KEY `pid` (`pid`,`RoomNum`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=29881 DEFAULT CHARSET=utf8;
 
+-- Data exporting was unselected.
 
-
-# Dump of table GtsBattleTowerPokemon4
-# ------------------------------------------------------------
-
-DROP TABLE IF EXISTS `GtsBattleTowerPokemon4`;
-
-CREATE TABLE `GtsBattleTowerPokemon4` (
+-- Dumping structure for table gts.GtsBattleTowerPokemon4
+CREATE TABLE IF NOT EXISTS `GtsBattleTowerPokemon4` (
   `party_id` bigint(20) unsigned NOT NULL,
   `Slot` tinyint(3) unsigned NOT NULL,
   `Species` smallint(5) unsigned DEFAULT NULL,
@@ -269,14 +228,10 @@ CREATE TABLE `GtsBattleTowerPokemon4` (
   PRIMARY KEY (`party_id`,`Slot`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+-- Data exporting was unselected.
 
-
-# Dump of table GtsHistory4
-# ------------------------------------------------------------
-
-DROP TABLE IF EXISTS `GtsHistory4`;
-
-CREATE TABLE `GtsHistory4` (
+-- Dumping structure for table gts.GtsHistory4
+CREATE TABLE IF NOT EXISTS `GtsHistory4` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `trade_id` bigint(20) unsigned DEFAULT NULL,
   `Data` blob NOT NULL,
@@ -309,16 +264,12 @@ CREATE TABLE `GtsHistory4` (
   KEY `Species` (`Species`),
   KEY `Gender` (`Gender`),
   KEY `Level` (`Level`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 
+-- Data exporting was unselected.
 
-
-# Dump of table GtsHistory5
-# ------------------------------------------------------------
-
-DROP TABLE IF EXISTS `GtsHistory5`;
-
-CREATE TABLE `GtsHistory5` (
+-- Dumping structure for table gts.GtsHistory5
+CREATE TABLE IF NOT EXISTS `GtsHistory5` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `trade_id` bigint(20) unsigned DEFAULT NULL,
   `Data` blob NOT NULL,
@@ -356,14 +307,10 @@ CREATE TABLE `GtsHistory5` (
   KEY `Level` (`Level`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+-- Data exporting was unselected.
 
-
-# Dump of table GtsPokemon4
-# ------------------------------------------------------------
-
-DROP TABLE IF EXISTS `GtsPokemon4`;
-
-CREATE TABLE `GtsPokemon4` (
+-- Dumping structure for table gts.GtsPokemon4
+CREATE TABLE IF NOT EXISTS `GtsPokemon4` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `Data` blob NOT NULL,
   `Species` smallint(5) unsigned NOT NULL,
@@ -393,16 +340,12 @@ CREATE TABLE `GtsPokemon4` (
   KEY `Species` (`Species`),
   KEY `Gender` (`Gender`),
   KEY `Level` (`Level`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
 
+-- Data exporting was unselected.
 
-
-# Dump of table GtsPokemon5
-# ------------------------------------------------------------
-
-DROP TABLE IF EXISTS `GtsPokemon5`;
-
-CREATE TABLE `GtsPokemon5` (
+-- Dumping structure for table gts.GtsPokemon5
+CREATE TABLE IF NOT EXISTS `GtsPokemon5` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `Data` blob NOT NULL,
   `Unknown0` blob NOT NULL,
@@ -435,16 +378,12 @@ CREATE TABLE `GtsPokemon5` (
   KEY `Species` (`Species`),
   KEY `Gender` (`Gender`),
   KEY `Level` (`Level`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
 
+-- Data exporting was unselected.
 
-
-# Dump of table GtsProfiles4
-# ------------------------------------------------------------
-
-DROP TABLE IF EXISTS `GtsProfiles4`;
-
-CREATE TABLE `GtsProfiles4` (
+-- Dumping structure for table gts.GtsProfiles4
+CREATE TABLE IF NOT EXISTS `GtsProfiles4` (
   `pid` int(11) NOT NULL,
   `Data` blob DEFAULT NULL,
   `Version` tinyint(3) unsigned DEFAULT NULL,
@@ -462,17 +401,14 @@ CREATE TABLE `GtsProfiles4` (
   `TimeAdded` datetime NOT NULL,
   `TimeUpdated` datetime NOT NULL,
   `TimeLastSearch` datetime DEFAULT NULL,
+  `IpAddress` varchar(64) DEFAULT NULL,
   PRIMARY KEY (`pid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+-- Data exporting was unselected.
 
-
-# Dump of table GtsProfiles5
-# ------------------------------------------------------------
-
-DROP TABLE IF EXISTS `GtsProfiles5`;
-
-CREATE TABLE `GtsProfiles5` (
+-- Dumping structure for table gts.GtsProfiles5
+CREATE TABLE IF NOT EXISTS `GtsProfiles5` (
   `pid` int(11) NOT NULL,
   `Data` blob DEFAULT NULL,
   `Version` tinyint(3) unsigned DEFAULT NULL,
@@ -490,17 +426,14 @@ CREATE TABLE `GtsProfiles5` (
   `TimeAdded` datetime NOT NULL,
   `TimeUpdated` datetime NOT NULL,
   `TimeLastSearch` datetime DEFAULT NULL,
+  `IpAddress` varchar(64) DEFAULT NULL,
   PRIMARY KEY (`pid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+-- Data exporting was unselected.
 
-
-# Dump of table pkmncf_plaza_profiles
-# ------------------------------------------------------------
-
-DROP TABLE IF EXISTS `pkmncf_plaza_profiles`;
-
-CREATE TABLE `pkmncf_plaza_profiles` (
+-- Dumping structure for table gts.pkmncf_plaza_profiles
+CREATE TABLE IF NOT EXISTS `pkmncf_plaza_profiles` (
   `pid` int(11) NOT NULL,
   `DataPrefix` blob DEFAULT NULL,
   `Data` blob DEFAULT NULL,
@@ -516,14 +449,10 @@ CREATE TABLE `pkmncf_plaza_profiles` (
   PRIMARY KEY (`pid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+-- Data exporting was unselected.
 
-
-# Dump of table pkmncf_pokedex_abilities
-# ------------------------------------------------------------
-
-DROP TABLE IF EXISTS `pkmncf_pokedex_abilities`;
-
-CREATE TABLE `pkmncf_pokedex_abilities` (
+-- Dumping structure for table gts.pkmncf_pokedex_abilities
+CREATE TABLE IF NOT EXISTS `pkmncf_pokedex_abilities` (
   `Value` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `Name_JA` varchar(30) DEFAULT '',
   `Name_EN` varchar(30) DEFAULT NULL,
@@ -533,16 +462,12 @@ CREATE TABLE `pkmncf_pokedex_abilities` (
   `Name_ES` varchar(30) DEFAULT NULL,
   `Name_KO` varchar(30) DEFAULT NULL,
   PRIMARY KEY (`Value`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=192 DEFAULT CHARSET=utf8;
 
+-- Data exporting was unselected.
 
-
-# Dump of table pkmncf_pokedex_countries
-# ------------------------------------------------------------
-
-DROP TABLE IF EXISTS `pkmncf_pokedex_countries`;
-
-CREATE TABLE `pkmncf_pokedex_countries` (
+-- Dumping structure for table gts.pkmncf_pokedex_countries
+CREATE TABLE IF NOT EXISTS `pkmncf_pokedex_countries` (
   `id` int(10) unsigned NOT NULL DEFAULT 0,
   `Value4` tinyint(3) unsigned DEFAULT 0,
   `Value5` tinyint(3) unsigned DEFAULT NULL,
@@ -560,14 +485,10 @@ CREATE TABLE `pkmncf_pokedex_countries` (
   KEY `Value5` (`Value5`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+-- Data exporting was unselected.
 
-
-# Dump of table pkmncf_pokedex_country_regions
-# ------------------------------------------------------------
-
-DROP TABLE IF EXISTS `pkmncf_pokedex_country_regions`;
-
-CREATE TABLE `pkmncf_pokedex_country_regions` (
+-- Dumping structure for table gts.pkmncf_pokedex_country_regions
+CREATE TABLE IF NOT EXISTS `pkmncf_pokedex_country_regions` (
   `id` int(10) unsigned NOT NULL DEFAULT 0,
   `country_id` int(10) unsigned NOT NULL DEFAULT 0,
   `Value4` tinyint(3) unsigned NOT NULL DEFAULT 0,
@@ -586,14 +507,10 @@ CREATE TABLE `pkmncf_pokedex_country_regions` (
   KEY `country_id_3` (`country_id`,`Value5`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+-- Data exporting was unselected.
 
-
-# Dump of table pkmncf_pokedex_encounters_random
-# ------------------------------------------------------------
-
-DROP TABLE IF EXISTS `pkmncf_pokedex_encounters_random`;
-
-CREATE TABLE `pkmncf_pokedex_encounters_random` (
+-- Dumping structure for table gts.pkmncf_pokedex_encounters_random
+CREATE TABLE IF NOT EXISTS `pkmncf_pokedex_encounters_random` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `room_id` int(10) unsigned NOT NULL,
   `Version` int(10) unsigned NOT NULL,
@@ -605,14 +522,10 @@ CREATE TABLE `pkmncf_pokedex_encounters_random` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+-- Data exporting was unselected.
 
-
-# Dump of table pkmncf_pokedex_items
-# ------------------------------------------------------------
-
-DROP TABLE IF EXISTS `pkmncf_pokedex_items`;
-
-CREATE TABLE `pkmncf_pokedex_items` (
+-- Dumping structure for table gts.pkmncf_pokedex_items
+CREATE TABLE IF NOT EXISTS `pkmncf_pokedex_items` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `Value3` int(10) unsigned DEFAULT NULL,
   `Value4` int(10) unsigned DEFAULT NULL,
@@ -626,21 +539,18 @@ CREATE TABLE `pkmncf_pokedex_items` (
   `Name_ES` varchar(30) DEFAULT NULL,
   `Name_KO` varchar(30) DEFAULT NULL,
   `Price` int(10) unsigned DEFAULT NULL,
+  `HoldGeneration` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `Value3` (`Value3`),
   KEY `Value4` (`Value4`),
   KEY `Value5` (`Value5`),
   KEY `Value6` (`Value6`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=5639 DEFAULT CHARSET=utf8;
 
+-- Data exporting was unselected.
 
-
-# Dump of table pkmncf_pokedex_locations
-# ------------------------------------------------------------
-
-DROP TABLE IF EXISTS `pkmncf_pokedex_locations`;
-
-CREATE TABLE `pkmncf_pokedex_locations` (
+-- Dumping structure for table gts.pkmncf_pokedex_locations
+CREATE TABLE IF NOT EXISTS `pkmncf_pokedex_locations` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `region_id` int(11) unsigned NOT NULL,
   `Name_JA` varchar(30) DEFAULT NULL,
@@ -657,16 +567,12 @@ CREATE TABLE `pkmncf_pokedex_locations` (
   `Value5` int(11) unsigned DEFAULT NULL,
   `Value6` int(11) unsigned DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=691 DEFAULT CHARSET=utf8;
 
+-- Data exporting was unselected.
 
-
-# Dump of table pkmncf_pokedex_moves
-# ------------------------------------------------------------
-
-DROP TABLE IF EXISTS `pkmncf_pokedex_moves`;
-
-CREATE TABLE `pkmncf_pokedex_moves` (
+-- Dumping structure for table gts.pkmncf_pokedex_moves
+CREATE TABLE IF NOT EXISTS `pkmncf_pokedex_moves` (
   `Value` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `type_id` int(10) unsigned DEFAULT NULL,
   `DamageClass` tinyint(3) unsigned NOT NULL,
@@ -684,16 +590,12 @@ CREATE TABLE `pkmncf_pokedex_moves` (
   `Target` int(11) DEFAULT NULL,
   PRIMARY KEY (`Value`),
   KEY `Type` (`type_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=10019 DEFAULT CHARSET=utf8;
 
+-- Data exporting was unselected.
 
-
-# Dump of table pkmncf_pokedex_pokemon
-# ------------------------------------------------------------
-
-DROP TABLE IF EXISTS `pkmncf_pokedex_pokemon`;
-
-CREATE TABLE `pkmncf_pokedex_pokemon` (
+-- Dumping structure for table gts.pkmncf_pokedex_pokemon
+CREATE TABLE IF NOT EXISTS `pkmncf_pokedex_pokemon` (
   `NationalDex` int(10) unsigned NOT NULL,
   `family_id` int(10) unsigned NOT NULL,
   `Name_JA` varchar(36) DEFAULT '',
@@ -715,14 +617,10 @@ CREATE TABLE `pkmncf_pokedex_pokemon` (
   KEY `EggGroup2` (`EggGroup2`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+-- Data exporting was unselected.
 
-
-# Dump of table pkmncf_pokedex_pokemon_families
-# ------------------------------------------------------------
-
-DROP TABLE IF EXISTS `pkmncf_pokedex_pokemon_families`;
-
-CREATE TABLE `pkmncf_pokedex_pokemon_families` (
+-- Dumping structure for table gts.pkmncf_pokedex_pokemon_families
+CREATE TABLE IF NOT EXISTS `pkmncf_pokedex_pokemon_families` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `BasicMale` int(10) unsigned NOT NULL,
   `BasicFemale` int(10) unsigned NOT NULL,
@@ -731,16 +629,35 @@ CREATE TABLE `pkmncf_pokedex_pokemon_families` (
   `Incense` int(10) unsigned DEFAULT NULL,
   `GenderRatio` tinyint(3) unsigned NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=365 DEFAULT CHARSET=utf8;
 
+-- Data exporting was unselected.
 
+-- Dumping structure for table gts.pkmncf_pokedex_pokemon_forms
+CREATE TABLE IF NOT EXISTS `pkmncf_pokedex_pokemon_forms` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `NationalDex` int(11) unsigned NOT NULL,
+  `FormValue` tinyint(3) unsigned NOT NULL,
+  `Name_JA` varchar(30) DEFAULT NULL,
+  `Name_EN` varchar(30) DEFAULT NULL,
+  `Name_FR` varchar(30) DEFAULT NULL,
+  `Name_IT` varchar(30) DEFAULT NULL,
+  `Name_DE` varchar(30) DEFAULT NULL,
+  `Name_ES` varchar(30) DEFAULT NULL,
+  `Name_KO` varchar(30) DEFAULT NULL,
+  `FormSuffix` varchar(30) DEFAULT NULL,
+  `Height` int(10) unsigned DEFAULT NULL,
+  `Weight` int(10) unsigned DEFAULT NULL,
+  `Experience` int(10) unsigned DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `NationalDex` (`NationalDex`),
+  KEY `FormValue` (`FormValue`)
+) ENGINE=InnoDB AUTO_INCREMENT=10193 DEFAULT CHARSET=utf8;
 
-# Dump of table pkmncf_pokedex_pokemon_form_stats
-# ------------------------------------------------------------
+-- Data exporting was unselected.
 
-DROP TABLE IF EXISTS `pkmncf_pokedex_pokemon_form_stats`;
-
-CREATE TABLE `pkmncf_pokedex_pokemon_form_stats` (
+-- Dumping structure for table gts.pkmncf_pokedex_pokemon_form_stats
+CREATE TABLE IF NOT EXISTS `pkmncf_pokedex_pokemon_form_stats` (
   `form_id` int(10) unsigned NOT NULL,
   `MinGeneration` int(11) unsigned NOT NULL,
   `Type1` int(10) unsigned DEFAULT NULL,
@@ -762,41 +679,10 @@ CREATE TABLE `pkmncf_pokedex_pokemon_form_stats` (
   KEY `Type2` (`Type2`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+-- Data exporting was unselected.
 
-
-# Dump of table pkmncf_pokedex_pokemon_forms
-# ------------------------------------------------------------
-
-DROP TABLE IF EXISTS `pkmncf_pokedex_pokemon_forms`;
-
-CREATE TABLE `pkmncf_pokedex_pokemon_forms` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `NationalDex` int(11) unsigned NOT NULL,
-  `FormValue` tinyint(3) unsigned NOT NULL,
-  `Name_JA` varchar(30) DEFAULT NULL,
-  `Name_EN` varchar(30) DEFAULT NULL,
-  `Name_FR` varchar(30) DEFAULT NULL,
-  `Name_IT` varchar(30) DEFAULT NULL,
-  `Name_DE` varchar(30) DEFAULT NULL,
-  `Name_ES` varchar(30) DEFAULT NULL,
-  `Name_KO` varchar(30) DEFAULT NULL,
-  `FormSuffix` varchar(30) DEFAULT NULL,
-  `Height` int(10) unsigned DEFAULT NULL,
-  `Weight` int(10) unsigned DEFAULT NULL,
-  `Experience` int(10) unsigned DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `NationalDex` (`NationalDex`),
-  KEY `FormValue` (`FormValue`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-
-
-# Dump of table pkmncf_pokedex_regions
-# ------------------------------------------------------------
-
-DROP TABLE IF EXISTS `pkmncf_pokedex_regions`;
-
-CREATE TABLE `pkmncf_pokedex_regions` (
+-- Dumping structure for table gts.pkmncf_pokedex_regions
+CREATE TABLE IF NOT EXISTS `pkmncf_pokedex_regions` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `Name_JA` varchar(30) DEFAULT NULL,
   `Name_EN` varchar(30) DEFAULT NULL,
@@ -806,16 +692,12 @@ CREATE TABLE `pkmncf_pokedex_regions` (
   `Name_ES` varchar(30) DEFAULT NULL,
   `Name_KO` varchar(30) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
 
+-- Data exporting was unselected.
 
-
-# Dump of table pkmncf_pokedex_ribbons
-# ------------------------------------------------------------
-
-DROP TABLE IF EXISTS `pkmncf_pokedex_ribbons`;
-
-CREATE TABLE `pkmncf_pokedex_ribbons` (
+-- Dumping structure for table gts.pkmncf_pokedex_ribbons
+CREATE TABLE IF NOT EXISTS `pkmncf_pokedex_ribbons` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `Position3` int(10) unsigned DEFAULT NULL,
   `Position4` int(10) unsigned DEFAULT NULL,
@@ -840,30 +722,22 @@ CREATE TABLE `pkmncf_pokedex_ribbons` (
   `Description_ES` varchar(300) DEFAULT NULL,
   `Description_KO` varchar(300) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=5010 DEFAULT CHARSET=utf8;
 
+-- Data exporting was unselected.
 
-
-# Dump of table pkmncf_pokedex_rooms
-# ------------------------------------------------------------
-
-DROP TABLE IF EXISTS `pkmncf_pokedex_rooms`;
-
-CREATE TABLE `pkmncf_pokedex_rooms` (
+-- Dumping structure for table gts.pkmncf_pokedex_rooms
+CREATE TABLE IF NOT EXISTS `pkmncf_pokedex_rooms` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `location_id` int(11) unsigned NOT NULL,
   `Comment` varchar(300) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+-- Data exporting was unselected.
 
-
-# Dump of table pkmncf_pokedex_types
-# ------------------------------------------------------------
-
-DROP TABLE IF EXISTS `pkmncf_pokedex_types`;
-
-CREATE TABLE `pkmncf_pokedex_types` (
+-- Dumping structure for table gts.pkmncf_pokedex_types
+CREATE TABLE IF NOT EXISTS `pkmncf_pokedex_types` (
   `id` int(10) unsigned NOT NULL,
   `Name_JA` varchar(30) DEFAULT '',
   `Name_EN` varchar(30) DEFAULT NULL,
@@ -876,26 +750,96 @@ CREATE TABLE `pkmncf_pokedex_types` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+-- Data exporting was unselected.
 
+-- Dumping structure for table gts.pkmncf_terminal_trainer_rankings_leaderboards_class
+CREATE TABLE IF NOT EXISTS `pkmncf_terminal_trainer_rankings_leaderboards_class` (
+  `report_id` int(11) NOT NULL,
+  `TrainerClass` int(11) NOT NULL,
+  `RecordType` int(11) NOT NULL,
+  `Score` bigint(20) NOT NULL DEFAULT 0,
+  PRIMARY KEY (`report_id`,`TrainerClass`,`RecordType`) USING BTREE,
+  KEY `leaderboard_id` (`report_id`) USING BTREE,
+  CONSTRAINT `FK_pkmncf_terminal_trainer_rankings_byclass4_reports` FOREIGN KEY (`report_id`) REFERENCES `pkmncf_terminal_trainer_rankings_reports` (`report_id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-# Dump of table pkmncf_web_news
-# ------------------------------------------------------------
+-- Data exporting was unselected.
 
-DROP TABLE IF EXISTS `pkmncf_web_news`;
+-- Dumping structure for table gts.pkmncf_terminal_trainer_rankings_leaderboards_month
+CREATE TABLE IF NOT EXISTS `pkmncf_terminal_trainer_rankings_leaderboards_month` (
+  `report_id` int(11) NOT NULL,
+  `Month` int(11) NOT NULL,
+  `RecordType` int(11) NOT NULL,
+  `Score` bigint(20) NOT NULL DEFAULT 0,
+  PRIMARY KEY (`report_id`,`Month`,`RecordType`) USING BTREE,
+  KEY `leaderboard_id` (`report_id`) USING BTREE,
+  CONSTRAINT `FK_pkmncf_terminal_trainer_rankings_bymonth4_reports` FOREIGN KEY (`report_id`) REFERENCES `pkmncf_terminal_trainer_rankings_reports` (`report_id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE `pkmncf_web_news` (
+-- Data exporting was unselected.
+
+-- Dumping structure for table gts.pkmncf_terminal_trainer_rankings_leaderboards_pokemon
+CREATE TABLE IF NOT EXISTS `pkmncf_terminal_trainer_rankings_leaderboards_pokemon` (
+  `report_id` int(11) NOT NULL,
+  `pokemon_id` int(10) unsigned NOT NULL,
+  `RecordType` int(11) NOT NULL,
+  `Score` bigint(20) NOT NULL,
+  PRIMARY KEY (`report_id`,`pokemon_id`,`RecordType`) USING BTREE,
+  KEY `leaderboard_id` (`report_id`) USING BTREE,
+  CONSTRAINT `FK_pkmncf_terminal_trainer_rankings_bypokemon4_reports` FOREIGN KEY (`report_id`) REFERENCES `pkmncf_terminal_trainer_rankings_reports` (`report_id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- Data exporting was unselected.
+
+-- Dumping structure for table gts.pkmncf_terminal_trainer_rankings_records
+CREATE TABLE IF NOT EXISTS `pkmncf_terminal_trainer_rankings_records` (
+  `pid` int(11) NOT NULL,
+  `RecordType` int(11) NOT NULL,
+  `Value` bigint(20) NOT NULL DEFAULT 0,
+  `LastUpdated` datetime NOT NULL,
+  PRIMARY KEY (`pid`,`RecordType`),
+  KEY `LastUpdated` (`LastUpdated`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- Data exporting was unselected.
+
+-- Dumping structure for table gts.pkmncf_terminal_trainer_rankings_reports
+CREATE TABLE IF NOT EXISTS `pkmncf_terminal_trainer_rankings_reports` (
+  `report_id` int(11) NOT NULL AUTO_INCREMENT,
+  `StartDate` datetime NOT NULL,
+  `EndDate` datetime NOT NULL,
+  `RecordType1` int(11) NOT NULL,
+  `RecordType2` int(11) NOT NULL,
+  `RecordType3` int(11) NOT NULL,
+  PRIMARY KEY (`report_id`) USING BTREE,
+  KEY `StartDate` (`StartDate`),
+  KEY `EndDate` (`EndDate`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- Data exporting was unselected.
+
+-- Dumping structure for table gts.pkmncf_terminal_trainer_rankings_teams
+CREATE TABLE IF NOT EXISTS `pkmncf_terminal_trainer_rankings_teams` (
+  `pid` int(11) NOT NULL,
+  `TrainerClass` int(11) NOT NULL,
+  `BirthMonth` int(11) NOT NULL,
+  `FavouritePokemon` int(10) unsigned NOT NULL,
+  `LastUpdated` datetime NOT NULL,
+  PRIMARY KEY (`pid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- Data exporting was unselected.
+
+-- Dumping structure for table gts.pkmncf_web_news
+CREATE TABLE IF NOT EXISTS `pkmncf_web_news` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+-- Data exporting was unselected.
 
-
-# Dump of table TerminalBattleVideoPokemon4
-# ------------------------------------------------------------
-
-DROP TABLE IF EXISTS `TerminalBattleVideoPokemon4`;
-
-CREATE TABLE `TerminalBattleVideoPokemon4` (
+-- Dumping structure for table gts.TerminalBattleVideoPokemon4
+CREATE TABLE IF NOT EXISTS `TerminalBattleVideoPokemon4` (
   `video_id` bigint(20) unsigned NOT NULL,
   `Slot` tinyint(3) unsigned NOT NULL,
   `Species` smallint(5) unsigned NOT NULL,
@@ -904,14 +848,10 @@ CREATE TABLE `TerminalBattleVideoPokemon4` (
   CONSTRAINT `terminalbattlevideopokemon4_ibfk_1` FOREIGN KEY (`video_id`) REFERENCES `TerminalBattleVideos4` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+-- Data exporting was unselected.
 
-
-# Dump of table TerminalBattleVideoPokemon5
-# ------------------------------------------------------------
-
-DROP TABLE IF EXISTS `TerminalBattleVideoPokemon5`;
-
-CREATE TABLE `TerminalBattleVideoPokemon5` (
+-- Dumping structure for table gts.TerminalBattleVideoPokemon5
+CREATE TABLE IF NOT EXISTS `TerminalBattleVideoPokemon5` (
   `video_id` bigint(20) unsigned NOT NULL,
   `Slot` tinyint(3) unsigned NOT NULL,
   `Species` smallint(5) unsigned NOT NULL,
@@ -920,14 +860,10 @@ CREATE TABLE `TerminalBattleVideoPokemon5` (
   CONSTRAINT `terminalbattlevideopokemon5_ibfk_1` FOREIGN KEY (`video_id`) REFERENCES `TerminalBattleVideos5` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+-- Data exporting was unselected.
 
-
-# Dump of table TerminalBattleVideos4
-# ------------------------------------------------------------
-
-DROP TABLE IF EXISTS `TerminalBattleVideos4`;
-
-CREATE TABLE `TerminalBattleVideos4` (
+-- Dumping structure for table gts.TerminalBattleVideos4
+CREATE TABLE IF NOT EXISTS `TerminalBattleVideos4` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `pid` int(11) NOT NULL,
   `SerialNumber` bigint(20) unsigned DEFAULT NULL,
@@ -952,14 +888,10 @@ CREATE TABLE `TerminalBattleVideos4` (
   KEY `md5` (`md5`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+-- Data exporting was unselected.
 
-
-# Dump of table TerminalBattleVideos5
-# ------------------------------------------------------------
-
-DROP TABLE IF EXISTS `TerminalBattleVideos5`;
-
-CREATE TABLE `TerminalBattleVideos5` (
+-- Dumping structure for table gts.TerminalBattleVideos5
+CREATE TABLE IF NOT EXISTS `TerminalBattleVideos5` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `pid` int(11) NOT NULL,
   `SerialNumber` bigint(20) unsigned DEFAULT NULL,
@@ -984,14 +916,10 @@ CREATE TABLE `TerminalBattleVideos5` (
   KEY `md5` (`md5`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+-- Data exporting was unselected.
 
-
-# Dump of table TerminalBoxes4
-# ------------------------------------------------------------
-
-DROP TABLE IF EXISTS `TerminalBoxes4`;
-
-CREATE TABLE `TerminalBoxes4` (
+-- Dumping structure for table gts.TerminalBoxes4
+CREATE TABLE IF NOT EXISTS `TerminalBoxes4` (
   `pid` int(11) NOT NULL,
   `SerialNumber` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `Data` blob NOT NULL,
@@ -1003,16 +931,12 @@ CREATE TABLE `TerminalBoxes4` (
   KEY `md5` (`md5`),
   KEY `Label` (`Label`),
   KEY `TimeAdded` (`TimeAdded`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
+-- Data exporting was unselected.
 
-
-# Dump of table TerminalDressup4
-# ------------------------------------------------------------
-
-DROP TABLE IF EXISTS `TerminalDressup4`;
-
-CREATE TABLE `TerminalDressup4` (
+-- Dumping structure for table gts.TerminalDressup4
+CREATE TABLE IF NOT EXISTS `TerminalDressup4` (
   `pid` int(11) NOT NULL,
   `SerialNumber` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `Data` blob NOT NULL,
@@ -1026,14 +950,10 @@ CREATE TABLE `TerminalDressup4` (
   KEY `TimeAdded` (`TimeAdded`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+-- Data exporting was unselected.
 
-
-# Dump of table TerminalMusicalPokemon5
-# ------------------------------------------------------------
-
-DROP TABLE IF EXISTS `TerminalMusicalPokemon5`;
-
-CREATE TABLE `TerminalMusicalPokemon5` (
+-- Dumping structure for table gts.TerminalMusicalPokemon5
+CREATE TABLE IF NOT EXISTS `TerminalMusicalPokemon5` (
   `musical_id` bigint(20) unsigned NOT NULL,
   `Slot` tinyint(3) unsigned NOT NULL,
   `Species` smallint(6) unsigned NOT NULL,
@@ -1042,14 +962,10 @@ CREATE TABLE `TerminalMusicalPokemon5` (
   CONSTRAINT `terminalmusicalpokemon5_ibfk_1` FOREIGN KEY (`musical_id`) REFERENCES `TerminalMusicals5` (`SerialNumber`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+-- Data exporting was unselected.
 
-
-# Dump of table TerminalMusicals5
-# ------------------------------------------------------------
-
-DROP TABLE IF EXISTS `TerminalMusicals5`;
-
-CREATE TABLE `TerminalMusicals5` (
+-- Dumping structure for table gts.TerminalMusicals5
+CREATE TABLE IF NOT EXISTS `TerminalMusicals5` (
   `pid` int(11) NOT NULL,
   `SerialNumber` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `Data` blob NOT NULL,
@@ -1061,12 +977,10 @@ CREATE TABLE `TerminalMusicals5` (
   KEY `TimeAdded` (`TimeAdded`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+-- Data exporting was unselected.
 
-
-
-/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
-/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
-/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
+/*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
+/*!40014 SET FOREIGN_KEY_CHECKS=IFNULL(@OLD_FOREIGN_KEY_CHECKS, 1) */;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=IFNULL(@OLD_SQL_NOTES, 1) */;
