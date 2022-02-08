@@ -24,7 +24,7 @@ namespace PkmnFoundations.Web.gts
         protected void Page_Load(object sender, EventArgs e)
         {
             Pokedex.Pokedex pokedex = AppStateHelper.Pokedex(Application);
-            PokemonParty4 pkmn = null;
+            PokemonPartyBase pkmn = null;
 
             if (Request.QueryString.Count == 0 || Request.QueryString.Count > 2) throw new WebException(400);
             if (Request.QueryString["offer"] != null ||
@@ -66,7 +66,7 @@ namespace PkmnFoundations.Web.gts
                     case "5":
                     {
                         GtsRecord5 record = Database.Instance.GtsGetRecord5(pokedex, tradeId, isExchanged, true);
-                        if (record != null) pkmn = new PokemonParty4(pokedex, record.Data.ToArray());
+                        if (record != null) pkmn = new PokemonParty5(pokedex, record.Data.ToArray());
 
                     } break;
                     default:
@@ -86,7 +86,7 @@ namespace PkmnFoundations.Web.gts
             Bind(pkmn);
         }
 
-        private void Bind(PokemonParty4 pkmn)
+        private void Bind(PokemonPartyBase pkmn)
         {
             litNickname.Text = pkmn.Nickname;
             bool shiny = pkmn.IsShiny;
@@ -103,7 +103,7 @@ namespace PkmnFoundations.Web.gts
             litCharacteristic.Text = pkmn.Characteristic.ToString();
             litSpecies.Text = pkmn.Species.Name.ToString();
             litPokedex.Text = pkmn.SpeciesID.ToString("000");
-            FormStats fs = pkmn.Form.BaseStats(Generations.Generation4);
+            FormStats fs = pkmn.Form.BaseStats(pkmn.Generation);
             litType1.Text = fs.Type1 == null ? "" : WebFormat.RenderType(fs.Type1);
             litType2.Text = fs.Type2 == null ? "" : WebFormat.RenderType(fs.Type2);
             litOtName.Text = Common.HtmlEncode(pkmn.TrainerName);

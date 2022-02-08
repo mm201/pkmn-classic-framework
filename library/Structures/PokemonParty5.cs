@@ -56,7 +56,7 @@ namespace PkmnFoundations.Structures
                 // todo: validate this against the computed level
                 //Level = block[4];
                 CapsuleIndex = block[5];
-                HP = BitConverter.ToUInt16(block, 6);
+                _HP = BitConverter.ToUInt16(block, 6);
                 // todo: validate this against computed stats
                 m_stats = new IntStatValues(BitConverter.ToUInt16(block, 8),
                     BitConverter.ToUInt16(block, 10),
@@ -79,7 +79,8 @@ namespace PkmnFoundations.Structures
         public byte Unknown5 { get; set; }
         public ushort Unknown6 { get; set; }
         public byte CapsuleIndex { get; set; }
-        public ushort HP { get; set; } // remaining hp
+        public override ushort HP { get { return _HP; } } // remaining hp
+        public ushort _HP { get; set; }
         public byte[] Mail { get; set; } // 56 bytes
         public byte[] Unknown7 { get; set; } // 8 bytes
         public byte[] Padding { get; set; } // 16 bytes. Pads the length to match the gen4 structure.

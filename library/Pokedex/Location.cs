@@ -129,14 +129,30 @@ namespace PkmnFoundations.Pokedex
         public static LazyKeyValuePair<int, Location> CreatePairForGeneration(Pokedex pokedex, Func<Generations> generationGetter)
         {
             return new LazyKeyValuePair<int, Location>(
-                k => k == 0 ? null : (pokedex == null ? null : pokedex.Locations(GenerationToLocationNumbering(generationGetter()))[k]),
+                k =>
+                {
+                    if (k == 0) return null;
+                    if (pokedex == null) return null;
+                    var locations = pokedex.Locations(GenerationToLocationNumbering(generationGetter()));
+                    if (locations == null) return null;
+                    if (!locations.ContainsKey(k)) return null;
+                    return locations[k];
+                },
                 v => v == null ? 0 : (v.Value(generationGetter()) ?? -1));
         }
 
         public static LazyKeyValuePair<int, Location> CreatePairForLocationNumbering(Pokedex pokedex, Func<LocationNumbering> generationGetter)
         {
             return new LazyKeyValuePair<int, Location>(
-                k => k == 0 ? null : (pokedex == null ? null : pokedex.Locations(generationGetter())[k]),
+                k =>
+                {
+                    if (k == 0) return null;
+                    if (pokedex == null) return null;
+                    var locations = pokedex.Locations(generationGetter());
+                    if (locations == null) return null;
+                    if (!locations.ContainsKey(k)) return null;
+                    return locations[k];
+                },
                 v => v == null ? 0 : (v.Value(generationGetter()) ?? -1));
         }
     }

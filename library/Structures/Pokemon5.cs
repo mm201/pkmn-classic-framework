@@ -248,7 +248,7 @@ namespace PkmnFoundations.Structures
                 eggLocationId = (plat && EggLocationID_Plat != 0) ? EggLocationID_Plat : EggLocationID;
                 locationId = (plat && LocationID_Plat != 0) ? LocationID_Plat : LocationID;
 
-                return new TrainerMemo(m_pokedex, LocationNumbering.Generation4,
+                return new TrainerMemo(m_pokedex, LocationNumbering.Generation5,
                     TrainerMemoDateTime(EggDate), TrainerMemoDateTime(Date),
                     eggLocationId, locationId, EncounterLevel == 0, EncounterLevel);
             }
@@ -282,6 +282,14 @@ namespace PkmnFoundations.Structures
 
                 int pokeballId = (int)value.PokeballValue;
                 PokeBallID = (byte)(pokeballId);
+            }
+        }
+
+        public override ushort HP
+        {
+            get
+            {
+                return (ushort)Stats[Structures.Stats.Hp];
             }
         }
 

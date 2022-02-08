@@ -50,7 +50,7 @@ namespace PkmnFoundations.Structures
         public uint OT;
         public TrendyPhrase4 PhraseLeader;
         // Different from GTS, 0 = male, 2 = female, 1 = Plato???? 
-        public byte Gender; // Probably trainer class.
+        public byte Gender;
 
         // 3: Lass
         // 6: Bug Catcher
@@ -68,7 +68,7 @@ namespace PkmnFoundations.Structures
         // 57: Roughneck
         // 60: School Kid M
         // 85: Idol
-        public byte Unknown;
+        public byte Unknown; // Probably trainer class.
 
         public byte[] Save()
         {

@@ -307,6 +307,14 @@ namespace PkmnFoundations.Structures
             return pokeballId > 16;
         }
 
+        public override ushort HP
+        {
+            get
+            {
+                return (ushort)Stats[Structures.Stats.Hp];
+            }
+        }
+
         public override int Size
         {
             get { return 136; }

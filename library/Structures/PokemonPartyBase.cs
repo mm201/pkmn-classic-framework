@@ -162,6 +162,8 @@ namespace PkmnFoundations.Structures
             }
         }
 
+        public abstract ushort HP { get; }
+
         public static ushort ComputeChecksum(byte[] data)
         {
             ushort result = 0;

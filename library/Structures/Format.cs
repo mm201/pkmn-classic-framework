@@ -7,16 +7,16 @@ namespace PkmnFoundations.Structures
 {
     public static class Format
     {
-        private static String[] m_marks = new String[] { "●", "▲", "■", "♥", "★", "♦" };
+        private static string[] m_marks = new string[] { "●", "▲", "■", "♥", "★", "♦" };
 
-        public static String Markings(Markings markings, String trueFormat, String falseFormat, String delimiter)
+        public static string Markings(Markings markings, string trueFormat, string falseFormat, string delimiter)
         {
             StringBuilder result = new StringBuilder();
             int marking = 1;
             for (int value = 0; value < 6; value++)
             {
                 if (marking > 1) result.Append(delimiter);
-                String format = (((int)markings & marking) != 0) ? trueFormat : falseFormat;
+                string format = (((int)markings & marking) != 0) ? trueFormat : falseFormat;
                 result.Append(String.Format(format, m_marks[value]));
 
                 marking <<= 1;
@@ -25,7 +25,7 @@ namespace PkmnFoundations.Structures
             return result.ToString();
         }
 
-        public static String GenderSymbol(Genders gender)
+        public static string GenderSymbol(Genders gender)
         {
             switch (gender)
             {
@@ -38,7 +38,7 @@ namespace PkmnFoundations.Structures
             }
         }
 
-        public static String ToIso639_1(Languages lang)
+        public static string ToIso639_1(Languages lang)
         {
             switch (lang)
             {
@@ -61,7 +61,7 @@ namespace PkmnFoundations.Structures
             }
         }
 
-        public static Languages FromIso639_1(String lang)
+        public static Languages FromIso639_1(string lang)
         {
             switch (lang.ToUpperInvariant())
             {
