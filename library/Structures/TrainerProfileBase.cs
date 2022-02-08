@@ -13,17 +13,19 @@ namespace PkmnFoundations.Structures
 
         }
 
-        protected TrainerProfileBase(int pid, byte[] data)
+        protected TrainerProfileBase(int pid, byte[] data, string ip_address)
         {
             if (data.Length != 100) throw new ArgumentException("Profile data must be 100 bytes.");
 
             PID = pid;
             Data = data;
+            IpAddress = ip_address;
         }
 
         // todo: encapsulate these so calculated fields are always correct
         public int PID;
         public byte[] Data; // 100 bytes
+        public string IpAddress;
 
         public Versions Version
         {

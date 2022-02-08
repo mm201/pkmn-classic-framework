@@ -93,7 +93,7 @@ namespace PkmnFoundations.Data
         #endregion
 
         #region Other Gamestats 4
-        public abstract bool GamestatsBumpProfile4(int pid);
+        public abstract bool GamestatsBumpProfile4(int pid, string ip_address);
         public abstract bool GamestatsSetProfile4(TrainerProfile4 profile);
         #endregion
 

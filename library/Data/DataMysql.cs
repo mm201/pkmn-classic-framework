@@ -1056,12 +1056,12 @@ namespace PkmnFoundations.Data
         #endregion
 
         #region Other Gamestats 4
-        public override bool GamestatsBumpProfile4(int pid)
+        public override bool GamestatsBumpProfile4(int pid, string ip_address)
         {
-            return WithTransaction(tran => GamestatsBumpProfile4(tran, pid));
+            return WithTransaction(tran => GamestatsBumpProfile4(tran, pid, ip_address));
         }
 
-        public bool GamestatsBumpProfile4(MySqlTransaction tran, int pid)
+        public bool GamestatsBumpProfile4(MySqlTransaction tran, int pid, string ip_address)
         {
             bool exists = Convert.ToSByte(tran.ExecuteScalar("SELECT EXISTS(SELECT * FROM GtsProfiles4 WHERE pid = @pid)", 
                 new MySqlParameter("@pid", pid))) != 0;
@@ -1069,13 +1069,18 @@ namespace PkmnFoundations.Data
             if (exists)
             {
                 return tran.ExecuteNonQuery("UPDATE GtsProfiles4 SET " +
-                    "TimeUpdated = UTC_TIMESTAMP() WHERE pid = @pid", new MySqlParameter("@pid", pid)) > 0;
+                    "TimeUpdated = UTC_TIMESTAMP(), IpAddress = @ip_address " +
+                    "WHERE pid = @pid", 
+                    new MySqlParameter("@ip_address", ip_address),
+                    new MySqlParameter("@pid", pid)) > 0;
             }
             else
             {
                 return tran.ExecuteNonQuery("INSERT INTO GtsProfiles4 " +
-                    "(pid, TimeAdded, TimeUpdated) VALUES (@pid, UTC_TIMESTAMP(), " +
-                    "UTC_TIMESTAMP())", new MySqlParameter("@pid", pid)) > 0;
+                    "(pid, TimeAdded, TimeUpdated, IpAddress) VALUES (@pid, UTC_TIMESTAMP(), " +
+                    "UTC_TIMESTAMP(), @ip_address)", 
+                    new MySqlParameter("@pid", pid),
+                    new MySqlParameter("@ip_address", ip_address)) > 0;
             }
         }
 
@@ -1104,7 +1109,8 @@ namespace PkmnFoundations.Data
                 new MySqlParameter("@email", profile.Email),
                 new MySqlParameter("@has_notifications", profile.HasNotifications),
                 new MySqlParameter("@client_secret", profile.ClientSecret),
-                new MySqlParameter("@mail_secret", profile.MailSecret)
+                new MySqlParameter("@mail_secret", profile.MailSecret),
+                new MySqlParameter("@ip_address", profile.IpAddress)
             };
 
             if (exists)
@@ -1114,7 +1120,7 @@ namespace PkmnFoundations.Data
                     "Region = @region, OT = @ot, Name = @name, MacAddress = @mac_address, " +
                     "Email = @email, HasNotifications = @has_notifications, " +
                     "ClientSecret = @client_secret, MailSecret = @mail_secret, " +
-                    "ParseVersion = 2, TimeUpdated = UTC_TIMESTAMP() " +
+                    "IpAddress = @ip_address, ParseVersion = 2, TimeUpdated = UTC_TIMESTAMP() " +
                     "WHERE pid = @pid", _params) > 0;
             }
             else
@@ -1122,10 +1128,10 @@ namespace PkmnFoundations.Data
                 return tran.ExecuteNonQuery("INSERT INTO GtsProfiles4 " +
                     "(pid, Data, Version, Language, Country, Region, OT, Name, " +
                     "MacAddress, Email, HasNotifications, ClientSecret, MailSecret, " +
-                    "ParseVersion, TimeAdded, TimeUpdated) VALUES " +
+                    "IpAddress, ParseVersion, TimeAdded, TimeUpdated) VALUES " +
                     "(@pid, @data, @version, @language, @country, @region, @ot, " +
                     "@name, @mac_address, @email, @has_notifications, " +
-                    "@client_secret, @mail_secret, 2, UTC_TIMESTAMP(), UTC_TIMESTAMP())", _params) > 0;
+                    "@client_secret, @mail_secret, @ip_address, 2, UTC_TIMESTAMP(), UTC_TIMESTAMP())", _params) > 0;
             }
         }
         #endregion
@@ -2025,7 +2031,8 @@ namespace PkmnFoundations.Data
                 new MySqlParameter("@email", profile.Email),
                 new MySqlParameter("@has_notifications", profile.HasNotifications),
                 new MySqlParameter("@client_secret", profile.ClientSecret),
-                new MySqlParameter("@mail_secret", profile.MailSecret)
+                new MySqlParameter("@mail_secret", profile.MailSecret),
+                new MySqlParameter("@ip_address", profile.IpAddress)
             };
 
             if (exists)
@@ -2035,7 +2042,7 @@ namespace PkmnFoundations.Data
                     "Region = @region, OT = @ot, Name = @name, MacAddress = @mac_address, " +
                     "Email = @email, HasNotifications = @has_notifications, " +
                     "ClientSecret = @client_secret, MailSecret = @mail_secret, " +
-                    "ParseVersion = 2, TimeUpdated = UTC_TIMESTAMP() " +
+                    "IpAddress = @ip_address, ParseVersion = 2, TimeUpdated = UTC_TIMESTAMP() " +
                     "WHERE pid = @pid", _params) > 0;
             }
             else
@@ -2043,10 +2050,10 @@ namespace PkmnFoundations.Data
                 return tran.ExecuteNonQuery("INSERT INTO GtsProfiles5 " +
                     "(pid, Data, Version, Language, Country, Region, OT, Name, " +
                     "MacAddress, Email, HasNotifications, ClientSecret, MailSecret, " +
-                    "ParseVersion, TimeAdded, TimeUpdated) VALUES " +
+                    "IpAddress, ParseVersion, TimeAdded, TimeUpdated) VALUES " +
                     "(@pid, @data, @version, @language, @country, @region, @ot, " +
                     "@name, @mac_address, @email, @has_notifications, " +
-                    "@client_secret, @mail_secret, 2, UTC_TIMESTAMP(), UTC_TIMESTAMP())", _params) > 0;
+                    "@client_secret, @mail_secret, @ip_address, 2, UTC_TIMESTAMP(), UTC_TIMESTAMP())", _params) > 0;
             }
         }
         #endregion

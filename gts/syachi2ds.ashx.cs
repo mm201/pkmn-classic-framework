@@ -56,7 +56,7 @@ namespace PkmnFoundations.GTS
                     // Specifically, email, notification status, and the two secrets appear to always be 0.
                         byte[] profileBinary = new byte[100];
                         Array.Copy(request, 0, profileBinary, 0, 100);
-                        TrainerProfile5 profile = new TrainerProfile5(pid, profileBinary);
+                        TrainerProfile5 profile = new TrainerProfile5(pid, profileBinary, IpAddressHelper.GetIpAddress(context.Request));
                         Database.Instance.GamestatsSetProfile5(profile);
 #if !DEBUG
                     }

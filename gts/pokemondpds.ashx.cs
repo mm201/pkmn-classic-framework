@@ -56,7 +56,7 @@ namespace PkmnFoundations.GTS
 #endif
                         byte[] profileBinary = new byte[100];
                         Array.Copy(data, 0, profileBinary, 0, 100);
-                        TrainerProfile4 profile = new TrainerProfile4(pid, profileBinary);
+                        TrainerProfile4 profile = new TrainerProfile4(pid, profileBinary, IpAddressHelper.GetIpAddress(context.Request));
                         Database.Instance.GamestatsSetProfile4(profile);
 #if !DEBUG
                     }
@@ -124,7 +124,7 @@ namespace PkmnFoundations.GTS
                     // todo: find out the meaning of this request.
                     // is it simply done to check whether the GTS is online?
 
-                    Database.Instance.GamestatsBumpProfile4(pid);
+                    Database.Instance.GamestatsBumpProfile4(pid, IpAddressHelper.GetIpAddress(context.Request));
                     response.Write(new byte[] { 0x01, 0x00 }, 0, 2);
                     break;
 
@@ -510,7 +510,7 @@ namespace PkmnFoundations.GTS
                     SessionManager.Remove(session);
 
                     // Probably an availability/status code.
-                    Database.Instance.GamestatsBumpProfile4(pid);
+                    Database.Instance.GamestatsBumpProfile4(pid, IpAddressHelper.GetIpAddress(context.Request));
 
                     // Response codes:
                     // 0x00: BSOD

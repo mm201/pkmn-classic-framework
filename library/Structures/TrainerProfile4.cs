@@ -11,7 +11,7 @@ namespace PkmnFoundations.Structures
         {
         }
 
-        public TrainerProfile4(int pid, byte[] data) : base(pid, data)
+        public TrainerProfile4(int pid, byte[] data, string ip_address) : base(pid, data, ip_address)
         {
         }
 
@@ -25,7 +25,7 @@ namespace PkmnFoundations.Structures
 
         public TrainerProfile4 Clone()
         {
-            return new TrainerProfile4(PID, Data.ToArray());
+            return new TrainerProfile4(PID, Data.ToArray(), IpAddress);
         }
     }
 }
