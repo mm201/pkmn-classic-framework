@@ -181,14 +181,20 @@ namespace PkmnFoundations.Pokedex
             }
         }
 
-        public Family Families(int id)
+        public IDictionary<int, Family> Families
         {
-            return m_families[id];
+            get
+            {
+                return m_families;
+            }
         }
 
-        public Form Forms(int id)
+        public IDictionary<int, Form> Forms
         {
-            return m_forms[id];
+            get
+            {
+                return m_forms;
+            }
         }
 
         internal Dictionary<byte, Form> FormsByValue(int national_dex)
@@ -201,14 +207,17 @@ namespace PkmnFoundations.Pokedex
             return m_form_stats[form_id];
         }
 
-        public Item Items(int id)
+        public IDictionary<int, Item> Items
         {
-            return m_items[id];
+            get
+            {
+                return m_items;
+            }
         }
 
-        public Item Items(Generations generation, int value)
+        public IDictionary<int, Item> ItemsByGeneration(Generations generation)
         {
-            return m_items_generations[generation][value];
+            return m_items_generations[generation];
         }
 
         public Item Pokeballs(int value)
@@ -219,42 +228,60 @@ namespace PkmnFoundations.Pokedex
             return m_items_generations[Generations.Generation5][value];
         }
 
-        public Move Moves(int value)
+        public IDictionary<int, Move> Moves
         {
-            return m_moves[value];
+            get
+            {
+                return m_moves;
+            }
         }
 
-        public PkmnFoundations.Pokedex.Type Types(int id)
+        public IDictionary<int, PkmnFoundations.Pokedex.Type> Types
         {
-            return m_types[id];
+            get
+            {
+                return m_types;
+            }
         }
 
-        public Ability Abilities(int value)
+        public IDictionary<int, Ability> Abilities
         {
-            return m_abilities[value];
+            get
+            {
+                return m_abilities;
+            }
         }
 
-        public IDictionary<int, Ribbon> Ribbons()
+        public IDictionary<int, Ribbon> Ribbons
         {
-            return m_ribbons;
+            get
+            {
+                return m_ribbons;
+            }
         }
 
-        public IDictionary<int, Ribbon> Ribbons(Generations generation)
+        public IDictionary<int, Ribbon> RibbonsByGeneration(Generations generation)
         {
             return m_ribbon_positions_generations[generation];
         }
 
-        public Region Regions(int id)
+        public IDictionary<int, Region> Regions
         {
-            return m_regions[id];
+            get
+            {
+                return m_regions;
+            }
         }
 
-        public Location Locations(int id)
+        public IDictionary<int, Location> Locations
         {
-            return m_locations[id];
+            get
+            {
+                return m_locations;
+            }
         }
 
-        public IDictionary<int, Location> Locations(LocationNumbering generation)
+        public IDictionary<int, Location> LocationsByGeneration(LocationNumbering generation)
         {
             return m_location_values_generations[generation];
         }

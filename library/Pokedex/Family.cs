@@ -104,7 +104,7 @@ namespace PkmnFoundations.Pokedex
         public static LazyKeyValuePair<int, Family> CreatePair(Pokedex pokedex)
         {
             return new LazyKeyValuePair<int, Family>(
-                k => k == 0 ? null : (pokedex == null ? null : pokedex.Families(k)), 
+                k => k == 0 ? null : (pokedex == null ? null : pokedex.Families[k]), 
                 v => v == null ? 0 : v.ID);
         }
     }

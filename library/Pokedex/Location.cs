@@ -122,7 +122,7 @@ namespace PkmnFoundations.Pokedex
         public static LazyKeyValuePair<int, Location> CreatePair(Pokedex pokedex)
         {
             return new LazyKeyValuePair<int, Location>(
-                k => k == 0 ? null : (pokedex == null ? null : pokedex.Locations(k)),
+                k => k == 0 ? null : (pokedex == null ? null : pokedex.Locations[k]),
                 v => v == null ? 0 : v.ID);
         }
 
@@ -133,7 +133,7 @@ namespace PkmnFoundations.Pokedex
                 {
                     if (k == 0) return null;
                     if (pokedex == null) return null;
-                    var locations = pokedex.Locations(GenerationToLocationNumbering(generationGetter()));
+                    var locations = pokedex.LocationsByGeneration(GenerationToLocationNumbering(generationGetter()));
                     if (locations == null) return null;
                     if (!locations.ContainsKey(k)) return null;
                     return locations[k];
@@ -148,7 +148,7 @@ namespace PkmnFoundations.Pokedex
                 {
                     if (k == 0) return null;
                     if (pokedex == null) return null;
-                    var locations = pokedex.Locations(generationGetter());
+                    var locations = pokedex.LocationsByGeneration(generationGetter());
                     if (locations == null) return null;
                     if (!locations.ContainsKey(k)) return null;
                     return locations[k];

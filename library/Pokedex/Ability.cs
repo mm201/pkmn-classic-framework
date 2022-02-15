@@ -32,7 +32,7 @@ namespace PkmnFoundations.Pokedex
         public static LazyKeyValuePair<int, Ability> CreatePair(Pokedex pokedex)
         {
             return new LazyKeyValuePair<int, Ability>(
-                k => k == 0 ? null : (pokedex == null ? null : pokedex.Abilities(k)), 
+                k => k == 0 ? null : (pokedex == null ? null : pokedex.Abilities[k]), 
                 v => v == null ? 0 : v.Value);
         }
     }

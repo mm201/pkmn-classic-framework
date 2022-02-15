@@ -80,7 +80,7 @@ namespace PkmnFoundations.Pokedex
         public static LazyKeyValuePair<int, Form> CreatePair(Pokedex pokedex)
         {
             return new LazyKeyValuePair<int, Form>(
-                k => k == 0 ? null : (pokedex == null ? null : pokedex.Forms(k)),
+                k => k == 0 ? null : (pokedex == null ? null : pokedex.Forms[k]),
                 v => v == null ? 0 : v.ID);
         }
 

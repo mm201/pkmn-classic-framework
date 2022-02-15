@@ -157,7 +157,7 @@ namespace PkmnFoundations.Structures
             Ribbons.Clear();
             UnknownRibbons.Clear();
 
-            IDictionary<int, Ribbon> allRibbons = m_pokedex.Ribbons(Generations.Generation4);
+            IDictionary<int, Ribbon> allRibbons = m_pokedex.RibbonsByGeneration(Generations.Generation4);
 
             for (int x = 0; x < 96; x++)
             {

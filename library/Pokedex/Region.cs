@@ -26,7 +26,7 @@ namespace PkmnFoundations.Pokedex
         public static LazyKeyValuePair<int, Region> CreatePair(Pokedex pokedex)
         {
             return new LazyKeyValuePair<int, Region>(
-                k => k == 0 ? null : (pokedex == null ? null : pokedex.Regions(k)),
+                k => k == 0 ? null : (pokedex == null ? null : pokedex.Regions[k]),
                 v => v == null ? 0 : v.ID);
         }
     }

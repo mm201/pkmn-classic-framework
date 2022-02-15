@@ -69,7 +69,7 @@ namespace PkmnFoundations.Pokedex
         public static LazyKeyValuePair<int, Move> CreatePair(Pokedex pokedex)
         {
             return new LazyKeyValuePair<int, Move>(
-                k => k == 0 ? null : (pokedex == null ? null : pokedex.Moves(k)),
+                k => k == 0 ? null : (pokedex == null ? null : pokedex.Moves[k]),
                 v => v == null ? 0 : v.ID);
         }
     }
