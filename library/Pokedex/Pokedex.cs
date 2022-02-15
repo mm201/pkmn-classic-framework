@@ -288,6 +288,7 @@ namespace PkmnFoundations.Pokedex
 
         public static int SpeciesAtGeneration(Generations generation)
         {
+            // xxx: Pull from database
             switch (generation)
             {
                 case Generations.Generation1:
@@ -302,6 +303,10 @@ namespace PkmnFoundations.Pokedex
                     return 649;
                 case Generations.Generation6:
                     return 721;
+                case Generations.Generation7:
+                    return 807; // Sorry, LGPE is Gen8
+                case Generations.Generation8:
+                    return 905;
                 default:
                     throw new NotSupportedException();
             }

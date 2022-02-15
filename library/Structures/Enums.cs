@@ -12,7 +12,9 @@ namespace PkmnFoundations.Structures
         Generation3 = 3,
         Generation4 = 4,
         Generation5 = 5,
-        Generation6 = 6
+        Generation6 = 6,
+        Generation7 = 7,
+        Generation8 = 8
     }
 
     [Flags]
@@ -23,7 +25,9 @@ namespace PkmnFoundations.Structures
         Generation3 = 4,
         Generation4 = 8,
         Generation5 = 16,
-        Generation6 = 32
+        Generation6 = 32,
+        Generation7 = 64,
+        Generation8 = 128
     }
 
     public enum LocationNumbering
