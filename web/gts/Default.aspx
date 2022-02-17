@@ -7,7 +7,7 @@
     <pf:RequireScript Key="jquery" ScriptUrl="~/scripts/jquery-1.11.1.min.js" runat="server" />
     <pf:RequireScript Key="jquery-ui" ScriptUrl="~/scripts/jquery-ui.min.js" After="jquery" runat="server" />
     <pf:RequireCss Key="form" CssUrl="~/css/form.css" After="main" runat="server" />
-    <pf:RequireCss Key="pkmnstats" CssUrl="~/css/pkmnstats.css" After="form" runat="server" />
+    <pf:RequireCss Key="pkmnstats" CssUrl="~/css/pkmnstats.css?1" After="form" runat="server" />
     <pf:RequireCss Key="types" CssUrl="~/css/types.css" runat="server" />
 </asp:Content>
 

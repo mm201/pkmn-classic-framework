@@ -231,7 +231,7 @@ namespace PkmnFoundations.GTS
 
             return "<img src=\"" + ResolveUrl(WebFormat.SpeciesImageSmall(species)) +
                 "\" alt=\"" + Common.HtmlEncode(species.Name.ToString()) + 
-                "\" class=\"sprite speciesSmall\" width=\"40px\" height=\"32px\" />" +
+                "\" class=\"sprite speciesSmall\" width=\"40px\" height=\"30px\" />" +
                 String.Format("{0} (#{1})",
                 Common.HtmlEncode(species.Name.ToString()),
                 record.RequestedSpecies);
