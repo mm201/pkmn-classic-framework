@@ -7,11 +7,13 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace PkmnFoundations.GTS {
-    
-    
-    public partial class MasterPage {
-        
+namespace PkmnFoundations.GTS
+{
+
+
+    public partial class MasterPage
+    {
+
         /// <summary>
         /// HeaderColour1 control.
         /// </summary>
@@ -20,7 +22,7 @@ namespace PkmnFoundations.GTS {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::PkmnFoundations.Web.HeaderColour HeaderColour1;
-        
+
         /// <summary>
         /// cpHead control.
         /// </summary>
@@ -29,7 +31,7 @@ namespace PkmnFoundations.GTS {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.ContentPlaceHolder cpHead;
-        
+
         /// <summary>
         /// litHeaderCssClassKeep control.
         /// </summary>
@@ -38,7 +40,7 @@ namespace PkmnFoundations.GTS {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Literal litHeaderCssClassKeep;
-        
+
         /// <summary>
         /// hlLogl control.
         /// </summary>
@@ -47,7 +49,7 @@ namespace PkmnFoundations.GTS {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.HyperLink hlLogl;
-        
+
         /// <summary>
         /// imgLogo control.
         /// </summary>
@@ -56,7 +58,7 @@ namespace PkmnFoundations.GTS {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::PkmnFoundations.Web.RetinaImage imgLogo;
-        
+
         /// <summary>
         /// litPokemon control.
         /// </summary>
@@ -65,7 +67,7 @@ namespace PkmnFoundations.GTS {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Literal litPokemon;
-        
+
         /// <summary>
         /// litVideos control.
         /// </summary>
@@ -74,7 +76,7 @@ namespace PkmnFoundations.GTS {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Literal litVideos;
-        
+
         /// <summary>
         /// hlMain control.
         /// </summary>
@@ -83,7 +85,7 @@ namespace PkmnFoundations.GTS {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.HyperLink hlMain;
-        
+
         /// <summary>
         /// hlGts control.
         /// </summary>
@@ -92,7 +94,7 @@ namespace PkmnFoundations.GTS {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.HyperLink hlGts;
-        
+
         /// <summary>
         /// hlBattleVideos control.
         /// </summary>
@@ -101,7 +103,7 @@ namespace PkmnFoundations.GTS {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.HyperLink hlBattleVideos;
-        
+
         /// <summary>
         /// hlDreamWorld control.
         /// </summary>
@@ -110,7 +112,7 @@ namespace PkmnFoundations.GTS {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.HyperLink hlDreamWorld;
-        
+
         /// <summary>
         /// hlPokedex control.
         /// </summary>
@@ -119,7 +121,7 @@ namespace PkmnFoundations.GTS {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.HyperLink hlPokedex;
-        
+
         /// <summary>
         /// hlStat control.
         /// </summary>
@@ -128,7 +130,7 @@ namespace PkmnFoundations.GTS {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.HyperLink hlStat;
-        
+
         /// <summary>
         /// hlMain_Home control.
         /// </summary>
@@ -137,7 +139,7 @@ namespace PkmnFoundations.GTS {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.HyperLink hlMain_Home;
-        
+
         /// <summary>
         /// hlGts_Offers control.
         /// </summary>
@@ -146,7 +148,7 @@ namespace PkmnFoundations.GTS {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.HyperLink hlGts_Offers;
-        
+
         /// <summary>
         /// cpMain control.
         /// </summary>
@@ -155,7 +157,7 @@ namespace PkmnFoundations.GTS {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.ContentPlaceHolder cpMain;
-        
+
         /// <summary>
         /// hlFooterGithub control.
         /// </summary>
@@ -164,7 +166,7 @@ namespace PkmnFoundations.GTS {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.HyperLink hlFooterGithub;
-        
+
         /// <summary>
         /// hlFooterTwitter control.
         /// </summary>
@@ -173,7 +175,16 @@ namespace PkmnFoundations.GTS {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.HyperLink hlFooterTwitter;
-        
+
+        /// <summary>
+        /// hlFooterDiscord control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HyperLink hlFooterDiscord;
+
         /// <summary>
         /// hlWiimmfi control.
         /// </summary>
@@ -182,7 +193,7 @@ namespace PkmnFoundations.GTS {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.HyperLink hlWiimmfi;
-        
+
         /// <summary>
         /// hlKaeru control.
         /// </summary>
