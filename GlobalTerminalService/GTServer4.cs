@@ -337,9 +337,6 @@ namespace PkmnFoundations.GlobalTerminalService
                     #region Trainer Rankings
                     case RequestTypes4.TrainerRankingsHead:
                     {
-#if !DEBUG
-                        goto default;
-#endif
                         if (data.Length != 0x140)
                         {
                             logEntry.AppendLine("Length did not validate.");
@@ -348,8 +345,10 @@ namespace PkmnFoundations.GlobalTerminalService
                             break;
                         }
 
-                        logEntry.AppendLine("Replayed response.");
-                        response.Write(new byte[] { 0x00, 0x00 }, 0, 2);
+                        // AdmiralCurtiss's request: completely blank! (just the 0x140 byte header)
+
+                        // AdmiralCurtiss's response: 
+                        // 0000: 0c000000f0550000 0128431c
 
                         // Response format seems to be a list of the three record categories currently being collected.
                         // 0x01: Hall of fame entries
@@ -357,8 +356,28 @@ namespace PkmnFoundations.GlobalTerminalService
                         // 0x43: Facilities challenged at battle frontier
                         // The purpose of 0x1c is unclear to me.
 
-                        // todo: See if we can ask for more than 3 different records. Would be neat to have all of them on the web!
-                        response.Write(new byte[] { 0x01, 0x28, 0x43, 0x1c }, 0, 4);
+                        if (Database.Instance.TrainerRankingsPerformRollover())
+                        {
+                            logEntry.AppendLine("Leaderboard rollover.");
+                        }
+                        var recordTypes = Database.Instance.TrainerRankingsGetActiveRecordTypes();
+
+                        response.Write(new byte[] { 0x00, 0x00 }, 0, 2);
+
+                        // The game will give error 10609 if the response is longer than 4 bytes.
+                        // The game will bluescreen if the response is shorter than 3 bytes.
+                        // The 4th byte is optional and I don't know what, if anything, it does.
+                        int i;
+                        for (i = 0; i < 3 && i < recordTypes.Count; i++)
+                        {
+                            response.WriteByte((byte)recordTypes[i]);
+                        }
+                        for (; i < 3; i++)
+                        {
+                            // Must be valid RecordTypes. If we pad with 0x00, it causes a bluescreen.
+                            response.WriteByte((byte)0x01);
+                        }
+                        response.WriteByte(0x1c); // todo: Find out the meaning of this 0x1c.
 
                     } break;
 
@@ -385,7 +404,7 @@ namespace PkmnFoundations.GlobalTerminalService
                         // 0160: 00000000
 
                         // Hikari's request:
-                        // Platinum EN July [I forget] Gallade
+                        // Platinum EN July AceTrainerF Gallade
                         // 0140: 0c02070bdb010000 e200350f01000000
                         // 0150: 0300000028000000 0800000043000000
                         // 0160: 28000000
@@ -402,10 +421,20 @@ namespace PkmnFoundations.GlobalTerminalService
 
                         // The response is biig and contains all the records for both this week and last week.
                         // This week lacks numbers because they're still growing and to make it a surprise.
+                        // Including more than 3 RecordTypes in the response will give error 10609.
 
-                        logEntry.AppendLine("Replayed response.");
+                        var submission = new TrainerRankingsSubmission(pid, data, 0x140);
+                        if (!Database.Instance.TrainerRankingsSubmit(submission))
+                        {
+                            logEntry.AppendLine("Submission error on database end.");
+                            type = EventLogEntryType.Error;
+                            response.Write(new byte[] { 0x02, 0x00 }, 0, 2);
+                            break;
+                        }
+
                         response.Write(new byte[] { 0x00, 0x00 }, 0, 2);
 
+                        /*
                         response.WriteBytes(new byte[] {
                             // Last week comes first:
                             0x1c, 0x00, 0x00, 0x00, // 0x1c is a record type here.
@@ -615,7 +644,79 @@ namespace PkmnFoundations.GlobalTerminalService
                             0x9a, 0x00, 0x8f, 0x00, 0x9d, 0x00, 0xe8, 0x01,
                             0x8e, 0x00, 0x7c, 0x01, 0x7d, 0x01, 0xe5, 0x00,
                             0x88, 0x01, 0x1a, 0x00, 0xfe, 0x00, 0xf9, 0x00
-                        });
+                        });*/
+
+                        // fake replay data:
+                        TrainerRankingsReport lastWeek = GenerateFakeReport(
+                            new DateTime(2014, 04, 27),
+                            new TrainerRankingsRecordTypes[] 
+                            {
+                                TrainerRankingsRecordTypes.TimesBattledWildPokemon,
+                                TrainerRankingsRecordTypes.BattlesTiedOverNintendoWiFiConnection,
+                                TrainerRankingsRecordTypes.TotalCastlePointsEarnedAtTheBattleCastle
+                            });
+                        TrainerRankingsReport thisWeek = GenerateFakeReport(
+                            new DateTime(2014, 05, 04),
+                            new TrainerRankingsRecordTypes[]
+                            {
+                                TrainerRankingsRecordTypes.HallOfFameEntries,
+                                TrainerRankingsRecordTypes.CompletedGtsPokemonTrades,
+                                TrainerRankingsRecordTypes.FacilitiesChallengedAtTheBattleFrontier
+                            });
+
+                        // Last week:
+                        foreach (var lbg in lastWeek.Leaderboards)
+                        {
+                            response.Write(BitConverter.GetBytes((int)lbg.RecordType), 0, 4);
+
+                            foreach (var lbe in lbg.LeaderboardTrainerClass.Entries)
+                            {
+                                response.WriteByte((byte)lbe.Team);
+                            }
+                            foreach (var lbe in lbg.LeaderboardTrainerClass.Entries)
+                            {
+                                response.Write(BitConverter.GetBytes(lbe.Score), 0, 8);
+                            }
+
+                            foreach (var lbe in lbg.LeaderboardBirthMonth.Entries)
+                            {
+                                response.WriteByte((byte)lbe.Team);
+                            }
+                            foreach (var lbe in lbg.LeaderboardBirthMonth.Entries)
+                            {
+                                response.Write(BitConverter.GetBytes(lbe.Score), 0, 8);
+                            }
+
+                            foreach (var lbe in lbg.LeaderboardFavouritePokemon.Entries)
+                            {
+                                response.Write(BitConverter.GetBytes((short)lbe.Team), 0, 2);
+                            }
+                            foreach (var lbe in lbg.LeaderboardFavouritePokemon.Entries)
+                            {
+                                response.Write(BitConverter.GetBytes(lbe.Score), 0, 8);
+                            }
+                        }
+
+                        // This week:
+                        foreach (var lbg in thisWeek.Leaderboards)
+                        {
+                            response.Write(BitConverter.GetBytes((int)lbg.RecordType), 0, 4);
+
+                            foreach (var lbe in lbg.LeaderboardTrainerClass.Entries)
+                            {
+                                response.WriteByte((byte)lbe.Team);
+                            }
+
+                            foreach (var lbe in lbg.LeaderboardBirthMonth.Entries)
+                            {
+                                response.WriteByte((byte)lbe.Team);
+                            }
+
+                            foreach (var lbe in lbg.LeaderboardFavouritePokemon.Entries)
+                            {
+                                response.Write(BitConverter.GetBytes((short)lbe.Team), 0, 2);
+                            }
+                        }
 
                     } break;
 #endregion
@@ -662,6 +763,23 @@ namespace PkmnFoundations.GlobalTerminalService
         }
 
         private byte[] m_pad;
+
+        private static TrainerRankingsLeaderboardEntry[] GenerateFakeData(int entryCount, int minTeam, int teamCount, int maxScore)
+        {
+            Random scoreRandomizer = new Random();
+            return Enumerable.Range(minTeam, teamCount).Select(i => new TrainerRankingsLeaderboardEntry(i, scoreRandomizer.Next(maxScore)))
+                .OrderBy(e => -e.Score).Take(entryCount).ToArray();
+        }
+
+        private static TrainerRankingsReport GenerateFakeReport(DateTime startDate, TrainerRankingsRecordTypes[] recordTypes)
+        {
+            var leaderboards = recordTypes.Select(r => new TrainerRankingsLeaderboardGroup(r,
+                new TrainerRankingsLeaderboard(TrainerRankingsTeamCategories.BirthMonth, GenerateFakeData(12, 1, 12, 100000)),
+                new TrainerRankingsLeaderboard(TrainerRankingsTeamCategories.TrainerClass, GenerateFakeData(16, 0, 16, 100000)),
+                new TrainerRankingsLeaderboard(TrainerRankingsTeamCategories.FavouritePokemon, GenerateFakeData(20, 1, 493, 100000)))).ToArray();
+
+            return new TrainerRankingsReport(startDate, startDate.AddDays(7), leaderboards);
+        }
     }
 
     internal enum RequestTypes4 : byte

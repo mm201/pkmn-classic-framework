@@ -2456,6 +2456,31 @@ namespace PkmnFoundations.Data
             return WithTransaction(tran => BattleVideoCount4(tran));
         }
 
+        public override bool TrainerRankingsPerformRollover()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override IList<TrainerRankingsRecordTypes> TrainerRankingsGetActiveRecordTypes()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override bool TrainerRankingsSubmit(TrainerRankingsSubmission submission)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override TrainerRankingsReport[] TrainerRankingsGetReport(DateTime start, DateTime end)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override TrainerRankingsReport TrainerRankingsGetPendingReport()
+        {
+            throw new NotImplementedException();
+        }
+
         #endregion
 
         #region Global Terminal 5

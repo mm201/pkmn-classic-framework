@@ -145,6 +145,53 @@ namespace PkmnFoundations.Data
         public abstract bool BattleVideoFlagSaved4(ulong serial);
 
         public abstract ulong BattleVideoCount4();
+
+        /// <summary>
+        /// Instructs the database that the provided datetime is now active.
+        /// If the new datetime is outside the active leaderboard's datetime
+        /// range, a new leaderboard should be initialized.
+        /// </summary>
+        /// <param name="date"></param>
+        /// <returns>True if it began a new leaderboard</returns>
+        public abstract bool TrainerRankingsPerformRollover();
+
+        /// <summary>
+        /// Gets the three record types being collected for the active leaderboard.
+        /// </summary>
+        /// <returns>RecordTypes</returns>
+        public abstract IList<TrainerRankingsRecordTypes> TrainerRankingsGetActiveRecordTypes();
+
+        /// <summary>
+        /// Submits trainer rankings data for one player and populates the active leaderboard with it.
+        /// </summary>
+        /// <param name="submission"></param>
+        /// <returns>True if the data was processed</returns>
+        public abstract bool TrainerRankingsSubmit(TrainerRankingsSubmission submission);
+
+        /// <summary>
+        /// Gets past reports falling within a specified date range.
+        /// </summary>
+        /// <param name="start">Datetime during which the oldest returned leaderboard was active</param>
+        /// <param name="end">Datetime during which the newest returned leaderboard was active</param>
+        /// <returns>Reports</returns>
+        public abstract TrainerRankingsReport[] TrainerRankingsGetReport(DateTime start, DateTime end);
+
+        /// <summary>
+        /// Gets the single report which was active during the specified date.
+        /// </summary>
+        /// <param name="during"></param>
+        /// <returns></returns>
+        public TrainerRankingsReport TrainerRankingsGetReport(DateTime during)
+        {
+            return TrainerRankingsGetReport(during, during).FirstOrDefault();
+        }
+
+        /// <summary>
+        /// Gets the currently active, incomplete report.
+        /// </summary>
+        /// <returns></returns>
+        public abstract TrainerRankingsReport TrainerRankingsGetPendingReport();
+
         #endregion
 
         #region Global Terminal 5
