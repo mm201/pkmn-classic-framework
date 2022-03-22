@@ -69,3 +69,8 @@ sprites and Generation 3 item/text conversion tables.
 * [kaphotics](https://twitter.com/kaphotics) for the Pokémon mini sprite rips
 from ORAS.
 * [sosnek](https://github.com/sosnek) for help with held item validation.
+* [msikma](https://github.com/msikma/pokesprite) and 
+[monsanto](https://github.com/smogon/sprites) for their sprite databases.
+* GatorShark and Magical for their
+[Spinda spot documentation](https://gatorshark.webs.com/SpindaDocumentation.htm)
+and [Python implementation](https://github.com/magical/spinda), respectively.
