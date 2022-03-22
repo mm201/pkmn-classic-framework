@@ -25,6 +25,12 @@ namespace PkmnFoundations.GTS
 
         public override void ProcessGamestatsRequest(byte[] request, MemoryStream response, string url, int pid, HttpContext context, GamestatsSession session)
         {
+            BanStatus ban = BanHelper.GetBanStatus(pid, IpAddressHelper.GetIpAddress(context.Request), Generations.Generation5);
+            if (ban != null && ban.Level > BanLevels.Restricted)
+            {
+                ShowError(context, 403);
+                return;
+            }
             Pokedex.Pokedex pokedex = AppStateHelper.Pokedex(context.Application);
 
             switch (url)

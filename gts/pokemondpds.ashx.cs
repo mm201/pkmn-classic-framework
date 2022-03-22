@@ -27,6 +27,12 @@ namespace PkmnFoundations.GTS
 
         public override void ProcessGamestatsRequest(byte[] data, MemoryStream response, string url, int pid, HttpContext context, GamestatsSession session)
         {
+            BanStatus ban = BanHelper.GetBanStatus(pid, IpAddressHelper.GetIpAddress(context.Request), Generations.Generation4);
+            if (ban != null && ban.Level > BanLevels.Restricted)
+            {
+                ShowError(context, 403);
+                return;
+            }
             Pokedex.Pokedex pokedex = AppStateHelper.Pokedex(context.Application);
 
             switch (url)
@@ -119,14 +125,18 @@ namespace PkmnFoundations.GTS
                 #region GTS
                 // Called during startup. Unknown purpose.
                 case "/pokemondpds/worldexchange/info.asp":
+                {
                     SessionManager.Remove(session);
 
                     // todo: find out the meaning of this request.
                     // is it simply done to check whether the GTS is online?
 
-                    Database.Instance.GamestatsBumpProfile4(pid, IpAddressHelper.GetIpAddress(context.Request));
+                    var ip = IpAddressHelper.GetIpAddress(context.Request);
+                    Database.Instance.GamestatsBumpProfile4(pid, ip);
+
                     response.Write(new byte[] { 0x01, 0x00 }, 0, 2);
                     break;
+                }
 
                 // Called during startup and when you check your pokemon's status.
                 case "/pokemondpds/worldexchange/result.asp":

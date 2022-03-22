@@ -1134,6 +1134,70 @@ namespace PkmnFoundations.Data
                     "@client_secret, @mail_secret, @ip_address, 2, UTC_TIMESTAMP(), UTC_TIMESTAMP())", _params) > 0;
             }
         }
+
+        public override TrainerProfile4 GamestatsGetProfile4(int pid)
+        {
+            return WithTransaction(tran => GamestatsGetProfile4(tran, pid));
+        }
+
+        public TrainerProfile4 GamestatsGetProfile4(MySqlTransaction tran, int pid)
+        {
+            DataTable result = tran.ExecuteDataTable("SELECT Data, IpAddress FROM GtsProfiles4 WHERE pid = @pid AND Expires > UTC_TIMESTAMP()", new MySqlParameter("@pid", pid));
+            if (result.Rows.Count == 0) return null;
+            DataRow row = result.Rows[0];
+            return new TrainerProfile4(pid, DatabaseExtender.Cast<byte[]>(row["Data"]), DatabaseExtender.Cast<string>(row["IpAddress"]));
+        }
+
+        public override BanStatus CheckBanStatus(int pid)
+        {
+            return WithTransaction(tran => CheckBanStatus(tran, pid));
+        }
+
+        public BanStatus CheckBanStatus(MySqlTransaction tran, int pid)
+        {
+            DataTable result = tran.ExecuteDataTable("SELECT Level, Reason, Expires FROM pkmncf_gamestats_bans_pid WHERE pid = @pid AND Expires > UTC_TIMESTAMP()", new MySqlParameter("@pid", pid));
+            if (result.Rows.Count == 0) return new BanStatus(BanLevels.None, null, DateTime.MinValue);
+            DataRow row = result.Rows[0];
+            return new BanStatus(
+                (BanLevels)DatabaseExtender.Cast<int>(row["Level"]), 
+                DatabaseExtender.Cast<string>(row["Reason"]),
+                DatabaseExtender.Cast<DateTime ?>(row["Expires"])
+                );
+        }
+
+        public override BanStatus CheckBanStatus(byte[] mac_address)
+        {
+            return WithTransaction(tran => CheckBanStatus(tran, mac_address));
+        }
+
+        public BanStatus CheckBanStatus(MySqlTransaction tran, byte[] mac_address)
+        {
+            DataTable result = tran.ExecuteDataTable("SELECT Level, Reason, Expires FROM pkmncf_gamestats_bans_mac WHERE pid = @mac_address AND Expires > UTC_TIMESTAMP()", new MySqlParameter("@mac_address", mac_address));
+            if (result.Rows.Count == 0) return new BanStatus(BanLevels.None, null, DateTime.MinValue);
+            DataRow row = result.Rows[0];
+            return new BanStatus(
+                (BanLevels)DatabaseExtender.Cast<int>(row["Level"]), 
+                DatabaseExtender.Cast<string>(row["Reason"]),
+                DatabaseExtender.Cast<DateTime?>(row["Expires"])
+                );
+        }
+
+        public override BanStatus CheckBanStatus(string ip_address)
+        {
+            return WithTransaction(tran => CheckBanStatus(tran, ip_address));
+        }
+
+        public BanStatus CheckBanStatus(MySqlTransaction tran, string ip_address)
+        {
+            DataTable result = tran.ExecuteDataTable("SELECT Level, Reason, Expires FROM pkmncf_gamestats_bans_ip WHERE IpAddress = @ip_address", new MySqlParameter("@ip_address", ip_address));
+            if (result.Rows.Count == 0) return new BanStatus(BanLevels.None, null, DateTime.MinValue);
+            DataRow row = result.Rows[0];
+            return new BanStatus(
+                (BanLevels)DatabaseExtender.Cast<int>(row["Level"]), 
+                DatabaseExtender.Cast<string>(row["Reason"]),
+                DatabaseExtender.Cast<DateTime?>(row["Expires"])
+                );
+        }
         #endregion
 
         #region GTS 5
@@ -2056,6 +2120,20 @@ namespace PkmnFoundations.Data
                     "@client_secret, @mail_secret, @ip_address, 2, UTC_TIMESTAMP(), UTC_TIMESTAMP())", _params) > 0;
             }
         }
+
+        public override TrainerProfile5 GamestatsGetProfile5(int pid)
+        {
+            return WithTransaction(tran => GamestatsGetProfile5(tran, pid));
+        }
+
+        public TrainerProfile5 GamestatsGetProfile5(MySqlTransaction tran, int pid)
+        {
+            DataTable result = tran.ExecuteDataTable("SELECT Data, IpAddress FROM GtsProfiles4 WHERE pid = @pid", new MySqlParameter("@pid", pid));
+            if (result.Rows.Count == 0) return null;
+            DataRow row = result.Rows[0];
+            return new TrainerProfile5(pid, DatabaseExtender.Cast<byte[]>(row["Data"]), DatabaseExtender.Cast<string>(row["IpAddress"]));
+        }
+
         #endregion
 
         #region Global Terminal 4

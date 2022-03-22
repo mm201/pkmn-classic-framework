@@ -2,7 +2,7 @@
 -- Host:                         127.0.0.1
 -- Server version:               10.3.28-MariaDB - mariadb.org binary distribution
 -- Server OS:                    Win64
--- HeidiSQL Version:             11.3.0.6392
+-- HeidiSQL Version:             11.3.0.6449
 -- --------------------------------------------------------
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -429,6 +429,39 @@ CREATE TABLE IF NOT EXISTS `GtsProfiles5` (
   `IpAddress` varchar(64) DEFAULT NULL,
   PRIMARY KEY (`pid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- Data exporting was unselected.
+
+-- Dumping structure for table gts.pkmncf_gamestats_bans_ip
+CREATE TABLE IF NOT EXISTS `pkmncf_gamestats_bans_ip` (
+  `IpAddress` varchar(64) NOT NULL,
+  `Level` int(11) NOT NULL,
+  `Reason` text DEFAULT NULL,
+  `Expires` datetime DEFAULT NULL,
+  PRIMARY KEY (`IpAddress`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- Data exporting was unselected.
+
+-- Dumping structure for table gts.pkmncf_gamestats_bans_mac
+CREATE TABLE IF NOT EXISTS `pkmncf_gamestats_bans_mac` (
+  `MacAddress` binary(6) NOT NULL,
+  `Level` int(11) NOT NULL,
+  `Reason` text DEFAULT NULL,
+  `Expires` datetime DEFAULT NULL,
+  PRIMARY KEY (`MacAddress`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- Data exporting was unselected.
+
+-- Dumping structure for table gts.pkmncf_gamestats_bans_pid
+CREATE TABLE IF NOT EXISTS `pkmncf_gamestats_bans_pid` (
+  `pid` int(11) NOT NULL,
+  `Level` int(11) NOT NULL,
+  `Reason` text DEFAULT NULL,
+  `Expires` datetime DEFAULT NULL,
+  PRIMARY KEY (`pid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- Data exporting was unselected.
 

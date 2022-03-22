@@ -75,6 +75,7 @@
     <Compile Include="Pokedex\Form.cs" />
     <Compile Include="Pokedex\Type.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Structures\BanStatus.cs" />
     <Compile Include="Structures\BattleSubwayPokemon5.cs" />
     <Compile Include="Structures\BattleSubwayProfile5.cs" />
     <Compile Include="Structures\BattleSubwayRecord5.cs" />
