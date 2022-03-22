@@ -22,5 +22,5 @@
 22	Friend Ball	4497
 23	Moon Ball	4498
 24	Sport Ball	4499
-#25	Park Ball	4500
-#26	Dream Ball	5576
+25	Dream Ball	5576
+#26	Beast Ball	7851
