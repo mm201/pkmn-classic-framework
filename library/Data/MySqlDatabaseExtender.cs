@@ -40,7 +40,7 @@ namespace PkmnFoundations.Data
         /// <param name="sqlstr">SQL string</param>
         /// <param name="return_type">Return value's expected type</param>
         /// <param name="_params">List of parameters to use with the SQL</param>
-        public static object ExecuteProcedure(this MySqlConnection db, String name, MySqlDbType return_type, params MySqlParameter[] _params)
+        public static object ExecuteProcedure(this MySqlConnection db, string name, MySqlDbType return_type, params MySqlParameter[] _params)
         {
             return ExecuteProcedureInternal(db.CreateCommand(), name, return_type, _params);
         }
@@ -51,7 +51,7 @@ namespace PkmnFoundations.Data
         /// <param name="db">Open data connection</param>
         /// <param name="sqlstr">SQL string</param>
         /// <param name="_params">List of parameters to use with the SQL</param>
-        public static int ExecuteProcedure(this MySqlConnection db, String name, params MySqlParameter[] _params)
+        public static int ExecuteProcedure(this MySqlConnection db, string name, params MySqlParameter[] _params)
         {
             MySqlCommand cmd = db.CreateCommand();
             cmd.CommandText = name;
@@ -67,7 +67,7 @@ namespace PkmnFoundations.Data
         /// <param name="sqlstr">SQL string</param>
         /// <param name="return_type">Return value's expected type</param>
         /// <param name="_params">List of parameters to use with the SQL</param>
-        public static object ExecuteProcedure(this MySqlTransaction tran, String name, MySqlDbType return_type, params MySqlParameter[] _params)
+        public static object ExecuteProcedure(this MySqlTransaction tran, string name, MySqlDbType return_type, params MySqlParameter[] _params)
         {
             MySqlCommand cmd = tran.Connection.CreateCommand();
             cmd.Transaction = tran;
@@ -80,7 +80,7 @@ namespace PkmnFoundations.Data
         /// <param name="db">Open data connection</param>
         /// <param name="sqlstr">SQL string</param>
         /// <param name="_params">List of parameters to use with the SQL</param>
-        public static int ExecuteProcedure(this MySqlTransaction tran, String name, params MySqlParameter[] _params)
+        public static int ExecuteProcedure(this MySqlTransaction tran, string name, params MySqlParameter[] _params)
         {
             MySqlCommand cmd = tran.Connection.CreateCommand();
             cmd.CommandText = name;
@@ -90,7 +90,7 @@ namespace PkmnFoundations.Data
             return cmd.ExecuteNonQuery();
         }
 
-        private static object ExecuteProcedureInternal(MySqlCommand cmd, String name, MySqlDbType return_type, MySqlParameter[] _params)
+        private static object ExecuteProcedureInternal(MySqlCommand cmd, string name, MySqlDbType return_type, MySqlParameter[] _params)
         {
             cmd.CommandText = name;
             cmd.CommandType = CommandType.StoredProcedure;

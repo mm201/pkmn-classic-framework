@@ -32,7 +32,7 @@ namespace PkmnFoundations.Data
         /// <param name="db">Open data connection</param>
         /// <param name="sqlstr">SQL string</param>
         /// <param name="_params">List of parameters to use with the SQL</param>
-        public static DataTable ExecuteDataTable(this DbConnection db, String sqlstr, params IDataParameter[] _params)
+        public static DataTable ExecuteDataTable(this DbConnection db, string sqlstr, params IDataParameter[] _params)
         {
             IDataReader reader = db.ExecuteReader(sqlstr, _params);
             DataTable result = new DataTable();
@@ -46,7 +46,7 @@ namespace PkmnFoundations.Data
         /// <param name="db">Open data connection</param>
         /// <param name="sqlstr">SQL string</param>
         /// <param name="_params">List of parameters to use with the SQL</param>
-        public static DataTable ExecuteDataTable(this DbConnection db, String sqlstr, IEnumerable<IDataParameter> _params)
+        public static DataTable ExecuteDataTable(this DbConnection db, string sqlstr, IEnumerable<IDataParameter> _params)
         {
             IDataReader reader = db.ExecuteReader(sqlstr, _params.ToArray());
             DataTable result = new DataTable();
@@ -60,7 +60,7 @@ namespace PkmnFoundations.Data
         /// <param name="db">Open data connection</param>
         /// <param name="sqlstr">SQL string</param>
         /// <param name="_params">List of parameters to use with the SQL</param>
-        public static DataTable ExecuteDataTable(this DbTransaction tran, String sqlstr, params IDataParameter[] _params)
+        public static DataTable ExecuteDataTable(this DbTransaction tran, string sqlstr, params IDataParameter[] _params)
         {
             IDataReader reader = tran.ExecuteReader(sqlstr, _params);
             DataTable result = new DataTable();
@@ -74,7 +74,7 @@ namespace PkmnFoundations.Data
         /// <param name="db">Open data connection</param>
         /// <param name="sqlstr">SQL string</param>
         /// <param name="_params">List of parameters to use with the SQL</param>
-        public static DataTable ExecuteDataTable(this DbTransaction tran, String sqlstr, IEnumerable<IDataParameter> _params)
+        public static DataTable ExecuteDataTable(this DbTransaction tran, string sqlstr, IEnumerable<IDataParameter> _params)
         {
             IDataReader reader = tran.ExecuteReader(sqlstr, _params.ToArray());
             DataTable result = new DataTable();
@@ -88,7 +88,7 @@ namespace PkmnFoundations.Data
         /// <param name="db">Open data connection</param>
         /// <param name="sqlstr">SQL string</param>
         /// <param name="_params">List of parameters to use with the SQL</param>
-        public static IDataReader ExecuteReader(this DbConnection db, String sqlstr, params IDataParameter[] _params)
+        public static IDataReader ExecuteReader(this DbConnection db, string sqlstr, params IDataParameter[] _params)
         {
             // hooray DbConnection provides a command factory
             DbCommand cmd = db.CreateCommand();
@@ -105,7 +105,7 @@ namespace PkmnFoundations.Data
         /// <param name="db">Open data connection</param>
         /// <param name="sqlstr">SQL string</param>
         /// <param name="_params">List of parameters to use with the SQL</param>
-        public static IDataReader ExecuteReader(this DbConnection db, String sqlstr, IEnumerable<IDataParameter> _params)
+        public static IDataReader ExecuteReader(this DbConnection db, string sqlstr, IEnumerable<IDataParameter> _params)
         {
             return db.ExecuteReader(sqlstr, _params.ToArray());
         }
@@ -116,7 +116,7 @@ namespace PkmnFoundations.Data
         /// <param name="db">Open data connection</param>
         /// <param name="sqlstr">SQL string</param>
         /// <param name="_params">List of parameters to use with the SQL</param>
-        public static IDataReader ExecuteReader(this DbTransaction tran, String sqlstr, params IDataParameter[] _params)
+        public static IDataReader ExecuteReader(this DbTransaction tran, string sqlstr, params IDataParameter[] _params)
         {
             // hooray DbConnection provides a command factory
             DbCommand cmd = tran.Connection.CreateCommand();
@@ -132,7 +132,7 @@ namespace PkmnFoundations.Data
         /// <param name="db">Open data connection</param>
         /// <param name="sqlstr">SQL string</param>
         /// <param name="_params">List of parameters to use with the SQL</param>
-        public static IDataReader ExecuteReader(this DbTransaction tran, String sqlstr, IEnumerable<IDataParameter> _params)
+        public static IDataReader ExecuteReader(this DbTransaction tran, string sqlstr, IEnumerable<IDataParameter> _params)
         {
             return tran.ExecuteReader(sqlstr, _params.ToArray());
         }
@@ -143,7 +143,7 @@ namespace PkmnFoundations.Data
         /// <param name="db">Open data connection</param>
         /// <param name="sqlstr">SQL string</param>
         /// <param name="_params">List of parameters to use with the SQL</param>
-        public static object ExecuteScalar(this DbConnection db, String sqlstr, params IDataParameter[] _params)
+        public static object ExecuteScalar(this DbConnection db, string sqlstr, params IDataParameter[] _params)
         {
             DbCommand cmd = db.CreateCommand();
             cmd.CommandText = sqlstr;
@@ -157,7 +157,7 @@ namespace PkmnFoundations.Data
         /// <param name="db">Open data connection</param>
         /// <param name="sqlstr">SQL string</param>
         /// <param name="_params">List of parameters to use with the SQL</param>
-        public static int ExecuteNonQuery(this DbConnection db, String sqlstr, params IDataParameter[] _params)
+        public static int ExecuteNonQuery(this DbConnection db, string sqlstr, params IDataParameter[] _params)
         {
             DbCommand cmd = db.CreateCommand();
             cmd.CommandText = sqlstr;
@@ -171,7 +171,7 @@ namespace PkmnFoundations.Data
         /// <param name="db">Open data connection</param>
         /// <param name="sqlstr">SQL string</param>
         /// <param name="_params">List of parameters to use with the SQL</param>
-        public static object ExecuteScalar(this DbTransaction tran, String sqlstr, params IDataParameter[] _params)
+        public static object ExecuteScalar(this DbTransaction tran, string sqlstr, params IDataParameter[] _params)
         {
             DbCommand cmd = tran.Connection.CreateCommand();
             cmd.CommandText = sqlstr;
@@ -186,7 +186,7 @@ namespace PkmnFoundations.Data
         /// <param name="db">Open data connection</param>
         /// <param name="sqlstr">SQL string</param>
         /// <param name="_params">List of parameters to use with the SQL</param>
-        public static int ExecuteNonQuery(this DbTransaction tran, String sqlstr, params IDataParameter[] _params)
+        public static int ExecuteNonQuery(this DbTransaction tran, string sqlstr, params IDataParameter[] _params)
         {
             DbCommand cmd = tran.Connection.CreateCommand();
             cmd.CommandText = sqlstr;
@@ -204,7 +204,7 @@ namespace PkmnFoundations.Data
         /// <param name="column">Column ordinal</param>
         /// <param name="_default">Default value</param>
         /// <returns></returns>
-        public static String GetStringOrDefault(this IDataReader reader, int column, String _default)
+        public static string GetStringOrDefault(this IDataReader reader, int column, string _default)
         {
             return reader.IsDBNull(column) ? _default : reader.GetString(column);
         }
@@ -215,7 +215,7 @@ namespace PkmnFoundations.Data
         /// <param name="reader">Active reader with data</param>
         /// <param name="column">Column ordinal</param>
         /// <returns></returns>
-        public static String GetStringOrDefault(this IDataReader reader, int column)
+        public static string GetStringOrDefault(this IDataReader reader, int column)
         {
             return reader.IsDBNull(column) ? "" : reader.GetString(column);
         }
@@ -227,9 +227,9 @@ namespace PkmnFoundations.Data
         /// <param name="column">Column name</param>
         /// <param name="_default">Default value</param>
         /// <returns></returns>
-        public static String GetStringOrDefault(this IDataReader reader, String column, String _default)
+        public static string GetStringOrDefault(this IDataReader reader, string column, string _default)
         {
-            return (reader[column] is DBNull) ? _default : (String)reader[column];
+            return (reader[column] is DBNull) ? _default : (string)reader[column];
         }
 
         /// <summary>
@@ -238,12 +238,12 @@ namespace PkmnFoundations.Data
         /// <param name="reader">Active reader with data</param>
         /// <param name="column">Column name</param>
         /// <returns></returns>
-        public static String GetStringOrDefault(this IDataReader reader, String column)
+        public static string GetStringOrDefault(this IDataReader reader, string column)
         {
-            return (reader[column] is DBNull) ? "" : (String)reader[column];
+            return (reader[column] is DBNull) ? "" : (string)reader[column];
         }
 
-        public static void GetBytes(this IDataReader reader, String column, long fieldOffset, byte[] buffer, int bufferOffset, int length)
+        public static void GetBytes(this IDataReader reader, string column, long fieldOffset, byte[] buffer, int bufferOffset, int length)
         {
             reader.GetBytes(reader.GetOrdinal(column), fieldOffset, buffer, bufferOffset, length);
         }
@@ -278,17 +278,17 @@ namespace PkmnFoundations.Data
             return result;
         }
 
-        public static byte[] GetByteArray(this IDataReader reader, String column)
+        public static byte[] GetByteArray(this IDataReader reader, string column)
         {
             return GetByteArray(reader, reader.GetOrdinal(column));
         }
 
-        public static byte[] GetByteArray(this IDataReader reader, String column, int length)
+        public static byte[] GetByteArray(this IDataReader reader, string column, int length)
         {
             return GetByteArray(reader, reader.GetOrdinal(column), length);
         }
 
-        public static bool IsDBNull(this IDataReader reader, String column)
+        public static bool IsDBNull(this IDataReader reader, string column)
         {
             return reader.IsDBNull(reader.GetOrdinal(column));
         }

@@ -42,7 +42,7 @@ namespace PkmnFoundations.Data
             return CreateInstance(connStr.ConnectionString, connStr.ProviderName);
         }
 
-        public static Database CreateInstance(String connStr, String provider)
+        public static Database CreateInstance(string connStr, string provider)
         {
             if (connStr == null) throw new ArgumentNullException("connStr");
             if (provider == null) throw new ArgumentNullException("provider");

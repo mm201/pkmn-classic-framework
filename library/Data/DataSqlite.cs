@@ -15,12 +15,12 @@ namespace PkmnFoundations.Data
             return CreateConnection(DefaultFilename);
         }
 
-        public SQLiteConnection CreateConnection(String filename)
+        public SQLiteConnection CreateConnection(string filename)
         {
             if (filename.Contains('\"')) throw new ArgumentException();
             return new SQLiteConnection("Data Source=" + filename + ";Version=3;");
         }
 
-        public String DefaultFilename = "pokedex.sqlite";
+        public string DefaultFilename = "pokedex.sqlite";
     }
 }

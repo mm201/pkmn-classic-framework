@@ -40,7 +40,7 @@ namespace PkmnFoundations.Data
         /// <param name="sqlstr">SQL string</param>
         /// <param name="return_type">Return value's expected type</param>
         /// <param name="_params">List of parameters to use with the SQL</param>
-        public static object ExecuteProcedure(this SqlConnection db, String name, SqlDbType return_type, params SqlParameter[] _params)
+        public static object ExecuteProcedure(this SqlConnection db, string name, SqlDbType return_type, params SqlParameter[] _params)
         {
             return ExecuteProcedureInternal(db.CreateCommand(), name, return_type, _params);
         }
@@ -51,7 +51,7 @@ namespace PkmnFoundations.Data
         /// <param name="db">Open data connection</param>
         /// <param name="sqlstr">SQL string</param>
         /// <param name="_params">List of parameters to use with the SQL</param>
-        public static int ExecuteProcedure(this SqlConnection db, String name, params SqlParameter[] _params)
+        public static int ExecuteProcedure(this SqlConnection db, string name, params SqlParameter[] _params)
         {
             SqlCommand cmd = db.CreateCommand();
             cmd.CommandText = name;
@@ -67,7 +67,7 @@ namespace PkmnFoundations.Data
         /// <param name="sqlstr">SQL string</param>
         /// <param name="return_type">Return value's expected type</param>
         /// <param name="_params">List of parameters to use with the SQL</param>
-        public static object ExecuteProcedure(this SqlTransaction tran, String name, SqlDbType return_type, params SqlParameter[] _params)
+        public static object ExecuteProcedure(this SqlTransaction tran, string name, SqlDbType return_type, params SqlParameter[] _params)
         {
             SqlCommand cmd = tran.Connection.CreateCommand();
             cmd.Transaction = tran;
@@ -80,7 +80,7 @@ namespace PkmnFoundations.Data
         /// <param name="db">Open data connection</param>
         /// <param name="sqlstr">SQL string</param>
         /// <param name="_params">List of parameters to use with the SQL</param>
-        public static int ExecuteProcedure(this SqlTransaction tran, String name, params SqlParameter[] _params)
+        public static int ExecuteProcedure(this SqlTransaction tran, string name, params SqlParameter[] _params)
         {
             SqlCommand cmd = tran.Connection.CreateCommand();
             cmd.CommandText = name;
@@ -90,7 +90,7 @@ namespace PkmnFoundations.Data
             return cmd.ExecuteNonQuery();
         }
 
-        private static object ExecuteProcedureInternal(SqlCommand cmd, String name, SqlDbType return_type, SqlParameter[] _params)
+        private static object ExecuteProcedureInternal(SqlCommand cmd, string name, SqlDbType return_type, SqlParameter[] _params)
         {
             cmd.CommandText = name;
             cmd.CommandType = CommandType.StoredProcedure;

@@ -16,12 +16,12 @@ namespace PkmnFoundations.Data
     public class DataMysql : Database
     {
         #region Initialization
-        public DataMysql(String connString)
+        public DataMysql(string connString)
         {
             ConnectionString = connString;
         }
 
-        public String ConnectionString { get; set; }
+        public string ConnectionString { get; set; }
 
         private MySqlConnection CreateConnection()
         {
@@ -30,14 +30,14 @@ namespace PkmnFoundations.Data
         #endregion
 
         #region Utility
-        public static String SqlSanitize(String s)
+        public static string SqlSanitize(string s)
         {
             return SqlSanitize(s, "");
         }
 
-        public static String SqlSanitize(String s, String newChar)
+        public static string SqlSanitize(string s, string newChar)
         {
-            String result = s.Replace("\'", newChar).Replace("[", newChar).Replace("]", newChar).Replace("`", newChar);
+            string result = s.Replace("\'", newChar).Replace("[", newChar).Replace("]", newChar).Replace("`", newChar);
             int x = result.IndexOf("--");
             if (x != -1) result = result.Substring(0, x);
             return result;
@@ -357,7 +357,7 @@ namespace PkmnFoundations.Data
         public GtsRecord4[] GtsSearch4(MySqlTransaction tran, Pokedex.Pokedex pokedex, int pid, ushort species, Genders gender, byte minLevel, byte maxLevel, byte country, int count)
         {
             List<MySqlParameter> _params = new List<MySqlParameter>();
-            String where = "WHERE pid != @pid AND IsExchanged = 0";
+            string where = "WHERE pid != @pid AND IsExchanged = 0";
             _params.Add(new MySqlParameter("@pid", pid));
 
             if (species > 0)
@@ -395,7 +395,7 @@ namespace PkmnFoundations.Data
                 _params.Add(new MySqlParameter("@country", country));
             }
 
-            String limit = "";
+            string limit = "";
             if (count > 0)
             {
                 _params.Add(new MySqlParameter("@count", count));
@@ -825,7 +825,7 @@ namespace PkmnFoundations.Data
         /// </returns>
         private ulong FindBattleTowerRecord4(MySqlTransaction tran, BattleTowerRecord4 record, bool leader)
         {
-            String tblName = leader ? "GtsBattleTowerLeaders4" : "GtsBattleTower4";
+            string tblName = leader ? "GtsBattleTowerLeaders4" : "GtsBattleTower4";
 
             // If PID is missing, this is restored data.
             // We assume the original server took care of matching existing
@@ -887,7 +887,7 @@ namespace PkmnFoundations.Data
 
             if (records.Count == 0) return new BattleTowerRecord4[0];
 
-            String inClause = String.Join(", ", keys.Select(i => i.ToString()).ToArray());
+            string inClause = String.Join(", ", keys.Select(i => i.ToString()).ToArray());
             using (MySqlDataReader reader = (MySqlDataReader)tran.ExecuteReader("SELECT party_id, " +
                 "Slot, Species, HeldItem, Move1, Move2, Move3, Move4, " +
                 "TrainerID, Personality, IVs, EVs, Unknown1, Language, " +
@@ -1425,7 +1425,7 @@ namespace PkmnFoundations.Data
         public GtsRecord5[] GtsSearch5(MySqlTransaction tran, Pokedex.Pokedex pokedex, int pid, ushort species, Genders gender, byte minLevel, byte maxLevel, byte country, int count)
         {
             List<MySqlParameter> _params = new List<MySqlParameter>();
-            String where = "WHERE pid != @pid AND IsExchanged = 0";
+            string where = "WHERE pid != @pid AND IsExchanged = 0";
             _params.Add(new MySqlParameter("@pid", pid));
 
             if (species > 0)
@@ -1463,7 +1463,7 @@ namespace PkmnFoundations.Data
                 _params.Add(new MySqlParameter("@country", country));
             }
 
-            String limit = "";
+            string limit = "";
             if (count > 0)
             {
                 _params.Add(new MySqlParameter("@count", count));
@@ -1900,7 +1900,7 @@ namespace PkmnFoundations.Data
         /// </returns>
         private ulong FindBattleSubwayRecord5(MySqlTransaction tran, BattleSubwayRecord5 record, bool leader)
         {
-            String tblName = leader ? "GtsBattleSubwayLeaders5" : "GtsBattleSubway5";
+            string tblName = leader ? "GtsBattleSubwayLeaders5" : "GtsBattleSubway5";
 
             // If PID is missing, this is restored data.
             // We assume the original server took care of matching existing
@@ -1968,7 +1968,7 @@ namespace PkmnFoundations.Data
 
             if (records.Count == 0) return new BattleSubwayRecord5[0];
 
-            String inClause = String.Join(", ", keys.Select(i => i.ToString()).ToArray());
+            string inClause = String.Join(", ", keys.Select(i => i.ToString()).ToArray());
             using (MySqlDataReader reader = (MySqlDataReader)tran.ExecuteReader("SELECT party_id, " +
                 "Slot, Species, HeldItem, Move1, Move2, Move3, Move4, " +
                 "TrainerID, Personality, IVs, EVs, Unknown1, Language, " +
@@ -2377,8 +2377,8 @@ namespace PkmnFoundations.Data
         public BattleVideoHeader4[] BattleVideoSearch4(MySqlTransaction tran, ushort species, BattleVideoRankings4 ranking, BattleVideoMetagames4 metagame, byte country, byte region, int count)
         {
             List<MySqlParameter> _params = new List<MySqlParameter>();
-            String where = "";
-            String sort = "";
+            string where = "";
+            string sort = "";
             bool hasSearch = false;
 
             if (ranking == BattleVideoRankings4.None)
@@ -2481,7 +2481,7 @@ namespace PkmnFoundations.Data
 
         public BattleVideoRecord4 BattleVideoGet4(MySqlTransaction tran, ulong serial, bool incrementViews = false)
         {
-            String update = incrementViews ? "UPDATE TerminalBattleVideos4 " +
+            string update = incrementViews ? "UPDATE TerminalBattleVideos4 " +
                 "SET Views = Views + 1 WHERE SerialNumber = @serial; "
                 : "";
 
@@ -2765,8 +2765,8 @@ namespace PkmnFoundations.Data
         public BattleVideoHeader5[] BattleVideoSearch5(MySqlTransaction tran, ushort species, BattleVideoRankings5 ranking, BattleVideoMetagames5 metagame, byte country, byte region, int count)
         {
             List<MySqlParameter> _params = new List<MySqlParameter>();
-            String where = "";
-            String sort = "";
+            string where = "";
+            string sort = "";
             bool hasSearch = false;
 
             if (ranking == BattleVideoRankings5.None)
@@ -2874,7 +2874,7 @@ namespace PkmnFoundations.Data
 
         public BattleVideoRecord5 BattleVideoGet5(MySqlTransaction tran, ulong serial, bool incrementViews = false)
         {
-            String update = incrementViews ? "UPDATE TerminalBattleVideos5 " +
+            string update = incrementViews ? "UPDATE TerminalBattleVideos5 " +
                 "SET Views = Views + 1 WHERE SerialNumber = @serial; " 
                 : "";
 
@@ -2928,26 +2928,26 @@ namespace PkmnFoundations.Data
         #endregion
 
         #region Pokedex creation
-        private const String INSERT_COLUMNS = "Name_JA, Name_EN, Name_FR, Name_IT, Name_DE, Name_ES, Name_KO";
-        private const String INSERT_VALUES = "@name_ja, @name_en, @name_fr, @name_it, @name_de, @name_es, @name_ko";
-        private static String[] m_query_langs = new String[] { "JA", "EN", "FR", "IT", "DE", "ES", "KO" };
+        private const string INSERT_COLUMNS = "Name_JA, Name_EN, Name_FR, Name_IT, Name_DE, Name_ES, Name_KO";
+        private const string INSERT_VALUES = "@name_ja, @name_en, @name_fr, @name_it, @name_de, @name_es, @name_ko";
+        private static string[] m_query_langs = new string[] { "JA", "EN", "FR", "IT", "DE", "ES", "KO" };
 
         private static void CreateLocalizedStringQueryPieces(LocalizedString s, 
-            List<MySqlParameter> insertParams, String prefix = "@name_")
+            List<MySqlParameter> insertParams, string prefix = "@name_")
         {
-            foreach (String lang in m_query_langs)
+            foreach (string lang in m_query_langs)
             {
                 MySqlParameter param = new MySqlParameter(prefix + lang.ToLowerInvariant(), s.ContainsKey(lang) ? s[lang] : (object)DBNull.Value);
                 insertParams.Add(param);
             }
         }
 
-        private static String CreateLocalizedInsertColumns(String prefix)
+        private static string CreateLocalizedInsertColumns(string prefix)
         {
             return String.Join(", ", m_query_langs.Select(lang => prefix + lang).ToArray());
         }
 
-        private static String CreateLocalizedInsertValues(String prefix)
+        private static string CreateLocalizedInsertValues(string prefix)
         {
             return String.Join(", ", m_query_langs.Select(lang => prefix + lang.ToLowerInvariant()).ToArray());
         }
