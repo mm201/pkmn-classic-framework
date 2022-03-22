@@ -262,7 +262,8 @@ namespace PkmnFoundations.Structures
             {
                 if (m_pokeball != null) return m_pokeball;
                 int pokeballId = IsHgss() ? PokeBallID_Hgss : PokeBallID;
-                m_pokeball = m_pokedex.Pokeballs(pokeballId);
+                if (!m_pokedex.Pokeballs.ContainsKey(pokeballId)) return null;
+                m_pokeball = m_pokedex.Pokeballs[pokeballId];
                 return m_pokeball;
             }
             set 

@@ -268,7 +268,8 @@ namespace PkmnFoundations.Structures
             get
             {
                 if (m_pokeball != null) return m_pokeball;
-                m_pokeball = m_pokedex.Pokeballs(PokeBallID);
+                if (!m_pokedex.Pokeballs.ContainsKey(PokeBallID)) return null;
+                m_pokeball = m_pokedex.Pokeballs[PokeBallID];
                 return m_pokeball;
             }
             set

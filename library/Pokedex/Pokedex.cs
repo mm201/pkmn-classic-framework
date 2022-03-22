@@ -80,6 +80,7 @@ namespace PkmnFoundations.Pokedex
             m_items_generations.Add(Generations.Generation4, items4);
             m_items_generations.Add(Generations.Generation5, items5);
             m_items_generations.Add(Generations.Generation6, items6);
+            m_pokeballs = new Dictionary<int, Item>();
 
             foreach (var pair in m_items)
             {
@@ -88,6 +89,7 @@ namespace PkmnFoundations.Pokedex
                 if (i.Value4 != null) items4.Add((int)i.Value4, i);
                 if (i.Value5 != null) items5.Add((int)i.Value5, i);
                 if (i.Value6 != null) items6.Add((int)i.Value6, i);
+                if (i.PokeballValue != null) m_pokeballs.Add((int)i.PokeballValue, i);
             }
 
             m_ribbon_positions_generations = new Dictionary<Generations, Dictionary<int, Ribbon>>();
@@ -164,6 +166,7 @@ namespace PkmnFoundations.Pokedex
         private Dictionary<int, Ribbon> m_ribbons;
 
         private Dictionary<Generations, Dictionary<int, Item>> m_items_generations;
+        private Dictionary<int, Item> m_pokeballs;
         private Dictionary<Generations, Dictionary<int, Ribbon>> m_ribbon_positions_generations;
         private Dictionary<Generations, Dictionary<int, Ribbon>> m_ribbon_values_generations;
 
@@ -220,12 +223,12 @@ namespace PkmnFoundations.Pokedex
             return m_items_generations[generation];
         }
 
-        public Item Pokeballs(int value)
+        public IDictionary<int, Item> Pokeballs
         {
-            // fixme: fact check the values for apricorn pokeballs.
-            // What's used here is most assuredly wrong (and probably quite silly)
-            // todo: add a PokeballValue field to the Items table and a dictionary here
-            return m_items_generations[Generations.Generation5][value];
+            get
+            {
+                return m_pokeballs;
+            }
         }
 
         public IDictionary<int, Move> Moves

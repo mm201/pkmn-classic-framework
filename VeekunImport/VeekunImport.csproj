@@ -111,6 +111,9 @@
     <Content Include="families.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="items_balls.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="regions.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

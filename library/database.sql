@@ -564,6 +564,7 @@ CREATE TABLE IF NOT EXISTS `pkmncf_pokedex_items` (
   `Value4` int(10) unsigned DEFAULT NULL,
   `Value5` int(10) unsigned DEFAULT NULL,
   `Value6` int(10) unsigned DEFAULT NULL,
+  `PokeballValue` int(10) unsigned DEFAULT NULL,
   `Name_JA` varchar(30) DEFAULT '',
   `Name_EN` varchar(30) DEFAULT NULL,
   `Name_FR` varchar(30) DEFAULT NULL,
@@ -577,7 +578,8 @@ CREATE TABLE IF NOT EXISTS `pkmncf_pokedex_items` (
   KEY `Value3` (`Value3`),
   KEY `Value4` (`Value4`),
   KEY `Value5` (`Value5`),
-  KEY `Value6` (`Value6`)
+  KEY `Value6` (`Value6`),
+  KEY `ValueBall` (`PokeballValue`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=5639 DEFAULT CHARSET=utf8;
 
 -- Data exporting was unselected.

@@ -3101,12 +3101,13 @@ namespace PkmnFoundations.Data
                 insertParams.Add(new MySqlParameter("@value4", i.Value4));
                 insertParams.Add(new MySqlParameter("@value5", i.Value5));
                 insertParams.Add(new MySqlParameter("@value6", i.Value6));
+                insertParams.Add(new MySqlParameter("@pokeball_value", i.PokeballValue));
                 insertParams.Add(new MySqlParameter("@price", i.Price));
                 CreateLocalizedStringQueryPieces(i.Name, insertParams);
 
                 db.ExecuteNonQuery("INSERT INTO pkmncf_pokedex_items (id, Value3, " +
-                    "Value4, Value5, Value6, " + INSERT_COLUMNS + ", Price) VALUES (" +
-                    "@id, @value3, @value4, @value5, @value6, " + INSERT_VALUES +
+                    "Value4, Value5, Value6, PokeballValue, " + INSERT_COLUMNS + ", Price) VALUES (" +
+                    "@id, @value3, @value4, @value5, @value6, @pokeball_value, " + INSERT_VALUES +
                     ", @price)", insertParams.ToArray());
 
                 db.Close();
@@ -3344,7 +3345,7 @@ namespace PkmnFoundations.Data
                 db.Open();
 
                 using (MySqlDataReader reader = (MySqlDataReader)db.ExecuteReader("SELECT " +
-                    "id, Value3, Value4, Value5, Value6, " + INSERT_COLUMNS +
+                    "id, Value3, Value4, Value5, Value6, PokeballValue, " + INSERT_COLUMNS +
                     ", Price " +
                     "FROM pkmncf_pokedex_items"))
                 {

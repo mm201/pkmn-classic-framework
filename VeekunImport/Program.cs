@@ -351,27 +351,50 @@ namespace VeekunImport
                 {
                     string filename = String.Format("items{0}.txt", generation);
                     ProcessTSV(filename, 3, row =>
+                    {
+                        string[] fields = row.Fields;
+                        int id, thisGenId;
+                        string name = fields[1];
+                        if (!Int32.TryParse(fields[0], out thisGenId) ||
+                            !Int32.TryParse(fields[2], out id))
                         {
-                            string[] fields = row.Fields;
-                            int id, thisGenId;
-                            string name = fields[1];
-                            if (!Int32.TryParse(fields[0], out thisGenId) ||
-                                !Int32.TryParse(fields[2], out id))
-                            {
-                                Console.WriteLine("{0} line {1} has bad format, skipped.", filename, row.LineNumber);
-                                return;
-                            }
-                            ItemLoading theItem = null;
-                            if (!items.ContainsKey(id))
-                            {
-                                theItem = new ItemLoading(id, name);
-                                items.Add(id, theItem);
-                            }
-                            theItem = theItem ?? items[id];
-                            theItem.Name = name; // prefer newer names where available
-                            theItem.SetGenerationValue(thisGenId, generation);
-                        });
+                            Console.WriteLine("{0} line {1} has bad format, skipped.", filename, row.LineNumber);
+                            return;
+                        }
+                        ItemLoading theItem = null;
+                        if (!items.ContainsKey(id))
+                        {
+                            theItem = new ItemLoading(id, name);
+                            items.Add(id, theItem);
+                        }
+                        theItem = theItem ?? items[id];
+                        theItem.Name = name; // prefer newer names where available
+                        theItem.SetGenerationValue(thisGenId, generation);
+                    });
                 }
+
+                // Pokeball IDs:
+                ProcessTSV("items_balls.txt", 3, row =>
+                {
+                    string[] fields = row.Fields;
+                    int id, ballId;
+                    string name = fields[1];
+                    if (!Int32.TryParse(fields[0], out ballId) ||
+                        !Int32.TryParse(fields[2], out id))
+                    {
+                        Console.WriteLine("{0} line {1} has bad format, skipped.", "items_balls.txt", row.LineNumber);
+                        return;
+                    }
+                    ItemLoading theItem = null;
+                    if (!items.ContainsKey(id))
+                    {
+                        theItem = new ItemLoading(id, name);
+                        items.Add(id, theItem);
+                    }
+                    theItem = theItem ?? items[id];
+                    if (theItem.Name == null) theItem.Name = name;
+                    theItem.PokeballValue = ballId;
+                });
 
                 // lookup Veekun ID number against some generation or another.
                 Dictionary<int, ItemLoading> items3 = items
@@ -435,7 +458,7 @@ namespace VeekunImport
                         name = new LocalizedString() { { "EN", il.Name } };
                         Console.WriteLine("Veekun database missing item {0} {1}. Non-English translations will be missing.", il.ID, name);
                     }
-                    Item i = new Item(null, il.ID, il.Value3, il.Value4, il.Value5, il.Value6, il.Price, name);
+                    Item i = new Item(null, il.ID, il.Value3, il.Value4, il.Value5, il.Value6, il.PokeballValue, il.Price, name);
                     db.PokedexInsertItem(i);
                     Console.WriteLine("Inserted item {0} {1}", i.ID, i.Name.ToString());
                 }
@@ -632,6 +655,7 @@ namespace VeekunImport
             Name = name;
             Value3 = Value4 = Value5 = Value6 = null;
             NameLocalized = null;
+            PokeballValue = null;
         }
 
         public int ID;
@@ -639,6 +663,7 @@ namespace VeekunImport
         public LocalizedString NameLocalized;
         public int? Value3, Value4, Value5, Value6;
         public int Price;
+        public int? PokeballValue;
 
         public void SetGenerationValue(int ? value, int generation)
         {

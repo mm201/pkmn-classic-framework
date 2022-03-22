@@ -11,7 +11,7 @@ namespace PkmnFoundations.Pokedex
     public class Item : PokedexRecordBase
     {
         public Item(Pokedex pokedex, int id, int ? value3, int ? value4, 
-            int ? value5, int ? value6, int price, LocalizedString name)
+            int ? value5, int ? value6, int ? pokeball_value, int price, LocalizedString name)
             : base(pokedex)
         {
             ID = id;
@@ -21,6 +21,7 @@ namespace PkmnFoundations.Pokedex
             Value4 = value4;
             Value5 = value5;
             Value6 = value6;
+            PokeballValue = pokeball_value;
             Price = price;
             Name = name;
         }
@@ -33,6 +34,7 @@ namespace PkmnFoundations.Pokedex
                 reader["Value4"] is DBNull ? null : (int?)Convert.ToInt32(reader["Value4"]),
                 reader["Value5"] is DBNull ? null : (int?)Convert.ToInt32(reader["Value5"]),
                 reader["Value6"] is DBNull ? null : (int?)Convert.ToInt32(reader["Value6"]),
+                reader["PokeballValue"] is DBNull ? null : (int?)Convert.ToInt32(reader["PokeballValue"]),
                 Convert.ToInt32(reader["Price"]),
                 LocalizedStringFromReader(reader, "Name_")
             )
@@ -68,9 +70,7 @@ namespace PkmnFoundations.Pokedex
 
         public int ? PokeballValue
         {
-            // fixme: this needs to be its own field in the database.
-            // (see full comment at Pokedex.Pokeballs)
-            get { return Value6; }
+            get; private set;
         }
 
         public static LazyKeyValuePair<int, Item> CreatePair(Pokedex pokedex)
@@ -90,7 +90,7 @@ namespace PkmnFoundations.Pokedex
         public static LazyKeyValuePair<int, Item> CreatePairPokeball(Pokedex pokedex)
         {
             return new LazyKeyValuePair<int, Item>(
-                k => k == 0 ? null : (pokedex == null ? null : pokedex.Pokeballs(k)),
+                k => k == 0 ? null : (pokedex == null ? null : pokedex.Pokeballs[k]),
                 v => v == null ? 0 : v.ID);
         }
     }

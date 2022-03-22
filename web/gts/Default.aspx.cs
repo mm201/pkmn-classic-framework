@@ -44,7 +44,7 @@ namespace PkmnFoundations.GTS
             txtLevelMax.Attributes["onchange"] = "changedMax(\'" + txtLevelMin.ClientID + "\', \'" + txtLevelMax.ClientID + "\');";
         }
 
-        private String FormatLevels(byte min, byte max)
+        private string FormatLevels(byte min, byte max)
         {
             if (min == 0 && max == 0)
             {
@@ -68,7 +68,7 @@ namespace PkmnFoundations.GTS
             }
         }
 
-        protected String CreateOfferImage(object DataItem)
+        protected string CreateOfferImage(object DataItem)
         {
             try
             {
@@ -83,14 +83,14 @@ namespace PkmnFoundations.GTS
             }
         }
 
-        protected String CreatePokeball(object DataItem)
+        protected string CreatePokeball(object DataItem)
         {
             try
             {
                 GtsRecordBase record = (GtsRecordBase)DataItem;
                 // Hide pokeballs with incorrect numbers until we catalog them.
-                if (record.Pokemon.Pokeball.Value4 > 15) return "";
-                String itemName = Common.HtmlEncode(record.Pokemon.Pokeball.Name.ToString());
+                if (record.Pokemon.Pokeball == null) return "";
+                string itemName = Common.HtmlEncode(record.Pokemon.Pokeball.Name.ToString());
                 return "<img src=\"" + ResolveUrl(WebFormat.ItemImage(record.Pokemon.Pokeball)) +
                     "\" alt=\"" + itemName + "\" title=\"" + itemName + 
                     "\" class=\"sprite item\" width=\"24px\" height=\"24px\" />";
@@ -101,7 +101,7 @@ namespace PkmnFoundations.GTS
             }
         }
 
-        protected String CreatePokerus(object DataItem)
+        protected string CreatePokerus(object DataItem)
         {
             try
             {
@@ -122,19 +122,19 @@ namespace PkmnFoundations.GTS
             }
         }
 
-        protected String CreateLevel(object DataItem)
+        protected string CreateLevel(object DataItem)
         {
             GtsRecordBase record = (GtsRecordBase)DataItem;
             return record.Level.ToString();
         }
 
-        protected String CreateGender(object DataItem)
+        protected string CreateGender(object DataItem)
         {
             GtsRecordBase record = (GtsRecordBase)DataItem;
             return Format.GenderSymbol(record.Gender);
         }
 
-        protected String CreateNickname(object DataItem)
+        protected string CreateNickname(object DataItem)
         {
             try
             {
@@ -147,7 +147,7 @@ namespace PkmnFoundations.GTS
             }
         }
 
-        protected String CreateSpecies(object DataItem)
+        protected string CreateSpecies(object DataItem)
         {
             try
             {
@@ -161,7 +161,7 @@ namespace PkmnFoundations.GTS
             }
         }
 
-        protected String CreatePokedex(object DataItem)
+        protected string CreatePokedex(object DataItem)
         {
             try
             {
@@ -174,13 +174,13 @@ namespace PkmnFoundations.GTS
             }
         }
 
-        protected String CreateHeldItem(object DataItem)
+        protected string CreateHeldItem(object DataItem)
         {
             try
             {
                 GtsRecordBase record = (GtsRecordBase)DataItem;
                 if (record.Pokemon.HeldItem == null) return "";
-                String itemName = Common.HtmlEncode(record.Pokemon.HeldItem.Name.ToString());
+                string itemName = Common.HtmlEncode(record.Pokemon.HeldItem.Name.ToString());
                 return "<img src=\"" + ResolveUrl(WebFormat.ItemImage(record.Pokemon.HeldItem)) +
                     "\" alt=\"" + itemName + "\" class=\"sprite item\" width=\"24px\" height=\"24px\" />" +
                     itemName;
@@ -191,7 +191,7 @@ namespace PkmnFoundations.GTS
             }
         }
 
-        protected String CreateNature(object DataItem)
+        protected string CreateNature(object DataItem)
         {
             try
             {
@@ -204,7 +204,7 @@ namespace PkmnFoundations.GTS
             }
         }
 
-        protected String CreateAbility(object DataItem)
+        protected string CreateAbility(object DataItem)
         {
             try
             {
@@ -217,13 +217,13 @@ namespace PkmnFoundations.GTS
             }
         }
 
-        protected String CreateTrainer(object DataItem)
+        protected string CreateTrainer(object DataItem)
         {
             GtsRecordBase record = (GtsRecordBase)DataItem;
             return Common.HtmlEncode(record.TrainerName);
         }
 
-        protected String CreateWantedSpecies(object DataItem)
+        protected string CreateWantedSpecies(object DataItem)
         {
             Pokedex.Pokedex pokedex = AppStateHelper.Pokedex(Application);
             GtsRecordBase record = (GtsRecordBase)DataItem;
@@ -237,19 +237,19 @@ namespace PkmnFoundations.GTS
                 record.RequestedSpecies);
         }
 
-        protected String CreateWantedGender(object DataItem)
+        protected string CreateWantedGender(object DataItem)
         {
             GtsRecordBase record = (GtsRecordBase)DataItem;
             return Format.GenderSymbol(record.RequestedGender);
         }
 
-        protected String CreateWantedLevel(object DataItem)
+        protected string CreateWantedLevel(object DataItem)
         {
             GtsRecordBase record = (GtsRecordBase)DataItem;
             return FormatLevels(record.RequestedMinLevel, record.RequestedMaxLevel);
         }
 
-        protected String CreateDate(object DataItem)
+        protected string CreateDate(object DataItem)
         {
             GtsRecordBase record = (GtsRecordBase)DataItem;
             if (record.TimeDeposited == null) return "";
