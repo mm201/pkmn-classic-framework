@@ -14,11 +14,6 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
-
--- Dumping database structure for gts
-CREATE DATABASE IF NOT EXISTS `gts` /*!40100 DEFAULT CHARACTER SET utf8 */;
-USE `gts`;
-
 -- Dumping structure for table gts.BattleVideoCrawlQueue
 CREATE TABLE IF NOT EXISTS `BattleVideoCrawlQueue` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
@@ -443,6 +438,17 @@ CREATE TABLE IF NOT EXISTS `pkmncf_gamestats_bans_ip` (
 
 -- Data exporting was unselected.
 
+-- Dumping structure for table gts.pkmncf_gamestats_bans_ipv4_range
+CREATE TABLE IF NOT EXISTS `pkmncf_gamestats_bans_ipv4_range` (
+  `IpAddressMin` int(10) unsigned NOT NULL,
+  `IpAddressMax` int(10) unsigned NOT NULL,
+  `Level` int(11) NOT NULL,
+  `Reason` text DEFAULT NULL,
+  `Expires` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- Data exporting was unselected.
+
 -- Dumping structure for table gts.pkmncf_gamestats_bans_mac
 CREATE TABLE IF NOT EXISTS `pkmncf_gamestats_bans_mac` (
   `MacAddress` binary(6) NOT NULL,
@@ -462,6 +468,20 @@ CREATE TABLE IF NOT EXISTS `pkmncf_gamestats_bans_pid` (
   `Expires` datetime DEFAULT NULL,
   PRIMARY KEY (`pid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- Data exporting was unselected.
+
+-- Dumping structure for table gts.pkmncf_gamestats_bans_savefile
+CREATE TABLE IF NOT EXISTS `pkmncf_gamestats_bans_savefile` (
+  `Version` tinyint(3) unsigned NOT NULL,
+  `Language` tinyint(3) unsigned NOT NULL,
+  `OT` int(10) unsigned NOT NULL,
+  `Name` binary(16) NOT NULL,
+  `Level` int(11) NOT NULL,
+  `Reason` text DEFAULT NULL,
+  `Expires` datetime DEFAULT NULL,
+  PRIMARY KEY (`Version`,`Language`,`OT`,`Name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- Data exporting was unselected.
 

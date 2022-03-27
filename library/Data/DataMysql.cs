@@ -1233,6 +1233,27 @@ namespace PkmnFoundations.Data
                 );
         }
 
+        public override BanStatus CheckBanStatus(uint ip_address)
+        {
+            return WithTransaction(tran => CheckBanStatus(tran, ip_address));
+        }
+
+        public BanStatus CheckBanStatus(MySqlTransaction tran, uint ip_address)
+        {
+            DataTable result = tran.ExecuteDataTable("SELECT Level, Reason, Expires " +
+                "FROM pkmncf_gamestats_bans_ipv4_range " +
+                "WHERE (@ip BETWEEN IpAddressMin AND IpAddressMax) AND (Expires > UTC_TIMESTAMP() OR Expires IS NULL)",
+                new MySqlParameter("@ip", ip_address));
+
+            if (result.Rows.Count == 0) return new BanStatus(BanLevels.None, null, DateTime.MinValue);
+            DataRow row = result.Rows[0];
+            return new BanStatus(
+                (BanLevels)DatabaseExtender.Cast<int>(row["Level"]),
+                DatabaseExtender.Cast<string>(row["Reason"]),
+                DatabaseExtender.Cast<DateTime?>(row["Expires"])
+                );
+        }
+
         public override void AddBan(int pid, BanStatus status)
         {
             WithTransaction(tran => AddBan(tran, pid, status));

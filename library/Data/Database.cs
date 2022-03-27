@@ -103,6 +103,7 @@ namespace PkmnFoundations.Data
         public abstract BanStatus CheckBanStatus(byte[] mac_address);
         public abstract BanStatus CheckBanStatus(string ip_address);
         public abstract BanStatus CheckBanStatus(TrainerProfileBase profile);
+        public abstract BanStatus CheckBanStatus(uint ip_address);
 
         public abstract void AddBan(int pid, BanStatus status);
         public abstract void AddBan(byte[] mac_address, BanStatus status);

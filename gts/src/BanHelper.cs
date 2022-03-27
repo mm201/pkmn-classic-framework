@@ -16,6 +16,7 @@ namespace PkmnFoundations.GTS
                 BanStatus pidBan = Database.Instance.CheckBanStatus(pid);
                 BanStatus ipBan = Database.Instance.CheckBanStatus(IpAddress);
                 BanStatus macBan = null;
+                BanStatus ipRangeBan = null;
 
                 try
                 {
@@ -39,7 +40,16 @@ namespace PkmnFoundations.GTS
                 {
                 }
 
-                return new[] { pidBan, ipBan, macBan }.Where(ban => ban != null).OrderBy(ban => ban.Level).LastOrDefault();
+                try
+                {
+                    uint ipBinary = IpAddressHelper.Ipv4ToBinary(IpAddress);
+                    ipRangeBan = Database.Instance.CheckBanStatus(ipBinary);
+                }
+                catch (Exception)
+                {
+                }
+
+                return new[] { pidBan, ipBan, macBan, ipRangeBan }.Where(ban => ban != null).OrderBy(ban => ban.Level).LastOrDefault();
             }
             catch (Exception)
             {

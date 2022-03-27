@@ -32,5 +32,13 @@ namespace PkmnFoundations.GTS
             else
                 return ip;
         }
+
+        public static uint Ipv4ToBinary(string ip)
+        {
+            string[] split = ip.Split('.');
+            if (split.Length != 4) throw new FormatException("Format not valid for an IPV4 address.");
+
+            return BitConverter.ToUInt32(split.Select(s => Convert.ToByte(s)).Reverse().ToArray(), 0);
+        }
     }
 }
