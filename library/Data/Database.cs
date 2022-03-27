@@ -96,9 +96,17 @@ namespace PkmnFoundations.Data
         public abstract bool GamestatsBumpProfile4(int pid, string ip_address);
         public abstract bool GamestatsSetProfile4(TrainerProfile4 profile);
         public abstract TrainerProfile4 GamestatsGetProfile4(int pid);
+        #endregion
+
+        #region Bans
         public abstract BanStatus CheckBanStatus(int pid);
         public abstract BanStatus CheckBanStatus(byte[] mac_address);
         public abstract BanStatus CheckBanStatus(string ip_address);
+        public abstract BanStatus CheckBanStatus(TrainerProfileBase profile);
+
+        public abstract void AddBan(int pid, BanStatus status);
+        public abstract void AddBan(byte[] mac_address, BanStatus status);
+        public abstract void AddBan(string ip_address, BanStatus status);
         #endregion
 
         #region GTS 5

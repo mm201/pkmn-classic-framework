@@ -464,8 +464,8 @@ namespace PkmnFoundations.Data
             result.TrainerRegion = reader.GetByte(17);
             result.TrainerClass = reader.GetByte(18);
             result.IsExchanged = reader.GetByte(19);
-            result.TrainerVersion = reader.GetByte(20);
-            result.TrainerLanguage = reader.GetByte(21);
+            result.TrainerVersion = (Versions)reader.GetByte(20);
+            result.TrainerLanguage = (Languages)reader.GetByte(21);
 
             return result;
         }
@@ -1201,6 +1201,98 @@ namespace PkmnFoundations.Data
                 DatabaseExtender.Cast<DateTime?>(row["Expires"])
                 );
         }
+
+        /// <summary>
+        /// Checks JUST for a matching savefile ban. Use the appropriate pid/MAC CheckBanStatus overload to check those tables.
+        /// </summary>
+        /// <param name="profile"></param>
+        /// <returns></returns>
+        public override BanStatus CheckBanStatus(TrainerProfileBase profile)
+        {
+            return WithTransaction(tran => CheckBanStatus(tran, profile));
+        }
+
+        public BanStatus CheckBanStatus(MySqlTransaction tran, TrainerProfileBase profile)
+        {
+            byte[] name = null;
+            if (profile is TrainerProfile4)
+            {
+                name = ((TrainerProfile4)profile).Name.RawData;
+            }
+            if (profile is TrainerProfile5)
+            {
+                name = ((TrainerProfile5)profile).Name.RawData;
+            }
+
+            DataTable result = tran.ExecuteDataTable("SELECT Level, Reason, Expires " +
+                "FROM pkmncf_gamestats_bans_savefile WHERE Version = @version AND Language = @language AND OT = @ot AND Name = @name " +
+                "AND (Expires > UTC_TIMESTAMP() OR Expires IS NULL)",
+                new MySqlParameter("@version", profile.Version),
+                new MySqlParameter("@language", profile.Language),
+                new MySqlParameter("@ot", profile.OT),
+                new MySqlParameter("@name", name));
+
+            if (result.Rows.Count == 0) return new BanStatus(BanLevels.None, null, DateTime.MinValue);
+            DataRow row = result.Rows[0];
+            return new BanStatus(
+                (BanLevels)DatabaseExtender.Cast<int>(row["Level"]), 
+                DatabaseExtender.Cast<string>(row["Reason"]),
+                DatabaseExtender.Cast<DateTime?>(row["Expires"])
+                );
+        }
+
+        public override void AddBan(int pid, BanStatus status)
+        {
+            WithTransaction(tran => AddBan(tran, pid, status));
+        }
+
+        public void AddBan(MySqlTransaction tran, int pid, BanStatus status)
+        {
+            AddBan(tran, "pkmncf_gamestats_bans_pid", "pid", new MySqlParameter("@pk", pid), status);
+        }
+
+        public override void AddBan(byte[] mac_address, BanStatus status)
+        {
+            WithTransaction(tran => AddBan(tran, mac_address, status));
+        }
+
+        public void AddBan(MySqlTransaction tran, byte[] mac_address, BanStatus status)
+        {
+            AddBan(tran, "pkmncf_gamestats_bans_mac", "MacAddress", new MySqlParameter("@pk", mac_address), status);
+        }
+
+        public override void AddBan(string ip_address, BanStatus status)
+        {
+            WithTransaction(tran => AddBan(tran, ip_address, status));
+        }
+
+        public void AddBan(MySqlTransaction tran, string ip_address, BanStatus status)
+        {
+            AddBan(tran, "pkmncf_gamestats_bans_ip", "IpAddress", new MySqlParameter("@pk", ip_address), status);
+        }
+
+        private void AddBan(MySqlTransaction tran, string tbl, string primary_key, MySqlParameter pk_param, BanStatus status)
+        {
+            string pkParamName = pk_param.ParameterName;
+            string sqlExists = "SELECT EXISTS(SELECT * FROM " + tbl + " WHERE " + primary_key + " = " + pkParamName + ")";
+            string sqlInsert = "INSERT INTO " + tbl + " (" + primary_key + ", Level, Reason, Expires) VALUES (" + pkParamName + ", @level, @reason, @expires)";
+            string sqlUpdate = "UPDATE " + tbl + " SET Level = @level, Reason = @reason, Expires = GREATEST(Expires, @expires) WHERE " + primary_key + " = " + pkParamName;
+
+            if (Convert.ToSByte(tran.ExecuteScalar(sqlExists, pk_param.CloneParameter())) > 0)
+            {
+                tran.ExecuteNonQuery(sqlUpdate, pk_param.CloneParameter(), 
+                    new MySqlParameter("@level", status.Level), 
+                    new MySqlParameter("@reason", status.Reason), 
+                    new MySqlParameter("@expires", status.Expires));
+            }
+            else
+            {
+                tran.ExecuteNonQuery(sqlInsert, pk_param.CloneParameter(),
+                    new MySqlParameter("@level", status.Level),
+                    new MySqlParameter("@reason", status.Reason),
+                    new MySqlParameter("@expires", status.Expires));
+            }
+        }
         #endregion
 
         #region GTS 5
@@ -1535,8 +1627,8 @@ namespace PkmnFoundations.Data
             result.TrainerRegion = reader.GetByte(18);
             result.TrainerClass = reader.GetByte(19);
             result.IsExchanged = reader.GetByte(20);
-            result.TrainerVersion = reader.GetByte(21);
-            result.TrainerLanguage = reader.GetByte(22);
+            result.TrainerVersion = (Versions)reader.GetByte(21);
+            result.TrainerLanguage = (Languages)reader.GetByte(22);
             result.TrainerBadges = reader.GetByte(23);
             result.TrainerUnityTower = reader.GetByte(24);
 

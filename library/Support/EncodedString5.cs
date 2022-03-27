@@ -160,6 +160,11 @@ namespace PkmnFoundations.Support
 			return Text;
 		}
 
+        public EncodedString5 Clone()
+        {
+            return new EncodedString5(RawData);
+        }
+
         private static Dictionary<char, ushort> m_lookup_reverse = null;
         private static Dictionary<char, ushort> LookupReverse
         {

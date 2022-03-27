@@ -33,6 +33,10 @@ namespace PkmnFoundations.Structures
             {
                 return (Versions)Data[0];
             }
+            set
+            {
+                Data[0] = (byte)value;
+            }
         }
 
         public Languages Language
@@ -40,6 +44,10 @@ namespace PkmnFoundations.Structures
             get
             {
                 return (Languages)Data[1];
+            }
+            set
+            {
+                Data[1] = (byte)value;
             }
         }
 
@@ -49,6 +57,10 @@ namespace PkmnFoundations.Structures
             {
                 return Data[2];
             }
+            set
+            {
+                Data[2] = value;
+            }
         }
 
         public byte Region
@@ -56,6 +68,10 @@ namespace PkmnFoundations.Structures
             get
             {
                 return Data[3];
+            }
+            set
+            {
+                Data[3] = value;
             }
         }
 
@@ -65,7 +81,19 @@ namespace PkmnFoundations.Structures
             {
                 return BitConverter.ToUInt32(Data, 4);
             }
+            set
+            {
+                Array.Copy(BitConverter.GetBytes(value), 0, Data, 4, 4);
+            }
         }
+
+        /*
+        // xxx: This would require C# 9 covariant return types to work. https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/proposals/csharp-9.0/covariant-returns
+        public abstract EncodedStringBase Name
+        {
+            get;
+        }
+        */
 
         public byte[] MacAddress
         {

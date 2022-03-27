@@ -149,7 +149,7 @@ namespace PkmnFoundations.Support
             m_text = null;
         }
 
-        private void AssignText(String text)
+        private void AssignText(string text)
         {
             m_text = text;
             m_raw_data = null;
@@ -159,6 +159,11 @@ namespace PkmnFoundations.Support
 		{
 			return Text;
 		}
+
+        public EncodedString4 Clone()
+        {
+            return new EncodedString4(RawData);
+        }
 
         private static Dictionary<char, ushort> m_lookup_reverse = null;
         private static Dictionary<char, ushort> LookupReverse

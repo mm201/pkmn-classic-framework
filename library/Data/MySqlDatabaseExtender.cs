@@ -24,12 +24,20 @@ namespace PkmnFoundations.Data
             int x = 0;
             foreach (MySqlParameter p in collection)
             {
-                MySqlParameter param = new MySqlParameter(p.ParameterName, (MySqlDbType)p.DbType, p.Size, p.Direction, p.IsNullable, p.Precision, p.Scale, p.SourceColumn, p.SourceVersion, p.Value);
-                param.DbType = p.DbType;
-                result[x] = param;
+                result[x] = p.CloneParameter();
                 x++;
             }
 
+            return result;
+        }
+
+        public static MySqlParameter CloneParameter(this MySqlParameter param)
+        {
+            MySqlParameter result = new MySqlParameter(param.ParameterName, 
+                (MySqlDbType)param.DbType, param.Size, param.Direction, 
+                param.IsNullable, param.Precision, param.Scale, 
+                param.SourceColumn, param.SourceVersion, param.Value);
+            result.DbType = param.DbType;
             return result;
         }
 

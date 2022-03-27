@@ -153,8 +153,8 @@ namespace PkmnFoundations.Structures
             writer.Write(TrainerRegion);                                 // 0121
             writer.Write(TrainerClass);                                  // 0122
             writer.Write(IsExchanged);                                   // 0123
-            writer.Write(TrainerVersion);                                // 0124
-            writer.Write(TrainerLanguage);                               // 0125
+            writer.Write((byte)TrainerVersion);                          // 0124
+            writer.Write((byte)TrainerLanguage);                         // 0125
             writer.Write(TrainerBadges);                                 // 0126
             writer.Write(TrainerUnityTower);                             // 0127
         }
@@ -181,8 +181,8 @@ namespace PkmnFoundations.Structures
             TrainerRegion = reader.ReadByte();                           // 0121
             TrainerClass = reader.ReadByte();                            // 0122
             IsExchanged = reader.ReadByte();                             // 0123
-            TrainerVersion = reader.ReadByte();                          // 0124
-            TrainerLanguage = reader.ReadByte();                         // 0125
+            TrainerVersion = (Versions)reader.ReadByte();                // 0124
+            TrainerLanguage = (Languages)reader.ReadByte();              // 0125
             TrainerBadges = reader.ReadByte();                           // 0126
             TrainerUnityTower = reader.ReadByte();                       // 0127
         }
@@ -233,6 +233,20 @@ namespace PkmnFoundations.Structures
             TimeExchanged = DateTime.UtcNow;
             PID = other.PID;
             IsExchanged = 0x01;
+        }
+
+        public override TrainerProfileBase ExtrapolateProfile()
+        {
+            TrainerProfile5 result = new TrainerProfile5();
+            result.PID = PID;
+            result.Version = TrainerVersion;
+            result.Language = TrainerLanguage;
+            result.Country = TrainerCountry;
+            result.Region = TrainerRegion;
+            result.OT = TrainerOT;
+            result.Name = TrainerNameEncoded.Clone();
+
+            return result;
         }
 
         public static bool operator ==(GtsRecord5 a, GtsRecord5 b)

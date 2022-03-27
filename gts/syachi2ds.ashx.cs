@@ -25,11 +25,13 @@ namespace PkmnFoundations.GTS
 
         public override void ProcessGamestatsRequest(byte[] request, MemoryStream response, string url, int pid, HttpContext context, GamestatsSession session)
         {
-            BanStatus ban = BanHelper.GetBanStatus(pid, IpAddressHelper.GetIpAddress(context.Request), Generations.Generation5);
-            if (ban != null && ban.Level > BanLevels.Restricted)
             {
-                ShowError(context, 403);
-                return;
+                BanStatus ban = BanHelper.GetBanStatus(pid, IpAddressHelper.GetIpAddress(context.Request), Generations.Generation5);
+                if (ban != null && ban.Level > BanLevels.Restricted)
+                {
+                    ShowError(context, 403);
+                    return;
+                }
             }
             Pokedex.Pokedex pokedex = AppStateHelper.Pokedex(context.Application);
 
@@ -57,13 +59,20 @@ namespace PkmnFoundations.GTS
                     try
                     {
 #endif
-                    // this blob appears to share the same format with GenIV only with (obviously) a GenV string for the trainer name
-                    // and the email-related fields dummied out.
-                    // Specifically, email, notification status, and the two secrets appear to always be 0.
+                        // this blob appears to share the same format with GenIV only with (obviously) a GenV string for the trainer name
+                        // and the email-related fields dummied out.
+                        // Specifically, email, notification status, and the two secrets appear to always be 0.
                         byte[] profileBinary = new byte[100];
                         Array.Copy(request, 0, profileBinary, 0, 100);
                         TrainerProfile5 profile = new TrainerProfile5(pid, profileBinary, IpAddressHelper.GetIpAddress(context.Request));
                         Database.Instance.GamestatsSetProfile5(profile);
+
+                        BanStatus ban = Database.Instance.CheckBanStatus(profile);
+                        if (ban != null && ban.Level > BanLevels.Restricted)
+                        {
+                            ShowError(context, 403);
+                            return;
+                        }
 #if !DEBUG
                     }
                     catch { }

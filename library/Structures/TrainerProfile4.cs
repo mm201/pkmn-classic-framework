@@ -21,6 +21,10 @@ namespace PkmnFoundations.Structures
             {
                 return new EncodedString4(Data, 8, 16);
             }
+            set
+            {
+                Array.Copy(value.RawData, 0, Data, 8, 16);
+            }
         }
 
         public TrainerProfile4 Clone()

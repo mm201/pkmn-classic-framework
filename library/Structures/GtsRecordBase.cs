@@ -78,8 +78,8 @@ namespace PkmnFoundations.Structures
 
         public byte IsExchanged;
 
-        public byte TrainerVersion;
-        public byte TrainerLanguage;
+        public Versions TrainerVersion;
+        public Languages TrainerLanguage;
 
         public virtual bool Validate()
         {
@@ -109,6 +109,8 @@ namespace PkmnFoundations.Structures
 
             return true;
         }
+
+        public abstract TrainerProfileBase ExtrapolateProfile();
 
         public static bool CheckLevels(byte min, byte max, byte other)
         {

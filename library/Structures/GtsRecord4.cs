@@ -130,7 +130,7 @@ namespace PkmnFoundations.Structures
             // todo: enclose in properties and validate these when assigning.
             if (TrainerNameEncoded.RawData.Length != 0x10) throw new FormatException("Trainer name length is incorrect");
 
-            writer.Write(DataActual, 0, 0xEC);                           // 0000
+            writer.Write(DataActual, 0, 0xec);                           // 0000
             writer.Write(Species);                                       // 00EC
             writer.Write((byte)Gender);                                  // 00EE
             writer.Write(Level);                                         // 00EF
@@ -150,13 +150,13 @@ namespace PkmnFoundations.Structures
             writer.Write(TrainerRegion);                                 // 011F
             writer.Write(TrainerClass);                                  // 0120
             writer.Write(IsExchanged);                                   // 0121
-            writer.Write(TrainerVersion);                                // 0122
-            writer.Write(TrainerLanguage);                               // 0123
+            writer.Write((byte)TrainerVersion);                          // 0122
+            writer.Write((byte)TrainerLanguage);                         // 0123
         }
 
         protected override void Load(BinaryReader reader)
         {
-            DataActual = reader.ReadBytes(0xEC);                         // 0000
+            DataActual = reader.ReadBytes(0xec);                         // 0000
             Species = reader.ReadUInt16();                               // 00EC
             Gender = (Genders)reader.ReadByte();                         // 00EE
             Level = reader.ReadByte();                                   // 00EF
@@ -176,8 +176,8 @@ namespace PkmnFoundations.Structures
             TrainerRegion = reader.ReadByte();                           // 011F
             TrainerClass = reader.ReadByte();                            // 0120
             IsExchanged = reader.ReadByte();                             // 0121
-            TrainerVersion = reader.ReadByte();                          // 0122
-            TrainerLanguage = reader.ReadByte();                         // 0123
+            TrainerVersion = (Versions)reader.ReadByte();                // 0122
+            TrainerLanguage = (Languages)reader.ReadByte();              // 0123
         }
 
         public override int Size
@@ -229,6 +229,20 @@ namespace PkmnFoundations.Structures
             TimeExchanged = DateTime.UtcNow;
             PID = other.PID;
             IsExchanged = 0x01;
+        }
+
+        public override TrainerProfileBase ExtrapolateProfile()
+        {
+            TrainerProfile4 result = new TrainerProfile4();
+            result.PID = PID;
+            result.Version = TrainerVersion;
+            result.Language = TrainerLanguage;
+            result.Country = TrainerCountry;
+            result.Region = TrainerRegion;
+            result.OT = TrainerOT;
+            result.Name = TrainerNameEncoded.Clone();
+
+            return result;
         }
 
         public static bool operator ==(GtsRecord4 a, GtsRecord4 b)
