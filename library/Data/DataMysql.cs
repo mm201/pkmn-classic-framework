@@ -1147,6 +1147,9 @@ namespace PkmnFoundations.Data
             DataRow row = result.Rows[0];
             return new TrainerProfile4(pid, DatabaseExtender.Cast<byte[]>(row["Data"]), DatabaseExtender.Cast<string>(row["IpAddress"]));
         }
+        #endregion
+
+        #region Bans
 
         public override BanStatus CheckBanStatus(int pid)
         {
@@ -1155,7 +1158,7 @@ namespace PkmnFoundations.Data
 
         public BanStatus CheckBanStatus(MySqlTransaction tran, int pid)
         {
-            DataTable result = tran.ExecuteDataTable("SELECT Level, Reason, Expires FROM pkmncf_gamestats_bans_pid WHERE pid = @pid AND Expires > UTC_TIMESTAMP()", new MySqlParameter("@pid", pid));
+            DataTable result = tran.ExecuteDataTable("SELECT Level, Reason, Expires FROM pkmncf_gamestats_bans_pid WHERE pid = @pid AND (Expires > UTC_TIMESTAMP() OR Expires IS NULL)", new MySqlParameter("@pid", pid));
             if (result.Rows.Count == 0) return new BanStatus(BanLevels.None, null, DateTime.MinValue);
             DataRow row = result.Rows[0];
             return new BanStatus(
@@ -1172,7 +1175,7 @@ namespace PkmnFoundations.Data
 
         public BanStatus CheckBanStatus(MySqlTransaction tran, byte[] mac_address)
         {
-            DataTable result = tran.ExecuteDataTable("SELECT Level, Reason, Expires FROM pkmncf_gamestats_bans_mac WHERE pid = @mac_address AND Expires > UTC_TIMESTAMP()", new MySqlParameter("@mac_address", mac_address));
+            DataTable result = tran.ExecuteDataTable("SELECT Level, Reason, Expires FROM pkmncf_gamestats_bans_mac WHERE pid = @mac_address AND (Expires > UTC_TIMESTAMP() OR Expires IS NULL)", new MySqlParameter("@mac_address", mac_address));
             if (result.Rows.Count == 0) return new BanStatus(BanLevels.None, null, DateTime.MinValue);
             DataRow row = result.Rows[0];
             return new BanStatus(
@@ -1189,7 +1192,7 @@ namespace PkmnFoundations.Data
 
         public BanStatus CheckBanStatus(MySqlTransaction tran, string ip_address)
         {
-            DataTable result = tran.ExecuteDataTable("SELECT Level, Reason, Expires FROM pkmncf_gamestats_bans_ip WHERE IpAddress = @ip_address", new MySqlParameter("@ip_address", ip_address));
+            DataTable result = tran.ExecuteDataTable("SELECT Level, Reason, Expires FROM pkmncf_gamestats_bans_ip WHERE IpAddress = @ip_address AND (Expires > UTC_TIMESTAMP() OR Expires IS NULL)", new MySqlParameter("@ip_address", ip_address));
             if (result.Rows.Count == 0) return new BanStatus(BanLevels.None, null, DateTime.MinValue);
             DataRow row = result.Rows[0];
             return new BanStatus(
