@@ -90,7 +90,7 @@ CREATE TABLE IF NOT EXISTS `GtsBattleSubway5` (
   PRIMARY KEY (`id`),
   KEY `RoomNum` (`RoomNum`,`Rank`,`Position`),
   KEY `pid` (`pid`,`RoomNum`)
-) ENGINE=InnoDB AUTO_INCREMENT=7003 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- Data exporting was unselected.
 
@@ -115,7 +115,7 @@ CREATE TABLE IF NOT EXISTS `GtsBattleSubwayLeaders5` (
   PRIMARY KEY (`id`),
   KEY `RoomNum` (`RoomNum`,`Rank`,`TimeAdded`),
   KEY `pid` (`pid`,`RoomNum`)
-) ENGINE=InnoDB AUTO_INCREMENT=30001 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- Data exporting was unselected.
 
@@ -172,7 +172,7 @@ CREATE TABLE IF NOT EXISTS `GtsBattleTower4` (
   PRIMARY KEY (`id`),
   KEY `RoomNum` (`RoomNum`,`Rank`,`Position`),
   KEY `pid` (`pid`,`RoomNum`)
-) ENGINE=InnoDB AUTO_INCREMENT=6988 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- Data exporting was unselected.
 
@@ -197,7 +197,7 @@ CREATE TABLE IF NOT EXISTS `GtsBattleTowerLeaders4` (
   PRIMARY KEY (`id`),
   KEY `RoomNum` (`RoomNum`,`Rank`,`TimeAdded`),
   KEY `pid` (`pid`,`RoomNum`)
-) ENGINE=InnoDB AUTO_INCREMENT=29881 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- Data exporting was unselected.
 
@@ -259,7 +259,7 @@ CREATE TABLE IF NOT EXISTS `GtsHistory4` (
   KEY `Species` (`Species`),
   KEY `Gender` (`Gender`),
   KEY `Level` (`Level`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- Data exporting was unselected.
 
@@ -335,7 +335,7 @@ CREATE TABLE IF NOT EXISTS `GtsPokemon4` (
   KEY `Species` (`Species`),
   KEY `Gender` (`Gender`),
   KEY `Level` (`Level`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- Data exporting was unselected.
 
@@ -373,7 +373,7 @@ CREATE TABLE IF NOT EXISTS `GtsPokemon5` (
   KEY `Species` (`Species`),
   KEY `Gender` (`Gender`),
   KEY `Level` (`Level`)
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- Data exporting was unselected.
 
@@ -515,7 +515,7 @@ CREATE TABLE IF NOT EXISTS `pkmncf_pokedex_abilities` (
   `Name_ES` varchar(30) DEFAULT NULL,
   `Name_KO` varchar(30) DEFAULT NULL,
   PRIMARY KEY (`Value`)
-) ENGINE=InnoDB AUTO_INCREMENT=192 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- Data exporting was unselected.
 
@@ -600,7 +600,7 @@ CREATE TABLE IF NOT EXISTS `pkmncf_pokedex_items` (
   KEY `Value5` (`Value5`),
   KEY `Value6` (`Value6`),
   KEY `ValueBall` (`PokeballValue`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=5639 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- Data exporting was unselected.
 
@@ -622,7 +622,7 @@ CREATE TABLE IF NOT EXISTS `pkmncf_pokedex_locations` (
   `Value5` int(11) unsigned DEFAULT NULL,
   `Value6` int(11) unsigned DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=691 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- Data exporting was unselected.
 
@@ -645,7 +645,7 @@ CREATE TABLE IF NOT EXISTS `pkmncf_pokedex_moves` (
   `Target` int(11) DEFAULT NULL,
   PRIMARY KEY (`Value`),
   KEY `Type` (`type_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10019 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- Data exporting was unselected.
 
@@ -684,7 +684,7 @@ CREATE TABLE IF NOT EXISTS `pkmncf_pokedex_pokemon_families` (
   `Incense` int(10) unsigned DEFAULT NULL,
   `GenderRatio` tinyint(3) unsigned NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=365 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- Data exporting was unselected.
 
@@ -707,7 +707,7 @@ CREATE TABLE IF NOT EXISTS `pkmncf_pokedex_pokemon_forms` (
   PRIMARY KEY (`id`),
   KEY `NationalDex` (`NationalDex`),
   KEY `FormValue` (`FormValue`)
-) ENGINE=InnoDB AUTO_INCREMENT=10193 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- Data exporting was unselected.
 
@@ -747,7 +747,7 @@ CREATE TABLE IF NOT EXISTS `pkmncf_pokedex_regions` (
   `Name_ES` varchar(30) DEFAULT NULL,
   `Name_KO` varchar(30) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- Data exporting was unselected.
 
@@ -777,7 +777,7 @@ CREATE TABLE IF NOT EXISTS `pkmncf_pokedex_ribbons` (
   `Description_ES` varchar(300) DEFAULT NULL,
   `Description_KO` varchar(300) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5010 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- Data exporting was unselected.
 
@@ -986,7 +986,7 @@ CREATE TABLE IF NOT EXISTS `TerminalBoxes4` (
   KEY `md5` (`md5`),
   KEY `Label` (`Label`),
   KEY `TimeAdded` (`TimeAdded`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- Data exporting was unselected.
 
