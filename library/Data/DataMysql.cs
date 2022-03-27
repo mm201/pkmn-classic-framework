@@ -407,7 +407,7 @@ namespace PkmnFoundations.Data
                 "RequestedSpecies, RequestedGender, RequestedMinLevel, RequestedMaxLevel, " +
                 "Unknown1, TrainerGender, Unknown2, TimeDeposited, TimeExchanged, pid, " +
                 "TrainerName, TrainerOT, TrainerCountry, TrainerRegion, TrainerClass, " +
-                "IsExchanged, TrainerVersion, TrainerLanguage FROM GtsPokemon4 " + where +
+                "IsExchanged, TrainerVersion, TrainerLanguage, id FROM GtsPokemon4 " + where +
                 " ORDER BY TimeDeposited DESC" + limit,
                 _params.ToArray()))
             {
@@ -416,7 +416,11 @@ namespace PkmnFoundations.Data
                 else records = new List<GtsRecord4>();
 
                 while (reader.Read())
-                    records.Add(Record4FromReader(pokedex, reader));
+                {
+                    var record = Record4FromReader(pokedex, reader);
+                    record.TradeId = DatabaseExtender.Cast<ulong>(reader["id"]);
+                    records.Add(record);
+                }
 
                 reader.Close();
                 return records.ToArray();
@@ -432,40 +436,28 @@ namespace PkmnFoundations.Data
         {
             GtsRecord4 result = new GtsRecord4(pokedex);
 
-            byte[] data = new byte[236];
-            reader.GetBytes(0, 0, data, 0, 236);
-            result.Data = data;
-            data = null;
-
-            // xxx: Shouldn't use column ordinals
-            result.Species = reader.GetUInt16(1);
-            result.Gender = (Genders)reader.GetByte(2);
-            result.Level = reader.GetByte(3);
-            result.RequestedSpecies = reader.GetUInt16(4);
-            result.RequestedGender = (Genders)reader.GetByte(5);
-            result.RequestedMinLevel = reader.GetByte(6);
-            result.RequestedMaxLevel = reader.GetByte(7);
-            result.Unknown1 = reader.GetByte(8);
-            result.TrainerGender = (TrainerGenders)reader.GetByte(9);
-            result.Unknown2 = reader.GetByte(10);
-            if (reader.IsDBNull(11)) result.TimeDeposited = null;
-            else result.TimeDeposited = reader.GetDateTime(11);
-            if (reader.IsDBNull(12)) result.TimeExchanged = null;
-            else result.TimeExchanged = reader.GetDateTime(12);
-            result.PID = reader.GetInt32(13);
-
-            data = new byte[16];
-            reader.GetBytes(14, 0, data, 0, 16);
-            result.TrainerNameEncoded = new EncodedString4(data);
-            data = null;
-
-            result.TrainerOT = reader.GetUInt16(15);
-            result.TrainerCountry = reader.GetByte(16);
-            result.TrainerRegion = reader.GetByte(17);
-            result.TrainerClass = reader.GetByte(18);
-            result.IsExchanged = reader.GetByte(19);
-            result.TrainerVersion = (Versions)reader.GetByte(20);
-            result.TrainerLanguage = (Languages)reader.GetByte(21);
+            result.Data = DatabaseExtender.Cast<byte[]>(reader["Data"]);
+            result.Species = DatabaseExtender.Cast<ushort>(reader["Species"]);
+            result.Gender = (Genders)DatabaseExtender.Cast<byte>(reader["Gender"]);
+            result.Level = DatabaseExtender.Cast<byte>(reader["Level"]);
+            result.RequestedSpecies = DatabaseExtender.Cast<ushort>(reader["RequestedSpecies"]);
+            result.RequestedGender = (Genders)DatabaseExtender.Cast<byte>(reader["RequestedGender"]);
+            result.RequestedMinLevel = DatabaseExtender.Cast<byte>(reader["RequestedMinLevel"]);
+            result.RequestedMaxLevel = DatabaseExtender.Cast<byte>(reader["RequestedMaxLevel"]);
+            result.Unknown1 = DatabaseExtender.Cast<byte>(reader["Unknown1"]);
+            result.TrainerGender = (TrainerGenders)DatabaseExtender.Cast<byte>(reader["TrainerGender"]);
+            result.Unknown2 = DatabaseExtender.Cast<byte>(reader["Unknown2"]);
+            result.TimeDeposited = DatabaseExtender.Cast<DateTime ?>(reader["TimeDeposited"]);
+            result.TimeExchanged = DatabaseExtender.Cast<DateTime?>(reader["TimeExchanged"]);
+            result.PID = DatabaseExtender.Cast<int>(reader["pid"]);
+            result.TrainerNameEncoded = new EncodedString4(DatabaseExtender.Cast<byte[]>(reader["TrainerName"]));
+            result.TrainerOT = DatabaseExtender.Cast<ushort>(reader["TrainerOT"]);
+            result.TrainerCountry = DatabaseExtender.Cast<byte>(reader["TrainerCountry"]);
+            result.TrainerRegion = DatabaseExtender.Cast<byte>(reader["TrainerRegion"]);
+            result.TrainerClass = DatabaseExtender.Cast<byte>(reader["TrainerClass"]);
+            result.IsExchanged = DatabaseExtender.Cast<byte>(reader["IsExchanged"]);
+            result.TrainerVersion = (Versions)DatabaseExtender.Cast<byte>(reader["TrainerVersion"]);
+            result.TrainerLanguage = (Languages)DatabaseExtender.Cast<byte>(reader["TrainerLanguage"]);
 
             return result;
         }
@@ -1571,7 +1563,7 @@ namespace PkmnFoundations.Data
                 "RequestedSpecies, RequestedGender, RequestedMinLevel, RequestedMaxLevel, " +
                 "Unknown1, TrainerGender, Unknown2, TimeDeposited, TimeExchanged, pid, " +
                 "TrainerOT, TrainerName, TrainerCountry, TrainerRegion, TrainerClass, " +
-                "IsExchanged, TrainerVersion, TrainerLanguage, TrainerBadges, TrainerUnityTower " +
+                "IsExchanged, TrainerVersion, TrainerLanguage, TrainerBadges, TrainerUnityTower, id " +
                 "FROM GtsPokemon5 " + where +
                 " ORDER BY TimeDeposited DESC" + limit,
                 _params.ToArray()))
@@ -1581,7 +1573,11 @@ namespace PkmnFoundations.Data
                 else records = new List<GtsRecord5>();
 
                 while (reader.Read())
-                    records.Add(Record5FromReader(pokedex, reader));
+                {
+                    var record = Record5FromReader(pokedex, reader);
+                    record.TradeId = DatabaseExtender.Cast<ulong>(reader["id"]);
+                    records.Add(record);
+                }
 
                 reader.Close();
                 return records.ToArray();
@@ -1590,47 +1586,40 @@ namespace PkmnFoundations.Data
 
         private static GtsRecord5 Record5FromReader(Pokedex.Pokedex pokedex, MySqlDataReader reader)
         {
-            // xxx: Don't use ordinals here
             GtsRecord5 result = new GtsRecord5(pokedex);
 
             // xxx: Data and Unknown0 should share a database field.
             // (This requires migrating a lot of existing data)
-            byte[] data = new byte[236];
-            reader.GetBytes(0, 0, data, 0, 220);
-            reader.GetBytes(1, 0, data, 220, 16);
-            result.Data = data;
-            data = null;
+            byte[] data = DatabaseExtender.Cast<byte[]>(reader["Data"]);
+            byte[] unknown0 = DatabaseExtender.Cast<byte[]>(reader["Unknown0"]);
+            byte[] combined = new byte[236];
+            Array.Copy(data, 0, combined, 0, 220);
+            Array.Copy(unknown0, 0, combined, 220, 16);
+            result.Data = combined;
 
-            result.Species = reader.GetUInt16(2);
-            result.Gender = (Genders)reader.GetByte(3);
-            result.Level = reader.GetByte(4);
-            result.RequestedSpecies = reader.GetUInt16(5);
-            result.RequestedGender = (Genders)reader.GetByte(6);
-            result.RequestedMinLevel = reader.GetByte(7);
-            result.RequestedMaxLevel = reader.GetByte(8);
-            result.Unknown1 = reader.GetByte(9);
-            result.TrainerGender = (TrainerGenders)reader.GetByte(10);
-            result.Unknown2 = reader.GetByte(11);
-            if (reader.IsDBNull(12)) result.TimeDeposited = null;
-            else result.TimeDeposited = reader.GetDateTime(12);
-            if (reader.IsDBNull(13)) result.TimeExchanged = null;
-            else result.TimeExchanged = reader.GetDateTime(13);
-            result.PID = reader.GetInt32(14);
-            result.TrainerOT = reader.GetUInt32(15);
-
-            data = new byte[16];
-            reader.GetBytes(16, 0, data, 0, 16);
-            result.TrainerNameEncoded = new EncodedString5(data);
-            data = null;
-
-            result.TrainerCountry = reader.GetByte(17);
-            result.TrainerRegion = reader.GetByte(18);
-            result.TrainerClass = reader.GetByte(19);
-            result.IsExchanged = reader.GetByte(20);
-            result.TrainerVersion = (Versions)reader.GetByte(21);
-            result.TrainerLanguage = (Languages)reader.GetByte(22);
-            result.TrainerBadges = reader.GetByte(23);
-            result.TrainerUnityTower = reader.GetByte(24);
+            result.Species = DatabaseExtender.Cast<ushort>(reader["Species"]);
+            result.Gender = (Genders)DatabaseExtender.Cast<byte>(reader["Gender"]);
+            result.Level = DatabaseExtender.Cast<byte>(reader["Level"]);
+            result.RequestedSpecies = DatabaseExtender.Cast<ushort>(reader["RequestedSpecies"]);
+            result.RequestedGender = (Genders)DatabaseExtender.Cast<byte>(reader["RequestedGender"]);
+            result.RequestedMinLevel = DatabaseExtender.Cast<byte>(reader["RequestedMinLevel"]);
+            result.RequestedMaxLevel = DatabaseExtender.Cast<byte>(reader["RequestedMaxLevel"]);
+            result.Unknown1 = DatabaseExtender.Cast<byte>(reader["Unknown1"]);
+            result.TrainerGender = (TrainerGenders)DatabaseExtender.Cast<byte>(reader["TrainerGender"]);
+            result.Unknown2 = DatabaseExtender.Cast<byte>(reader["Unknown2"]);
+            result.TimeDeposited = DatabaseExtender.Cast<DateTime ?>(reader["TimeDeposited"]);
+            result.TimeExchanged = DatabaseExtender.Cast<DateTime ?>(reader["TimeExchanged"]);
+            result.PID = DatabaseExtender.Cast<int>(reader["pid"]);
+            result.TrainerOT = DatabaseExtender.Cast<uint>(reader["TrainerOT"]);
+            result.TrainerNameEncoded = new EncodedString5(DatabaseExtender.Cast<byte[]>(reader["TrainerName"]));
+            result.TrainerCountry = DatabaseExtender.Cast<byte>(reader["TrainerCountry"]);
+            result.TrainerRegion = DatabaseExtender.Cast<byte>(reader["TrainerRegion"]);
+            result.TrainerClass = DatabaseExtender.Cast<byte>(reader["TrainerClass"]);
+            result.IsExchanged = DatabaseExtender.Cast<byte>(reader["IsExchanged"]);
+            result.TrainerVersion = (Versions)DatabaseExtender.Cast<byte>(reader["TrainerVersion"]);
+            result.TrainerLanguage = (Languages)DatabaseExtender.Cast<byte>(reader["TrainerLanguage"]);
+            result.TrainerBadges = DatabaseExtender.Cast<byte>(reader["TrainerBadges"]);
+            result.TrainerUnityTower = DatabaseExtender.Cast<byte>(reader["TrainerUnityTower"]);
 
             return result;
         }

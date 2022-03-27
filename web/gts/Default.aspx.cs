@@ -255,5 +255,21 @@ namespace PkmnFoundations.GTS
             if (record.TimeDeposited == null) return "";
             return Common.HtmlEncode(((DateTime)record.TimeDeposited).ToString("f"));
         }
+
+        protected string CreateAdminLinks(object DataItem)
+        {
+#if DEBUG
+            GtsRecordBase record = (GtsRecordBase)DataItem;
+            StringBuilder result = new StringBuilder();
+
+            result.Append("<li><a class=\"ui-button\" href=\"");
+            result.Append(Common.HtmlEncode(Common.ResolveUrl("~/gts/Pokemon.aspx?g=" + (rbGen4.Checked ? "4" : "5") + "&offer=" + record.TradeId.ToString())));
+            result.Append("\" target=\"_blank\">Details</a></li>");
+
+            return result.ToString();
+#else
+            return "";
+#endif
+        }
     }
 }

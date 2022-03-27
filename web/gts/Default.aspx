@@ -135,6 +135,7 @@
             <%# CreateGender(Container.DataItem) %>
             <%# CreatePokerus(Container.DataItem) %>
         </li>
+            <%# CreateAdminLinks(Container.DataItem) %>
         </ul>
     </td>
     <tr class="pfFormPair">

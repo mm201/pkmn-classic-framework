@@ -81,6 +81,8 @@ namespace PkmnFoundations.Structures
         public Versions TrainerVersion;
         public Languages TrainerLanguage;
 
+        public ulong TradeId;
+
         public virtual bool Validate()
         {
             // note that IsExchanged only becomes true after FlagTraded is

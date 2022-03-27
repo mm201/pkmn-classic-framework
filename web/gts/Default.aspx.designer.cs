@@ -7,11 +7,13 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace PkmnFoundations.GTS {
-    
-    
-    public partial class AllPokemon {
-        
+namespace PkmnFoundations.GTS
+{
+
+
+    public partial class AllPokemon
+    {
+
         /// <summary>
         /// HeaderColour1 control.
         /// </summary>
@@ -20,7 +22,7 @@ namespace PkmnFoundations.GTS {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::PkmnFoundations.Web.HeaderColour HeaderColour1;
-        
+
         /// <summary>
         /// theForm control.
         /// </summary>
@@ -29,7 +31,7 @@ namespace PkmnFoundations.GTS {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlForm theForm;
-        
+
         /// <summary>
         /// ppSpecies control.
         /// </summary>
@@ -38,7 +40,7 @@ namespace PkmnFoundations.GTS {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::PkmnFoundations.Web.controls.PokemonPicker ppSpecies;
-        
+
         /// <summary>
         /// rbGen4 control.
         /// </summary>
@@ -47,7 +49,7 @@ namespace PkmnFoundations.GTS {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RadioButton rbGen4;
-        
+
         /// <summary>
         /// lblGen4 control.
         /// </summary>
@@ -56,7 +58,7 @@ namespace PkmnFoundations.GTS {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Label lblGen4;
-        
+
         /// <summary>
         /// rbGen5 control.
         /// </summary>
@@ -65,7 +67,7 @@ namespace PkmnFoundations.GTS {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.RadioButton rbGen5;
-        
+
         /// <summary>
         /// lblGen5 control.
         /// </summary>
@@ -74,7 +76,7 @@ namespace PkmnFoundations.GTS {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Label lblGen5;
-        
+
         /// <summary>
         /// btnSearch control.
         /// </summary>
@@ -83,7 +85,7 @@ namespace PkmnFoundations.GTS {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btnSearch;
-        
+
         /// <summary>
         /// txtLevelMin control.
         /// </summary>
@@ -92,7 +94,7 @@ namespace PkmnFoundations.GTS {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtLevelMin;
-        
+
         /// <summary>
         /// txtLevelMax control.
         /// </summary>
@@ -101,7 +103,7 @@ namespace PkmnFoundations.GTS {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtLevelMax;
-        
+
         /// <summary>
         /// chkMale control.
         /// </summary>
@@ -110,7 +112,7 @@ namespace PkmnFoundations.GTS {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.CheckBox chkMale;
-        
+
         /// <summary>
         /// chkFemale control.
         /// </summary>
@@ -119,7 +121,7 @@ namespace PkmnFoundations.GTS {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.CheckBox chkFemale;
-        
+
         /// <summary>
         /// phNone control.
         /// </summary>
@@ -128,7 +130,7 @@ namespace PkmnFoundations.GTS {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.PlaceHolder phNone;
-        
+
         /// <summary>
         /// rptPokemon control.
         /// </summary>
