@@ -16,7 +16,9 @@ namespace PkmnFoundations.GTS
                 BanStatus pidBan = Database.Instance.CheckBanStatus(pid);
                 BanStatus ipBan = Database.Instance.CheckBanStatus(IpAddress);
                 BanStatus macBan = null;
+                BanStatus saveBan = null;
                 BanStatus ipRangeBan = null;
+
 
                 try
                 {
@@ -26,12 +28,14 @@ namespace PkmnFoundations.GTS
                         {
                             var profile = Database.Instance.GamestatsGetProfile4(pid);
                             macBan = Database.Instance.CheckBanStatus(profile.MacAddress);
+                            saveBan = Database.Instance.CheckBanStatus(profile);
                             break;
                         }
                         case Generations.Generation5:
                         {
                             var profile = Database.Instance.GamestatsGetProfile5(pid);
                             macBan = Database.Instance.CheckBanStatus(profile.MacAddress);
+                            saveBan = Database.Instance.CheckBanStatus(profile);
                             break;
                         }
                     }
@@ -49,7 +53,7 @@ namespace PkmnFoundations.GTS
                 {
                 }
 
-                return new[] { pidBan, ipBan, macBan, ipRangeBan }.Where(ban => ban != null).OrderBy(ban => ban.Level).LastOrDefault();
+                return new[] { pidBan, ipBan, macBan, saveBan, ipRangeBan }.Where(ban => ban != null).OrderBy(ban => ban.Level).LastOrDefault();
             }
             catch (Exception)
             {

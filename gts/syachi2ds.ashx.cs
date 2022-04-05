@@ -66,13 +66,6 @@ namespace PkmnFoundations.GTS
                         Array.Copy(request, 0, profileBinary, 0, 100);
                         TrainerProfile5 profile = new TrainerProfile5(pid, profileBinary, IpAddressHelper.GetIpAddress(context.Request));
                         Database.Instance.GamestatsSetProfile5(profile);
-
-                        BanStatus ban = Database.Instance.CheckBanStatus(profile);
-                        if (ban != null && ban.Level > BanLevels.Restricted)
-                        {
-                            ShowError(context, 403);
-                            return;
-                        }
 #if !DEBUG
                     }
                     catch { }
