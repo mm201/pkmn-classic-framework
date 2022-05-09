@@ -3390,7 +3390,7 @@ namespace PkmnFoundations.Data
                     "form_id, MinGeneration, Type1, Type2, BaseHP, BaseAttack, " +
                     "BaseDefense, BaseSpeed, BaseSpAttack, BaseSpDefense, RewardHP, " +
                     "RewardAttack, RewardDefense, RewardSpeed, RewardSpAttack, RewardSpDefense " +
-                    "FROM pkmncf_pokedex_pokemon_form_Stats"))
+                    "FROM pkmncf_pokedex_pokemon_form_stats"))
                 {
                     return ReaderToList(reader, pokedex, () => new FormStats(pokedex, reader));
                 }
@@ -3414,6 +3414,7 @@ namespace PkmnFoundations.Data
 
         public override List<Evolution> PokedexGetAllEvolutions(Pokedex.Pokedex pokedex)
         {
+            // todo
             throw new NotImplementedException();
             using (MySqlConnection db = CreateConnection())
             {
