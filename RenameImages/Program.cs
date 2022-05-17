@@ -56,7 +56,7 @@ namespace RenameImages
                 speciesNameBuilder.Replace(' ', '-');
                 string speciesName = speciesNameBuilder.ToString();
 
-                // xxx: This is incorrect for Vivillon, Pumpkaboo, and Gourgeist, because their suffixless form is not form 0.
+                // fixme: This is incorrect for Vivillon, Pumpkaboo, and Gourgeist, because their suffixless form is not form 0.
                 string oldFilename = (form.Value == 0) 
                     ? String.Format("{0}.png", speciesName)
                     : String.Format("{0}-{1}.png", speciesName, form.Suffix);

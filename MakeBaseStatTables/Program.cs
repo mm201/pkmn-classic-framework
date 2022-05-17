@@ -24,10 +24,8 @@ namespace MakeBaseStatTables
             if (veekunFilename.Contains(';')) throw new NotSupportedException("The character ; in filenames is not supported.");
             if (veekunFilename.Contains('?'))
             {
-                Console.WriteLine("Usage: VeekunImport [filename [connectionString providerName]]");
+                Console.WriteLine("Usage: MakeBaseStatTables [filename]");
                 Console.WriteLine("filename: Filename of Veekun sqlite database. Default: pokedex.sqlite");
-                Console.WriteLine("connectionString: pkmnFoundations connection string. Default: from app.config");
-                Console.WriteLine("providerName: .NET classname of connection provider. Default: from app.config");
                 return;
             }
 
