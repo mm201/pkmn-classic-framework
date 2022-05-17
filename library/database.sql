@@ -807,6 +807,68 @@ CREATE TABLE IF NOT EXISTS `pkmncf_pokedex_types` (
 
 -- Data exporting was unselected.
 
+-- Dumping structure for procedure gts.pkmncf_terminal_proc_create_leaderboards_for_record
+DELIMITER //
+CREATE PROCEDURE `pkmncf_terminal_proc_create_leaderboards_for_record`(
+	IN `@report_id` INT,
+	IN `@record_type` INT
+)
+    SQL SECURITY INVOKER
+BEGIN
+
+	SELECT @start_date := StartDate
+		FROM pkmncf_terminal_trainer_rankings_reports WHERE report_id = @report_id;
+
+	INSERT INTO pkmncf_terminal_trainer_rankings_leaderboards_class
+		SELECT @report_id AS report_id, TrainerClass, @record_type AS RecordType, SUM(VALUE) AS Score 
+		FROM pkmncf_terminal_trainer_rankings_records
+		INNER JOIN pkmncf_terminal_trainer_rankings_teams 
+			ON pkmncf_terminal_trainer_rankings_records.pid = pkmncf_terminal_trainer_rankings_teams.pid
+		WHERE pkmncf_terminal_trainer_rankings_records.LastUpdated >= @start_date
+			AND RecordType = @record_type
+		GROUP BY TrainerClass;
+
+	INSERT INTO pkmncf_terminal_trainer_rankings_leaderboards_month
+		SELECT @report_id AS report_id, TrainerClass, @record_type AS RecordType, SUM(VALUE) AS Score 
+		FROM pkmncf_terminal_trainer_rankings_records
+		INNER JOIN pkmncf_terminal_trainer_rankings_teams 
+			ON pkmncf_terminal_trainer_rankings_records.pid = pkmncf_terminal_trainer_rankings_teams.pid
+		WHERE pkmncf_terminal_trainer_rankings_records.LastUpdated >= @start_date
+			AND RecordType = @record_type
+		GROUP BY BirthMonth;
+		
+	INSERT INTO pkmncf_terminal_trainer_rankings_leaderboards_pokemon
+		SELECT @report_id AS report_id, TrainerClass, @record_type AS RecordType, SUM(VALUE) AS Score 
+		FROM pkmncf_terminal_trainer_rankings_records
+		INNER JOIN pkmncf_terminal_trainer_rankings_teams 
+			ON pkmncf_terminal_trainer_rankings_records.pid = pkmncf_terminal_trainer_rankings_teams.pid
+		WHERE pkmncf_terminal_trainer_rankings_records.LastUpdated >= @start_date
+			AND RecordType = @record_type
+		GROUP BY FavouritePokemon;
+
+END//
+DELIMITER ;
+
+-- Dumping structure for procedure gts.pkmncf_terminal_proc_create_leaderboards_for_report
+DELIMITER //
+CREATE PROCEDURE `pkmncf_terminal_proc_create_leaderboards_for_report`(
+	IN `@report_id` INT
+)
+    SQL SECURITY INVOKER
+BEGIN
+	SELECT @record_type_1 := RecordType1, @record_type_2 := RecordType2, @record_type_3 := RecordType3
+	FROM pkmncf_terminal_trainer_rankings_reports WHERE report_id = @report_id;
+	
+	DELETE FROM pkmncf_terminal_trainer_rankings_leaderboards_class WHERE report_id = @report_id;
+	DELETE FROM pkmncf_terminal_trainer_rankings_leaderboards_month WHERE report_id = @report_id;
+	DELETE FROM pkmncf_terminal_trainer_rankings_leaderboards_pokemon WHERE report_id = @report_id;
+	
+	CALL pkmncf_terminal_proc_create_leaderboards_for_record(@report_id, @record_type_1);
+	CALL pkmncf_terminal_proc_create_leaderboards_for_record(@report_id, @record_type_2);
+	CALL pkmncf_terminal_proc_create_leaderboards_for_record(@report_id, @record_type_3);
+END//
+DELIMITER ;
+
 -- Dumping structure for table gts.pkmncf_terminal_trainer_rankings_leaderboards_class
 CREATE TABLE IF NOT EXISTS `pkmncf_terminal_trainer_rankings_leaderboards_class` (
   `report_id` int(11) NOT NULL,

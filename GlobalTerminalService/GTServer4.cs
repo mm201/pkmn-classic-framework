@@ -424,13 +424,7 @@ namespace PkmnFoundations.GlobalTerminalService
                         // Including more than 3 RecordTypes in the response will give error 10609.
 
                         var submission = new TrainerRankingsSubmission(pid, data, 0x140);
-                        if (!Database.Instance.TrainerRankingsSubmit(submission))
-                        {
-                            logEntry.AppendLine("Submission error on database end.");
-                            type = EventLogEntryType.Error;
-                            response.Write(new byte[] { 0x02, 0x00 }, 0, 2);
-                            break;
-                        }
+                        Database.Instance.TrainerRankingsSubmit(submission);
 
                         response.Write(new byte[] { 0x00, 0x00 }, 0, 2);
 

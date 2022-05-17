@@ -2641,7 +2641,95 @@ namespace PkmnFoundations.Data
 
         public override bool TrainerRankingsPerformRollover()
         {
-            throw new NotImplementedException();
+            return WithTransaction(tran => TrainerRankingsPerformRollover(tran));
+        }
+
+        public bool TrainerRankingsPerformRollover(MySqlTransaction tran)
+        {
+            // Use one single date for this transaction to avoid any possible inconsistencies.
+            // An inconsistency here could lead to creating an extra leaderboard for the past week.
+            DateTime now = DateTime.UtcNow;
+
+            // 1. Check if current leaderboard is still valid.
+            // It's best to just check that a future end date is in existence.
+            // Adding more checks, e.g. start < now < end, could allow things to get funny if the clock changes.
+            // Just use the futuremost leaderboard as the current one, and start a new one if we think that leaderboard is in the past.
+            DataTable tblLastReport = tran.ExecuteDataTable(
+                "SELECT report_id, StartDate, EndDate FROM pkmncf_terminal_trainer_rankings_reports ORDER BY EndDate DESC LIMIT 1",
+                new MySqlParameter("@now", now));
+
+            if (tblLastReport.Rows.Count > 0)
+            {
+                DataRow rowLastReport = tblLastReport.Rows[0];
+                if (DatabaseExtender.Cast<DateTime>(rowLastReport["EndDate"]) > now) return false; // found leaderboard still good
+
+                int lastReportId = DatabaseExtender.Cast<int>(rowLastReport["report_id"]);
+
+                // update leaderboard aggregates for the most recently concluded leaderboard
+                tran.ExecuteProcedure("pkmncf_terminal_proc_create_leaderboards_for_report", new MySqlParameter("@report_id", lastReportId));
+            }
+
+            // 2. Pick new record-types, preferring ones which haven't been used in a while.
+            DataTable tblRecordTypes = tran.ExecuteDataTable("SELECT RecordType, MAX(StartDate) AS LastUsed " +
+                "FROM ( " +
+                    "SELECT RecordType1 AS RecordType, StartDate FROM pkmncf_terminal_trainer_rankings_reports " +
+                    "UNION " +
+                    "SELECT RecordType2 AS RecordType, StartDate FROM pkmncf_terminal_trainer_rankings_reports " +
+                    "UNION " +
+                    "SELECT RecordType3 AS RecordType, StartDate FROM pkmncf_terminal_trainer_rankings_reports " +
+                    ") AS tbl4 " +
+                "GROUP BY RecordType");
+
+            TrainerRankingsRecordTypes[] enumValues = (TrainerRankingsRecordTypes[])Enum.GetValues(typeof(TrainerRankingsRecordTypes));
+
+            // outer join enum values to include those recordtypes that have never been used
+            var combined = enumValues
+                .Join(tblRecordTypes.AsEnumerable(), 
+                    i => i, 
+                    row => (TrainerRankingsRecordTypes)DatabaseExtender.Cast<int>(row["RecordType"]), 
+                    (i, row) => new { RecordType = i, LastUsed = row == null ? DateTime.MinValue : DatabaseExtender.Cast<DateTime>(row["LastUsed"]) })
+                .OrderBy(r => r.LastUsed).ToList(); // oldest first
+
+            List<TrainerRankingsRecordTypes> chosen = new List<TrainerRankingsRecordTypes>(3);
+            Random rand = new Random(); // todo: use better rng here. Maybe when the framework gets good RNGs
+
+            // pick a random sampling of 3 recordtypes near the start of the list (oldest) but not always just the first 3 for a little randomness but not too much:
+            for (int i = 0; i < 3; i++)
+            {
+                // here we do a kind of "itunes shuffle" type algorithm where
+                // we cycle through recordtypes but vary the order a little bit
+                // each time.
+                // We do this by choosing from the recordypes in the bottom 10%
+                // according to last used date and iterating
+
+                DateTime cutoff = DateLerp(combined[0].LastUsed, combined[combined.Count - 1].LastUsed, 0.1);
+                int acceptableCount = combined.Count(row => row.LastUsed <= cutoff); // xxx: can do faster since we know this is sorted
+                int chosenIndex = rand.Next(acceptableCount);
+                chosen.Add(combined[chosenIndex].RecordType);
+                combined.RemoveAt(chosenIndex);
+            }
+
+            // 3. Init a new report.
+            // Note that if more than a whole week has passed since a visit, go ahead and skip the blank week(s). It's a little white lie but makes the data look more presentable than a bunch of 0s.
+            DateTime startDate = now.Date.AddDays(-(int)now.Date.DayOfWeek); // DayOfWeek zero-based starting on sunday
+            DateTime endDate = startDate.AddDays(7);
+
+            tran.ExecuteNonQuery("INSERT INTO pkmncf_terminal_trainer_rankings_reports " +
+                "(StartDate, EndDate, RecordType1, RecordType2, RecordType3) VALUES " +
+                "(@start_date, @end_date, @record_type1, @record_type2, @record_type3)",
+                new MySqlParameter("@start_date", startDate),
+                new MySqlParameter("@end_date", endDate),
+                new MySqlParameter("@record_type1", chosen[0]),
+                new MySqlParameter("@record_type2", chosen[1]),
+                new MySqlParameter("@record_type3", chosen[2]));
+
+            return true;
+        }
+
+        private static DateTime DateLerp(DateTime first, DateTime second, double weight)
+        {
+            TimeSpan diff = second - first;
+            return first + new TimeSpan((long)(diff.Ticks * weight));
         }
 
         public override IList<TrainerRankingsRecordTypes> TrainerRankingsGetActiveRecordTypes()
