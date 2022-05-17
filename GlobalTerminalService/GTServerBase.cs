@@ -53,13 +53,15 @@ namespace PkmnFoundations.GlobalTerminalService
         {
             X509Store store = new X509Store(StoreLocation.LocalMachine);
             store.Open(OpenFlags.ReadOnly);
-            X509Certificate2Collection cers = store.Certificates.Find(X509FindType.FindBySubjectName, "pkgdsprod.nintendo.co.jp", false);
+            var cers = 
+                store.Certificates.Find(X509FindType.FindBySubjectName, "pkgdsprod.nintendo.co.jp", false)
+                .Cast<X509Certificate2>().Where(cer => cer.HasPrivateKey && cer.PrivateKey != null);
 
             // fixme: Screen any found certificates for errors like "The
             // credentials supplied to the package were not recognized" and use
             // the dummy if none are good.
-            if (cers.Count > 0)
-                return cers[0];
+            var cerFirst = cers.FirstOrDefault();
+            if (cerFirst != null) return cerFirst;
 
             LogHelper.Write("X.509 certificate not found. Please add a certificate with subject \"pkgdsprod.nintendo.co.jp\" to the store. Using dummy certificate.");
             return new X509Certificate2(AppDomain.CurrentDomain.BaseDirectory + Path.DirectorySeparatorChar + "cert.pfx", "letmein");
