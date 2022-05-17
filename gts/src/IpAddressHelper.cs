@@ -14,8 +14,10 @@ namespace PkmnFoundations.GTS
             string hostAddress = RemovePort(request.UserHostAddress.Trim());
             
             if (!allowedProxies.Contains(hostAddress)) return hostAddress; // return real IP if not a blessed proxy
+            if (request.Headers["X-Forwarded-For"] == null) return hostAddress;
 
             var xForwardedFor = request.Headers["X-Forwarded-For"].Split(',').Select(s => RemovePort(s.Trim()));
+
             foreach (string s in xForwardedFor.Reverse())
             {
                 if (!allowedProxies.Contains(s)) return s; // return LAST IP in the proxy chain that's not trusted. (everything coming earlier could be spoofed)
