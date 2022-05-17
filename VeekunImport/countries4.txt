@@ -1,0 +1,130 @@
+﻿1	AF	Afghanistan
+2	AL	Albania
+3	DZ	Algeria
+6	AO	Angola
+8	AG	Antigua and Barbuda
+9	AR	Argentina
+12	AU	Australia
+13	AT	Austria
+15	BS	Bahamas
+16	BH	Bahrain
+17	BD	Bangladesh
+18	BB	Barbados
+20	BE	Belgium
+21	BZ	Belize
+22	BJ	Benin
+23	BM	Bermuda
+25	BO	Bolivia
+27	BW	Botswana
+28	BR	Brazil
+29	VG	British Virgin Islands
+31	BG	Bulgaria
+33	BI	Burundi
+34	KH	Cambodia
+35	CM	Cameroon
+36	CA	Canada
+40	TD	Chad
+42	CL	Chile
+43	CN	China
+45	CO	Colombia
+48	CG	Congo
+49	CK	Cook Islands
+50	CR	Costa Rica
+52	HR	Croatia
+54	CY	Cyprus
+55	CZ	Czech Republic
+56	DK	Denmark
+58	DM	Dominica
+59	DO	Dominican Republic
+60	EC	Ecuador
+61	EG	Egypt
+62	SV	El Salvador
+69	FJ	Fiji
+70	FI	Finland
+71	FR	France
+72	GF	French Guiana
+74	GA	Gabon
+77	DE	Germany
+78	GH	Ghana
+79	GI	Gibraltar
+80	GR	Greece
+81	GL	Greenland
+82	GD	Grenada
+83	GP	Guadeloupe
+85	GT	Guatemala
+86	GN	Guinea
+88	GY	Guyana
+89	HT	Haiti
+90	HN	Honduras
+91	HK	Hong Kong
+92	HU	Hungary
+93	IS	Iceland
+94	IN	India
+95	ID	Indonesia
+97	IQ	Iraq
+98	IE	Ireland
+100	IL	Israel
+101	IT	Italy
+102	JM	Jamaica
+103	JP	Japan
+104	JO	Jordan
+107	KE	Kenya
+110	KR	Republic of Korea
+111	KW	Kuwait
+115	LB	Lebanon
+117	LR	Liberia
+118	LY	Libyan Arab Jamhiriya
+121	LU	Luxembourg
+122	MO	Macau
+126	MY	Malaysia
+129	MT	Malta
+131	MQ	Martinique
+133	MU	Mauritius
+135	MX	Mexico
+140	MA	Morocco
+142	MM	Myanmar
+146	NL	Netherlands
+148	NC	New Caledonia
+149	NZ	New Zealand
+150	NI	Nicaragua
+151	NE	Niger
+152	NG	Nigeria
+156	NO	Norway
+157	OM	Oman
+158	PK	Pakistan
+160	PA	Panama
+161	PG	Papua New Guinea
+163	PE	Peru
+164	PH	Philippines
+166	PL	Poland
+167	PT	Portugal
+171	RO	Romania
+172	RU	Russian Federation
+179	WS	Samoa
+183	SN	Senegal
+186	SL	Sierra Leone
+187	SG	Singapore
+188	SK	Slovakia
+189	SI	Slovenia
+192	ZA	South Africa
+193	ES	Spain
+194	LK	Sri Lanka
+196	SR	Suriname
+198	SZ	Swaziland
+199	SE	Sweden
+200	CH	Swiss Confederation
+202	TW	Taiwan
+204	TZ	United Republic of Tanzania
+205	TH	Thailand
+207	TG	Togo
+211	TN	Tunisia
+212	TR	Turkey
+216	UG	Uganda
+218	AE	United Arab Emirates
+219	GB	United Kingdom
+220	US	United States of America
+221	VI	United States Virgin Islands
+222	UY	Uruguay
+224	VU	Vanuatu
+226	VE	Venezuela
+227	VN	Vietnam
