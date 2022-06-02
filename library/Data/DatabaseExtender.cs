@@ -299,5 +299,32 @@ namespace PkmnFoundations.Data
             if (value is DBNull) value = null;
             return (T)value; // Allow InvalidCastException to escape.
         }
+
+        public static List<T> Collect<T>(this IDataReader reader, Func<IDataRecord, T> collector)
+        {
+            List<T> result = new List<T>();
+
+            while (reader.Read())
+            {
+                result.Add(collector(reader));
+            }
+
+            return result;
+        }
+
+        public static List<T> ExecuteCollection<T>(this DbConnection conn, string sqlstr, Func<IDataRecord, T> collector, params IDataParameter[] _params)
+        {
+            return conn.ExecuteReader(sqlstr, _params).Collect(collector);
+        }
+
+        public static List<T> ExecuteCollection<T>(this DbTransaction tran, string sqlstr, Func<IDataRecord, T> collector, params IDataParameter[] _params)
+        {
+            return tran.ExecuteReader(sqlstr, _params).Collect(collector);
+        }
+
+        public static List<T> ExecuteCollection<T>(this DbCommand cmd, Func<IDataRecord, T> collector)
+        {
+            return cmd.ExecuteReader().Collect(collector);
+        }
     }
 }

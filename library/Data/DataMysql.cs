@@ -2684,11 +2684,12 @@ namespace PkmnFoundations.Data
 
             // outer join enum values to include those recordtypes that have never been used
             var combined = enumValues
-                .Join(tblRecordTypes.AsEnumerable(), 
-                    i => i, 
-                    row => (TrainerRankingsRecordTypes)DatabaseExtender.Cast<int>(row["RecordType"]), 
-                    (i, row) => new { RecordType = i, LastUsed = row == null ? DateTime.MinValue : DatabaseExtender.Cast<DateTime>(row["LastUsed"]) })
-                .OrderBy(r => r.LastUsed).ToList(); // oldest first
+                .GroupJoin(tblRecordTypes.AsEnumerable(),
+                    i => i,
+                    row => (TrainerRankingsRecordTypes)DatabaseExtender.Cast<int>(row["RecordType"]),
+                    (i, rows) => new { RecordType = i, LastUsed = rows.Count() == 0 ? DateTime.MinValue : DatabaseExtender.Cast<DateTime>(rows.First()["LastUsed"]) }
+                    )
+                .OrderBy(r => r.LastUsed).ToList();
 
             List<TrainerRankingsRecordTypes> chosen = new List<TrainerRankingsRecordTypes>(3);
             Random rand = new Random(); // todo: use better rng here. Maybe when the framework gets good RNGs
@@ -2734,22 +2735,218 @@ namespace PkmnFoundations.Data
 
         public override IList<TrainerRankingsRecordTypes> TrainerRankingsGetActiveRecordTypes()
         {
-            throw new NotImplementedException();
+            return WithTransaction(tran => TrainerRankingsGetActiveRecordTypes(tran));
         }
 
-        public override bool TrainerRankingsSubmit(TrainerRankingsSubmission submission)
+        public IList<TrainerRankingsRecordTypes> TrainerRankingsGetActiveRecordTypes(MySqlTransaction tran)
         {
-            throw new NotImplementedException();
+            DateTime now = DateTime.UtcNow;
+
+            DataTable tbl = tran.ExecuteDataTable(
+                "SELECT RecordType1, RecordType2, RecordType3 FROM pkmncf_terminal_trainer_rankings_reports ORDER BY EndDate DESC LIMIT 1",
+                new MySqlParameter("@now", now));
+
+            if (tbl.Rows.Count == 0) return new List<TrainerRankingsRecordTypes>();
+            DataRow row = tbl.Rows[0];
+
+            return new List<TrainerRankingsRecordTypes>()
+            { 
+                (TrainerRankingsRecordTypes)DatabaseExtender.Cast<int>(row["RecordType1"]),
+                (TrainerRankingsRecordTypes)DatabaseExtender.Cast<int>(row["RecordType2"]),
+                (TrainerRankingsRecordTypes)DatabaseExtender.Cast<int>(row["RecordType3"]),
+            };
         }
 
-        public override TrainerRankingsReport[] TrainerRankingsGetReport(DateTime start, DateTime end)
+        public override void TrainerRankingsSubmit(TrainerRankingsSubmission submission)
         {
-            throw new NotImplementedException();
+            WithTransaction(tran => TrainerRankingsSubmit(tran, submission));
+        }
+
+        public void TrainerRankingsSubmit(MySqlTransaction tran, TrainerRankingsSubmission submission)
+        {
+            tran.ExecuteNonQuery("IF (SELECT EXISTS(SELECT * FROM pkmncf_terminal_trainer_rankings_teams WHERE pid = @pid)) THEN " +
+                "UPDATE pkmncf_terminal_trainer_rankings_teams SET " +
+                "TrainerClass = @trainer_class, BirthMonth = @birth_month, " +
+                "FavouritePokemon = @favourite_pokemon, " +
+                "Unknown1 = @unknown1, Unknown2 = @unknown2, " +
+                "Unknown3 = @unknown3, LastUpdated = UTC_TIMESTAMP() " +
+                "WHERE pid = @pid; " +
+                "ELSE " +
+                "INSERT INTO pkmncf_terminal_trainer_rankings_teams " +
+                "(pid, TrainerClass, BirthMonth, FavouritePokemon, Unknown1, Unknown2, Unknown3, LastUpdated) " +
+                "VALUES (@pid, @trainer_class, @birth_month, @favourite_pokemon, @unknown1, @unknown2, @unknown3, UTC_TIMESTAMP()); " +
+                "END IF;", 
+                new MySqlParameter("@pid", submission.PID),
+                new MySqlParameter("@trainer_class", submission.TrainerClass),
+                new MySqlParameter("@birth_month", submission.BirthMonth),
+                new MySqlParameter("@favourite_pokemon", submission.FavouritePokemon),
+                new MySqlParameter("@unknown1", submission.Unknown1),
+                new MySqlParameter("@unknown2", submission.Unknown2),
+                new MySqlParameter("@unknown3", submission.Unknown3)
+            );
+
+            foreach (var entry in submission.Entries)
+            {
+                tran.ExecuteNonQuery("DELETE FROM pkmncf_terminal_trainer_rankings_records WHERE pid = @pid AND RecordType = @record_type; " +
+                    "INSERT INTO pkmncf_terminal_trainer_rankings_records (pid, RecordType, Score, LastUpdated) " +
+                    "VALUES (@pid, @record_type, @score, UTC_TIMESTAMP())",
+                    new MySqlParameter("@pid", submission.PID),
+                    new MySqlParameter("@record_type", entry.RecordType),
+                    new MySqlParameter("@score", entry.Score));
+            }
+        }
+
+        public override TrainerRankingsReport[] TrainerRankingsGetReport(DateTime start, DateTime end, int limit)
+        {
+            return WithTransaction(tran => TrainerRankingsGetReport(tran, start, end, limit));
+        }
+
+        public TrainerRankingsReport[] TrainerRankingsGetReport(MySqlTransaction tran, DateTime start, DateTime end, int limit)
+        {
+            DataTable tblReports = tran.ExecuteDataTable(
+                "SELECT report_id, StartDate, EndDate, RecordType1, RecordType2, RecordType3 " +
+                "FROM pkmncf_terminal_trainer_rankings_reports " +
+                "WHERE EndDate >= @start_date AND StartDate <= @end_date " +
+                "ORDER BY StartDate DESC" + (limit > 0 ? " LIMIT @limit" : ""),
+                new MySqlParameter("@start_date", start),
+                new MySqlParameter("@end_date", end),
+                new MySqlParameter("@limit", limit));
+
+            var result = new TrainerRankingsReport[tblReports.Rows.Count];
+
+            for (int res = 0; res < result.Length; res++)
+            {
+                DataRow row = tblReports.Rows[res];
+                var groups = new TrainerRankingsLeaderboardGroup[3];
+                var groupCols = new[] { "RecordType1", "RecordType2", "RecordType3" };
+                var reportId = DatabaseExtender.Cast<int>(row["report_id"]);
+
+                for (int grp = 0; grp < 3; grp++)
+                {
+                    var recordType = (TrainerRankingsRecordTypes)DatabaseExtender.Cast<int>(row[groupCols[grp]]);
+
+                    groups[grp] = new TrainerRankingsLeaderboardGroup
+                    (
+                        recordType,
+                        GetSpecificLeaderboard(tran, reportId, recordType, TrainerRankingsTeamCategories.TrainerClass),
+                        GetSpecificLeaderboard(tran, reportId, recordType, TrainerRankingsTeamCategories.BirthMonth),
+                        GetSpecificLeaderboard(tran, reportId, recordType, TrainerRankingsTeamCategories.FavouritePokemon)
+                    );
+                }
+
+                result[res] = new TrainerRankingsReport(DatabaseExtender.Cast<DateTime>(row["StartDate"]), DatabaseExtender.Cast<DateTime>(row["EndDate"]), groups);
+            }
+
+            return result;
+        }
+
+        private TrainerRankingsLeaderboard GetSpecificLeaderboard(MySqlTransaction tran, int reportId, 
+            TrainerRankingsRecordTypes recordType, TrainerRankingsTeamCategories teamCategory)
+        {
+            string tableName, teamColumnName;
+
+            switch (teamCategory)
+            {
+                case TrainerRankingsTeamCategories.TrainerClass:
+                    tableName = "pkmncf_terminal_trainer_rankings_leaderboards_class";
+                    teamColumnName = "TrainerClass";
+                    break;
+                case TrainerRankingsTeamCategories.BirthMonth:
+                    tableName = "pkmncf_terminal_trainer_rankings_leaderboards_month";
+                    teamColumnName = "Month";
+                    break;
+                case TrainerRankingsTeamCategories.FavouritePokemon:
+                    tableName = "pkmncf_terminal_trainer_rankings_leaderboards_pokemon";
+                    teamColumnName = "pokemon_id";
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException("teamCategory");
+            }
+
+            var tblLeaderboard = tran.ExecuteDataTable("SELECT " + teamColumnName + " AS Team, Score FROM " + tableName +
+                " WHERE report_id = @report_id AND RecordType = @record_type",
+                new MySqlParameter("@report_id", reportId),
+                new MySqlParameter("@record_type", recordType));
+
+            var entries = tblLeaderboard.AsEnumerable()
+                .Select(rowEntry => new TrainerRankingsLeaderboardEntry(
+                    DatabaseExtender.Cast<int>(rowEntry["Team"]),
+                    DatabaseExtender.Cast<long>(rowEntry["Score"]))).ToArray();
+
+            return new TrainerRankingsLeaderboard(teamCategory, entries);
         }
 
         public override TrainerRankingsReport TrainerRankingsGetPendingReport()
         {
-            throw new NotImplementedException();
+            return WithTransaction(tran => TrainerRankingsGetPendingReport(tran));
+        }
+
+        public TrainerRankingsReport TrainerRankingsGetPendingReport(MySqlTransaction tran)
+        {
+            DataTable tblReports = tran.ExecuteDataTable(
+                "SELECT report_id, StartDate, EndDate, RecordType1, RecordType2, RecordType3 " +
+                "FROM pkmncf_terminal_trainer_rankings_reports " +
+                "ORDER BY StartDate DESC LIMIT 1");
+
+            if (tblReports.Rows.Count < 1) return null;
+
+            DataRow row = tblReports.Rows[0];
+            var groups = new TrainerRankingsLeaderboardGroup[3];
+            var groupCols = new[] { "RecordType1", "RecordType2", "RecordType3" };
+            var startDate = DatabaseExtender.Cast<DateTime>(row["StartDate"]);
+
+            for (int grp = 0; grp < 3; grp++)
+            {
+                var recordType = (TrainerRankingsRecordTypes)DatabaseExtender.Cast<int>(row[groupCols[grp]]);
+
+                groups[grp] = new TrainerRankingsLeaderboardGroup
+                (
+                    recordType,
+                    GetSpecificPendingLeaderboard(tran, recordType, TrainerRankingsTeamCategories.TrainerClass, startDate),
+                    GetSpecificPendingLeaderboard(tran, recordType, TrainerRankingsTeamCategories.BirthMonth, startDate),
+                    GetSpecificPendingLeaderboard(tran, recordType, TrainerRankingsTeamCategories.FavouritePokemon, startDate)
+                );
+            }
+
+            return new TrainerRankingsReport(startDate, DatabaseExtender.Cast<DateTime>(row["EndDate"]), groups);
+        }
+
+        private TrainerRankingsLeaderboard GetSpecificPendingLeaderboard(MySqlTransaction tran, 
+            TrainerRankingsRecordTypes recordType, TrainerRankingsTeamCategories teamCategory, DateTime startDate)
+        {
+            string teamColumnName; // different column names than above...
+
+            switch (teamCategory)
+            {
+                case TrainerRankingsTeamCategories.TrainerClass:
+                    teamColumnName = "TrainerClass";
+                    break;
+                case TrainerRankingsTeamCategories.BirthMonth:
+                    teamColumnName = "BirthMonth";
+                    break;
+                case TrainerRankingsTeamCategories.FavouritePokemon:
+                    teamColumnName = "FavouritePokemon";
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException("teamCategory");
+            }
+
+            var tblLeaderboard = tran.ExecuteDataTable("SELECT " + teamColumnName + " AS Team, SUM(Score) AS Score " +
+                "FROM pkmncf_terminal_trainer_rankings_records " +
+                "INNER JOIN pkmncf_terminal_trainer_rankings_teams " +
+                    "ON pkmncf_terminal_trainer_rankings_records.pid = pkmncf_terminal_trainer_rankings_teams.pid " +
+                "WHERE pkmncf_terminal_trainer_rankings_records.LastUpdated >= @start_date " +
+                    "AND RecordType = @record_type " +
+                "GROUP BY TrainerClass;",
+                new MySqlParameter("@record_type", recordType),
+                new MySqlParameter("@start_date", startDate));
+
+            var entries = tblLeaderboard.AsEnumerable()
+                .Select(rowEntry => new TrainerRankingsLeaderboardEntry(
+                    DatabaseExtender.Cast<int>(rowEntry["Team"]),
+                    Convert.ToInt64(rowEntry["Score"]))).ToArray();
+
+            return new TrainerRankingsLeaderboard(teamCategory, entries);
         }
 
         #endregion

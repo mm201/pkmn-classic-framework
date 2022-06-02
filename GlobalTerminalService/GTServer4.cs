@@ -362,6 +362,10 @@ namespace PkmnFoundations.GlobalTerminalService
                         }
                         var recordTypes = Database.Instance.TrainerRankingsGetActiveRecordTypes();
 
+                        // todo: If we can be sure the player has already sent us their up to date records,
+                        // then we can lie here about the active records and collect more complete trainer
+                        // stats for better trainer profiles
+
                         response.Write(new byte[] { 0x00, 0x00 }, 0, 2);
 
                         // The game will give error 10609 if the response is longer than 4 bytes.
@@ -640,6 +644,7 @@ namespace PkmnFoundations.GlobalTerminalService
                             0x88, 0x01, 0x1a, 0x00, 0xfe, 0x00, 0xf9, 0x00
                         });*/
 
+                        /*
                         // fake replay data:
                         TrainerRankingsReport lastWeek = GenerateFakeReport(
                             new DateTime(2014, 04, 27),
@@ -651,6 +656,17 @@ namespace PkmnFoundations.GlobalTerminalService
                             });
                         TrainerRankingsReport thisWeek = GenerateFakeReport(
                             new DateTime(2014, 05, 04),
+                            new TrainerRankingsRecordTypes[]
+                            {
+                                TrainerRankingsRecordTypes.HallOfFameEntries,
+                                TrainerRankingsRecordTypes.CompletedGtsPokemonTrades,
+                                TrainerRankingsRecordTypes.FacilitiesChallengedAtTheBattleFrontier
+                            });
+                        */
+
+                        TrainerRankingsReport thisWeek = Database.Instance.TrainerRankingsGetPendingReport();
+                        TrainerRankingsReport lastWeek = Database.Instance.TrainerRankingsGetReport(DateTime.MinValue, thisWeek.StartDate.AddDays(-1), 1).FirstOrDefault();
+                        if (lastWeek == null) lastWeek = GenerateFakeReport(thisWeek.StartDate.AddDays(-7),
                             new TrainerRankingsRecordTypes[]
                             {
                                 TrainerRankingsRecordTypes.HallOfFameEntries,
@@ -768,8 +784,8 @@ namespace PkmnFoundations.GlobalTerminalService
         private static TrainerRankingsReport GenerateFakeReport(DateTime startDate, TrainerRankingsRecordTypes[] recordTypes)
         {
             var leaderboards = recordTypes.Select(r => new TrainerRankingsLeaderboardGroup(r,
-                new TrainerRankingsLeaderboard(TrainerRankingsTeamCategories.BirthMonth, GenerateFakeData(12, 1, 12, 100000)),
                 new TrainerRankingsLeaderboard(TrainerRankingsTeamCategories.TrainerClass, GenerateFakeData(16, 0, 16, 100000)),
+                new TrainerRankingsLeaderboard(TrainerRankingsTeamCategories.BirthMonth, GenerateFakeData(12, 1, 12, 100000)),
                 new TrainerRankingsLeaderboard(TrainerRankingsTeamCategories.FavouritePokemon, GenerateFakeData(20, 1, 493, 100000)))).ToArray();
 
             return new TrainerRankingsReport(startDate, startDate.AddDays(7), leaderboards);

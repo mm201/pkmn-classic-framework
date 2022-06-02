@@ -2,7 +2,7 @@
 -- Host:                         127.0.0.1
 -- Server version:               10.3.28-MariaDB - mariadb.org binary distribution
 -- Server OS:                    Win64
--- HeidiSQL Version:             11.3.0.6449
+-- HeidiSQL Version:             12.0.0.6468
 -- --------------------------------------------------------
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -820,7 +820,7 @@ BEGIN
 		FROM pkmncf_terminal_trainer_rankings_reports WHERE report_id = @report_id;
 
 	INSERT INTO pkmncf_terminal_trainer_rankings_leaderboards_class
-		SELECT @report_id AS report_id, TrainerClass, @record_type AS RecordType, SUM(VALUE) AS Score 
+		SELECT @report_id AS report_id, TrainerClass, @record_type AS RecordType, SUM(Score) AS Score 
 		FROM pkmncf_terminal_trainer_rankings_records
 		INNER JOIN pkmncf_terminal_trainer_rankings_teams 
 			ON pkmncf_terminal_trainer_rankings_records.pid = pkmncf_terminal_trainer_rankings_teams.pid
@@ -829,7 +829,7 @@ BEGIN
 		GROUP BY TrainerClass;
 
 	INSERT INTO pkmncf_terminal_trainer_rankings_leaderboards_month
-		SELECT @report_id AS report_id, TrainerClass, @record_type AS RecordType, SUM(VALUE) AS Score 
+		SELECT @report_id AS report_id, TrainerClass, @record_type AS RecordType, SUM(Score) AS Score 
 		FROM pkmncf_terminal_trainer_rankings_records
 		INNER JOIN pkmncf_terminal_trainer_rankings_teams 
 			ON pkmncf_terminal_trainer_rankings_records.pid = pkmncf_terminal_trainer_rankings_teams.pid
@@ -838,7 +838,7 @@ BEGIN
 		GROUP BY BirthMonth;
 		
 	INSERT INTO pkmncf_terminal_trainer_rankings_leaderboards_pokemon
-		SELECT @report_id AS report_id, TrainerClass, @record_type AS RecordType, SUM(VALUE) AS Score 
+		SELECT @report_id AS report_id, TrainerClass, @record_type AS RecordType, SUM(Score) AS Score 
 		FROM pkmncf_terminal_trainer_rankings_records
 		INNER JOIN pkmncf_terminal_trainer_rankings_teams 
 			ON pkmncf_terminal_trainer_rankings_records.pid = pkmncf_terminal_trainer_rankings_teams.pid
@@ -912,7 +912,7 @@ CREATE TABLE IF NOT EXISTS `pkmncf_terminal_trainer_rankings_leaderboards_pokemo
 CREATE TABLE IF NOT EXISTS `pkmncf_terminal_trainer_rankings_records` (
   `pid` int(11) NOT NULL,
   `RecordType` int(11) NOT NULL,
-  `Value` bigint(20) NOT NULL DEFAULT 0,
+  `Score` bigint(20) NOT NULL DEFAULT 0,
   `LastUpdated` datetime NOT NULL,
   PRIMARY KEY (`pid`,`RecordType`),
   KEY `LastUpdated` (`LastUpdated`) USING BTREE
@@ -940,7 +940,10 @@ CREATE TABLE IF NOT EXISTS `pkmncf_terminal_trainer_rankings_teams` (
   `pid` int(11) NOT NULL,
   `TrainerClass` int(11) NOT NULL,
   `BirthMonth` int(11) NOT NULL,
-  `FavouritePokemon` int(10) unsigned NOT NULL,
+  `FavouritePokemon` int(11) NOT NULL,
+  `Unknown1` smallint(5) unsigned NOT NULL DEFAULT 0,
+  `Unknown2` smallint(5) unsigned NOT NULL DEFAULT 0,
+  `Unknown3` smallint(5) unsigned NOT NULL DEFAULT 0,
   `LastUpdated` datetime NOT NULL,
   PRIMARY KEY (`pid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

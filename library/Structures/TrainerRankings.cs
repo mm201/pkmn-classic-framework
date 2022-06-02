@@ -23,19 +23,19 @@ namespace PkmnFoundations.Structures
 
     public class TrainerRankingsLeaderboardGroup
     {
-        public TrainerRankingsLeaderboardGroup(TrainerRankingsRecordTypes record_type, TrainerRankingsLeaderboard leaderboard_birth_month,
-            TrainerRankingsLeaderboard leaderboard_trainer_class, TrainerRankingsLeaderboard leaderboard_favourite_pokemon)
+        public TrainerRankingsLeaderboardGroup(TrainerRankingsRecordTypes record_type, TrainerRankingsLeaderboard leaderboard_trainer_class,
+            TrainerRankingsLeaderboard leaderboard_birth_month, TrainerRankingsLeaderboard leaderboard_favourite_pokemon)
         {
             RecordType = record_type;
-            LeaderboardBirthMonth = leaderboard_birth_month;
             LeaderboardTrainerClass = leaderboard_trainer_class;
+            LeaderboardBirthMonth = leaderboard_birth_month;
             LeaderboardFavouritePokemon = leaderboard_favourite_pokemon;
         }
 
         public TrainerRankingsRecordTypes RecordType { get; set; }
 
-        public TrainerRankingsLeaderboard LeaderboardBirthMonth { get; set; }
         public TrainerRankingsLeaderboard LeaderboardTrainerClass { get; set; }
+        public TrainerRankingsLeaderboard LeaderboardBirthMonth { get; set; }
         public TrainerRankingsLeaderboard LeaderboardFavouritePokemon { get; set; }
     }
 
@@ -191,8 +191,8 @@ namespace PkmnFoundations.Structures
     public class TrainerRankingsSubmission : BinarySerializableBase
     {
         public TrainerRankingsSubmission(int pid, Versions version,
-            Languages language, byte birth_month, byte trainer_class, 
-            ushort favourite_pokemon, ushort unknown1, ushort unknown2, 
+            Languages language, byte birth_month, byte trainer_class,
+            ushort favourite_pokemon, ushort unknown1, ushort unknown2,
             ushort unknown3, TrainerRankingsSubmissionEntry[] entries)
         {
             PID = pid;
@@ -299,11 +299,11 @@ namespace PkmnFoundations.Structures
         public ushort Unknown3 { get; set; }
 
         private TrainerRankingsSubmissionEntry[] m_entries;
-        public TrainerRankingsSubmissionEntry[] Entries 
+        public TrainerRankingsSubmissionEntry[] Entries
         {
-            get 
-            { 
-                return m_entries; 
+            get
+            {
+                return m_entries;
             }
             set
             {

@@ -179,25 +179,45 @@ namespace PkmnFoundations.Data
         /// Submits trainer rankings data for one player and populates the active leaderboard with it.
         /// </summary>
         /// <param name="submission"></param>
-        /// <returns>True if the data was processed</returns>
-        public abstract bool TrainerRankingsSubmit(TrainerRankingsSubmission submission);
+        public abstract void TrainerRankingsSubmit(TrainerRankingsSubmission submission);
 
         /// <summary>
-        /// Gets past reports falling within a specified date range.
+        /// Gets past reports, sorted descending, falling within a specified date range.
+        /// </summary>
+        /// <param name="start">Datetime during which the oldest returned leaderboard was active</param>
+        /// <param name="end">Datetime during which the newest returned leaderboard was active</param>
+        /// <param name="limit">Limit on the number of results or less than 1 for unlimited</param>
+        /// <returns>Reports</returns>
+        public abstract TrainerRankingsReport[] TrainerRankingsGetReport(DateTime start, DateTime end, int limit);
+
+        /// <summary>
+        /// Gets past reports, sorted descending, falling within a specified date range.
         /// </summary>
         /// <param name="start">Datetime during which the oldest returned leaderboard was active</param>
         /// <param name="end">Datetime during which the newest returned leaderboard was active</param>
         /// <returns>Reports</returns>
-        public abstract TrainerRankingsReport[] TrainerRankingsGetReport(DateTime start, DateTime end);
+        public TrainerRankingsReport[] TrainerRankingsGetReport(DateTime start, DateTime end)
+        {
+            return TrainerRankingsGetReport(start, end, 0);
+        }
 
         /// <summary>
         /// Gets the single report which was active during the specified date.
         /// </summary>
         /// <param name="during"></param>
-        /// <returns></returns>
+        /// <returns>Report</returns>
         public TrainerRankingsReport TrainerRankingsGetReport(DateTime during)
         {
-            return TrainerRankingsGetReport(during, during).FirstOrDefault();
+            return TrainerRankingsGetReport(during, during, 1).FirstOrDefault();
+        }
+
+        /// <summary>
+        /// Gets the most recently finished report
+        /// </summary>
+        /// <returns>Report</returns>
+        public TrainerRankingsReport TrainerRankingsGetReport()
+        {
+            return TrainerRankingsGetReport(DateTime.MinValue, DateTime.UtcNow, 1).FirstOrDefault();
         }
 
         /// <summary>
