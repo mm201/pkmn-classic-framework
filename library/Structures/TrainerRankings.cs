@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PkmnFoundations.Support;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -19,6 +20,14 @@ namespace PkmnFoundations.Structures
         public DateTime EndDate { get; set; }
 
         public TrainerRankingsLeaderboardGroup[] Leaderboards { get; set; }
+
+        public void PadResults()
+        {
+            foreach (var group in Leaderboards)
+            {
+                group.PadResults(StartDate);
+            }
+        }
     }
 
     public class TrainerRankingsLeaderboardGroup
@@ -37,6 +46,13 @@ namespace PkmnFoundations.Structures
         public TrainerRankingsLeaderboard LeaderboardTrainerClass { get; set; }
         public TrainerRankingsLeaderboard LeaderboardBirthMonth { get; set; }
         public TrainerRankingsLeaderboard LeaderboardFavouritePokemon { get; set; }
+
+        public void PadResults(DateTime startDate)
+        {
+            LeaderboardTrainerClass.PadResults(startDate, 16, 0, 16);
+            LeaderboardBirthMonth.PadResults(startDate, 12, 1, 12);
+            LeaderboardFavouritePokemon.PadResults(startDate, 20, 1, 493);
+        }
     }
 
     public class TrainerRankingsLeaderboard
@@ -50,6 +66,24 @@ namespace PkmnFoundations.Structures
         public TrainerRankingsTeamCategories TeamCategory { get; set; }
 
         public TrainerRankingsLeaderboardEntry[] Entries { get; set; }
+
+        public void PadResults(DateTime startDate, int entryCount, int minTeam, int teamCount)
+        {
+            IEnumerable<TrainerRankingsLeaderboardEntry> working = Entries;
+            if (Entries.Length < teamCount)
+            {
+                var unusedValues = Enumerable.Range(minTeam, teamCount)
+                    .DrawWithoutReplacement(new Random((int)startDate.Ticks + 69420))
+                    .Take(entryCount)
+                    .Where(i => !Entries.Select(e => e.Team).Contains(i));
+
+                working = Entries.Concat(unusedValues.Select(i => new TrainerRankingsLeaderboardEntry(i, 0)));
+            }
+
+            // todo: shuffle ties maybe...
+
+            Entries = working.Take(entryCount).ToArray();
+        }
     }
 
     public class TrainerRankingsLeaderboardEntry
@@ -72,16 +106,16 @@ namespace PkmnFoundations.Structures
         //Blank02 = 0x02,
         //Blank03 = 0x03,
         //Blank04 = 0x04,
-        BattleTowerSingleBattleWinStreak = 0x05,
-        //Blank06 = 0x06,
-        BattleTowerDoubleBattleWinStreak = 0x07,
-        //Blank08 = 0x08,
-        BattleTowerMultiBattleWinStreak = 0x09,
-        //Blank0a = 0x0a,
-        BattleTowerPartneredMultiBattleWinStreak = 0x0b,
-        //Blank0c = 0x0c,
-        WiFiBattleTowerWinStreak = 0x0d,
-        //Blank0e = 0x0e,
+        //BattleTowerSingleBattleWinStreak = 0x05, // crashes when asked for
+        //Blank06 = 0x06, // crashes when asked for
+        //BattleTowerDoubleBattleWinStreak = 0x07, // crashes when asked for
+        //Blank08 = 0x08, // crashes when asked for
+        //BattleTowerMultiBattleWinStreak = 0x09, // crashes when asked for
+        //Blank0a = 0x0a, // crashes when asked for
+        //BattleTowerPartneredMultiBattleWinStreak = 0x0b, // crashes when asked for
+        //Blank0c = 0x0c, // crashes when asked for
+        //WiFiBattleTowerWinStreak = 0x0d, // crashes when asked for
+        //Blank0e = 0x0e, // crashes when asked for
         ContestsEnteredAlone = 0x0f,
         ContestsEnteredWithFriends = 0x10,
         ContestsEnteredAloneAndWon = 0x11,
@@ -102,7 +136,7 @@ namespace PkmnFoundations.Structures
         EggsHatched = 0x20,
         TimesOwnPokemonEvolved = 0x21,
         GameCornerSlotJackpots = 0x22,
-        BattleFrontierChallenges = 0x23,
+        BattleTowerChallenges = 0x23, // seems to say Frontier on Platinum but Tower on HGSS
         //Blank24 = 0x24,
         //Blank25 = 0x25,
         //Blank26 = 0x26,
@@ -111,19 +145,19 @@ namespace PkmnFoundations.Structures
         BattlesWonOverNintendoWiFiConnection = 0x29,
         //Blank2a = 0x2a,
         BattlesTiedOverNintendoWiFiConnection = 0x2b,
-        BattlesWonAtBattleTower = 0x2c,
-        TotalMoneySpendShopping = 0x2d,
-        PokemonLeftWithDayCare = 0x2e,
+        BattlesWonAtTheBattleTower = 0x2c,
+        TotalMoneySpentShopping = 0x2d,
+        PokemonLeftWithTheDayCare = 0x2e,
         PokemonDefeated = 0x2f,
         PokemonOfferedOnGts = 0x30,
-        TimesPokemonWereTradedWithFriendsAtWiFiClub = 0x31,
+        TimesPokemonWereTradedWithFriendsAtTheWiFiClub = 0x31,
         TimesYouSignedYourTrainerCard = 0x32,
         PokemonExtractedFromFossils = 0x33,
         TimesFootprintsWereCheckedByDrFootstep = 0x34,
         TimesMailWasSent = 0x35,
         WildPokemonLuredUsingHoney = 0x36,
-        TimesYouTalkedToSomeoneInWiFiPlaza = 0x37,
-        SpheresBuriedInUnderground = 0x38,
+        TimesYouTalkedToSomeoneInTheWiFiPlaza = 0x37,
+        NumberOfSpheresBuriedInTheUnderground = 0x38,
         TimesWatchedTv = 0x39,
         TimesPokemonWereGivenNicknames = 0x3a,
         PremierBallsReceived = 0x3b,
@@ -133,7 +167,7 @@ namespace PkmnFoundations.Structures
         PokemonDressUpDataPhotosTaken = 0x3f,
         BouldersPushedUsingTheHiddenMoveStrength = 0x40,
         TimesMiredInASwamp = 0x41,
-        MatchesAgainstYourFrivalAndGymLeadersAtTheBattleground = 0x42,
+        MatchesAgainstYourRivalAndGymLeadersAtTheBattleground = 0x42,
         FacilitiesChallengedAtTheBattleFrontier = 0x43,
         TimesYouMetTheFrontierBrains = 0x44,
         WinsAtTheBattleFactory = 0x45,
@@ -148,16 +182,16 @@ namespace PkmnFoundations.Structures
         TotalBattlePointsSpent = 0x4e,
         WiFiPlazaGamesPlayed = 0x4f,
         EggsTradedUsingSpinTrade = 0x50,
-        StarPiecesTradedAtFuegoIronworks = 0x51,
-        //BattlePointsEarnedFromTheBattleArcadeGameBoard52 = 0x52,
-        ItemsAndBerriesEarnedFromTheBattleArcadeGameBoard = 0x53,
-        //TotalBattlePointsWon54 = 0x54,
-        //TotalBattlePointsSpent55 = 0x55,
-        WinsInWiFiPlazaGames = 0x56,
-        //EggsTradedUsingSpinTrade57 = 0x57,
-        //Blank58 = 0x58,
-        //Blank59 = 0x59,
-        //Blank5a = 0x5a,
+        StarPiecesTradedAtTheFuegoIronworks = 0x51,
+        //BattlePointsEarnedFromTheBattleArcadeGameBoard52 = 0x52, // crashes when asked for
+        //ItemsAndBerriesEarnedFromTheBattleArcadeGameBoard53 = 0x53, // crashes when asked for
+        //TotalBattlePointsWon54 = 0x54, // crashes when asked for
+        //TotalBattlePointsSpent55 = 0x55, // crashes when asked for
+        //WinsInWiFiPlazaGames = 0x56, // crashes when asked for
+        //EggsTradedUsingSpinTrade57 = 0x57, // crashes when asked for
+        //Blank58 = 0x58, // crashes when asked for
+        //Blank59 = 0x59, // crashes when asked for
+        //Blank5a = 0x5a, // crashes when asked for
         //BlueScreen = 0x5b
     }
 

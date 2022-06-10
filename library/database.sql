@@ -2,7 +2,7 @@
 -- Host:                         127.0.0.1
 -- Server version:               10.3.28-MariaDB - mariadb.org binary distribution
 -- Server OS:                    Win64
--- HeidiSQL Version:             12.0.0.6468
+-- HeidiSQL Version:             12.0.0.6518
 -- --------------------------------------------------------
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -829,7 +829,7 @@ BEGIN
 		GROUP BY TrainerClass;
 
 	INSERT INTO pkmncf_terminal_trainer_rankings_leaderboards_month
-		SELECT @report_id AS report_id, TrainerClass, @record_type AS RecordType, SUM(Score) AS Score 
+		SELECT @report_id AS report_id, BirthMonth, @record_type AS RecordType, SUM(Score) AS Score 
 		FROM pkmncf_terminal_trainer_rankings_records
 		INNER JOIN pkmncf_terminal_trainer_rankings_teams 
 			ON pkmncf_terminal_trainer_rankings_records.pid = pkmncf_terminal_trainer_rankings_teams.pid
@@ -838,7 +838,7 @@ BEGIN
 		GROUP BY BirthMonth;
 		
 	INSERT INTO pkmncf_terminal_trainer_rankings_leaderboards_pokemon
-		SELECT @report_id AS report_id, TrainerClass, @record_type AS RecordType, SUM(Score) AS Score 
+		SELECT @report_id AS report_id, FavouritePokemon, @record_type AS RecordType, SUM(Score) AS Score 
 		FROM pkmncf_terminal_trainer_rankings_records
 		INNER JOIN pkmncf_terminal_trainer_rankings_teams 
 			ON pkmncf_terminal_trainer_rankings_records.pid = pkmncf_terminal_trainer_rankings_teams.pid
@@ -898,7 +898,7 @@ CREATE TABLE IF NOT EXISTS `pkmncf_terminal_trainer_rankings_leaderboards_month`
 -- Dumping structure for table gts.pkmncf_terminal_trainer_rankings_leaderboards_pokemon
 CREATE TABLE IF NOT EXISTS `pkmncf_terminal_trainer_rankings_leaderboards_pokemon` (
   `report_id` int(11) NOT NULL,
-  `pokemon_id` int(10) unsigned NOT NULL,
+  `pokemon_id` int(11) NOT NULL,
   `RecordType` int(11) NOT NULL,
   `Score` bigint(20) NOT NULL,
   PRIMARY KEY (`report_id`,`pokemon_id`,`RecordType`) USING BTREE,

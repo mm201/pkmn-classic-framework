@@ -2937,7 +2937,7 @@ namespace PkmnFoundations.Data
                     "ON pkmncf_terminal_trainer_rankings_records.pid = pkmncf_terminal_trainer_rankings_teams.pid " +
                 "WHERE pkmncf_terminal_trainer_rankings_records.LastUpdated >= @start_date " +
                     "AND RecordType = @record_type " +
-                "GROUP BY TrainerClass;",
+                "GROUP BY Team",
                 new MySqlParameter("@record_type", recordType),
                 new MySqlParameter("@start_date", startDate));
 

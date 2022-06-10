@@ -118,6 +118,7 @@
     <Compile Include="Support\AssertHelper.cs" />
     <Compile Include="Support\EncodedString4.cs" />
     <Compile Include="Support\EncodedString5.cs" />
+    <Compile Include="Support\EnumerableExtender.cs" />
     <Compile Include="Support\GameSyncUtils.cs" />
     <Compile Include="Support\Indexer1d.cs" />
     <Compile Include="Support\LazyKeyValuePair.cs" />
