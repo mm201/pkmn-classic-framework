@@ -2867,7 +2867,7 @@ namespace PkmnFoundations.Data
             }
 
             var tblLeaderboard = tran.ExecuteDataTable("SELECT " + teamColumnName + " AS Team, Score FROM " + tableName +
-                " WHERE report_id = @report_id AND RecordType = @record_type AND " + teamBetween,
+                " WHERE report_id = @report_id AND RecordType = @record_type AND " + teamBetween + " ORDER BY Score DESC",
                 new MySqlParameter("@report_id", reportId),
                 new MySqlParameter("@record_type", recordType));
 
@@ -2943,7 +2943,7 @@ namespace PkmnFoundations.Data
                     "ON pkmncf_terminal_trainer_rankings_records.pid = pkmncf_terminal_trainer_rankings_teams.pid " +
                 "WHERE pkmncf_terminal_trainer_rankings_records.LastUpdated >= @start_date " +
                     "AND RecordType = @record_type AND " + teamBetween +
-                " GROUP BY Team",
+                " GROUP BY Team ORDER BY Score DESC",
                 new MySqlParameter("@record_type", recordType),
                 new MySqlParameter("@start_date", startDate));
 
