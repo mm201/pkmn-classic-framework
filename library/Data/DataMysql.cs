@@ -2666,7 +2666,7 @@ namespace PkmnFoundations.Data
                 int lastReportId = DatabaseExtender.Cast<int>(rowLastReport["report_id"]);
 
                 // update leaderboard aggregates for the most recently concluded leaderboard
-                tran.ExecuteProcedure("pkmncf_terminal_proc_create_leaderboards_for_report", new MySqlParameter("@report_id", lastReportId));
+                tran.ExecuteProcedure("pkmncf_terminal_proc_create_leaderboards_for_report", new MySqlParameter("_report_id", lastReportId));
             }
 
             // 2. Pick new record-types, preferring ones which haven't been used in a while.
