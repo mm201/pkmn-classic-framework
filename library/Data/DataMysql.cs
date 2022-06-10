@@ -2843,28 +2843,31 @@ namespace PkmnFoundations.Data
         private TrainerRankingsLeaderboard GetSpecificLeaderboard(MySqlTransaction tran, int reportId, 
             TrainerRankingsRecordTypes recordType, TrainerRankingsTeamCategories teamCategory)
         {
-            string tableName, teamColumnName;
+            string tableName, teamColumnName, teamBetween;
 
             switch (teamCategory)
             {
                 case TrainerRankingsTeamCategories.TrainerClass:
                     tableName = "pkmncf_terminal_trainer_rankings_leaderboards_class";
                     teamColumnName = "TrainerClass";
+                    teamBetween = "TrainerClass BETWEEN 0 and 16";
                     break;
                 case TrainerRankingsTeamCategories.BirthMonth:
                     tableName = "pkmncf_terminal_trainer_rankings_leaderboards_month";
                     teamColumnName = "Month";
+                    teamBetween = "Month BETWEEN 1 and 12";
                     break;
                 case TrainerRankingsTeamCategories.FavouritePokemon:
                     tableName = "pkmncf_terminal_trainer_rankings_leaderboards_pokemon";
                     teamColumnName = "pokemon_id";
+                    teamBetween = "pokemon_id BETWEEN 1 and 493";
                     break;
                 default:
                     throw new ArgumentOutOfRangeException("teamCategory");
             }
 
             var tblLeaderboard = tran.ExecuteDataTable("SELECT " + teamColumnName + " AS Team, Score FROM " + tableName +
-                " WHERE report_id = @report_id AND RecordType = @record_type",
+                " WHERE report_id = @report_id AND RecordType = @record_type AND " + teamBetween,
                 new MySqlParameter("@report_id", reportId),
                 new MySqlParameter("@record_type", recordType));
 
@@ -2914,18 +2917,21 @@ namespace PkmnFoundations.Data
         private TrainerRankingsLeaderboard GetSpecificPendingLeaderboard(MySqlTransaction tran, 
             TrainerRankingsRecordTypes recordType, TrainerRankingsTeamCategories teamCategory, DateTime startDate)
         {
-            string teamColumnName; // different column names than above...
+            string teamColumnName, teamBetween; // different column names than above...
 
             switch (teamCategory)
             {
                 case TrainerRankingsTeamCategories.TrainerClass:
                     teamColumnName = "TrainerClass";
+                    teamBetween = "TrainerClass BETWEEN 0 and 16";
                     break;
                 case TrainerRankingsTeamCategories.BirthMonth:
                     teamColumnName = "BirthMonth";
+                    teamBetween = "BirthMonth BETWEEN 1 and 12";
                     break;
                 case TrainerRankingsTeamCategories.FavouritePokemon:
                     teamColumnName = "FavouritePokemon";
+                    teamBetween = "FavouritePokemon BETWEEN 1 and 493";
                     break;
                 default:
                     throw new ArgumentOutOfRangeException("teamCategory");
@@ -2936,8 +2942,8 @@ namespace PkmnFoundations.Data
                 "INNER JOIN pkmncf_terminal_trainer_rankings_teams " +
                     "ON pkmncf_terminal_trainer_rankings_records.pid = pkmncf_terminal_trainer_rankings_teams.pid " +
                 "WHERE pkmncf_terminal_trainer_rankings_records.LastUpdated >= @start_date " +
-                    "AND RecordType = @record_type " +
-                "GROUP BY Team",
+                    "AND RecordType = @record_type AND " + teamBetween +
+                " GROUP BY Team",
                 new MySqlParameter("@record_type", recordType),
                 new MySqlParameter("@start_date", startDate));
 

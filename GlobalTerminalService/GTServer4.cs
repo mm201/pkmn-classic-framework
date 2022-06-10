@@ -430,27 +430,6 @@ namespace PkmnFoundations.GlobalTerminalService
                         // This week lacks numbers because they're still growing and to make it a surprise.
                         // Including more than 3 RecordTypes in the response will give error 10609.
 
-
-                        /*
-                        // fake replay data:
-                        TrainerRankingsReport lastWeek = GenerateFakeReport(
-                            new DateTime(2014, 04, 27),
-                            new TrainerRankingsRecordTypes[] 
-                            {
-                                TrainerRankingsRecordTypes.TimesBattledWildPokemon,
-                                TrainerRankingsRecordTypes.BattlesTiedOverNintendoWiFiConnection,
-                                TrainerRankingsRecordTypes.TotalCastlePointsEarnedAtTheBattleCastle
-                            });
-                        TrainerRankingsReport thisWeek = GenerateFakeReport(
-                            new DateTime(2014, 05, 04),
-                            new TrainerRankingsRecordTypes[]
-                            {
-                                TrainerRankingsRecordTypes.HallOfFameEntries,
-                                TrainerRankingsRecordTypes.CompletedGtsPokemonTrades,
-                                TrainerRankingsRecordTypes.FacilitiesChallengedAtTheBattleFrontier
-                            });
-                        */
-
                         TrainerRankingsReport thisWeek = Database.Instance.TrainerRankingsGetPendingReport();
                         thisWeek.PadResults();
                         TrainerRankingsReport lastWeek = Database.Instance.TrainerRankingsGetReport(DateTime.MinValue, thisWeek.StartDate.AddDays(-1), 1).FirstOrDefault();
