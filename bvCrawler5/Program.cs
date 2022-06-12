@@ -414,7 +414,7 @@ namespace PkmnFoundations
                 db.Open();
                 for (int x = 0; x < count; x++)
                 {
-                    ulong videoId = BitConverter.ToUInt64(data, 208 + x * 208);
+                    ulong videoId = BitConverter.ToUInt64(data, 16 + x * 208);
                     QueueVideoId(db, videoId);
                 }
                 db.Close();
