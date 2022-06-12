@@ -249,13 +249,6 @@ namespace PkmnFoundations.GlobalTerminalService
                         }
                         logEntry.AppendLine(".");
 
-                        if ((byte)meta == 254)
-                        {
-                            // todo: Figure out how to make the game perform this search!
-                            logEntry.AppendLine("Reverting to latest 30.");
-                            meta = BattleVideoMetagames4.SearchLatest30;
-                        }
-
                         BattleVideoHeader4[] results = Database.Instance.BattleVideoSearch4(species, ranking, meta, country, region, 30);
                         response.Write(new byte[] { 0x00, 0x00 }, 0, 2); // result code (0 for OK)
                         response.Write(BitConverter.GetBytes(results.Length), 0, 4);
