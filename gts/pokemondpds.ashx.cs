@@ -192,7 +192,7 @@ namespace PkmnFoundations.GTS
                     {
                         // No pokemon in the system
                         // what do here?
-                        ShowError(context, 400);
+                        ShowError(context, 403);
                         return;
                     }
                     else
@@ -502,11 +502,9 @@ namespace PkmnFoundations.GTS
                     AssertHelper.Assert(prevSession.Tag is GtsRecord4[]);
                     GtsRecord4[] tag = (GtsRecord4[])prevSession.Tag;
                     AssertHelper.Assert(tag.Length == 2);
-                    AssertHelper.Assert(tag[0] is GtsRecord4);
-                    AssertHelper.Assert(tag[0] is GtsRecord4);
 
-                    GtsRecord4 upload = (GtsRecord4)tag[0];
-                    GtsRecord4 result = (GtsRecord4)tag[1];
+                    GtsRecord4 upload = tag[0];
+                    GtsRecord4 result = tag[1];
 
                     if (Database.Instance.GtsTradePokemon4(upload, result, pid))
                         response.Write(new byte[] { 0x01, 0x00 }, 0, 2);

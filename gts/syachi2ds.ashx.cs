@@ -133,7 +133,7 @@ namespace PkmnFoundations.GTS
                         // todo: we should probably repeat the previous record
                         // that was in here before delete.asp was called.
                         // That is... if we still had it. -__-;
-                        ShowError(context, 400);
+                        ShowError(context, 403);
                         return;
                     }
                     else
@@ -457,8 +457,8 @@ namespace PkmnFoundations.GTS
                     GtsRecord5[] tag = (GtsRecord5[])prevSession.Tag;
                     AssertHelper.Assert(tag.Length == 2);
 
-                    GtsRecord5 upload = (GtsRecord5)tag[0];
-                    GtsRecord5 result = (GtsRecord5)tag[1];
+                    GtsRecord5 upload = tag[0];
+                    GtsRecord5 result = tag[1];
 
                     if (Database.Instance.GtsTradePokemon5(upload, result, pid))
                         response.Write(new byte[] { 0x01, 0x00 }, 0, 2);
