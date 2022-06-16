@@ -373,9 +373,6 @@ namespace PkmnFoundations.GlobalTerminalService
 
                     case RequestTypes4.TrainerRankingsSearch:
                     {
-#if !DEBUG
-                        goto default;
-#endif
                         if (data.Length != 0x164)
                         {
                             logEntry.AppendLine("Length did not validate.");
