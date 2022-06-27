@@ -2392,13 +2392,19 @@ namespace PkmnFoundations.Data
                 new MySqlParameter("@data", record.Data))) != 0;
             if (exists) return 0;
 
+            DateTime now = DateTime.UtcNow;
+            DateTime hypeTime = GetActiveHypeDate(now);
+            double adjustedHype = HypeDecay(HYPE_NEW_VIDEO, now, hypeTime);
+
+            ulong serial;
+
             if (record.SerialNumber == 0)
             {
                 ulong key = Convert.ToUInt64(tran.ExecuteScalar("INSERT INTO TerminalBattleVideos4 " +
                     "(pid, Header, Data, md5, TimeAdded, ParseVersion, Streak, TrainerName, " +
-                    "Metagame, Country, Region) " +
+                    "Metagame, Country, Region, Hype, HypeTimestamp) " +
                     "VALUES (@pid, @header, @data, unhex(md5(CONCAT(@header, @data))), " +
-                    "UTC_TIMESTAMP(), 1, @streak, @trainer, @metagame, @country, @region); " +
+                    "UTC_TIMESTAMP(), 1, @streak, @trainer, @metagame, @country, @region, @hype, @hype_timestamp); " +
                     "SELECT LAST_INSERT_ID()",
                     new MySqlParameter("@pid", record.PID),
                     new MySqlParameter("@header", record.Header.Data),
@@ -2407,9 +2413,11 @@ namespace PkmnFoundations.Data
                     new MySqlParameter("@trainer", record.Header.TrainerName),
                     new MySqlParameter("@metagame", (byte)record.Header.Metagame),
                     new MySqlParameter("@country", (byte)record.Header.Country),
-                    new MySqlParameter("@region", (byte)record.Header.Region)
+                    new MySqlParameter("@region", (byte)record.Header.Region),
+                    new MySqlParameter("@hype", adjustedHype),
+                    new MySqlParameter("@hype_timestamp", hypeTime)
                     ));
-                ulong serial = BattleVideoHeader4.KeyToSerial(key);
+                serial = BattleVideoHeader4.KeyToSerial(key);
 
                 tran.ExecuteNonQuery("UPDATE TerminalBattleVideos4 SET " +
                     "SerialNumber = @serial WHERE id = @key", 
@@ -2418,8 +2426,6 @@ namespace PkmnFoundations.Data
 
                 // todo: make a proc to insert both video and party.
                 InsertBattleVideoParty4(record.Header, key, tran);
-
-                return serial;
             }
             else
             {
@@ -2428,10 +2434,10 @@ namespace PkmnFoundations.Data
                 int rows = tran.ExecuteNonQuery("INSERT INTO TerminalBattleVideos4 " +
                     "(id, pid, SerialNumber, Header, Data, md5, TimeAdded, " +
                     "ParseVersion, Streak, TrainerName, " +
-                    "Metagame, Country, Region) " +
+                    "Metagame, Country, Region, Hype, HypeTimestamp) " +
                     "VALUES (@key, @pid, @serial, @header, @data, " +
                     "unhex(md5(CONCAT(@header, @data))), " +
-                    "UTC_TIMESTAMP(), 1, @streak, @trainer, @metagame, @country, @region)",
+                    "UTC_TIMESTAMP(), 1, @streak, @trainer, @metagame, @country, @region, @hype, @hype_timestamp)",
                     new MySqlParameter("@key", key),
                     new MySqlParameter("@pid", record.PID),
                     new MySqlParameter("@serial", record.SerialNumber),
@@ -2441,15 +2447,19 @@ namespace PkmnFoundations.Data
                     new MySqlParameter("@trainer", record.Header.TrainerName),
                     new MySqlParameter("@metagame", (byte)record.Header.Metagame),
                     new MySqlParameter("@country", (byte)record.Header.Country),
-                    new MySqlParameter("@region", (byte)record.Header.Region)
+                    new MySqlParameter("@region", (byte)record.Header.Region),
+                    new MySqlParameter("@hype", adjustedHype),
+                    new MySqlParameter("@hype_timestamp", hypeTime)
                     );
 
                 if (rows == 0) return 0;
+                serial = record.SerialNumber;
 
                 InsertBattleVideoParty4(record.Header, key, tran);
-
-                return record.SerialNumber;
             }
+
+            BattleVideoUpdateHypeTimes4(tran);
+            return serial;
         }
 
         public override ulong BattleVideoUpload4(BattleVideoRecord4 record)
@@ -2477,6 +2487,23 @@ namespace PkmnFoundations.Data
                 cmd.Parameters["@species"].Value = species;
                 cmd.ExecuteNonQuery();
             }
+        }
+
+        private void BattleVideoUpdateHypeTimes4(MySqlTransaction tran)
+        {
+            DateTime hypeTime = GetActiveHypeDate(DateTime.UtcNow);
+
+            // common case: HypeTimestamp is in the past and needs to be updated and decay applied.
+            tran.ExecuteNonQuery("UPDATE TerminalBattleVideos4 " +
+                "SET Hype = Hype / (1 << FLOOR(DATEDIFF(@hypetime, HypeTimestamp) / 7)), HypeTimestamp = @hypetime " +
+                "WHERE HypeTimestamp < @hypetime", 
+                new MySqlParameter("@hypetime", hypeTime));
+
+            // unusual case: HypeTimestamp is in the future and reverse decay needs to be applied.
+            tran.ExecuteNonQuery("UPDATE TerminalBattleVideos4 " +
+                "SET Hype = Hype * (1 << FLOOR(DATEDIFF(HypeTimestamp, @hypetime) / 7)), HypeTimestamp = @hypetime " +
+                "WHERE HypeTimestamp > @hypetime",
+                new MySqlParameter("@hypetime", hypeTime));
         }
 
         public BattleVideoHeader4[] BattleVideoSearch4(MySqlTransaction tran, ushort species, BattleVideoRankings4 ranking, BattleVideoMetagames4 metagame, byte country, byte region, int count)
@@ -2725,12 +2752,6 @@ namespace PkmnFoundations.Data
                 new MySqlParameter("@record_type3", chosen[2]));
 
             return true;
-        }
-
-        private static DateTime DateLerp(DateTime first, DateTime second, double weight)
-        {
-            TimeSpan diff = second - first;
-            return first + new TimeSpan((long)(diff.Ticks * weight));
         }
 
         public override IList<TrainerRankingsRecordTypes> TrainerRankingsGetActiveRecordTypes()
@@ -3071,13 +3092,19 @@ namespace PkmnFoundations.Data
                 new MySqlParameter("@data", record.Data))) != 0;
             if (exists) return 0;
 
+            DateTime now = DateTime.UtcNow;
+            DateTime hypeTime = GetActiveHypeDate(now);
+            double adjustedHype = HypeDecay(HYPE_NEW_VIDEO, now, hypeTime);
+
+            ulong serial;
+
             if (record.SerialNumber == 0)
             {
                 ulong key = Convert.ToUInt64(tran.ExecuteScalar("INSERT INTO TerminalBattleVideos5 " +
                     "(pid, Header, Data, md5, TimeAdded, ParseVersion, Streak, TrainerName, " +
-                    "Metagame, Country, Region) " +
+                    "Metagame, Country, Region, Hype, HypeTimestamp) " +
                     "VALUES (@pid, @header, @data, unhex(md5(CONCAT(@header, @data))), " +
-                    "UTC_TIMESTAMP(), 1, @streak, @trainer, @metagame, @country, @region); " +
+                    "UTC_TIMESTAMP(), 1, @streak, @trainer, @metagame, @country, @region, @hype, @hype_timestamp); " +
                     "SELECT LAST_INSERT_ID()",
                     new MySqlParameter("@pid", record.PID),
                     new MySqlParameter("@header", record.Header.Data),
@@ -3086,9 +3113,11 @@ namespace PkmnFoundations.Data
                     new MySqlParameter("@trainer", record.Header.TrainerName),
                     new MySqlParameter("@metagame", (byte)record.Header.Metagame),
                     new MySqlParameter("@country", (byte)record.Header.Country),
-                    new MySqlParameter("@region", (byte)record.Header.Region)
+                    new MySqlParameter("@region", (byte)record.Header.Region),
+                    new MySqlParameter("@hype", adjustedHype),
+                    new MySqlParameter("@hype_timestamp", hypeTime)
                     ));
-                ulong serial = BattleVideoHeader4.KeyToSerial(key);
+                serial = BattleVideoHeader4.KeyToSerial(key);
 
                 tran.ExecuteNonQuery("UPDATE TerminalBattleVideos5 SET " +
                     "SerialNumber = @serial WHERE id = @key",
@@ -3097,8 +3126,6 @@ namespace PkmnFoundations.Data
 
                 // todo: make a proc to insert both video and party.
                 InsertBattleVideoParty5(record.Header, key, tran);
-
-                return serial;
             }
             else
             {
@@ -3107,10 +3134,10 @@ namespace PkmnFoundations.Data
                 int rows = tran.ExecuteNonQuery("INSERT INTO TerminalBattleVideos5 " +
                     "(id, pid, SerialNumber, Header, Data, md5, TimeAdded, " +
                     "ParseVersion, Streak, TrainerName, " +
-                    "Metagame, Country, Region) " +
+                    "Metagame, Country, Region, Hype, HypeTimestamp) " +
                     "VALUES (@key, @pid, @serial, @header, @data, " +
                     "unhex(md5(CONCAT(@header, @data))), " +
-                    "UTC_TIMESTAMP(), 1, @streak, @trainer, @metagame, @country, @region)",
+                    "UTC_TIMESTAMP(), 1, @streak, @trainer, @metagame, @country, @region, @hype, @hype_timestamp)",
                     new MySqlParameter("@key", key),
                     new MySqlParameter("@pid", record.PID),
                     new MySqlParameter("@serial", record.SerialNumber),
@@ -3120,15 +3147,19 @@ namespace PkmnFoundations.Data
                     new MySqlParameter("@trainer", record.Header.TrainerName),
                     new MySqlParameter("@metagame", (byte)record.Header.Metagame),
                     new MySqlParameter("@country", (byte)record.Header.Country),
-                    new MySqlParameter("@region", (byte)record.Header.Region)
+                    new MySqlParameter("@region", (byte)record.Header.Region),
+                    new MySqlParameter("@hype", adjustedHype),
+                    new MySqlParameter("@hype_timestamp", hypeTime)
                     );
 
                 if (rows == 0) return 0;
+                serial = record.SerialNumber;
 
                 InsertBattleVideoParty5(record.Header, key, tran);
-
-                return record.SerialNumber;
             }
+
+            BattleVideoUpdateHypeTimes5(tran);
+            return serial;
         }
 
         public override ulong BattleVideoUpload5(BattleVideoRecord5 record)
@@ -3156,6 +3187,23 @@ namespace PkmnFoundations.Data
                 cmd.Parameters["@species"].Value = species;
                 cmd.ExecuteNonQuery();
             }
+        }
+
+        private void BattleVideoUpdateHypeTimes5(MySqlTransaction tran)
+        {
+            DateTime hypeTime = GetActiveHypeDate(DateTime.UtcNow);
+
+            // common case: HypeTimestamp is in the past and needs to be updated and decay applied.
+            tran.ExecuteNonQuery("UPDATE TerminalBattleVideos5 " +
+                "SET Hype = Hype / (1 << FLOOR(DATEDIFF(@hypetime, HypeTimestamp) / 7)), HypeTimestamp = @hypetime " +
+                "WHERE HypeTimestamp < @hypetime",
+                new MySqlParameter("@hypetime", hypeTime));
+
+            // unusual case: HypeTimestamp is in the future and reverse decay needs to be applied.
+            tran.ExecuteNonQuery("UPDATE TerminalBattleVideos5 " +
+                "SET Hype = Hype * (1 << FLOOR(DATEDIFF(HypeTimestamp, @hypetime) / 7)), HypeTimestamp = @hypetime " +
+                "WHERE HypeTimestamp > @hypetime",
+                new MySqlParameter("@hypetime", hypeTime));
         }
 
         public BattleVideoHeader5[] BattleVideoSearch5(MySqlTransaction tran, ushort species, BattleVideoRankings5 ranking, BattleVideoMetagames5 metagame, byte country, byte region, int count)

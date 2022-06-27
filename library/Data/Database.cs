@@ -58,6 +58,43 @@ namespace PkmnFoundations.Data
         #endregion
 
         #region Utility
+
+        internal static DateTime DateLerp(DateTime first, DateTime second, double weight)
+        {
+            TimeSpan diff = second - first;
+            return first + new TimeSpan((long)(diff.Ticks * weight));
+        }
+
+        private const double HYPE_DECAY_RATE = -0.09902102579427790134531887449403; // -ln(2)/7
+        internal const double HYPE_NEW_VIDEO = 5.0d;
+        internal const double HYPE_WATCHED_VIDEO = 1.0d;
+        internal const double HYPE_SAVED_VIDEO = 2.0d;
+
+        /// <summary>
+        /// Calculates how much Hype has changed between two times. This could be 
+        /// </summary>
+        /// <param name="oldHype"></param>
+        /// <param name="oldDate"></param>
+        /// <param name="newDate"></param>
+        /// <returns></returns>
+        internal static double HypeDecay(double oldHype, DateTime oldDate, DateTime newDate)
+        {
+            TimeSpan ts = newDate - oldDate;
+            double decays = HYPE_DECAY_RATE * ts.Ticks / TimeSpan.FromDays(1).Ticks;
+            return Math.Exp(decays) * oldHype; // e^(days*-ln(2)/7), should decay by half each week.
+        }
+
+        /// <summary>
+        /// Gets the desired date to use for hype ratings. Changes exactly once a week.
+        /// </summary>
+        /// <param name="now"></param>
+        /// <returns></returns>
+        internal static DateTime GetActiveHypeDate(DateTime now)
+        {
+            DateTime dateNow = now.Date;
+            return dateNow.AddDays(-(int)dateNow.DayOfWeek);
+        }
+
         #endregion
 
         #region GTS 4
