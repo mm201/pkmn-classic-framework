@@ -65,7 +65,8 @@ namespace PkmnFoundations.Data
             return first + new TimeSpan((long)(diff.Ticks * weight));
         }
 
-        private const double HYPE_DECAY_RATE = -0.09902102579427790134531887449403; // -ln(2)/7
+        internal const double HYPE_DECAY_DAYS = 7.0d;
+        internal const double HYPE_DECAY_RATE = -0.09902102579427790134531887449403; // -ln(2)/HYPE_DECAY_DAYS
         internal const double HYPE_NEW_VIDEO = 5.0d;
         internal const double HYPE_WATCHED_VIDEO = 1.0d;
         internal const double HYPE_SAVED_VIDEO = 2.0d;

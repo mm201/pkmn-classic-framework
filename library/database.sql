@@ -1,6 +1,6 @@
 -- --------------------------------------------------------
 -- Host:                         127.0.0.1
--- Server version:               10.3.28-MariaDB - mariadb.org binary distribution
+-- Server version:               10.5.16-MariaDB - mariadb.org binary distribution
 -- Server OS:                    Win64
 -- HeidiSQL Version:             12.0.0.6518
 -- --------------------------------------------------------
@@ -999,6 +999,8 @@ CREATE TABLE IF NOT EXISTS `TerminalBattleVideos4` (
   `Region` tinyint(3) unsigned NOT NULL,
   `Views` int(10) unsigned NOT NULL DEFAULT 0,
   `Saves` int(10) unsigned NOT NULL DEFAULT 0,
+  `Hype` double DEFAULT 0,
+  `HypeTimestamp` datetime DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id`),
   KEY `SerialNumber` (`SerialNumber`),
   KEY `TimeAdded` (`TimeAdded`),
@@ -1027,6 +1029,8 @@ CREATE TABLE IF NOT EXISTS `TerminalBattleVideos5` (
   `Region` tinyint(3) unsigned NOT NULL,
   `Views` int(10) unsigned NOT NULL DEFAULT 0,
   `Saves` int(10) unsigned NOT NULL DEFAULT 0,
+  `Hype` double DEFAULT 0,
+  `HypeTimestamp` datetime DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id`),
   KEY `SerialNumber` (`SerialNumber`),
   KEY `TimeAdded` (`TimeAdded`),

@@ -2489,21 +2489,28 @@ namespace PkmnFoundations.Data
             }
         }
 
-        private void BattleVideoUpdateHypeTimes4(MySqlTransaction tran)
+        private void BattleVideoUpdateHypeTimes(MySqlTransaction tran, string tableName)
         {
             DateTime hypeTime = GetActiveHypeDate(DateTime.UtcNow);
 
             // common case: HypeTimestamp is in the past and needs to be updated and decay applied.
-            tran.ExecuteNonQuery("UPDATE TerminalBattleVideos4 " +
-                "SET Hype = Hype / (1 << FLOOR(DATEDIFF(@hypetime, HypeTimestamp) / 7)), HypeTimestamp = @hypetime " +
-                "WHERE HypeTimestamp < @hypetime", 
-                new MySqlParameter("@hypetime", hypeTime));
+            tran.ExecuteNonQuery("UPDATE " + tableName + " " +
+                "SET Hype = Hype / (1 << FLOOR(DATEDIFF(@hypetime, HypeTimestamp) / @decay)), HypeTimestamp = @hypetime " +
+                "WHERE HypeTimestamp < @hypetime",
+                new MySqlParameter("@hypetime", hypeTime),
+                new MySqlParameter("@decay", HYPE_DECAY_DAYS));
 
             // unusual case: HypeTimestamp is in the future and reverse decay needs to be applied.
-            tran.ExecuteNonQuery("UPDATE TerminalBattleVideos4 " +
-                "SET Hype = Hype * (1 << FLOOR(DATEDIFF(HypeTimestamp, @hypetime) / 7)), HypeTimestamp = @hypetime " +
+            tran.ExecuteNonQuery("UPDATE " + tableName + " " +
+                "SET Hype = Hype * (1 << FLOOR(DATEDIFF(HypeTimestamp, @hypetime) / @decay)), HypeTimestamp = @hypetime " +
                 "WHERE HypeTimestamp > @hypetime",
-                new MySqlParameter("@hypetime", hypeTime));
+                new MySqlParameter("@hypetime", hypeTime),
+                new MySqlParameter("@decay", HYPE_DECAY_DAYS));
+        }
+
+        private void BattleVideoUpdateHypeTimes4(MySqlTransaction tran)
+        {
+            BattleVideoUpdateHypeTimes(tran, "TerminalBattleVideos4");
         }
 
         public BattleVideoHeader4[] BattleVideoSearch4(MySqlTransaction tran, ushort species, BattleVideoRankings4 ranking, BattleVideoMetagames4 metagame, byte country, byte region, int count)
@@ -2611,21 +2618,46 @@ namespace PkmnFoundations.Data
             return new BattleVideoHeader4(reader.GetInt32(0), reader.GetUInt64(1), data);
         }
 
+        public MySqlDataReader BattleVideoGet(MySqlTransaction tran, string tableName, ulong serial, bool incrementViews)
+        {
+            string update;
+            MySqlParameter[] _params;
+
+            if (incrementViews)
+            {
+                DateTime now = DateTime.UtcNow;
+                DateTime hypeTime = GetActiveHypeDate(now);
+                double hype = HypeDecay(HYPE_WATCHED_VIDEO, now, hypeTime);
+
+                update = "UPDATE " + tableName + " " +
+                    "SET Views = Views + 1, Hype = @hype, HypeTimestamp = @hype_timestamp WHERE SerialNumber = @serial; ";
+                _params = new[] {
+                    new MySqlParameter("@hype", hype),
+                    new MySqlParameter("@hype_timestamp", hypeTime),
+                    new MySqlParameter("@serial", serial) };
+            }
+            else
+            {
+                update = "";
+                _params = new[] { new MySqlParameter("@serial", serial) };
+            }
+
+            return (MySqlDataReader)tran.ExecuteReader(update + "SELECT pid, " +
+                "SerialNumber, Header, Data FROM " + tableName + " " +
+                "WHERE SerialNumber = @serial",
+                _params);
+        }
+
         public BattleVideoRecord4 BattleVideoGet4(MySqlTransaction tran, ulong serial, bool incrementViews = false)
         {
-            string update = incrementViews ? "UPDATE TerminalBattleVideos4 " +
-                "SET Views = Views + 1 WHERE SerialNumber = @serial; "
-                : "";
-
-            using (MySqlDataReader reader = (MySqlDataReader)tran.ExecuteReader(update + "SELECT pid, " +
-                "SerialNumber, Header, Data FROM TerminalBattleVideos4 " +
-                "WHERE SerialNumber = @serial",
-                new MySqlParameter("@serial", serial)))
+            BattleVideoRecord4 result = null;
+            using (var reader = BattleVideoGet(tran, "TerminalBattleVideos4", serial, incrementViews))
             {
                 if (reader.Read())
-                    return BattleVideo4FromReader(reader);
-                else return null;
+                    result = BattleVideo4FromReader(reader);
             }
+            if (incrementViews) BattleVideoUpdateHypeTimes4(tran);
+            return result;
         }
 
         public override BattleVideoRecord4 BattleVideoGet4(ulong serial, bool incrementViews = false)
@@ -2644,9 +2676,17 @@ namespace PkmnFoundations.Data
 
         public bool BattleVideoFlagSaved4(MySqlTransaction tran, ulong serial)
         {
+            DateTime now = DateTime.UtcNow;
+            DateTime hypeTime = GetActiveHypeDate(now);
+            double hype = HypeDecay(HYPE_SAVED_VIDEO, now, hypeTime);
+
             int results = tran.ExecuteNonQuery("UPDATE TerminalBattleVideos4 " +
-                "SET Saves = Saves + 1 WHERE SerialNumber = @serial", 
+                "SET Saves = Saves + 1, Hype = @hype, HypeTimestamp = @hype_timestamp WHERE SerialNumber = @serial",
+                new MySqlParameter("@hype", hype),
+                new MySqlParameter("@hype_timestamp", hypeTime),
                 new MySqlParameter("@serial", serial));
+
+            BattleVideoUpdateHypeTimes4(tran);
 
             return results > 0;
         }
@@ -3191,19 +3231,7 @@ namespace PkmnFoundations.Data
 
         private void BattleVideoUpdateHypeTimes5(MySqlTransaction tran)
         {
-            DateTime hypeTime = GetActiveHypeDate(DateTime.UtcNow);
-
-            // common case: HypeTimestamp is in the past and needs to be updated and decay applied.
-            tran.ExecuteNonQuery("UPDATE TerminalBattleVideos5 " +
-                "SET Hype = Hype / (1 << FLOOR(DATEDIFF(@hypetime, HypeTimestamp) / 7)), HypeTimestamp = @hypetime " +
-                "WHERE HypeTimestamp < @hypetime",
-                new MySqlParameter("@hypetime", hypeTime));
-
-            // unusual case: HypeTimestamp is in the future and reverse decay needs to be applied.
-            tran.ExecuteNonQuery("UPDATE TerminalBattleVideos5 " +
-                "SET Hype = Hype * (1 << FLOOR(DATEDIFF(HypeTimestamp, @hypetime) / 7)), HypeTimestamp = @hypetime " +
-                "WHERE HypeTimestamp > @hypetime",
-                new MySqlParameter("@hypetime", hypeTime));
+            BattleVideoUpdateHypeTimes(tran, "TerminalBattleVideos5");
         }
 
         public BattleVideoHeader5[] BattleVideoSearch5(MySqlTransaction tran, ushort species, BattleVideoRankings5 ranking, BattleVideoMetagames5 metagame, byte country, byte region, int count)
@@ -3318,19 +3346,14 @@ namespace PkmnFoundations.Data
 
         public BattleVideoRecord5 BattleVideoGet5(MySqlTransaction tran, ulong serial, bool incrementViews = false)
         {
-            string update = incrementViews ? "UPDATE TerminalBattleVideos5 " +
-                "SET Views = Views + 1 WHERE SerialNumber = @serial; " 
-                : "";
-
-            using (MySqlDataReader reader = (MySqlDataReader)tran.ExecuteReader(update + "SELECT pid, " +
-                "SerialNumber, Header, Data FROM TerminalBattleVideos5 " +
-                "WHERE SerialNumber = @serial",
-                new MySqlParameter("@serial", serial)))
+            BattleVideoRecord5 result = null;
+            using (var reader = BattleVideoGet(tran, "TerminalBattleVideos5", serial, incrementViews))
             {
                 if (reader.Read())
-                    return BattleVideo5FromReader(reader);
-                else return null;
+                    result = BattleVideo5FromReader(reader);
             }
+            if (incrementViews) BattleVideoUpdateHypeTimes5(tran);
+            return result;
         }
 
         public override BattleVideoRecord5 BattleVideoGet5(ulong serial, bool incrementViews = false)
@@ -3349,9 +3372,19 @@ namespace PkmnFoundations.Data
 
         public bool BattleVideoFlagSaved5(MySqlTransaction tran, ulong serial)
         {
-            return tran.ExecuteNonQuery("UPDATE TerminalBattleVideos5 " +
-                "SET Saves = Saves + 1 WHERE SerialNumber = @serial",
-                new MySqlParameter("@serial", serial)) > 0;
+            DateTime now = DateTime.UtcNow;
+            DateTime hypeTime = GetActiveHypeDate(now);
+            double hype = HypeDecay(HYPE_SAVED_VIDEO, now, hypeTime);
+
+            int results = tran.ExecuteNonQuery("UPDATE TerminalBattleVideos5 " +
+                "SET Saves = Saves + 1, Hype = @hype, HypeTimestamp = @hype_timestamp WHERE SerialNumber = @serial",
+                new MySqlParameter("@hype", hype),
+                new MySqlParameter("@hype_timestamp", hypeTime),
+                new MySqlParameter("@serial", serial));
+
+            BattleVideoUpdateHypeTimes5(tran);
+
+            return results > 0;
         }
 
         public override bool BattleVideoFlagSaved5(ulong serial)
