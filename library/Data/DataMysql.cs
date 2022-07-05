@@ -2458,7 +2458,7 @@ namespace PkmnFoundations.Data
                 InsertBattleVideoParty4(record.Header, key, tran);
             }
 
-            BattleVideoUpdateHypeTimes4(tran);
+            BattleVideoUpdateHypeTimes4(tran, hypeTime);
             return serial;
         }
 
@@ -2489,10 +2489,8 @@ namespace PkmnFoundations.Data
             }
         }
 
-        private void BattleVideoUpdateHypeTimes(MySqlTransaction tran, string tableName)
+        private void BattleVideoUpdateHypeTimes(MySqlTransaction tran, string tableName, DateTime hypeTime)
         {
-            DateTime hypeTime = GetActiveHypeDate(DateTime.UtcNow);
-
             // common case: HypeTimestamp is in the past and needs to be updated and decay applied.
             tran.ExecuteNonQuery("UPDATE " + tableName + " " +
                 "SET Hype = Hype / (1 << FLOOR(DATEDIFF(@hypetime, HypeTimestamp) / @decay)), HypeTimestamp = @hypetime " +
@@ -2508,9 +2506,9 @@ namespace PkmnFoundations.Data
                 new MySqlParameter("@decay", HYPE_DECAY_DAYS));
         }
 
-        private void BattleVideoUpdateHypeTimes4(MySqlTransaction tran)
+        private void BattleVideoUpdateHypeTimes4(MySqlTransaction tran, DateTime hypeTime)
         {
-            BattleVideoUpdateHypeTimes(tran, "TerminalBattleVideos4");
+            BattleVideoUpdateHypeTimes(tran, "TerminalBattleVideos4", hypeTime);
         }
 
         public BattleVideoHeader4[] BattleVideoSearch4(MySqlTransaction tran, ushort species, BattleVideoRankings4 ranking, BattleVideoMetagames4 metagame, byte country, byte region, int count)
@@ -2629,8 +2627,10 @@ namespace PkmnFoundations.Data
                 DateTime hypeTime = GetActiveHypeDate(now);
                 double hype = HypeDecay(HYPE_WATCHED_VIDEO, now, hypeTime);
 
+                BattleVideoUpdateHypeTimes(tran, tableName, hypeTime);
+
                 update = "UPDATE " + tableName + " " +
-                    "SET Views = Views + 1, Hype = @hype, HypeTimestamp = @hype_timestamp WHERE SerialNumber = @serial; ";
+                    "SET Views = Views + 1, Hype = Hype + @hype WHERE SerialNumber = @serial; ";
                 _params = new[] {
                     new MySqlParameter("@hype", hype),
                     new MySqlParameter("@hype_timestamp", hypeTime),
@@ -2656,7 +2656,6 @@ namespace PkmnFoundations.Data
                 if (reader.Read())
                     result = BattleVideo4FromReader(reader);
             }
-            if (incrementViews) BattleVideoUpdateHypeTimes4(tran);
             return result;
         }
 
@@ -2680,13 +2679,13 @@ namespace PkmnFoundations.Data
             DateTime hypeTime = GetActiveHypeDate(now);
             double hype = HypeDecay(HYPE_SAVED_VIDEO, now, hypeTime);
 
+            BattleVideoUpdateHypeTimes4(tran, hypeTime);
+
             int results = tran.ExecuteNonQuery("UPDATE TerminalBattleVideos4 " +
-                "SET Saves = Saves + 1, Hype = @hype, HypeTimestamp = @hype_timestamp WHERE SerialNumber = @serial",
+                "SET Saves = Saves + 1, Hype = Hype + @hype WHERE SerialNumber = @serial",
                 new MySqlParameter("@hype", hype),
                 new MySqlParameter("@hype_timestamp", hypeTime),
                 new MySqlParameter("@serial", serial));
-
-            BattleVideoUpdateHypeTimes4(tran);
 
             return results > 0;
         }
@@ -3198,7 +3197,7 @@ namespace PkmnFoundations.Data
                 InsertBattleVideoParty5(record.Header, key, tran);
             }
 
-            BattleVideoUpdateHypeTimes5(tran);
+            BattleVideoUpdateHypeTimes5(tran, hypeTime);
             return serial;
         }
 
@@ -3229,9 +3228,9 @@ namespace PkmnFoundations.Data
             }
         }
 
-        private void BattleVideoUpdateHypeTimes5(MySqlTransaction tran)
+        private void BattleVideoUpdateHypeTimes5(MySqlTransaction tran, DateTime hypeTime)
         {
-            BattleVideoUpdateHypeTimes(tran, "TerminalBattleVideos5");
+            BattleVideoUpdateHypeTimes(tran, "TerminalBattleVideos5", hypeTime);
         }
 
         public BattleVideoHeader5[] BattleVideoSearch5(MySqlTransaction tran, ushort species, BattleVideoRankings5 ranking, BattleVideoMetagames5 metagame, byte country, byte region, int count)
@@ -3352,7 +3351,6 @@ namespace PkmnFoundations.Data
                 if (reader.Read())
                     result = BattleVideo5FromReader(reader);
             }
-            if (incrementViews) BattleVideoUpdateHypeTimes5(tran);
             return result;
         }
 
@@ -3376,13 +3374,13 @@ namespace PkmnFoundations.Data
             DateTime hypeTime = GetActiveHypeDate(now);
             double hype = HypeDecay(HYPE_SAVED_VIDEO, now, hypeTime);
 
+            BattleVideoUpdateHypeTimes5(tran, hypeTime);
+
             int results = tran.ExecuteNonQuery("UPDATE TerminalBattleVideos5 " +
-                "SET Saves = Saves + 1, Hype = @hype, HypeTimestamp = @hype_timestamp WHERE SerialNumber = @serial",
+                "SET Saves = Saves + 1, Hype = Hype + @hype WHERE SerialNumber = @serial",
                 new MySqlParameter("@hype", hype),
                 new MySqlParameter("@hype_timestamp", hypeTime),
                 new MySqlParameter("@serial", serial));
-
-            BattleVideoUpdateHypeTimes5(tran);
 
             return results > 0;
         }
