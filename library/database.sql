@@ -1007,7 +1007,9 @@ CREATE TABLE IF NOT EXISTS `TerminalBattleVideos4` (
   KEY `Metagame` (`Metagame`),
   KEY `pid` (`pid`),
   KEY `Country` (`Country`,`Region`),
-  KEY `md5` (`md5`)
+  KEY `md5` (`md5`),
+  KEY `Hype` (`Hype`),
+  KEY `HypeTimestamp` (`HypeTimestamp`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- Data exporting was unselected.
@@ -1037,7 +1039,9 @@ CREATE TABLE IF NOT EXISTS `TerminalBattleVideos5` (
   KEY `Metagame` (`Metagame`),
   KEY `pid` (`pid`),
   KEY `Country` (`Country`,`Region`),
-  KEY `md5` (`md5`)
+  KEY `md5` (`md5`),
+  KEY `Hype` (`Hype`),
+  KEY `HypeTimestamp` (`HypeTimestamp`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- Data exporting was unselected.

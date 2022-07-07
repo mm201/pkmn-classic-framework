@@ -2572,14 +2572,13 @@ namespace PkmnFoundations.Data
             }
             else if (ranking == BattleVideoRankings4.Colosseum)
             {
-                // todo: sort by .. something.
                 where = " WHERE Metagame BETWEEN 0 AND 14";
-                sort = " ORDER BY Streak DESC, TimeAdded DESC, id DESC";
+                sort = " ORDER BY Hype DESC, TimeAdded DESC, id DESC";
             }
             else if (ranking == BattleVideoRankings4.BattleFrontier)
             {
                 where = " WHERE NOT (Metagame BETWEEN 0 AND 14)";
-                sort = " ORDER BY Streak DESC, TimeAdded DESC, id DESC";
+                sort = " ORDER BY Hype DESC, TimeAdded DESC, id DESC";
             }
             else
             {
@@ -3300,14 +3299,13 @@ namespace PkmnFoundations.Data
             }
             else if (ranking == BattleVideoRankings5.LinkBattles)
             {
-                // todo: sort by .. something.
                 where = " WHERE NOT (Metagame BETWEEN 0 AND 4)";
-                sort = " ORDER BY Streak DESC, TimeAdded DESC, id DESC";
+                sort = " ORDER BY Hype DESC, TimeAdded DESC, id DESC";
             }
             else if (ranking == BattleVideoRankings5.SubwayBattles)
             {
                 where = " WHERE Metagame BETWEEN 0 AND 4";
-                sort = " ORDER BY Streak DESC, TimeAdded DESC, id DESC";
+                sort = " ORDER BY Hype DESC, TimeAdded DESC, id DESC";
             }
             else
             {
