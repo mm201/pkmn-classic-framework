@@ -374,8 +374,9 @@ namespace PkmnFoundations.Data
         public GtsRecord4[] GtsSearch4(MySqlTransaction tran, Pokedex.Pokedex pokedex, int pid, ushort species, Genders gender, byte minLevel, byte maxLevel, byte country, int count)
         {
             List<MySqlParameter> _params = new List<MySqlParameter>();
-            string where = "WHERE pid != @pid AND IsExchanged = 0";
+            string where = "WHERE pid != @pid AND IsExchanged = 0 AND (LockedUntil < @now OR LockedUntil IS NULL)";
             _params.Add(new MySqlParameter("@pid", pid));
+            _params.Add(new MySqlParameter("@now", DateTime.UtcNow));
 
             if (species > 0)
             {
@@ -1567,8 +1568,9 @@ namespace PkmnFoundations.Data
         public GtsRecord5[] GtsSearch5(MySqlTransaction tran, Pokedex.Pokedex pokedex, int pid, ushort species, Genders gender, byte minLevel, byte maxLevel, byte country, int count)
         {
             List<MySqlParameter> _params = new List<MySqlParameter>();
-            string where = "WHERE pid != @pid AND IsExchanged = 0";
+            string where = "WHERE pid != @pid AND IsExchanged = 0 AND (LockedUntil < @now OR LockedUntil IS NULL)";
             _params.Add(new MySqlParameter("@pid", pid));
+            _params.Add(new MySqlParameter("@now", DateTime.UtcNow));
 
             if (species > 0)
             {
