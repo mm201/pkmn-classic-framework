@@ -96,6 +96,8 @@ namespace PkmnFoundations.Data
             return dateNow.AddDays(-(int)dateNow.DayOfWeek);
         }
 
+        internal const double GTS_LOCK_DURATION = 60.0d;
+
         #endregion
 
         #region GTS 4
@@ -107,6 +109,8 @@ namespace PkmnFoundations.Data
         public abstract bool GtsDepositPokemon4(GtsRecord4 record);
 
         public abstract bool GtsDeletePokemon4(int pid);
+
+        public abstract bool GtsLockPokemon4(int offer_pid, int partner_pid);
 
         public abstract bool GtsTradePokemon4(int pidSrc, int pidDest);
         public abstract bool GtsTradePokemon4(GtsRecord4 upload, GtsRecord4 result, int partner_pid);
@@ -157,6 +161,8 @@ namespace PkmnFoundations.Data
         public abstract bool GtsDepositPokemon5(GtsRecord5 record);
 
         public abstract bool GtsDeletePokemon5(int pid);
+
+        public abstract bool GtsLockPokemon5(int offer_pid, int partner_pid);
 
         public abstract bool GtsTradePokemon5(int pidSrc, int pidDest);
         public abstract bool GtsTradePokemon5(GtsRecord5 upload, GtsRecord5 result, int partner_pid);

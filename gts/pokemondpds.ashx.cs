@@ -443,6 +443,14 @@ namespace PkmnFoundations.GTS
                         return;
                     }
 
+                    if (!Database.Instance.GtsLockPokemon4(targetPid, pid))
+                    {
+                        // failed to acquire lock, implying someone else beat us here. Say already traded.
+                        SessionManager.Remove(session);
+                        response.Write(new byte[] { 0x02, 0x00 }, 0, 2);
+                        break;
+                    }
+
                     // uncomment these two lines if you're replaying gamestats requests and need to skip the random token
                     //session = new GamestatsSession(this.GameId, this.Salt, pid, "/pokemondpds/worldexchange/exchange.asp");
                     //SessionManager.Add(session);

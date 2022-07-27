@@ -406,6 +406,14 @@ namespace PkmnFoundations.GTS
                         return;
                     }
 
+                    if (!Database.Instance.GtsLockPokemon5(targetPid, pid))
+                    {
+                        // failed to acquire lock, implying someone else beat us here. Say already traded.
+                        SessionManager.Remove(session);
+                        response.Write(new byte[] { 0x02, 0x00 }, 0, 2);
+                        break;
+                    }
+
                     object[] tag = new GtsRecord5[2];
                     tag[0] = upload;
                     tag[1] = result;
