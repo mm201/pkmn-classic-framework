@@ -237,7 +237,7 @@ namespace PkmnFoundations.GTS
                     SessionManager.Remove(session);
 
                     GtsRecord4 record = Database.Instance.GtsDataForUser4(pokedex, pid);
-                    if (record == null)
+                    if (record == null || Database.Instance.GtsCheckLockStatus4(record.TradeId, pid))
                     {
                         response.Write(new byte[] { 0x00, 0x00 }, 0, 2);
                     }
