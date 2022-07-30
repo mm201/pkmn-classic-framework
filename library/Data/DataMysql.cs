@@ -326,7 +326,7 @@ namespace PkmnFoundations.Data
 
             ulong? trade_id = GtsGetDepositId4(tran, result.PID);
             GtsRecord4 resultOrig = GtsDataForUser4(tran, result.Pokedex, result.PID);
-            if (resultOrig == null || resultOrig != result)
+            if (trade_id == null || resultOrig == null || resultOrig != result || !GtsCheckLockStatus4((ulong)trade_id, partner_pid))
                 // looks like the pokemon was ninja'd between the Exchange and Exchange_finish
                 return false;
 
@@ -368,6 +368,23 @@ namespace PkmnFoundations.Data
                 new MySqlParameter("@locked_until", now.AddSeconds(GTS_LOCK_DURATION)),
                 new MySqlParameter("@locked_by", partner_pid),
                 new MySqlParameter("@now", now));
+
+            return rows > 0;
+        }
+
+        public override bool GtsCheckLockStatus4(ulong tradeId, int partner_pid)
+        {
+            return WithTransaction(tran => GtsCheckLockStatus4(tran, tradeId, partner_pid));
+        }
+
+        public bool GtsCheckLockStatus4(MySqlTransaction tran, ulong tradeId, int partner_pid)
+        {
+            int rows = Convert.ToInt32(tran.ExecuteScalar("SELECT count(*) FROM GtsPokemon4 " +
+                "WHERE TradeID = @trade_id AND (LockedUntil < @now OR LockedUntil IS NULL OR LockedBy = @partner_pid)",
+                new MySqlParameter("@trade_id", tradeId),
+                new MySqlParameter("@partner_pid", partner_pid),
+                new MySqlParameter("@now", DateTime.UtcNow)
+                ));
 
             return rows > 0;
         }
@@ -1516,7 +1533,7 @@ namespace PkmnFoundations.Data
 
             ulong? trade_id = GtsGetDepositId5(tran, result.PID);
             GtsRecord5 resultOrig = GtsDataForUser5(tran, result.Pokedex, result.PID);
-            if (resultOrig == null || resultOrig != result)
+            if (trade_id == null || resultOrig == null || resultOrig != result || !GtsCheckLockStatus5((ulong)trade_id, partner_pid))
                 // looks like the pokemon was ninja'd between the Exchange and Exchange_finish
                 return false;
 
@@ -1558,6 +1575,23 @@ namespace PkmnFoundations.Data
                 new MySqlParameter("@locked_until", now.AddSeconds(GTS_LOCK_DURATION)),
                 new MySqlParameter("@locked_by", partner_pid),
                 new MySqlParameter("@now", now));
+
+            return rows > 0;
+        }
+
+        public override bool GtsCheckLockStatus5(ulong tradeId, int partner_pid)
+        {
+            return WithTransaction(tran => GtsCheckLockStatus5(tran, tradeId, partner_pid));
+        }
+
+        public bool GtsCheckLockStatus5(MySqlTransaction tran, ulong tradeId, int partner_pid)
+        {
+            int rows = Convert.ToInt32(tran.ExecuteScalar("SELECT count(*) FROM GtsPokemon5 " +
+                "WHERE TradeID = @trade_id AND (LockedUntil < @now OR LockedUntil IS NULL OR LockedBy = @partner_pid)",
+                new MySqlParameter("@trade_id", tradeId),
+                new MySqlParameter("@partner_pid", partner_pid),
+                new MySqlParameter("@now", DateTime.UtcNow)
+                ));
 
             return rows > 0;
         }

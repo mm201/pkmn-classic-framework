@@ -111,6 +111,7 @@ namespace PkmnFoundations.Data
         public abstract bool GtsDeletePokemon4(int pid);
 
         public abstract bool GtsLockPokemon4(ulong tradeId, int partner_pid);
+        public abstract bool GtsCheckLockStatus4(ulong tradeId, int partner_pid);
 
         public abstract bool GtsTradePokemon4(int pidSrc, int pidDest);
         public abstract bool GtsTradePokemon4(GtsRecord4 upload, GtsRecord4 result, int partner_pid);
@@ -163,6 +164,7 @@ namespace PkmnFoundations.Data
         public abstract bool GtsDeletePokemon5(int pid);
 
         public abstract bool GtsLockPokemon5(ulong tradeId, int partner_pid);
+        public abstract bool GtsCheckLockStatus5(ulong tradeId, int partner_pid);
 
         public abstract bool GtsTradePokemon5(int pidSrc, int pidDest);
         public abstract bool GtsTradePokemon5(GtsRecord5 upload, GtsRecord5 result, int partner_pid);
