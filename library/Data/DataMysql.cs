@@ -349,26 +349,27 @@ namespace PkmnFoundations.Data
             return true;
         }
 
-        public override bool GtsLockPokemon4(int offer_pid, int partner_pid)
+        public override bool GtsTradePokemon4(GtsRecord4 upload, GtsRecord4 result, int partner_pid)
         {
-            return WithTransaction(tran => GtsLockPokemon4(offer_pid, partner_pid));
+            return WithTransactionSuccessful(tran => GtsTradePokemon4(tran, upload, result, partner_pid));
         }
 
-        public bool GtsLockPokemon4(MySqlTransaction tran, int offer_pid, int partner_pid)
+        public override bool GtsLockPokemon4(ulong tradeId, int partner_pid)
+        {
+            return WithTransaction(tran => GtsLockPokemon4(tran, tradeId, partner_pid));
+        }
+
+        public bool GtsLockPokemon4(MySqlTransaction tran, ulong tradeId, int partner_pid)
         {
             DateTime now = DateTime.UtcNow;
             int rows = tran.ExecuteNonQuery("UPDATE GtsPokemon4 SET LockedUntil = @locked_until, LockedBy = @locked_by " +
-                "WHERE LockedUntil < @now OR LockedUntil IS NULL",
+                "WHERE TradeID = @trade_id AND (LockedUntil < @now OR LockedUntil IS NULL)",
+                new MySqlParameter("@trade_id", tradeId),
                 new MySqlParameter("@locked_until", now.AddSeconds(GTS_LOCK_DURATION)),
                 new MySqlParameter("@locked_by", partner_pid),
                 new MySqlParameter("@now", now));
 
             return rows > 0;
-        }
-
-        public override bool GtsTradePokemon4(GtsRecord4 upload, GtsRecord4 result, int partner_pid)
-        {
-            return WithTransactionSuccessful(tran => GtsTradePokemon4(tran, upload, result, partner_pid));
         }
 
         public GtsRecord4[] GtsSearch4(MySqlTransaction tran, Pokedex.Pokedex pokedex, int pid, ushort species, Genders gender, byte minLevel, byte maxLevel, byte country, int count)
@@ -1538,26 +1539,27 @@ namespace PkmnFoundations.Data
             return true;
         }
 
-        public override bool GtsLockPokemon5(int offer_pid, int partner_pid)
+        public override bool GtsTradePokemon5(GtsRecord5 upload, GtsRecord5 result, int partner_pid)
         {
-            return WithTransaction(tran => GtsLockPokemon5(offer_pid, partner_pid));
+            return WithTransactionSuccessful(tran => GtsTradePokemon5(tran, upload, result, partner_pid));
         }
 
-        public bool GtsLockPokemon5(MySqlTransaction tran, int offer_pid, int partner_pid)
+        public override bool GtsLockPokemon5(ulong tradeId, int partner_pid)
+        {
+            return WithTransaction(tran => GtsLockPokemon5(tran, tradeId, partner_pid));
+        }
+
+        public bool GtsLockPokemon5(MySqlTransaction tran, ulong tradeId, int partner_pid)
         {
             DateTime now = DateTime.UtcNow;
             int rows = tran.ExecuteNonQuery("UPDATE GtsPokemon5 SET LockedUntil = @locked_until, LockedBy = @locked_by " +
-                "WHERE LockedUntil < @now OR LockedUntil IS NULL",
+                "WHERE TradeID = @trade_id AND (LockedUntil < @now OR LockedUntil IS NULL)",
+                new MySqlParameter("@trade_id", tradeId),
                 new MySqlParameter("@locked_until", now.AddSeconds(GTS_LOCK_DURATION)),
                 new MySqlParameter("@locked_by", partner_pid),
                 new MySqlParameter("@now", now));
 
             return rows > 0;
-        }
-
-        public override bool GtsTradePokemon5(GtsRecord5 upload, GtsRecord5 result, int partner_pid)
-        {
-            return WithTransactionSuccessful(tran => GtsTradePokemon5(tran, upload, result, partner_pid));
         }
 
         public override GtsRecord5[] GtsSearch5(Pokedex.Pokedex pokedex, int pid, ushort species, Genders gender, byte minLevel, byte maxLevel, byte country, int count)

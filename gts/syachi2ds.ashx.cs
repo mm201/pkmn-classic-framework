@@ -406,7 +406,7 @@ namespace PkmnFoundations.GTS
                         return;
                     }
 
-                    if (!Database.Instance.GtsLockPokemon5(targetPid, pid))
+                    if (!Database.Instance.GtsLockPokemon5(result.TradeId, pid))
                     {
                         // failed to acquire lock, implying someone else beat us here. Say already traded.
                         SessionManager.Remove(session);
