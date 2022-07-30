@@ -363,7 +363,7 @@ namespace PkmnFoundations.Data
         {
             DateTime now = DateTime.UtcNow;
             int rows = tran.ExecuteNonQuery("UPDATE GtsPokemon4 SET LockedUntil = @locked_until, LockedBy = @locked_by " +
-                "WHERE TradeID = @trade_id AND (LockedUntil < @now OR LockedUntil IS NULL)",
+                "WHERE id = @trade_id AND (LockedUntil < @now OR LockedUntil IS NULL)",
                 new MySqlParameter("@trade_id", tradeId),
                 new MySqlParameter("@locked_until", now.AddSeconds(GTS_LOCK_DURATION)),
                 new MySqlParameter("@locked_by", partner_pid),
@@ -380,7 +380,7 @@ namespace PkmnFoundations.Data
         public bool GtsCheckLockStatus4(MySqlTransaction tran, ulong tradeId, int partner_pid)
         {
             int rows = Convert.ToInt32(tran.ExecuteScalar("SELECT count(*) FROM GtsPokemon4 " +
-                "WHERE TradeID = @trade_id AND (LockedUntil < @now OR LockedUntil IS NULL OR LockedBy = @partner_pid)",
+                "WHERE id = @trade_id AND (LockedUntil < @now OR LockedUntil IS NULL OR LockedBy = @partner_pid)",
                 new MySqlParameter("@trade_id", tradeId),
                 new MySqlParameter("@partner_pid", partner_pid),
                 new MySqlParameter("@now", DateTime.UtcNow)
@@ -1170,7 +1170,7 @@ namespace PkmnFoundations.Data
 
         public TrainerProfile4 GamestatsGetProfile4(MySqlTransaction tran, int pid)
         {
-            DataTable result = tran.ExecuteDataTable("SELECT Data, IpAddress FROM GtsProfiles4 WHERE pid = @pid AND Expires > UTC_TIMESTAMP()", new MySqlParameter("@pid", pid));
+            DataTable result = tran.ExecuteDataTable("SELECT Data, IpAddress FROM GtsProfiles4 WHERE pid = @pid", new MySqlParameter("@pid", pid));
             if (result.Rows.Count == 0) return null;
             DataRow row = result.Rows[0];
             return new TrainerProfile4(pid, DatabaseExtender.Cast<byte[]>(row["Data"]), DatabaseExtender.Cast<string>(row["IpAddress"]));
@@ -1203,7 +1203,7 @@ namespace PkmnFoundations.Data
 
         public BanStatus CheckBanStatus(MySqlTransaction tran, byte[] mac_address)
         {
-            DataTable result = tran.ExecuteDataTable("SELECT Level, Reason, Expires FROM pkmncf_gamestats_bans_mac WHERE pid = @mac_address AND (Expires > UTC_TIMESTAMP() OR Expires IS NULL)", new MySqlParameter("@mac_address", mac_address));
+            DataTable result = tran.ExecuteDataTable("SELECT Level, Reason, Expires FROM pkmncf_gamestats_bans_mac WHERE MacAddress = @mac_address AND (Expires > UTC_TIMESTAMP() OR Expires IS NULL)", new MySqlParameter("@mac_address", mac_address));
             if (result.Rows.Count == 0) return new BanStatus(BanLevels.None, null, DateTime.MinValue);
             DataRow row = result.Rows[0];
             return new BanStatus(
@@ -1570,7 +1570,7 @@ namespace PkmnFoundations.Data
         {
             DateTime now = DateTime.UtcNow;
             int rows = tran.ExecuteNonQuery("UPDATE GtsPokemon5 SET LockedUntil = @locked_until, LockedBy = @locked_by " +
-                "WHERE TradeID = @trade_id AND (LockedUntil < @now OR LockedUntil IS NULL)",
+                "WHERE id = @trade_id AND (LockedUntil < @now OR LockedUntil IS NULL)",
                 new MySqlParameter("@trade_id", tradeId),
                 new MySqlParameter("@locked_until", now.AddSeconds(GTS_LOCK_DURATION)),
                 new MySqlParameter("@locked_by", partner_pid),
@@ -1587,7 +1587,7 @@ namespace PkmnFoundations.Data
         public bool GtsCheckLockStatus5(MySqlTransaction tran, ulong tradeId, int partner_pid)
         {
             int rows = Convert.ToInt32(tran.ExecuteScalar("SELECT count(*) FROM GtsPokemon5 " +
-                "WHERE TradeID = @trade_id AND (LockedUntil < @now OR LockedUntil IS NULL OR LockedBy = @partner_pid)",
+                "WHERE id = @trade_id AND (LockedUntil < @now OR LockedUntil IS NULL OR LockedBy = @partner_pid)",
                 new MySqlParameter("@trade_id", tradeId),
                 new MySqlParameter("@partner_pid", partner_pid),
                 new MySqlParameter("@now", DateTime.UtcNow)
