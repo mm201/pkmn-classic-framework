@@ -27,15 +27,21 @@ namespace PkmnFoundations.GTS
                         case Generations.Generation4:
                         {
                             var profile = Database.Instance.GamestatsGetProfile4(pid);
-                            macBan = Database.Instance.CheckBanStatus(profile.MacAddress);
-                            saveBan = Database.Instance.CheckBanStatus(profile);
+                            if (profile != null)
+                            {
+                                macBan = Database.Instance.CheckBanStatus(profile.MacAddress);
+                                saveBan = Database.Instance.CheckBanStatus(profile);
+                            }
                             break;
                         }
                         case Generations.Generation5:
                         {
                             var profile = Database.Instance.GamestatsGetProfile5(pid);
-                            macBan = Database.Instance.CheckBanStatus(profile.MacAddress);
-                            saveBan = Database.Instance.CheckBanStatus(profile);
+                            if (profile != null)
+                            {
+                                macBan = Database.Instance.CheckBanStatus(profile.MacAddress);
+                                saveBan = Database.Instance.CheckBanStatus(profile);
+                            }
                             break;
                         }
                     }

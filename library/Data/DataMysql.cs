@@ -1173,7 +1173,9 @@ namespace PkmnFoundations.Data
             DataTable result = tran.ExecuteDataTable("SELECT Data, IpAddress FROM GtsProfiles4 WHERE pid = @pid", new MySqlParameter("@pid", pid));
             if (result.Rows.Count == 0) return null;
             DataRow row = result.Rows[0];
-            return new TrainerProfile4(pid, DatabaseExtender.Cast<byte[]>(row["Data"]), DatabaseExtender.Cast<string>(row["IpAddress"]));
+            byte[] data = DatabaseExtender.Cast<byte[]>(row["Data"]);
+            if (data == null) return null;
+            return new TrainerProfile4(pid, data, DatabaseExtender.Cast<string>(row["IpAddress"]));
         }
         #endregion
 
@@ -2308,7 +2310,9 @@ namespace PkmnFoundations.Data
             DataTable result = tran.ExecuteDataTable("SELECT Data, IpAddress FROM GtsProfiles4 WHERE pid = @pid", new MySqlParameter("@pid", pid));
             if (result.Rows.Count == 0) return null;
             DataRow row = result.Rows[0];
-            return new TrainerProfile5(pid, DatabaseExtender.Cast<byte[]>(row["Data"]), DatabaseExtender.Cast<string>(row["IpAddress"]));
+            byte[] data = DatabaseExtender.Cast<byte[]>(row["Data"]);
+            if (data == null) return null;
+            return new TrainerProfile5(pid, data, DatabaseExtender.Cast<string>(row["IpAddress"]));
         }
 
         #endregion

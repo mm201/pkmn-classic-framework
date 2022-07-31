@@ -15,6 +15,7 @@ namespace PkmnFoundations.Structures
 
         protected TrainerProfileBase(int pid, byte[] data, string ip_address)
         {
+            if (data == null) throw new ArgumentNullException("data");
             if (data.Length != 100) throw new ArgumentException("Profile data must be 100 bytes.");
 
             PID = pid;
