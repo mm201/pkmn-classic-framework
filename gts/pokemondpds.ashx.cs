@@ -497,14 +497,25 @@ namespace PkmnFoundations.GTS
                     GamestatsSession prevSession = SessionManager.FindSession(pid, "/pokemondpds/worldexchange/exchange.asp");
                     if (prevSession == null)
                     {
-                        response.Write(new byte[] { 0x00, 0x00 }, 0, 2);
+                        // response codes:
+                        // 0x00: I thought this meant fail but it also sometimes succeeds
+                        // 0x01: Success (the normal success response)
+                        // 0x02: Either the GTS is experiencing high traffic volumes or the service is down. Please wait a while and try again.
+                        // 0x03: Success (apparently)
+                        // 0x04: Success (apparently)
+                        // 0x05: Success (apparently)
+                        // 0x06: Success (apparently)
+                        // ...
+                        // 0x0f: Success (apparently)
+                        // I'm going to reason that responses other than 0x02 will all succeed, at least on platinum
+                        response.Write(new byte[] { 0x02, 0x00 }, 0, 2);
                         return;
                     }
 
                     SessionManager.Remove(prevSession);
                     if (prevSession.Tag == null)
                     {
-                        response.Write(new byte[] { 0x00, 0x00 }, 0, 2);
+                        response.Write(new byte[] { 0x02, 0x00 }, 0, 2);
                         return;
                     }
                     AssertHelper.Assert(prevSession.Tag is GtsRecord4[]);
@@ -517,7 +528,7 @@ namespace PkmnFoundations.GTS
                     if (Database.Instance.GtsTradePokemon4(upload, result, pid))
                         response.Write(new byte[] { 0x01, 0x00 }, 0, 2);
                     else
-                        response.Write(new byte[] { 0x00, 0x00 }, 0, 2);
+                        response.Write(new byte[] { 0x02, 0x00 }, 0, 2);
 
                 } break;
                 #endregion

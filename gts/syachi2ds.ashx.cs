@@ -451,14 +451,14 @@ namespace PkmnFoundations.GTS
                     GamestatsSession prevSession = SessionManager.FindSession(pid, "/syachi2ds/web/worldexchange/exchange.asp");
                     if (prevSession == null)
                     {
-                        response.Write(new byte[] { 0x00, 0x00 }, 0, 2);
+                        response.Write(new byte[] { 0x02, 0x00 }, 0, 2);
                         return;
                     }
 
                     SessionManager.Remove(prevSession);
                     if (prevSession.Tag == null)
                     {
-                        response.Write(new byte[] { 0x00, 0x00 }, 0, 2);
+                        response.Write(new byte[] { 0x02, 0x00 }, 0, 2);
                         return;
                     }
                     AssertHelper.Assert(prevSession.Tag is GtsRecord5[]);
@@ -471,7 +471,7 @@ namespace PkmnFoundations.GTS
                     if (Database.Instance.GtsTradePokemon5(upload, result, pid))
                         response.Write(new byte[] { 0x01, 0x00 }, 0, 2);
                     else
-                        response.Write(new byte[] { 0x00, 0x00 }, 0, 2);
+                        response.Write(new byte[] { 0x02, 0x00 }, 0, 2);
 
                 } break;
                 #endregion
