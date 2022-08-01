@@ -237,14 +237,12 @@ namespace PkmnFoundations.GTS
                     SessionManager.Remove(session);
 
                     GtsRecord4 record = Database.Instance.GtsDataForUser4(pokedex, pid);
-                    if (record == null || Database.Instance.GtsCheckLockStatus4(record.TradeId, pid))
+
+                    if (record == null || // no pokemon in the system
+                        record.IsExchanged > 0 || // a traded pokemon is there, fail. Use delete.asp instead.
+                        !Database.Instance.GtsCheckLockStatus4(record.TradeId, pid)) // someone else is in the process of trading for this
                     {
-                        response.Write(new byte[] { 0x00, 0x00 }, 0, 2);
-                    }
-                    else if (record.IsExchanged > 0)
-                    {
-                        // a traded pokemon is there, fail. Use delete.asp instead.
-                        response.Write(new byte[] { 0x00, 0x00 }, 0, 2);
+                        response.Write(new byte[] { 0x02, 0x00 }, 0, 2);
                     }
                     else
                     {
@@ -257,7 +255,7 @@ namespace PkmnFoundations.GTS
                         }
                         else
                         {
-                            response.Write(new byte[] { 0x00, 0x00 }, 0, 2);
+                            response.Write(new byte[] { 0x02, 0x00 }, 0, 2);
                         }
                     }
                 } break;
