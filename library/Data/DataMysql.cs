@@ -145,7 +145,7 @@ namespace PkmnFoundations.Data
         #region GTS 4
         public GtsRecord4 GtsDataForUser4(MySqlTransaction tran, Pokedex.Pokedex pokedex, int pid)
         {
-            using (MySqlDataReader reader = (MySqlDataReader)tran.ExecuteReader("SELECT Data, Species, Gender, Level, " +
+            using (MySqlDataReader reader = (MySqlDataReader)tran.ExecuteReader("SELECT id, Data, Species, Gender, Level, " +
                 "RequestedSpecies, RequestedGender, RequestedMinLevel, RequestedMaxLevel, " +
                 "Unknown1, TrainerGender, Unknown2, TimeDeposited, TimeExchanged, pid, " +
                 "TrainerName, TrainerOT, TrainerCountry, TrainerRegion, TrainerClass, " +
@@ -174,7 +174,7 @@ namespace PkmnFoundations.Data
 
         public GtsRecord4 GtsGetRecord4(MySqlTransaction tran, Pokedex.Pokedex pokedex, long tradeId, bool isExchanged, bool allowHistory)
         {
-            using (MySqlDataReader reader = (MySqlDataReader)tran.ExecuteReader("SELECT Data, Species, Gender, Level, " +
+            using (MySqlDataReader reader = (MySqlDataReader)tran.ExecuteReader("SELECT id, Data, Species, Gender, Level, " +
                 "RequestedSpecies, RequestedGender, RequestedMinLevel, RequestedMaxLevel, " +
                 "Unknown1, TrainerGender, Unknown2, TimeDeposited, TimeExchanged, pid, " +
                 "TrainerName, TrainerOT, TrainerCountry, TrainerRegion, TrainerClass, " +
@@ -194,7 +194,7 @@ namespace PkmnFoundations.Data
 
             if (allowHistory)
             {
-                using (MySqlDataReader reader = (MySqlDataReader)tran.ExecuteReader("SELECT Data, Species, Gender, Level, " +
+                using (MySqlDataReader reader = (MySqlDataReader)tran.ExecuteReader("SELECT id, Data, Species, Gender, Level, " +
                     "RequestedSpecies, RequestedGender, RequestedMinLevel, RequestedMaxLevel, " +
                     "Unknown1, TrainerGender, Unknown2, TimeDeposited, TimeExchanged, pid, " +
                     "TrainerName, TrainerOT, TrainerCountry, TrainerRegion, TrainerClass, " +
@@ -326,7 +326,7 @@ namespace PkmnFoundations.Data
 
             ulong? trade_id = GtsGetDepositId4(tran, result.PID);
             GtsRecord4 resultOrig = GtsDataForUser4(tran, result.Pokedex, result.PID);
-            if (trade_id == null || resultOrig == null || resultOrig != result || !GtsCheckLockStatus4((ulong)trade_id, partner_pid))
+            if (trade_id == null || resultOrig == null || resultOrig != result || !GtsCheckLockStatus4(tran, (ulong)trade_id, partner_pid))
                 // looks like the pokemon was ninja'd between the Exchange and Exchange_finish
                 return false;
 
@@ -363,13 +363,13 @@ namespace PkmnFoundations.Data
         {
             DateTime now = DateTime.UtcNow;
             int rows = tran.ExecuteNonQuery("UPDATE GtsPokemon4 SET LockedUntil = @locked_until, LockedBy = @locked_by " +
-                "WHERE id = @trade_id AND (LockedUntil < @now OR LockedUntil IS NULL)",
+                "WHERE id = @trade_id AND (LockedUntil < @now OR LockedUntil IS NULL OR LockedBy = @locked_by)",
                 new MySqlParameter("@trade_id", tradeId),
                 new MySqlParameter("@locked_until", now.AddSeconds(GTS_LOCK_DURATION)),
                 new MySqlParameter("@locked_by", partner_pid),
                 new MySqlParameter("@now", now));
 
-            return rows > 0;
+            return rows != 0;
         }
 
         public override bool GtsCheckLockStatus4(ulong tradeId, int partner_pid)
@@ -380,13 +380,13 @@ namespace PkmnFoundations.Data
         public bool GtsCheckLockStatus4(MySqlTransaction tran, ulong tradeId, int partner_pid)
         {
             int rows = Convert.ToInt32(tran.ExecuteScalar("SELECT count(*) FROM GtsPokemon4 " +
-                "WHERE id = @trade_id AND (LockedUntil < @now OR LockedUntil IS NULL OR LockedBy = @partner_pid)",
+                "WHERE id = @trade_id AND (LockedUntil < @now OR LockedUntil IS NULL OR LockedBy = @locked_by)",
                 new MySqlParameter("@trade_id", tradeId),
-                new MySqlParameter("@partner_pid", partner_pid),
+                new MySqlParameter("@locked_by", partner_pid),
                 new MySqlParameter("@now", DateTime.UtcNow)
                 ));
 
-            return rows > 0;
+            return rows != 0; // No rows means a lock is in effect or nothing was found
         }
 
         public GtsRecord4[] GtsSearch4(MySqlTransaction tran, Pokedex.Pokedex pokedex, int pid, ushort species, Genders gender, byte minLevel, byte maxLevel, byte country, int count)
@@ -472,6 +472,7 @@ namespace PkmnFoundations.Data
         {
             GtsRecord4 result = new GtsRecord4(pokedex);
 
+            result.TradeId = DatabaseExtender.Cast<ulong>(reader["id"]);
             result.Data = DatabaseExtender.Cast<byte[]>(reader["Data"]);
             result.Species = DatabaseExtender.Cast<ushort>(reader["Species"]);
             result.Gender = (Genders)DatabaseExtender.Cast<byte>(reader["Gender"]);
@@ -1349,7 +1350,7 @@ namespace PkmnFoundations.Data
         #region GTS 5
         public GtsRecord5 GtsDataForUser5(MySqlTransaction tran, Pokedex.Pokedex pokedex, int pid)
         {
-            using (MySqlDataReader reader = (MySqlDataReader)tran.ExecuteReader("SELECT Data, Unknown0, " +
+            using (MySqlDataReader reader = (MySqlDataReader)tran.ExecuteReader("SELECT id, Data, Unknown0, " +
                 "Species, Gender, Level, " +
                 "RequestedSpecies, RequestedGender, RequestedMinLevel, RequestedMaxLevel, " +
                 "Unknown1, TrainerGender, Unknown2, TimeDeposited, TimeExchanged, pid, " +
@@ -1379,7 +1380,7 @@ namespace PkmnFoundations.Data
 
         public GtsRecord5 GtsGetRecord5(MySqlTransaction tran, Pokedex.Pokedex pokedex, long tradeId, bool isExchanged, bool allowHistory)
         {
-            using (MySqlDataReader reader = (MySqlDataReader)tran.ExecuteReader("SELECT Data, Unknown0, " +
+            using (MySqlDataReader reader = (MySqlDataReader)tran.ExecuteReader("SELECT id, Data, Unknown0, " +
                 "Species, Gender, Level, " +
                 "RequestedSpecies, RequestedGender, RequestedMinLevel, RequestedMaxLevel, " +
                 "Unknown1, TrainerGender, Unknown2, TimeDeposited, TimeExchanged, pid, " +
@@ -1400,7 +1401,7 @@ namespace PkmnFoundations.Data
 
             if (allowHistory)
             {
-                using (MySqlDataReader reader = (MySqlDataReader)tran.ExecuteReader("SELECT Data, Unknown0, " +
+                using (MySqlDataReader reader = (MySqlDataReader)tran.ExecuteReader("SELECT id, Data, Unknown0, " +
                     "Species, Gender, Level, " +
                     "RequestedSpecies, RequestedGender, RequestedMinLevel, RequestedMaxLevel, " +
                     "Unknown1, TrainerGender, Unknown2, TimeDeposited, TimeExchanged, pid, " +
@@ -1535,7 +1536,7 @@ namespace PkmnFoundations.Data
 
             ulong? trade_id = GtsGetDepositId5(tran, result.PID);
             GtsRecord5 resultOrig = GtsDataForUser5(tran, result.Pokedex, result.PID);
-            if (trade_id == null || resultOrig == null || resultOrig != result || !GtsCheckLockStatus5((ulong)trade_id, partner_pid))
+            if (trade_id == null || resultOrig == null || resultOrig != result || !GtsCheckLockStatus5(tran, (ulong)trade_id, partner_pid))
                 // looks like the pokemon was ninja'd between the Exchange and Exchange_finish
                 return false;
 
@@ -1572,13 +1573,13 @@ namespace PkmnFoundations.Data
         {
             DateTime now = DateTime.UtcNow;
             int rows = tran.ExecuteNonQuery("UPDATE GtsPokemon5 SET LockedUntil = @locked_until, LockedBy = @locked_by " +
-                "WHERE id = @trade_id AND (LockedUntil < @now OR LockedUntil IS NULL)",
+                "WHERE id = @trade_id AND (LockedUntil < @now OR LockedUntil IS NULL OR LockedBy = @locked_by)",
                 new MySqlParameter("@trade_id", tradeId),
                 new MySqlParameter("@locked_until", now.AddSeconds(GTS_LOCK_DURATION)),
                 new MySqlParameter("@locked_by", partner_pid),
                 new MySqlParameter("@now", now));
 
-            return rows > 0;
+            return rows != 0;
         }
 
         public override bool GtsCheckLockStatus5(ulong tradeId, int partner_pid)
@@ -1589,13 +1590,13 @@ namespace PkmnFoundations.Data
         public bool GtsCheckLockStatus5(MySqlTransaction tran, ulong tradeId, int partner_pid)
         {
             int rows = Convert.ToInt32(tran.ExecuteScalar("SELECT count(*) FROM GtsPokemon5 " +
-                "WHERE id = @trade_id AND (LockedUntil < @now OR LockedUntil IS NULL OR LockedBy = @partner_pid)",
+                "WHERE id = @trade_id AND (LockedUntil < @now OR LockedUntil IS NULL OR LockedBy = @locked_by)",
                 new MySqlParameter("@trade_id", tradeId),
-                new MySqlParameter("@partner_pid", partner_pid),
+                new MySqlParameter("@locked_by", partner_pid),
                 new MySqlParameter("@now", DateTime.UtcNow)
                 ));
 
-            return rows > 0;
+            return rows != 0; // No rows means a lock is in effect or nothing was found
         }
 
         public override GtsRecord5[] GtsSearch5(Pokedex.Pokedex pokedex, int pid, ushort species, Genders gender, byte minLevel, byte maxLevel, byte country, int count)
@@ -1683,6 +1684,7 @@ namespace PkmnFoundations.Data
         {
             GtsRecord5 result = new GtsRecord5(pokedex);
 
+            result.TradeId = DatabaseExtender.Cast<ulong>(reader["id"]);
             // xxx: Data and Unknown0 should share a database field.
             // (This requires migrating a lot of existing data)
             byte[] data = DatabaseExtender.Cast<byte[]>(reader["Data"]);
