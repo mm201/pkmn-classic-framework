@@ -88,6 +88,7 @@
     <Content Include="pokemondpds_web.ashx" />
     <Content Include="masters\MasterPage.master" />
     <Content Include="pgl.ashx" />
+    <None Include="Properties\PublishProfiles\Local IIS.pubxml" />
     <None Include="Properties\PublishProfiles\Public.pubxml" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
