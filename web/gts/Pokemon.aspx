@@ -101,6 +101,11 @@
                         <td class="pfFormValue"><asp:Literal ID="litAbility" runat="server" />
                         </td>
                     </tr>
+                    <tr class="pfFormPair">
+                        <th class="pfFormKey">Version</th>
+                        <td class="pfFormValue"><asp:Literal ID="litVersion" runat="server" />
+                        </td>
+                    </tr>
                 </table>
             </div>
         

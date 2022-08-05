@@ -137,6 +137,7 @@ namespace PkmnFoundations.Web.gts
             }
             litNature.Text = pkmn.Nature.ToString(); // todo: i18n
             litAbility.Text = pkmn.Ability == null ? "" : pkmn.Ability.Name.ToString();
+            litVersion.Text = pkmn.Version.ToString();
             litHpCurr.Text = pkmn.HP.ToString();
             litHp.Text = pkmn.Stats[Stats.Hp].ToString();
             litHpProgress.Text = WebFormat.RenderProgress(pkmn.HP, pkmn.Stats[Stats.Hp]);
