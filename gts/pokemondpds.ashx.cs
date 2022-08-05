@@ -183,21 +183,36 @@ namespace PkmnFoundations.GTS
                 {
                     SessionManager.Remove(session);
 
-                    // this is only called if result.asp returned 4.
-                    // todo: what does this do if the contained pokemon is traded??
+                    // This can be called in 3 circumstances:
+                    // 1. After result.asp when it says your existing pokemon is in the system
+                    // 2. When you check the summary of your pokemon (Platinum onward)
+                    // 3. When you attempt to retract your offer, just before saving.
 
                     GtsRecord4 record = Database.Instance.GtsDataForUser4(pokedex, pid);
 
                     if (record == null)
                     {
                         // No pokemon in the system
-                        // what do here?
-                        ShowError(context, 403);
+
+                        // response codes:
+                        // 0x01: BSOD
+                        // 0x02: BSOD
+                        // 0x03, entering GTS: Causes it to show no pokemon in the system, as if result.asp returned 5.
+                        // 0x03, checking summary: A communication error has occurred. You will be returned to the title screen. Please press the A Button.
+                        // 0x03, retracting: Communication error... (and it boots you)
+                        // 0x04: BSOD
+                        // 0x05, entering GTS: Causes it to show no pokemon in the system, as if result.asp returned 5.
+                        // 0x05, checking summary: A communication error has occurred. You will be returned to the title screen. Please press the A Button.
+                        // 0x05, retracting: Communication error... (and it boots you)
+                        // 0x06: BSOD
+                        // 0x07: BSOD
+                        response.Write(new byte[] { 0x05, 0x00 }, 0, 2);
                         return;
                     }
                     else
                     {
                         // just write the record whether traded or not...
+                        // todo: confirm that writing a traded record here will allow the trade to conclude
                         response.Write(record.Save(), 0, 292);
                     }
                 } break;
@@ -210,10 +225,20 @@ namespace PkmnFoundations.GTS
                     GtsRecord4 record = Database.Instance.GtsDataForUser4(pokedex, pid);
                     if (record == null)
                     {
-                        response.Write(new byte[] { 0x00, 0x00 }, 0, 2);
+                        response.Write(new byte[] { 0x03, 0x00 }, 0, 2);
                     }
                     else if (record.IsExchanged > 0)
                     {
+                        // Responses:
+                        // 0x00: BSOD
+                        // 0x01: Success
+                        // 0x02: BSOD
+                        // 0x03: A communication error has occurred. You have been disconnected from Nintendo Wi-Fi Connection. You will be returned to wherever you last saved. Please press the A Button.
+                        // 0x04: BSOD
+                        // 0x05: Either the GTS is experiencing high traffic volumes or the service is down. Please wait a while and try again. You have been disconnected from Nintendo Wi-Fi Connection, Please press the A Button.
+                        // 0x06: BSOD
+                        // 0x07: BSOD
+
                         // delete the arrived pokemon from the system
                         // todo: add transactions
                         // todo: log the successful trade?
@@ -222,12 +247,12 @@ namespace PkmnFoundations.GTS
                         if (success)
                             response.Write(new byte[] { 0x01, 0x00 }, 0, 2);
                         else
-                            response.Write(new byte[] { 0x00, 0x00 }, 0, 2);
+                            response.Write(new byte[] { 0x05, 0x00 }, 0, 2);
                     }
                     else
                     {
                         // own pokemon is there, fail. Use return.asp instead.
-                        response.Write(new byte[] { 0x00, 0x00 }, 0, 2);
+                        response.Write(new byte[] { 0x03, 0x00 }, 0, 2);
                     }
                 } break;
 
@@ -333,14 +358,14 @@ namespace PkmnFoundations.GTS
                     GamestatsSession prevSession = SessionManager.FindSession(pid, "/pokemondpds/worldexchange/post.asp");
                     if (prevSession == null)
                     {
-                        response.Write(new byte[] { 0x00, 0x00 }, 0, 2);
+                        response.Write(new byte[] { 0x02, 0x00 }, 0, 2);
                         return;
                     }
 
                     SessionManager.Remove(prevSession);
                     if (prevSession.Tag == null)
                     {
-                        response.Write(new byte[] { 0x00, 0x00 }, 0, 2);
+                        response.Write(new byte[] { 0x02, 0x00 }, 0, 2);
                         return;
                     }
                     AssertHelper.Assert(prevSession.Tag is GtsRecord4);
@@ -348,10 +373,19 @@ namespace PkmnFoundations.GTS
 
                     if (Database.Instance.GtsDepositPokemon4(record))
                     {
+                        // Responses:
+                        // 0x00: BSOD
+                        // 0x01: Success
+                        // 0x02: A communication error has occurred. You have been disconnected from Nintendo Wi-Fi Connection. You will be returned to wherever you last saved. Please press the A Button.
+                        // 0x03: Communication error... (and it thinks the upload was successful)
+                        // 0x04: BSOD
+                        // 0x05: A communication error has occurred. You have been disconnected from Nintendo Wi-Fi Connection. You will be returned to wherever you last saved. Please press the A Button.
+                        // 0x06: BSOD
+                        // 0x07: BSOD
                         response.Write(new byte[] { 0x01, 0x00 }, 0, 2);
                     }
                     else
-                        response.Write(new byte[] { 0x00, 0x00 }, 0, 2);
+                        response.Write(new byte[] { 0x05, 0x00 }, 0, 2);
 
                 } break;
 

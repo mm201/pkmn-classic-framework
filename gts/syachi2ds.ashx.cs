@@ -120,8 +120,10 @@ namespace PkmnFoundations.GTS
                 {
                     SessionManager.Remove(session);
 
-                    // this is only called if result.asp returned 4.
-                    // todo: what does this do if the contained pokemon is traded??
+                    // This can be called in 3 circumstances:
+                    // 1. After result.asp when it says your existing pokemon is in the system
+                    // 2. When you check the summary of your pokemon (Platinum onward)
+                    // 3. When you attempt to retract your offer, just before saving.
                     // todo: the same big blob of stuff from result.asp is sent here too.
 
                     GtsRecord5 record = Database.Instance.GtsDataForUser5(pokedex, pid);
@@ -129,16 +131,13 @@ namespace PkmnFoundations.GTS
                     if (record == null)
                     {
                         // No pokemon in the system
-                        // what do here?
-                        // todo: we should probably repeat the previous record
-                        // that was in here before delete.asp was called.
-                        // That is... if we still had it. -__-;
-                        ShowError(context, 403);
+                        response.Write(new byte[] { 0x05, 0x00 }, 0, 2);
                         return;
                     }
                     else
                     {
                         // just write the record whether traded or not...
+                        // todo: confirm that writing a traded record here will allow the trade to conclude
                         response.Write(record.Save(), 0, 296);
                     }
                 } break;
@@ -153,10 +152,14 @@ namespace PkmnFoundations.GTS
                     GtsRecord5 record = Database.Instance.GtsDataForUser5(pokedex, pid);
                     if (record == null)
                     {
-                        response.Write(new byte[] { 0x00, 0x00 }, 0, 2);
+                        response.Write(new byte[] { 0x05, 0x00 }, 0, 2);
                     }
                     else if (record.IsExchanged > 0)
                     {
+                        // Responses:
+                        // 0x03: BSOD
+                        // 0x05: 13263
+
                         // delete the arrived pokemon from the system
                         // todo: add transactions
                         // todo: log the successful trade?
@@ -165,12 +168,12 @@ namespace PkmnFoundations.GTS
                         if (success)
                             response.Write(new byte[] { 0x01, 0x00 }, 0, 2);
                         else
-                            response.Write(new byte[] { 0x00, 0x00 }, 0, 2);
+                            response.Write(new byte[] { 0x05, 0x00 }, 0, 2);
                     }
                     else
                     {
                         // own pokemon is there, fail. Use return.asp instead.
-                        response.Write(new byte[] { 0x00, 0x00 }, 0, 2);
+                        response.Write(new byte[] { 0x05, 0x00 }, 0, 2);
                     }
                 } break;
 
@@ -285,14 +288,14 @@ namespace PkmnFoundations.GTS
                     GamestatsSession prevSession = SessionManager.FindSession(pid, "/syachi2ds/web/worldexchange/post.asp");
                     if (prevSession == null)
                     {
-                        response.Write(new byte[] { 0x00, 0x00 }, 0, 2);
+                        response.Write(new byte[] { 0x02, 0x00 }, 0, 2);
                         return;
                     }
 
                     SessionManager.Remove(prevSession);
                     if (prevSession.Tag == null)
                     {
-                        response.Write(new byte[] { 0x00, 0x00 }, 0, 2);
+                        response.Write(new byte[] { 0x02, 0x00 }, 0, 2);
                         return;
                     }
                     AssertHelper.Assert(prevSession.Tag is GtsRecord5);
@@ -305,7 +308,7 @@ namespace PkmnFoundations.GTS
                         response.Write(new byte[] { 0x01, 0x00 }, 0, 2);
                     }
                     else
-                        response.Write(new byte[] { 0x00, 0x00 }, 0, 2);
+                        response.Write(new byte[] { 0x02, 0x00 }, 0, 2);
 
                 } break;
 
