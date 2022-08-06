@@ -77,6 +77,26 @@ namespace MakeBaseStatTables
                 }
                 reader.Close();
 
+                reader = (SQLiteDataReader)connVeekun.ExecuteReader("SELECT id, " +
+                    "(SELECT ability_id FROM pokemon_abilities WHERE pokemon_id = id AND slot = 1) AS ability1, " +
+                    "(SELECT ability_id FROM pokemon_abilities WHERE pokemon_id = id AND slot = 2) AS ability2, " +
+                    "(SELECT ability_id FROM pokemon_abilities WHERE pokemon_id = id AND is_hidden = 1) AS ability_hidden " +
+                    "FROM pokemon ORDER BY id");
+                using (FileStream fs = File.Open("form_abilities3.txt", FileMode.Create))
+                {
+                    StreamWriter sw = new StreamWriter(fs);
+
+                    while (reader.Read())
+                    {
+                        sw.Write("{0:00000}\t", reader["id"]);
+                        sw.Write("{0:000}\t", reader["ability1"] is DBNull ? 0 : Convert.ToInt32(reader["ability1"]));
+                        sw.Write("{0:000}\t", reader["ability2"] is DBNull ? 0 : Convert.ToInt32(reader["ability2"]));
+                        sw.WriteLine("{0:000}", reader["ability_hidden"] is DBNull ? 0 : Convert.ToInt32(reader["ability_hidden"]));
+                    }
+                    sw.Close();
+                    fs.Close();
+                }
+
                 connVeekun.Close();
             }
         }
