@@ -78,23 +78,64 @@ namespace MakeBaseStatTables
                 reader.Close();
 
                 reader = (SQLiteDataReader)connVeekun.ExecuteReader("SELECT id, " +
-                    "(SELECT ability_id FROM pokemon_abilities WHERE pokemon_id = id AND slot = 1) AS ability1, " +
-                    "(SELECT ability_id FROM pokemon_abilities WHERE pokemon_id = id AND slot = 2) AS ability2, " +
-                    "(SELECT ability_id FROM pokemon_abilities WHERE pokemon_id = id AND is_hidden = 1) AS ability_hidden " +
-                    "FROM pokemon ORDER BY id");
-                using (FileStream fs = File.Open("form_abilities3.txt", FileMode.Create))
+                    "(SELECT ability_id FROM pokemon_abilities WHERE pokemon_id = pokemon_forms.pokemon_id AND slot = 1) AS ability1, " +
+                    "(SELECT ability_id FROM pokemon_abilities WHERE pokemon_id = pokemon_forms.pokemon_id AND slot = 2) AS ability2, " +
+                    "(SELECT ability_id FROM pokemon_abilities WHERE pokemon_id = pokemon_forms.pokemon_id AND is_hidden = 1) AS ability_hidden " +
+                    "FROM pokemon_forms ORDER BY id");
+                using (FileStream fs3 = File.Open("form_abilities3.txt", FileMode.Create), 
+                    fs4 = File.Open("form_abilities4.txt", FileMode.Create),
+                    fs5 = File.Open("form_abilities5.txt", FileMode.Create),
+                    fs6 = File.Open("form_abilities6.txt", FileMode.Create))
                 {
-                    StreamWriter sw = new StreamWriter(fs);
+                    StreamWriter sw3 = new StreamWriter(fs3);
+                    StreamWriter sw4 = new StreamWriter(fs4);
+                    StreamWriter sw5 = new StreamWriter(fs5);
+                    StreamWriter sw6 = new StreamWriter(fs6);
 
                     while (reader.Read())
                     {
-                        sw.Write("{0:00000}\t", reader["id"]);
-                        sw.Write("{0:000}\t", reader["ability1"] is DBNull ? 0 : Convert.ToInt32(reader["ability1"]));
-                        sw.Write("{0:000}\t", reader["ability2"] is DBNull ? 0 : Convert.ToInt32(reader["ability2"]));
-                        sw.WriteLine("{0:000}", reader["ability_hidden"] is DBNull ? 0 : Convert.ToInt32(reader["ability_hidden"]));
+                        long id = Convert.ToInt64(reader["id"]);
+
+                        if ((id <= 386) || (id >= 10000 && id <= 10033))
+                        {
+                            sw3.Write("{0:00000}\t", reader["id"]);
+                            sw3.Write("{0:000}\t", reader["ability1"] is DBNull ? 0 : Convert.ToInt32(reader["ability1"]));
+                            sw3.Write("{0:000}\t", reader["ability2"] is DBNull ? 0 : Convert.ToInt32(reader["ability2"]));
+                            sw3.WriteLine("{0:000}", 0);
+                        }
+                        else if ((id <= 493) || (id >= 10034 && id <= 10065))
+                        {
+                            sw4.Write("{0:00000}\t", reader["id"]);
+                            sw4.Write("{0:000}\t", reader["ability1"] is DBNull ? 0 : Convert.ToInt32(reader["ability1"]));
+                            sw4.Write("{0:000}\t", reader["ability2"] is DBNull ? 0 : Convert.ToInt32(reader["ability2"]));
+                            sw4.WriteLine("{0:000}", 0);
+                        }
+
+                        if ((id <= 649) || (id >= 10000 && id <= 10084))
+                        {
+                            sw5.Write("{0:00000}\t", reader["id"]);
+                            sw5.Write("{0:000}\t", reader["ability1"] is DBNull ? 0 : Convert.ToInt32(reader["ability1"]));
+                            sw5.Write("{0:000}\t", reader["ability2"] is DBNull ? 0 : Convert.ToInt32(reader["ability2"]));
+                            sw5.WriteLine("{0:000}", reader["ability_hidden"] is DBNull ? 0 : Convert.ToInt32(reader["ability_hidden"]));
+                        }
+                        else
+                        {
+                            sw6.Write("{0:00000}\t", reader["id"]);
+                            sw6.Write("{0:000}\t", reader["ability1"] is DBNull ? 0 : Convert.ToInt32(reader["ability1"]));
+                            sw6.Write("{0:000}\t", reader["ability2"] is DBNull ? 0 : Convert.ToInt32(reader["ability2"]));
+                            sw6.WriteLine("{0:000}", reader["ability_hidden"] is DBNull ? 0 : Convert.ToInt32(reader["ability_hidden"]));
+                        }
                     }
-                    sw.Close();
-                    fs.Close();
+
+                    sw3.Close();
+                    sw4.Close();
+                    sw5.Close();
+                    sw6.Close();
+
+                    fs3.Close();
+                    fs4.Close();
+                    fs5.Close();
+                    fs6.Close();
                 }
 
                 connVeekun.Close();
