@@ -78,6 +78,10 @@
     <Content Include="families_map.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="form_abilities3.txt" />
+    <Content Include="form_abilities4.txt" />
+    <Content Include="form_abilities5.txt" />
+    <Content Include="form_abilities6.txt" />
     <Content Include="form_stats1.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
