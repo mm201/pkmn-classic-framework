@@ -24,12 +24,12 @@ namespace PkmnFoundations.Pokedex
                 p.Evaluate();
         }
 
-        public static LocalizedString LocalizedStringFromReader(IDataReader reader, String prefix)
+        public static LocalizedString LocalizedStringFromReader(IDataReader reader, string prefix)
         {
             // fixme: share this field with CreateLocalizedStringQueryPieces
-            String[] langs = new String[] { "JA", "EN", "FR", "IT", "DE", "ES", "KO" };
+            string[] langs = new string[] { "JA", "EN", "FR", "IT", "DE", "ES", "KO" };
             LocalizedString result = new LocalizedString();
-            foreach (String lang in langs)
+            foreach (string lang in langs)
             {
                 try
                 {

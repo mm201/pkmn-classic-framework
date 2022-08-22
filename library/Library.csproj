@@ -61,6 +61,7 @@
     <Compile Include="Data\SqlDatabaseExtender.cs" />
     <Compile Include="Pokedex\Ability.cs" />
     <Compile Include="Pokedex\Evolution.cs" />
+    <Compile Include="Pokedex\FormAbilities.cs" />
     <Compile Include="Pokedex\FormStats.cs" />
     <Compile Include="Pokedex\Item.cs" />
     <Compile Include="Pokedex\Location.cs" />

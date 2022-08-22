@@ -3847,6 +3847,21 @@ namespace PkmnFoundations.Data
             }
         }
 
+        public override List<FormAbilities> PokedexGetAllFormAbilities(Pokedex.Pokedex pokedex)
+        {
+            using (MySqlConnection db = CreateConnection())
+            {
+                db.Open();
+
+                using (MySqlDataReader reader = (MySqlDataReader)db.ExecuteReader("SELECT " +
+                    "form_id, MinGeneration, Ability1, Ability2, HiddenAbility1 " +
+                    "FROM pkmncf_pokedex_pokemon_form_abilities"))
+                {
+                    return ReaderToList(reader, pokedex, () => new FormAbilities(pokedex, reader));
+                }
+            }
+        }
+
         public override List<Family> PokedexGetAllFamilies(Pokedex.Pokedex pokedex)
         {
             using (MySqlConnection db = CreateConnection())

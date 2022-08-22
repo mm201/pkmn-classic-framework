@@ -715,10 +715,21 @@ CREATE TABLE IF NOT EXISTS `pkmncf_pokedex_pokemon_forms` (
 
 -- Data exporting was unselected.
 
+-- Dumping structure for table gts.pkmncf_pokedex_pokemon_form_abilities
+CREATE TABLE IF NOT EXISTS `pkmncf_pokedex_pokemon_form_abilities` (
+  `form_id` int(10) unsigned NOT NULL,
+  `MinGeneration` int(10) unsigned NOT NULL,
+  `Ability1` int(10) unsigned DEFAULT NULL,
+  `Ability2` int(10) unsigned DEFAULT NULL,
+  `HiddenAbility1` int(10) unsigned DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- Data exporting was unselected.
+
 -- Dumping structure for table gts.pkmncf_pokedex_pokemon_form_stats
 CREATE TABLE IF NOT EXISTS `pkmncf_pokedex_pokemon_form_stats` (
   `form_id` int(10) unsigned NOT NULL,
-  `MinGeneration` int(11) unsigned NOT NULL,
+  `MinGeneration` int(10) unsigned NOT NULL,
   `Type1` int(10) unsigned DEFAULT NULL,
   `Type2` int(10) unsigned DEFAULT NULL,
   `BaseHP` int(11) DEFAULT NULL,

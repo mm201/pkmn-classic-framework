@@ -15,6 +15,7 @@ namespace PkmnFoundations.Pokedex
             : base(pokedex)
         {
             m_form_pair = Form.CreatePair(m_pokedex);
+            // xxx: Do we maybe want to expose types as some sort of collection maybe?
             m_type1_pair = Type.CreatePair(m_pokedex);
             m_type2_pair = Type.CreatePair(m_pokedex);
             m_lazy_pairs.Add(m_form_pair);

@@ -311,6 +311,7 @@ namespace PkmnFoundations.Data
         public abstract List<Species> PokedexGetAllSpecies(Pokedex.Pokedex pokedex);
         public abstract List<Form> PokedexGetAllForms(Pokedex.Pokedex pokedex);
         public abstract List<FormStats> PokedexGetAllFormStats(Pokedex.Pokedex pokedex);
+        public abstract List<FormAbilities> PokedexGetAllFormAbilities(Pokedex.Pokedex pokedex);
         public abstract List<Family> PokedexGetAllFamilies(Pokedex.Pokedex pokedex);
         public abstract List<Evolution> PokedexGetAllEvolutions(Pokedex.Pokedex pokedex);
 

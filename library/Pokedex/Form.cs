@@ -11,7 +11,7 @@ namespace PkmnFoundations.Pokedex
     public class Form : PokedexRecordBase
     {
         public Form(Pokedex pokedex, int id, int species_id, byte value,
-            LocalizedString name, String suffix, int height, int weight, int experience)
+            LocalizedString name, string suffix, int height, int weight, int experience)
             : base(pokedex)
         {
             m_species_pair = Species.CreatePair(m_pokedex);
@@ -46,12 +46,13 @@ namespace PkmnFoundations.Pokedex
         {
             base.PrefetchRelations();
             m_form_stats = m_pokedex.FormStats(ID);
+            m_form_abilities = m_pokedex.FormAbilities(ID);
         }
 
         public int ID { get; private set; }
         public byte Value { get; private set; }
         public LocalizedString Name { get; private set; }
-        public String Suffix { get; private set; }
+        public string Suffix { get; private set; }
         public int Height { get; private set; }
         public int Weight { get; private set; }
         public int Experience { get; private set; }
@@ -75,6 +76,14 @@ namespace PkmnFoundations.Pokedex
             // our own binary search and YAGNI for a list of at most 6 values.
             // http://stackoverflow.com/questions/20474896/finding-nearest-value-in-a-sorteddictionary
             return m_form_stats.Last(pair => (int)(pair.Key) <= (int)generation).Value;
+        }
+
+        private SortedList<Generations, FormAbilities> m_form_abilities;
+        public FormAbilities Abilities(Generations generation)
+        {
+            if (m_form_abilities == null) m_form_abilities = m_pokedex.FormAbilities(ID);
+            // xxx: above
+            return m_form_abilities.Last(pair => (int)(pair.Key) <= (int)generation).Value;
         }
 
         public static LazyKeyValuePair<int, Form> CreatePair(Pokedex pokedex)

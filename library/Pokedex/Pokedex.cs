@@ -33,28 +33,10 @@ namespace PkmnFoundations.Pokedex
             m_locations = db.PokedexGetAllLocations(this).ToDictionary(l => l.ID, l => l);
 
             List<FormStats> form_stats = db.PokedexGetAllFormStats(this);
-            form_stats.Sort(delegate(FormStats f, FormStats other) 
-            { 
-                if (f.FormID != other.FormID) return f.FormID.CompareTo(other.FormID); 
-                return f.MinGeneration.CompareTo(other.MinGeneration); 
-            });
+            m_form_stats = ProcessGenerationalChangeset(form_stats, fs => fs.FormID, fs => fs.MinGeneration);
 
-            Dictionary<int, SortedList<Generations, FormStats>> resultFormStats = new Dictionary<int, SortedList<Generations, FormStats>>();
-            SortedList<Generations, FormStats> currFormStats = null;
-            int currFormId = 0;
-
-            foreach (FormStats f in form_stats)
-            {
-                if (currFormStats == null || currFormId != f.FormID)
-                {
-                    if (currFormStats != null) resultFormStats.Add(currFormId, currFormStats);
-                    currFormStats = new SortedList<Generations, FormStats>();
-                }
-                currFormStats.Add(f.MinGeneration, f);
-                currFormId = f.FormID;
-            }
-            if (currFormStats != null) resultFormStats.Add(currFormId, currFormStats);
-            m_form_stats = resultFormStats;
+            List<FormAbilities> form_abilities = db.PokedexGetAllFormAbilities(this);
+            m_form_abilities = ProcessGenerationalChangeset(form_abilities, fa => fa.FormID, fa => fa.MinGeneration);
         }
 
         private void BuildAdditionalIndexes()
@@ -111,6 +93,42 @@ namespace PkmnFoundations.Pokedex
             AddGeneration(m_location_values_generations, m_locations, LocationNumbering.Generation6, l => l.Value6);
         }
 
+        private Dictionary<int, SortedList<Generations, T>> ProcessGenerationalChangeset<T>(List<T> data, Func<T, int> idGetter, Func<T, Generations> minGenerationGetter)
+        {
+            // xxx: Instead of passing in these two lamdbas, we want an IGenerationalChangesetItem interface with corresponding properties.
+
+            var sorted = data.ToList();
+            sorted.Sort(delegate (T f, T other)
+            {
+                int idF = idGetter(f);
+                int idOther = idGetter(other);
+                if (idF != idOther) return idF.CompareTo(idOther);
+
+                Generations genF = minGenerationGetter(f);
+                Generations genOther = minGenerationGetter(other);
+                return genF.CompareTo(genOther);
+            });
+
+            Dictionary<int, SortedList<Generations, T>> resultFormStats = new Dictionary<int, SortedList<Generations, T>>();
+            SortedList<Generations, T> currFormStats = null;
+            int currFormId = 0;
+
+            foreach (T f in sorted)
+            {
+                int idF = idGetter(f);
+                if (currFormStats == null || currFormId != idF)
+                {
+                    if (currFormStats != null) resultFormStats.Add(currFormId, currFormStats);
+                    currFormStats = new SortedList<Generations, T>();
+                }
+                currFormStats.Add(minGenerationGetter(f), f);
+                currFormId = idF;
+            }
+            if (currFormStats != null) resultFormStats.Add(currFormId, currFormStats);
+
+            return resultFormStats;
+        }
+
         private void AddGeneration<TGen, TKey, TValue>(Dictionary<TGen, Dictionary<TKey, TValue>> dest, Dictionary<TKey, TValue> src, TGen generation, Func<TValue, TKey?> keyGetter)
             where TKey : struct
         {
@@ -150,6 +168,11 @@ namespace PkmnFoundations.Pokedex
                 foreach (var j in k.Value)
                     j.Value.PrefetchRelations();
             }
+            foreach (var k in m_form_abilities)
+            {
+                foreach (var j in k.Value)
+                    j.Value.PrefetchRelations();
+            }
         }
 
         private Dictionary<int, Species> m_species;
@@ -157,6 +180,7 @@ namespace PkmnFoundations.Pokedex
         private Dictionary<int, Form> m_forms;
         private Dictionary<int, Dictionary<byte, Form>> m_forms_by_value;
         private Dictionary<int, SortedList<Generations, FormStats>> m_form_stats;
+        private Dictionary<int, SortedList<Generations, FormAbilities>> m_form_abilities;
         //private Dictionary<int, Evolution> m_evolutions;
 
         private Dictionary<int, Item> m_items;
@@ -208,6 +232,11 @@ namespace PkmnFoundations.Pokedex
         internal SortedList<Generations, FormStats> FormStats(int form_id)
         {
             return m_form_stats[form_id];
+        }
+
+        internal SortedList<Generations, FormAbilities> FormAbilities(int form_id)
+        {
+            return m_form_abilities[form_id];
         }
 
         public IDictionary<int, Item> Items
