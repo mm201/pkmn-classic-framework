@@ -721,7 +721,11 @@ CREATE TABLE IF NOT EXISTS `pkmncf_pokedex_pokemon_form_abilities` (
   `MinGeneration` int(10) unsigned NOT NULL,
   `Ability1` int(10) unsigned DEFAULT NULL,
   `Ability2` int(10) unsigned DEFAULT NULL,
-  `HiddenAbility1` int(10) unsigned DEFAULT NULL
+  `HiddenAbility1` int(10) unsigned DEFAULT NULL,
+  PRIMARY KEY (`form_id`,`MinGeneration`),
+  KEY `Ability1` (`Ability1`),
+  KEY `Ability2` (`Ability2`),
+  KEY `HiddenAbility1` (`HiddenAbility1`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- Data exporting was unselected.
@@ -744,6 +748,7 @@ CREATE TABLE IF NOT EXISTS `pkmncf_pokedex_pokemon_form_stats` (
   `RewardSpeed` tinyint(3) unsigned DEFAULT NULL,
   `RewardSpAttack` tinyint(3) unsigned DEFAULT NULL,
   `RewardSpDefense` tinyint(3) unsigned DEFAULT NULL,
+  PRIMARY KEY (`form_id`,`MinGeneration`),
   KEY `form_id` (`form_id`,`MinGeneration`),
   KEY `Type1` (`Type1`),
   KEY `Type2` (`Type2`)

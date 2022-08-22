@@ -1,4 +1,5 @@
-﻿using PkmnFoundations.Structures;
+﻿using PkmnFoundations.Data;
+using PkmnFoundations.Structures;
 using PkmnFoundations.Support;
 using System;
 using System.Collections.Generic;
@@ -34,9 +35,9 @@ namespace PkmnFoundations.Pokedex
                 pokedex,
             Convert.ToInt32(reader["form_id"]),
             (Generations)Convert.ToInt32(reader["MinGeneration"]),
-            Convert.ToInt32(reader["Ability1"]),
-            Convert.ToInt32(reader["Ability2"]),
-            Convert.ToInt32(reader["HiddenAbility1"])
+            (int)(DatabaseExtender.Cast<uint ?>(reader["Ability1"]) ?? 0),
+            (int)(DatabaseExtender.Cast<uint ?>(reader["Ability2"]) ?? 0),
+            (int)(DatabaseExtender.Cast<uint ?>(reader["HiddenAbility1"]) ?? 0)
             )
         {
         }

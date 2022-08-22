@@ -3606,9 +3606,9 @@ namespace PkmnFoundations.Data
                     "VALUES (@form_id, @min_generation, @ability1, @ability2, @hidden_ability1)",
                     new MySqlParameter("@form_id", f.FormID),
                     new MySqlParameter("@min_generation", (int)f.MinGeneration),
-                    new MySqlParameter("@ability1", f.Ability1ID),
-                    new MySqlParameter("@ability2", f.Ability2ID),
-                    new MySqlParameter("@hidden_ability1", f.HiddenAbility1ID)
+                    new MySqlParameter("@ability1", f.Ability1ID == 0 ? (int?)null : f.Ability1ID),
+                    new MySqlParameter("@ability2", f.Ability2ID == 0 ? (int?)null : f.Ability2ID),
+                    new MySqlParameter("@hidden_ability1", f.HiddenAbility1ID == 0 ? (int?)null : f.HiddenAbility1ID)
                 );
 
                 db.Close();
