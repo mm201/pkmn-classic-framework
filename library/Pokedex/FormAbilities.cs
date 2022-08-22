@@ -99,5 +99,15 @@ namespace PkmnFoundations.Pokedex
             } 
         }
 
+        public Ability[] HiddenAbilities
+        {
+            get
+            {
+                if (HiddenAbility1 != null)
+                    return new Ability[] { HiddenAbility1 };
+                else
+                    return new Ability[] { };
+            }
+        }
     }
 }

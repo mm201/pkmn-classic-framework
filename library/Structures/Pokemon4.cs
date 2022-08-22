@@ -350,6 +350,8 @@ namespace PkmnFoundations.Structures
 
             if (thePokemon.AbilityID <= 0) return new ValidationSummary() { IsValid = false };
             if (thePokemon.AbilityID > 123) return new ValidationSummary() { IsValid = false };
+            if (!thePokemon.Form.Abilities(Generations.Generation4).Abilities.Contains(thePokemon.Ability))
+                return new ValidationSummary() { IsValid = false };
 
             foreach (MoveSlot move in thePokemon.Moves)
             {
