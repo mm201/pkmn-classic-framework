@@ -3595,6 +3595,26 @@ namespace PkmnFoundations.Data
             }
         }
 
+        public override void PokedexInsertFormAbilities(FormAbilities f)
+        {
+            using (MySqlConnection db = CreateConnection())
+            {
+                db.Open();
+
+                db.ExecuteNonQuery("INSERT INTO pkmncf_pokedex_pokemon_form_abilities " +
+                    "(form_id, MinGeneration, Ability1, Ability2, HiddenAbility1) " +
+                    "VALUES (@form_id, @min_generation, @ability1, @ability2, @hidden_ability1)",
+                    new MySqlParameter("@form_id", f.FormID),
+                    new MySqlParameter("@min_generation", (int)f.MinGeneration),
+                    new MySqlParameter("@ability1", f.Ability1ID),
+                    new MySqlParameter("@ability2", f.Ability2ID),
+                    new MySqlParameter("@hidden_ability1", f.HiddenAbility1ID)
+                );
+
+                db.Close();
+            }
+        }
+
         public override void PokedexInsertFamily(Family f)
         {
             using (MySqlConnection db = CreateConnection())

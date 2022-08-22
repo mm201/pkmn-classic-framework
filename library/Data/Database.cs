@@ -293,6 +293,7 @@ namespace PkmnFoundations.Data
         public abstract void PokedexInsertSpecies(Species s);
         public abstract void PokedexInsertForm(Form f);
         public abstract void PokedexInsertFormStats(FormStats f);
+        public abstract void PokedexInsertFormAbilities(FormAbilities f);
         public abstract void PokedexInsertFamily(Family f);
         public abstract void PokedexInsertEvolution(Evolution f);
 

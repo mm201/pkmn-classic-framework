@@ -344,6 +344,23 @@ namespace VeekunImport
                 }
                 rdAbilities.Close();
 
+                // pkmncf_pokedex_pokemon_form_abilities
+                for (int generation = 3; generation <= GENERATIONS; generation++)
+                {
+                    string filename = String.Format("form_abilities{0}.txt", generation);
+                    ProcessTSV(filename, 4, row =>
+                    {
+                        int[] fieldsInt = row.Fields.Select(s => Convert.ToInt32(s)).ToArray();
+                        FormAbilities f = new FormAbilities(null, fieldsInt[0], (Generations)generation, 
+                            fieldsInt[1], fieldsInt[2], fieldsInt[3]
+                            );
+
+                        db.PokedexInsertFormAbilities(f);
+                        Console.WriteLine("Inserted abilities for {0} gen {1}", f.FormID, (int)f.MinGeneration);
+                    });
+                }
+
+
                 // pkmncf_pokedex_items
                 Dictionary<int, ItemLoading> items = new Dictionary<int, ItemLoading>();
 
