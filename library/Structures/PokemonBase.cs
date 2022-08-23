@@ -185,6 +185,8 @@ namespace PkmnFoundations.Structures
             // structure type, we have to roll our own vtable here to be able
             // to have generation-specific validation in each inheritance
             // branch.
+            // todo: Move some cross-generational validation logic over to
+            // this base method.
             switch (this.Generation)
             {
                 case Generations.Generation4:

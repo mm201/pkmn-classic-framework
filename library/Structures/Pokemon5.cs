@@ -341,8 +341,10 @@ namespace PkmnFoundations.Structures
 
             if (thePokemon.AbilityID <= 0) return new ValidationSummary() { IsValid = false };
             if (thePokemon.AbilityID > 164) return new ValidationSummary() { IsValid = false };
-            if (!thePokemon.Form.Abilities(Generations.Generation4).Abilities.Contains(thePokemon.Ability) &&
-                !thePokemon.Form.Abilities(Generations.Generation4).HiddenAbilities.Contains(thePokemon.Ability))
+            if (!thePokemon.Form.Abilities(Generations.Generation5).Abilities.Contains(thePokemon.Ability) &&
+                !thePokemon.Form.Abilities(Generations.Generation5).HiddenAbilities.Contains(thePokemon.Ability) &&
+                // Allow Blue Basculin to have Reckless. https://bulbapedia.bulbagarden.net/wiki/Basculin_(Pok%C3%A9mon)#Trivia
+                !(thePokemon.Form.Suffix == "blue-striped" && thePokemon.AbilityID == 120))
                 return new ValidationSummary() { IsValid = false };
 
             foreach (MoveSlot move in thePokemon.Moves)
