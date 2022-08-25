@@ -81,8 +81,10 @@
     <Compile Include="Structures\BattleSubwayRecord5.cs" />
     <Compile Include="Structures\BattleTowerPokemon4.cs" />
     <Compile Include="Structures\BattleTowerPokemonBase.cs" />
+    <Compile Include="Structures\BattleTowerProfileBase.cs" />
     <Compile Include="Structures\BattleTowerRecord4.cs" />
     <Compile Include="Structures\BattleTowerProfile4.cs" />
+    <Compile Include="Structures\BattleTowerRecordBase.cs" />
     <Compile Include="Structures\BattleVideoHeader4.cs" />
     <Compile Include="Structures\BattleVideoHeader5.cs" />
     <Compile Include="Structures\BattleVideoRecord4.cs" />
@@ -118,6 +120,7 @@
     <Compile Include="Support\AssertHelper.cs" />
     <Compile Include="Support\EncodedString4.cs" />
     <Compile Include="Support\EncodedString5.cs" />
+    <Compile Include="Support\EncodedStringBase.cs" />
     <Compile Include="Support\EnumerableExtender.cs" />
     <Compile Include="Support\GameSyncUtils.cs" />
     <Compile Include="Support\Indexer1d.cs" />

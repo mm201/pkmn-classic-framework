@@ -7,7 +7,7 @@ using PkmnFoundations.Support;
 
 namespace PkmnFoundations.Structures
 {
-    public class BattleTowerRecord4
+    public class BattleTowerRecord4 : BattleTowerRecordBase
     {
         public BattleTowerRecord4(Pokedex.Pokedex pokedex)
         {

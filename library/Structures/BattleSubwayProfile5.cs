@@ -7,7 +7,7 @@ using PkmnFoundations.Support;
 
 namespace PkmnFoundations.Structures
 {
-    public class BattleSubwayProfile5
+    public class BattleSubwayProfile5 : BattleTowerProfileBase
     {
         public BattleSubwayProfile5()
         {

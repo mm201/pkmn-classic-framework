@@ -7,13 +7,10 @@ using PkmnFoundations.Support;
 
 namespace PkmnFoundations.GTS
 {
-    // This was uglifying my ashx handler so I'm putting it in its own class
-    // instead.
-
     /// <summary>
     /// Provides a source of fake battle tower opponents.
     /// </summary>
-    public static class FakeOpponentGenerator4
+    public static class FakeOpponentGenerator
     {
         const int FAKE_OPPONENTS_COUNT = 7;
 
@@ -22,12 +19,12 @@ namespace PkmnFoundations.GTS
         /// </summary>
         /// <param name="count"></param>
         /// <returns></returns>
-        public static BattleTowerRecord4[] GenerateFakeOpponents(int count)
+        public static BattleTowerRecordBase[] GenerateFakeOpponents(FakeOpponentFactory factory, int count)
         {
             // todo: allow more with repeats
             if (count > FAKE_OPPONENTS_COUNT) throw new ArgumentOutOfRangeException("count");
             List<int> values = Enumerable.Range(0, FAKE_OPPONENTS_COUNT).ToList();
-            BattleTowerRecord4[] result = new BattleTowerRecord4[count];
+            BattleTowerRecordBase[] result = new BattleTowerRecordBase[count];
 
             Random rand = new Random();
             var pokedex = AppStateHelper.Pokedex(HttpContext.Current.Application);
@@ -37,13 +34,13 @@ namespace PkmnFoundations.GTS
                 int index = rand.Next(values.Count);
                 int index2 = values[index];
                 values.RemoveAt(index);
-                result[x] = GenerateFakeOpponent(pokedex, index2);
+                result[x] = GenerateFakeOpponent(factory, pokedex, index2);
             }
 
             return result;
         }
 
-        public static BattleTowerRecord4 GenerateFakeOpponent(Pokedex.Pokedex pokedex, int index)
+        public static BattleTowerRecordBase GenerateFakeOpponent(FakeOpponentFactory factory, Pokedex.Pokedex pokedex, int index)
         {
             if (index >= FAKE_OPPONENTS_COUNT) throw new ArgumentOutOfRangeException("index");
 
@@ -495,4 +492,86 @@ namespace PkmnFoundations.GTS
             return record;
         }
     }
+
+    public abstract class FakeOpponentFactory
+    {
+        public abstract BattleTowerRecordBase CreateRecord(Pokedex.Pokedex pokedex);
+
+        public abstract BattleTowerPokemonBase CreatePokemon(Pokedex.Pokedex pokedex, ushort species, ushort held_item, ushort[] moveset,
+            uint ot, uint personality, uint ivs, byte[] evs, byte pp_ups,
+            Languages language, byte ability, byte happiness, EncodedStringBase nickname);
+
+        public abstract BattleTowerProfileBase CreateProfile(EncodedStringBase name, Versions version,
+            Languages language, byte country, byte region, uint ot,
+            TrendyPhraseBase phrase_leader, byte gender, byte unknown);
+
+        public abstract EncodedStringBase CreateEncodedString(string text);
+
+        public abstract TrendyPhraseBase CreateTrendyPhrase(ushort mood, ushort index, ushort word1, ushort word2);
+    }
+
+    public class FakeOpponentFactory4 : FakeOpponentFactory
+    {
+        public override BattleTowerRecordBase CreateRecord(Pokedex.Pokedex pokedex)
+        {
+            BattleTowerRecord4 record = new BattleTowerRecord4(pokedex);
+            record.Party = new BattleTowerPokemon4[3];
+            record.Unknown3 = 6969;
+            return record;
+        }
+
+        public override BattleTowerPokemonBase CreatePokemon(Pokedex.Pokedex pokedex, 
+            ushort species, ushort held_item, ushort[] moveset, uint ot, 
+            uint personality, uint ivs, byte[] evs, byte pp_ups, 
+            Languages language, byte ability, byte happiness, 
+            EncodedStringBase nickname)
+        {
+            return new BattleTowerPokemon4(pokedex,
+                        species,
+                        held_item,
+                        moveset,
+                        ot, personality,
+                        ivs,
+                        evs,
+                        pp_ups, language, ability,
+                        happiness, (EncodedString4)nickname
+                    );
+        }
+
+        public override BattleTowerProfileBase CreateProfile(EncodedStringBase name, Versions version, Languages language, byte country, byte region, uint ot, TrendyPhraseBase phrase_leader, byte gender, byte unknown)
+        {
+            throw new NotImplementedException();
+        }
+
+    }
+
+    public class FakeOpponentFactory5 : FakeOpponentFactory
+    {
+        public override BattleTowerRecordBase CreateRecord(Pokedex.Pokedex pokedex)
+        {
+            BattleSubwayRecord5 record = new BattleSubwayRecord5(pokedex);
+            record.Party = new BattleSubwayPokemon5[3];
+            record.Unknown3 = 6969;
+            return record;
+        }
+
+        public override BattleTowerPokemonBase CreatePokemon(Pokedex.Pokedex pokedex,
+            ushort species, ushort held_item, ushort[] moveset, uint ot,
+            uint personality, uint ivs, byte[] evs, byte pp_ups,
+            Languages language, byte ability, byte happiness,
+            EncodedStringBase nickname)
+        {
+            return new BattleSubwayPokemon5(pokedex,
+                        species,
+                        held_item,
+                        moveset,
+                        ot, personality,
+                        ivs,
+                        evs,
+                        pp_ups, language, ability,
+                        happiness, (EncodedString5)nickname, 0
+                    );
+        }
+    }
+
 }

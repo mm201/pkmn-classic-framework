@@ -6,7 +6,7 @@ using System.IO;
 
 namespace PkmnFoundations.Support
 {
-    public class EncodedString5
+    public class EncodedString5 : EncodedStringBase
     {
         /// <summary>
         /// Instances an EncodedString5 from its binary representation.
@@ -71,12 +71,12 @@ namespace PkmnFoundations.Support
 			return sb.ToString();
 		}
 
-        public static String DecodeString(byte[] data)
+        public static string DecodeString(byte[] data)
         {
             return DecodeString(data, 0, data.Length >> 1);
         }
 
-        public static byte[] EncodeString(String str, int size)
+        public static byte[] EncodeString(string str, int size)
         {
             int actualLength = (size >> 1) - 1;
             if (str.Length > actualLength) throw new ArgumentOutOfRangeException("size");
@@ -98,7 +98,7 @@ namespace PkmnFoundations.Support
 		private byte[] m_raw_data;
 		private string m_text;
 
-        public int Size
+        public override int Size
         {
             get
             {
@@ -107,7 +107,7 @@ namespace PkmnFoundations.Support
             // todo: set
         }
 
-        public string Text
+        public override string Text
         {
             get
             {
@@ -123,7 +123,7 @@ namespace PkmnFoundations.Support
             }
         }
 
-		public byte[] RawData
+		public override byte[] RawData
         {
             get
             {

@@ -123,7 +123,7 @@
     </Compile>
     <Compile Include="src\AppStateHelper.cs" />
     <Compile Include="src\BanHelper.cs" />
-    <Compile Include="src\FakeOpponentGenerator4.cs" />
+    <Compile Include="src\FakeOpponentGenerator.cs" />
     <Compile Include="src\IpAddressHelper.cs" />
     <Compile Include="syachi2ds.ashx.cs">
       <DependentUpon>syachi2ds.ashx</DependentUpon>
