@@ -20,7 +20,8 @@ namespace PkmnFoundations.GTS.test
         protected void btnSubmit_Click(object sender, EventArgs e)
         {
             byte[] data = GamestatsBase.Common.FromHexString(txtName.Text.Replace(" ", ""));
-            litName.Text = Web.Common.HtmlEncode(EncodedString4.DecodeString(data));
+            EncodedString4 es = new EncodedString4(data);
+            litName.Text = Web.Common.HtmlEncode(es.ToString());
         }
     }
 }

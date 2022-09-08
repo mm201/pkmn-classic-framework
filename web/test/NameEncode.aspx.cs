@@ -18,7 +18,8 @@ namespace PkmnFoundations.Web.test
         protected void btnSubmit_Click(object sender, EventArgs e)
         {
             string text = txtName.Text;
-            litName.Text = Common.HtmlEncode(GamestatsBase.Common.ToHexStringUpper(EncodedString4.EncodeString(text, text.Length * 2 + 8)));
+            EncodedString4 es = new EncodedString4(text, text.Length * 2 + 8);
+            litName.Text = Common.HtmlEncode(GamestatsBase.Common.ToHexStringUpper(es.RawData));
         }
     }
 }

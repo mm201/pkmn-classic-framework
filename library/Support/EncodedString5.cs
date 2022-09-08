@@ -12,9 +12,8 @@ namespace PkmnFoundations.Support
         /// Instances an EncodedString5 from its binary representation.
         /// </summary>
         /// <param name="data">This buffer is copied.</param>
-        public EncodedString5(byte[] data)
+        public EncodedString5(byte[] data) : base(data)
         {
-            RawData = data;
         }
 
         /// <summary>
@@ -23,16 +22,8 @@ namespace PkmnFoundations.Support
         /// <param name="data">Buffer to copy from</param>
         /// <param name="start">Offset in buffer</param>
         /// <param name="length">Number of bytes (not chars) to copy</param>
-        public EncodedString5(byte[] data, int start, int length)
+        public EncodedString5(byte[] data, int start, int length) : base(data, start, length)
         {
-            if (data.Length < start + length) throw new ArgumentOutOfRangeException("length");
-            if (length < 2) throw new ArgumentOutOfRangeException("length");
-            if (length % 2 != 0) throw new ArgumentException("length");
-
-            m_size = length;
-            byte[] trim = new byte[length];
-            Array.Copy(data, start, trim, 0, length);
-            AssignData(trim);
         }
 
         /// <summary>
@@ -40,17 +31,12 @@ namespace PkmnFoundations.Support
         /// </summary>
         /// <param name="text">text</param>
         /// <param name="length">Length of encoded buffer in bytes (not chars)</param>
-        public EncodedString5(String text, int length)
+        public EncodedString5(string text, int length) : base(text, length)
         {
-            if (length < 2) throw new ArgumentOutOfRangeException("length");
-            if (length % 2 != 0) throw new ArgumentException("length");
-
-            m_size = length;
-            Text = text;
         }
 
         // todo: Use pointers for both of these
-		public static string DecodeString(byte[] data, int start, int count)
+		public static string DecodeString_impl(byte[] data, int start, int count)
 		{
             if (data.Length < start + count) throw new ArgumentOutOfRangeException("count");
             if (count < 0) throw new ArgumentOutOfRangeException("count");
@@ -71,12 +57,12 @@ namespace PkmnFoundations.Support
 			return sb.ToString();
 		}
 
-        public static string DecodeString(byte[] data)
+        public static string DecodeString_impl(byte[] data)
         {
-            return DecodeString(data, 0, data.Length >> 1);
+            return DecodeString_impl(data, 0, data.Length >> 1);
         }
 
-        public static byte[] EncodeString(string str, int size)
+        public static byte[] EncodeString_impl(string str, int size)
         {
             int actualLength = (size >> 1) - 1;
             if (str.Length > actualLength) throw new ArgumentOutOfRangeException("size");
@@ -94,68 +80,18 @@ namespace PkmnFoundations.Support
             return result;
         }
 
-        private int m_size;
-		private byte[] m_raw_data;
-		private string m_text;
-
-        public override int Size
+        protected override string DecodeString(byte[] data, int start, int count)
         {
-            get
-            {
-                return m_size;
-            }
-            // todo: set
+            return DecodeString_impl(data, start, count);
         }
 
-        public override string Text
+        protected override byte[] EncodeString(string str, int size)
         {
-            get
-            {
-                if (m_text == null && m_raw_data == null) return null;
-                if (m_text == null) m_text = DecodeString(m_raw_data);
-                return m_text;
-            }
-            set
-            {
-                int actualLength = (m_size >> 1) - 1;
-                if (value.Length > actualLength) throw new ArgumentException();
-                AssignText(value);
-            }
+            return EncodeString_impl(str, size);
         }
 
-		public override byte[] RawData
-        {
-            get
-            {
-                if (m_raw_data == null && m_text == null) return null;
-                if (m_raw_data == null) m_raw_data = EncodeString(m_text, m_size);
-                return m_raw_data.ToArray();
-            }
-            set
-            {
-                int size = value.Length;
-                if (size < 2) throw new ArgumentException();
-                if (size % 2 != 0) throw new ArgumentException();
 
-                m_size = size;
-                AssignData(value.ToArray());
-            }
-        }
-
-        // lazy evaluate these conversions since they're slow
-        private void AssignData(byte[] data)
-        {
-            m_raw_data = data;
-            m_text = null;
-        }
-
-        private void AssignText(String text)
-        {
-            m_text = text;
-            m_raw_data = null;
-        }
-		
-		public override string ToString()
+        public override string ToString()
 		{
 			return Text;
 		}
