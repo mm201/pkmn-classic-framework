@@ -499,13 +499,11 @@ namespace PkmnFoundations.GTS
 
         public abstract BattleTowerPokemonBase CreatePokemon(Pokedex.Pokedex pokedex, ushort species, ushort held_item, ushort[] moveset,
             uint ot, uint personality, uint ivs, byte[] evs, byte pp_ups,
-            Languages language, byte ability, byte happiness, EncodedStringBase nickname);
+            Languages language, byte ability, byte happiness, string nickname);
 
-        public abstract BattleTowerProfileBase CreateProfile(EncodedStringBase name, Versions version,
+        public abstract BattleTowerProfileBase CreateProfile(string name, Versions version,
             Languages language, byte country, byte region, uint ot,
             TrendyPhraseBase phrase_leader, byte gender, byte unknown);
-
-        public abstract EncodedStringBase CreateEncodedString(string text);
 
         public abstract TrendyPhraseBase CreateTrendyPhrase(ushort mood, ushort index, ushort word1, ushort word2);
     }
@@ -524,7 +522,7 @@ namespace PkmnFoundations.GTS
             ushort species, ushort held_item, ushort[] moveset, uint ot, 
             uint personality, uint ivs, byte[] evs, byte pp_ups, 
             Languages language, byte ability, byte happiness, 
-            EncodedStringBase nickname)
+            string nickname)
         {
             return new BattleTowerPokemon4(pokedex,
                         species,
@@ -534,15 +532,28 @@ namespace PkmnFoundations.GTS
                         ivs,
                         evs,
                         pp_ups, language, ability,
-                        happiness, (EncodedString4)nickname
+                        happiness, new EncodedString4(nickname, 22)
                     );
         }
 
-        public override BattleTowerProfileBase CreateProfile(EncodedStringBase name, Versions version, Languages language, byte country, byte region, uint ot, TrendyPhraseBase phrase_leader, byte gender, byte unknown)
+        public override BattleTowerProfileBase CreateProfile(string name, 
+            Versions version, Languages language, byte country, byte region, 
+            uint ot, TrendyPhraseBase phrase_leader, byte gender, byte unknown)
         {
-            throw new NotImplementedException();
+            return new BattleTowerProfile4(
+                new EncodedString4(name, 16),
+                version, language,
+                country, region, ot,
+                (TrendyPhrase4)phrase_leader,
+                gender, unknown
+                );
         }
 
+        public override TrendyPhraseBase CreateTrendyPhrase(ushort mood, 
+            ushort index, ushort word1, ushort word2)
+        {
+            return new TrendyPhrase4(mood, index, word1, word2);
+        }
     }
 
     public class FakeOpponentFactory5 : FakeOpponentFactory
@@ -559,7 +570,7 @@ namespace PkmnFoundations.GTS
             ushort species, ushort held_item, ushort[] moveset, uint ot,
             uint personality, uint ivs, byte[] evs, byte pp_ups,
             Languages language, byte ability, byte happiness,
-            EncodedStringBase nickname)
+            string nickname)
         {
             return new BattleSubwayPokemon5(pokedex,
                         species,
@@ -569,8 +580,26 @@ namespace PkmnFoundations.GTS
                         ivs,
                         evs,
                         pp_ups, language, ability,
-                        happiness, (EncodedString5)nickname, 0
+                        happiness, new EncodedString5(nickname, 22), 0
                     );
+        }
+
+        public override BattleTowerProfileBase CreateProfile(string name, 
+            Versions version, Languages language, byte country, byte region, 
+            uint ot, TrendyPhraseBase phrase_leader, byte gender, byte unknown)
+        {
+            return new BattleSubwayProfile5(
+                new EncodedString5(name, 16),
+                version, language,
+                country, region, ot,
+                (TrendyPhrase5)phrase_leader,
+                gender, unknown
+                );
+        }
+
+        public override TrendyPhraseBase CreateTrendyPhrase(ushort mood, ushort index, ushort word1, ushort word2)
+        {
+            return new TrendyPhrase5(mood, index, word1, word2);
         }
     }
 
