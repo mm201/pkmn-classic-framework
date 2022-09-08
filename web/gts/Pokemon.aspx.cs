@@ -138,6 +138,8 @@ namespace PkmnFoundations.Web.gts
             litNature.Text = pkmn.Nature.ToString(); // todo: i18n
             litAbility.Text = pkmn.Ability == null ? "" : pkmn.Ability.Name.ToString();
             litVersion.Text = pkmn.Version.ToString();
+
+            // xxx: loop
             litHpCurr.Text = pkmn.HP.ToString();
             litHp.Text = pkmn.Stats[Stats.Hp].ToString();
             litHpProgress.Text = WebFormat.RenderProgress(pkmn.HP, pkmn.Stats[Stats.Hp]);
@@ -146,6 +148,20 @@ namespace PkmnFoundations.Web.gts
             litSAtk.Text = pkmn.Stats[Stats.SpecialAttack].ToString();
             litSDef.Text = pkmn.Stats[Stats.SpecialDefense].ToString();
             litSpeed.Text = pkmn.Stats[Stats.Speed].ToString();
+
+            litHpIv.Text = pkmn.IVs[Stats.Hp].ToString();
+            litAtkIv.Text = pkmn.IVs[Stats.Attack].ToString();
+            litDefIv.Text = pkmn.IVs[Stats.Defense].ToString();
+            litSAtkIv.Text = pkmn.IVs[Stats.SpecialAttack].ToString();
+            litSDefIv.Text = pkmn.IVs[Stats.SpecialDefense].ToString();
+            litSpeedIv.Text = pkmn.IVs[Stats.Speed].ToString();
+
+            litHpEv.Text = pkmn.EVs[Stats.Hp].ToString();
+            litAtkEv.Text = pkmn.EVs[Stats.Attack].ToString();
+            litDefEv.Text = pkmn.EVs[Stats.Defense].ToString();
+            litSAtkEv.Text = pkmn.EVs[Stats.SpecialAttack].ToString();
+            litSDefEv.Text = pkmn.EVs[Stats.SpecialDefense].ToString();
+            litSpeedEv.Text = pkmn.EVs[Stats.Speed].ToString();
 
             phPkrs.Visible = pkmn.Pokerus == Pokerus.Infected;
             phPkrsCured.Visible = pkmn.Pokerus == Pokerus.Cured;

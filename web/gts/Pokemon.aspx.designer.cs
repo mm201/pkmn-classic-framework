@@ -249,6 +249,24 @@ namespace PkmnFoundations.Web.gts
         protected global::System.Web.UI.WebControls.Literal litVersion;
 
         /// <summary>
+        /// litHpIv control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal litHpIv;
+
+        /// <summary>
+        /// litHpEv control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal litHpEv;
+
+        /// <summary>
         /// litHpCurr control.
         /// </summary>
         /// <remarks>
@@ -276,6 +294,24 @@ namespace PkmnFoundations.Web.gts
         protected global::System.Web.UI.WebControls.Literal litHpProgress;
 
         /// <summary>
+        /// litAtkIv control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal litAtkIv;
+
+        /// <summary>
+        /// litAtkEv control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal litAtkEv;
+
+        /// <summary>
         /// litAtk control.
         /// </summary>
         /// <remarks>
@@ -283,6 +319,24 @@ namespace PkmnFoundations.Web.gts
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Literal litAtk;
+
+        /// <summary>
+        /// litDefIv control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal litDefIv;
+
+        /// <summary>
+        /// litDefEv control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal litDefEv;
 
         /// <summary>
         /// litDef control.
@@ -294,6 +348,24 @@ namespace PkmnFoundations.Web.gts
         protected global::System.Web.UI.WebControls.Literal litDef;
 
         /// <summary>
+        /// litSAtkIv control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal litSAtkIv;
+
+        /// <summary>
+        /// litSAtkEv control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal litSAtkEv;
+
+        /// <summary>
         /// litSAtk control.
         /// </summary>
         /// <remarks>
@@ -303,6 +375,24 @@ namespace PkmnFoundations.Web.gts
         protected global::System.Web.UI.WebControls.Literal litSAtk;
 
         /// <summary>
+        /// litSDefIv control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal litSDefIv;
+
+        /// <summary>
+        /// litSDefEv control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal litSDefEv;
+
+        /// <summary>
         /// litSDef control.
         /// </summary>
         /// <remarks>
@@ -310,6 +400,24 @@ namespace PkmnFoundations.Web.gts
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Literal litSDef;
+
+        /// <summary>
+        /// litSpeedIv control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal litSpeedIv;
+
+        /// <summary>
+        /// litSpeedEv control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal litSpeedEv;
 
         /// <summary>
         /// litSpeed control.
