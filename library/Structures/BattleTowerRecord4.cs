@@ -28,12 +28,80 @@ namespace PkmnFoundations.Structures
 
         public Pokedex.Pokedex Pokedex { get; set; }
 
-        public BattleTowerPokemon4[] Party;
-        public BattleTowerProfile4 Profile;
+        private BattleTowerPokemon4[] m_party;
+        private BattleTowerProfile4 m_profile;
+        private TrendyPhrase4 m_phrase_challenged;
+        private TrendyPhrase4 m_phrase_won;
+        private TrendyPhrase4 m_phrase_lost;
 
-        public TrendyPhrase4 PhraseChallenged;
-        public TrendyPhrase4 PhraseWon;
-        public TrendyPhrase4 PhraseLost;
+        public override IList<BattleTowerPokemonBase> Party
+        {
+            get
+            {
+                return m_party;
+            }
+            set
+            {
+                if (!(value is BattleTowerPokemon4[])) throw new ArgumentException("value must be BattleTowerPokemon4[]");
+                BattleTowerPokemon4[] party = (BattleTowerPokemon4[])value;
+                if (party.Length != 3) throw new ArgumentException("value must have length 3");
+                m_party = party;
+            }
+        }
+
+        public override BattleTowerProfileBase Profile
+        {
+            get
+            {
+                return m_profile;
+            }
+
+            set
+            {
+                m_profile = (BattleTowerProfile4)value;
+            }
+        }
+
+        public override TrendyPhraseBase PhraseChallenged
+        {
+            get
+            {
+                return m_phrase_challenged;
+            }
+
+            set
+            {
+                m_phrase_challenged = (TrendyPhrase4)value;
+            }
+        }
+
+        public override TrendyPhraseBase PhraseWon
+        {
+            get
+            {
+                return m_phrase_won;
+            }
+
+            set
+            {
+                m_phrase_won = (TrendyPhrase4)value;
+            }
+        }
+
+        public override TrendyPhraseBase PhraseLost
+        {
+            get
+            {
+                return m_phrase_lost;
+            }
+
+            set
+            {
+                m_phrase_lost = (TrendyPhrase4)value;
+            }
+        }
+
+
         public ushort Unknown3; // Seems to be some sort of Elo rating. Goes up to about 8000.
 
         public byte Rank;
@@ -52,7 +120,7 @@ namespace PkmnFoundations.Structures
             {
                 writer.Write(Party[x].Save());
             }
-            writer.Write(Profile.Save());
+            writer.Write(((BattleTowerProfile4)Profile).Save());
             writer.Write(PhraseChallenged.Data);
             writer.Write(PhraseWon.Data);
             writer.Write(PhraseLost.Data);
@@ -67,7 +135,7 @@ namespace PkmnFoundations.Structures
         {
             if (start + 0xe4 > data.Length) throw new ArgumentOutOfRangeException("start");
 
-            Party = new BattleTowerPokemon4[3];
+            m_party = new BattleTowerPokemon4[3];
             for (int x = 0; x < 3; x++)
             {
                 Party[x] = new BattleTowerPokemon4(Pokedex, data, start + x * 0x38);

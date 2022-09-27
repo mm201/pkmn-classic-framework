@@ -686,9 +686,9 @@ namespace PkmnFoundations.Data
                     "TimeUpdated = UTC_TIMESTAMP() WHERE id = @id",
                     _params.ToArray());
 
-                UpdateBattleTowerPokemon4(tran, record.Party[0], pkey, 0);
-                UpdateBattleTowerPokemon4(tran, record.Party[1], pkey, 1);
-                UpdateBattleTowerPokemon4(tran, record.Party[2], pkey, 2);
+                UpdateBattleTowerPokemon4(tran, (BattleTowerPokemon4)record.Party[0], pkey, 0);
+                UpdateBattleTowerPokemon4(tran, (BattleTowerPokemon4)record.Party[1], pkey, 1);
+                UpdateBattleTowerPokemon4(tran, (BattleTowerPokemon4)record.Party[2], pkey, 2);
             }
             else
             {
@@ -707,9 +707,9 @@ namespace PkmnFoundations.Data
                     "SELECT LAST_INSERT_ID()",
                     _params.ToArray()));
 
-                InsertBattleTowerPokemon4(tran, record.Party[0], pkey, 0);
-                InsertBattleTowerPokemon4(tran, record.Party[1], pkey, 1);
-                InsertBattleTowerPokemon4(tran, record.Party[2], pkey, 2);
+                InsertBattleTowerPokemon4(tran, (BattleTowerPokemon4)record.Party[0], pkey, 0);
+                InsertBattleTowerPokemon4(tran, (BattleTowerPokemon4)record.Party[1], pkey, 1);
+                InsertBattleTowerPokemon4(tran, (BattleTowerPokemon4)record.Party[2], pkey, 2);
             }
 
             return pkey;
@@ -754,16 +754,17 @@ namespace PkmnFoundations.Data
         private List<MySqlParameter> ParamsFromBattleTowerRecord4(BattleTowerRecord4 record, bool leader)
         {
             List<MySqlParameter> result = new List<MySqlParameter>(15);
+            BattleTowerProfile4 profile = (BattleTowerProfile4)record.Profile;
             result.Add(new MySqlParameter("@pid", record.PID));
-            result.Add(new MySqlParameter("@name", record.Profile.Name.RawData));
-            result.Add(new MySqlParameter("@version", (byte)record.Profile.Version));
-            result.Add(new MySqlParameter("@language", (byte)record.Profile.Language));
-            result.Add(new MySqlParameter("@country", record.Profile.Country));
-            result.Add(new MySqlParameter("@region", record.Profile.Region));
-            result.Add(new MySqlParameter("@trainer_id", record.Profile.OT));
-            result.Add(new MySqlParameter("@phrase_leader", record.Profile.PhraseLeader.Data));
-            result.Add(new MySqlParameter("@gender", record.Profile.Gender));
-            result.Add(new MySqlParameter("@unknown2", record.Profile.Unknown));
+            result.Add(new MySqlParameter("@name", profile.Name.RawData));
+            result.Add(new MySqlParameter("@version", (byte)profile.Version));
+            result.Add(new MySqlParameter("@language", (byte)profile.Language));
+            result.Add(new MySqlParameter("@country", profile.Country));
+            result.Add(new MySqlParameter("@region", profile.Region));
+            result.Add(new MySqlParameter("@trainer_id", profile.OT));
+            result.Add(new MySqlParameter("@phrase_leader", profile.PhraseLeader.Data));
+            result.Add(new MySqlParameter("@gender", profile.Gender));
+            result.Add(new MySqlParameter("@unknown2", profile.Unknown));
             result.Add(new MySqlParameter("@rank", record.Rank));
             result.Add(new MySqlParameter("@room", record.RoomNum));
             if (!leader)
@@ -870,6 +871,7 @@ namespace PkmnFoundations.Data
 
             if (oPkey == null)
             {
+                BattleTowerProfile4 profile = (BattleTowerProfile4)record.Profile;
                 // PID isn't found. Try to match one of Pikachu025's saved
                 // records based on unchanging properties of the savegame.
                 oPkey = tran.ExecuteScalar("SELECT id FROM " + tblName +
@@ -878,10 +880,10 @@ namespace PkmnFoundations.Data
                     "AND Language = @language AND TrainerID = @trainer_id",
                     new MySqlParameter("@rank", record.Rank),
                     new MySqlParameter("@room", record.RoomNum),
-                    new MySqlParameter("@name", record.Profile.Name.RawData),
-                    new MySqlParameter("@version", (byte)record.Profile.Version),
-                    new MySqlParameter("@language", (byte)record.Profile.Language),
-                    new MySqlParameter("@trainer_id", record.Profile.OT)
+                    new MySqlParameter("@name", profile.Name.RawData),
+                    new MySqlParameter("@version", (byte)profile.Version),
+                    new MySqlParameter("@language", (byte)profile.Language),
+                    new MySqlParameter("@trainer_id", profile.OT)
                 );
             }
 
@@ -1000,7 +1002,7 @@ namespace PkmnFoundations.Data
                 new MySqlParameter("@room", roomNum)))
             {
                 while (reader.Read())
-                    profiles.Add(BattleTowerRecord4FromReader(reader, pokedex).Profile);
+                    profiles.Add((BattleTowerProfile4)BattleTowerRecord4FromReader(reader, pokedex).Profile);
 
                 reader.Close();
             }
@@ -1915,9 +1917,9 @@ namespace PkmnFoundations.Data
                     "TimeUpdated = UTC_TIMESTAMP() WHERE id = @id",
                     _params.ToArray());
 
-                UpdateBattleSubwayPokemon5(tran, record.Party[0], pkey, 0);
-                UpdateBattleSubwayPokemon5(tran, record.Party[1], pkey, 1);
-                UpdateBattleSubwayPokemon5(tran, record.Party[2], pkey, 2);
+                UpdateBattleSubwayPokemon5(tran, (BattleSubwayPokemon5)record.Party[0], pkey, 0);
+                UpdateBattleSubwayPokemon5(tran, (BattleSubwayPokemon5)record.Party[1], pkey, 1);
+                UpdateBattleSubwayPokemon5(tran, (BattleSubwayPokemon5)record.Party[2], pkey, 2);
             }
             else
             {
@@ -1936,9 +1938,9 @@ namespace PkmnFoundations.Data
                     "SELECT LAST_INSERT_ID()",
                     _params.ToArray()));
 
-                InsertBattleSubwayPokemon5(tran, record.Party[0], pkey, 0);
-                InsertBattleSubwayPokemon5(tran, record.Party[1], pkey, 1);
-                InsertBattleSubwayPokemon5(tran, record.Party[2], pkey, 2);
+                InsertBattleSubwayPokemon5(tran, (BattleSubwayPokemon5)record.Party[0], pkey, 0);
+                InsertBattleSubwayPokemon5(tran, (BattleSubwayPokemon5)record.Party[1], pkey, 1);
+                InsertBattleSubwayPokemon5(tran, (BattleSubwayPokemon5)record.Party[2], pkey, 2);
             }
 
             return pkey;
@@ -1978,17 +1980,18 @@ namespace PkmnFoundations.Data
 
         private List<MySqlParameter> ParamsFromBattleSubwayRecord5(BattleSubwayRecord5 record, bool leader)
         {
+            BattleSubwayProfile5 profile = (BattleSubwayProfile5)record.Profile;
             List<MySqlParameter> result = new List<MySqlParameter>(15);
             result.Add(new MySqlParameter("@pid", record.PID));
-            result.Add(new MySqlParameter("@name", record.Profile.Name.RawData));
-            result.Add(new MySqlParameter("@version", (byte)record.Profile.Version));
-            result.Add(new MySqlParameter("@language", (byte)record.Profile.Language));
-            result.Add(new MySqlParameter("@country", record.Profile.Country));
-            result.Add(new MySqlParameter("@region", record.Profile.Region));
-            result.Add(new MySqlParameter("@trainer_id", record.Profile.OT));
-            result.Add(new MySqlParameter("@phrase_leader", record.Profile.PhraseLeader.Data));
-            result.Add(new MySqlParameter("@gender", record.Profile.Gender));
-            result.Add(new MySqlParameter("@unknown2", record.Profile.Unknown));
+            result.Add(new MySqlParameter("@name", profile.Name.RawData));
+            result.Add(new MySqlParameter("@version", (byte)profile.Version));
+            result.Add(new MySqlParameter("@language", (byte)profile.Language));
+            result.Add(new MySqlParameter("@country", profile.Country));
+            result.Add(new MySqlParameter("@region", profile.Region));
+            result.Add(new MySqlParameter("@trainer_id", profile.OT));
+            result.Add(new MySqlParameter("@phrase_leader", profile.PhraseLeader.Data));
+            result.Add(new MySqlParameter("@gender", profile.Gender));
+            result.Add(new MySqlParameter("@unknown2", profile.Unknown));
             result.Add(new MySqlParameter("@rank", record.Rank));
             result.Add(new MySqlParameter("@room", record.RoomNum));
             if (!leader)
@@ -2097,6 +2100,7 @@ namespace PkmnFoundations.Data
 
             if (oPkey == null)
             {
+                BattleSubwayProfile5 profile = (BattleSubwayProfile5)record.Profile;
                 // PID isn't found. Try to match one of Pikachu025's saved
                 // records based on unchanging properties of the savegame.
                 oPkey = tran.ExecuteScalar("SELECT id FROM " + tblName +
@@ -2105,10 +2109,10 @@ namespace PkmnFoundations.Data
                     "AND Language = @language AND TrainerID = @trainer_id",
                     new MySqlParameter("@rank", record.Rank),
                     new MySqlParameter("@room", record.RoomNum),
-                    new MySqlParameter("@name", record.Profile.Name.RawData),
-                    new MySqlParameter("@version", (byte)record.Profile.Version),
-                    new MySqlParameter("@language", (byte)record.Profile.Language),
-                    new MySqlParameter("@trainer_id", record.Profile.OT)
+                    new MySqlParameter("@name", profile.Name.RawData),
+                    new MySqlParameter("@version", (byte)profile.Version),
+                    new MySqlParameter("@language", (byte)profile.Language),
+                    new MySqlParameter("@trainer_id", profile.OT)
                 );
             }
 
@@ -2235,7 +2239,7 @@ namespace PkmnFoundations.Data
                 new MySqlParameter("@room", roomNum)))
             {
                 while (reader.Read())
-                    profiles.Add(BattleSubwayRecord5FromReader(reader, pokedex).Profile);
+                    profiles.Add((BattleSubwayProfile5)BattleSubwayRecord5FromReader(reader, pokedex).Profile);
 
                 reader.Close();
             }

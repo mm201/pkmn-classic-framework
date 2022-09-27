@@ -518,14 +518,14 @@ namespace PkmnFoundations.GTS
                         return;
                     }
 
+                    FakeOpponentFactory5 fact = new FakeOpponentFactory5();
                     BattleSubwayRecord5[] opponents = Database.Instance.BattleSubwayGetOpponents5(pokedex, pid, rank, roomNum);
                     BattleSubwayProfile5[] leaders = Database.Instance.BattleSubwayGetLeaders5(pokedex, rank, roomNum);
+                    BattleTowerRecordBase[] fakeOpponents = FakeOpponentGenerator.GenerateFakeOpponents(fact, 7 - opponents.Length);
 
-                    if (opponents.Length != 7)
+                    foreach (BattleSubwayRecord5 record in fakeOpponents)
                     {
-                        // todo: Implement fake trainers on Gen5 too.
-                        ShowError(context, 500);
-                        return;
+                        response.Write(record.Save(), 0, 240);
                     }
 
                     foreach (BattleSubwayRecord5 record in opponents)

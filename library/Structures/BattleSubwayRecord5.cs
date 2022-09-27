@@ -28,12 +28,80 @@ namespace PkmnFoundations.Structures
 
         public Pokedex.Pokedex Pokedex { get; set; }
 
-        public BattleSubwayPokemon5[] Party;
-        public BattleSubwayProfile5 Profile;
+        private BattleSubwayPokemon5[] m_party;
+        private BattleSubwayProfile5 m_profile;
+        private TrendyPhrase5 m_phrase_challenged;
+        private TrendyPhrase5 m_phrase_won;
+        private TrendyPhrase5 m_phrase_lost;
 
-        public TrendyPhrase5 PhraseChallenged;
-        public TrendyPhrase5 PhraseWon;
-        public TrendyPhrase5 PhraseLost;
+        public override IList<BattleTowerPokemonBase> Party
+        {
+            get
+            {
+                return m_party;
+            }
+            set
+            {
+                if (!(value is BattleSubwayPokemon5[])) throw new ArgumentException("value must be BattleSubwayPokemon5[]");
+                BattleSubwayPokemon5[] party = (BattleSubwayPokemon5[])value;
+                if (party.Length != 3) throw new ArgumentException("value must have length 3");
+                m_party = party;
+            }
+        }
+
+
+        public override BattleTowerProfileBase Profile
+        {
+            get
+            {
+                return m_profile;
+            }
+
+            set
+            {
+                m_profile = (BattleSubwayProfile5)value;
+            }
+        }
+
+        public override TrendyPhraseBase PhraseChallenged
+        {
+            get
+            {
+                return m_phrase_challenged;
+            }
+
+            set
+            {
+                m_phrase_challenged = (TrendyPhrase5)value;
+            }
+        }
+
+        public override TrendyPhraseBase PhraseWon
+        {
+            get
+            {
+                return m_phrase_won;
+            }
+
+            set
+            {
+                m_phrase_won = (TrendyPhrase5)value;
+            }
+        }
+
+        public override TrendyPhraseBase PhraseLost
+        {
+            get
+            {
+                return m_phrase_lost;
+            }
+
+            set
+            {
+                m_phrase_lost = (TrendyPhrase5)value;
+            }
+        }
+
         public ushort Unknown3;
 
         public byte Rank;
@@ -53,7 +121,7 @@ namespace PkmnFoundations.Structures
             {
                 writer.Write(Party[x].Save());
             }
-            writer.Write(Profile.Save());
+            writer.Write(((BattleSubwayProfile5)Profile).Save());
             writer.Write(PhraseChallenged.Data);
             writer.Write(PhraseWon.Data);
             writer.Write(PhraseLost.Data);
