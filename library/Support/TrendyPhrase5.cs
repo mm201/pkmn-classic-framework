@@ -27,12 +27,12 @@ namespace PkmnFoundations.Support
             return result;
         }
 
-        public override String Render(String wordFormat)
+        public override string Render(string wordFormat)
         {
             return RenderPhrase(Data, wordFormat);
         }
 
-        public static String RenderPhrase(byte[] data, String wordFormat)
+        public static string RenderPhrase(byte[] data, string wordFormat)
         {
             // todo: move me to TrendyPhraseBase, make RenderWord virtual
             if (data == null) throw new ArgumentNullException();
@@ -46,13 +46,13 @@ namespace PkmnFoundations.Support
             // moods higher than 6 seem to say "no answer" but indexes higher than 20 are blank. 
             if (mood >= 7) return "";
             if (index >= 21) return "";
-            return String.Format(PHRASES[mood, index],
-                String.Format(wordFormat, RenderWord(word1)),
-                String.Format(wordFormat, RenderWord(word2))
+            return string.Format(PHRASES[mood, index],
+                string.Format(wordFormat, RenderWord(word1)),
+                string.Format(wordFormat, RenderWord(word2))
                 );
         }
 
-        public static String RenderWord(ushort word)
+        public static string RenderWord(ushort word)
         {
             // todo: There's a certain list of banned spoiler words like
             // attacks from BW2 which should be turned into POKÉMON.
@@ -78,7 +78,7 @@ namespace PkmnFoundations.Support
         // for their string table dumps.
 
         // a/0/0/2/170 through /176
-        private static String[,] PHRASES = new String[,]
+        private static string[,] PHRASES = new string[,]
         {
             {   // Mood 0: Other /171                
                 "Hello!\n{0}!",
@@ -243,7 +243,7 @@ namespace PkmnFoundations.Support
             },
         };
 
-        private static String[] WORDS_POKEMON = new String[]
+        private static string[] WORDS_POKEMON = new string[]
         {
             "POKÉMON","BULBASAUR","IVYSAUR","VENUSAUR",           // 0
             "CHARMANDER","CHARMELEON","CHARIZARD","SQUIRTLE",
@@ -410,7 +410,7 @@ namespace PkmnFoundations.Support
             "MELOETTA","GENESECT","EGG","BAD EGG"
         };
 
-        private static String[] WORDS_MOVES = new[]
+        private static string[] WORDS_MOVES = new[]
         {
             "-----","POUND","KARATE CHOP","DOUBLESLAP",         // 652
             "COMET PUNCH","MEGA PUNCH","PAY DAY","FIRE PUNCH",
@@ -554,7 +554,7 @@ namespace PkmnFoundations.Support
             "ICICLE CRASH","V-CREATE","FUSION FLARE","FUSION BOLT"
         };
 
-        private static String[] WORDS_TYPES = new String[]
+        private static string[] WORDS_TYPES = new string[]
         {
             "NORMAL","FIGHTING","FLYING","POISON",              // 1212
             "GROUND","ROCK","BUG","GHOST",
@@ -563,7 +563,7 @@ namespace PkmnFoundations.Support
             "DARK"
         };
 
-        private static String[] WORDS_ABILITIES = new String[]
+        private static string[] WORDS_ABILITIES = new string[]
         {
             "-","STENCH","DRIZZLE","SPEED BOOST",               // 1229
             "BATTLE ARMOR","STURDY","DAMP","LIMBER",
@@ -609,7 +609,7 @@ namespace PkmnFoundations.Support
             "TERAVOLT"
         };
 
-        private static String[] WORDS_TRAINER = new String[]
+        private static string[] WORDS_TRAINER = new string[]
         {
             "MATCH UP","NO. 1","BAD MATCHUP","PREPARATION",     // 1394
             "WINS","NO MATCH","SPIRIT","CRITICAL HIT",
@@ -624,7 +624,7 @@ namespace PkmnFoundations.Support
             "EASY","WEAK","EASY WIN","MOVE"
         };
 
-        private static String[] WORDS_PEOPLE = new String[]
+        private static string[] WORDS_PEOPLE = new string[]
         {
             "OPPONENT","I","YOU","MOTHER",                      // 1438
             "GRANDFATHER","UNCLE","FATHER","BOY",
@@ -638,7 +638,7 @@ namespace PkmnFoundations.Support
             "I","I"
         };
 
-        private static String[] WORDS_GREETINGS = new String[]
+        private static string[] WORDS_GREETINGS = new string[]
         {
             "こんにちは","HELLO","BONJOUR","CIAO",               // 1476
             "HALLO","HOLA","안녕하세요","HELLO",
@@ -654,7 +654,7 @@ namespace PkmnFoundations.Support
             "YAHOO","YO","WELCOME","REGARDS"
         };
 
-        private static String[] WORDS_LIFESTYLE = new String[]
+        private static string[] WORDS_LIFESTYLE = new string[]
         {
             "IDOL","AUTUMN","TOMORROW","PLAYING",               // 1524
             "ANIME","JOB","SONG","HOME",
@@ -684,7 +684,7 @@ namespace PkmnFoundations.Support
             "VACATION","LOOKS","WORLD"
         };
 
-        private static String[] WORDS_FEELINGS = new String[]
+        private static string[] WORDS_FEELINGS = new string[]
         {
             "BEAUTY","DELIGHT","STRANGENESS","RECOMMEND",       // 1627
             "CLEVERNESS","DISAPPOINTED","COOLNESS","SADNESS",
@@ -700,7 +700,7 @@ namespace PkmnFoundations.Support
             "LOVEY-DOVEY","ANTICIPATION","SMILE"
         };
 
-        private static String[] WORDS_TERM = new String[]
+        private static string[] WORDS_TERM = new string[]
         {
             "C-GEAR","PASS POWER","ELEGANT","CUTE",             // 1674
             "COOL","GROUP","GOTCHA","COLLECTION",
@@ -712,7 +712,7 @@ namespace PkmnFoundations.Support
             "UNIQUE","LEVEL","RENTAL","TM"
         };
 
-        private static String[] WORDS_CONNECTION = new String[]
+        private static string[] WORDS_CONNECTION = new string[]
         {
             "PGL","GTS","POKÉMON DW","Wi-Fi",                   // 1706
             "SPIN","GAME SYNC","COLOSSEUM","SUBWAY",
@@ -726,14 +726,14 @@ namespace PkmnFoundations.Support
         // todo: We need to substitute words in this range with gifs, but only
         // when rendering to the web.
         // Maybe we can nicen their display in ToString() somehow too.
-        private static String[] WORDS_ANIMATED = new String[]
+        private static string[] WORDS_ANIMATED = new string[]
         {
             "絵_GOOD DAY!","絵_HELLO!","絵_I LOVE IT!","絵_GOOD LUCK!", // 1732
             "絵_IT'S FUN!","絵_HAPPY!","絵_THANK YOU!","絵_SUPER! ♪",
             "絵_SORRY...","絵_BYE-BYE!"
         };
 
-        private static String[] WORDS_VOICE = new String[]
+        private static string[] WORDS_VOICE = new string[]
         {
             "OH WELL","AAH","AHAHA","HUH?",                     // 1742
             "YEAH","URGH","LET ME THINK","HMM",

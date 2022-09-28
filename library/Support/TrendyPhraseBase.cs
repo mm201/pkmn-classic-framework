@@ -33,11 +33,11 @@ namespace PkmnFoundations.Support
             }
         }
 
-        public override String ToString()
+        public override string ToString()
         {
             return Render("{0}");
         }
 
-        public abstract String Render(String wordFormat);
+        public abstract string Render(string wordFormat);
     }
 }

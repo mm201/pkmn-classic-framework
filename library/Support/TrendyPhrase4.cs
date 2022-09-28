@@ -26,12 +26,12 @@ namespace PkmnFoundations.Support
             return result;
         }
 
-        public override String Render(String wordFormat)
+        public override string Render(string wordFormat)
         {
             return RenderPhrase(Data, wordFormat);
         }
 
-        public static String RenderPhrase(byte[] data, String wordFormat)
+        public static string RenderPhrase(byte[] data, string wordFormat)
         {
             if (data == null) throw new ArgumentNullException();
             if (data.Length != 8) throw new ArgumentException();
@@ -43,13 +43,13 @@ namespace PkmnFoundations.Support
 
             if (mood >= 5) return "";
             if (index >= 20) return "";
-            return String.Format(PHRASES[mood, index], 
-                String.Format(wordFormat, RenderWord(word1)),
-                String.Format(wordFormat, RenderWord(word2))
+            return string.Format(PHRASES[mood, index], 
+                string.Format(wordFormat, RenderWord(word1)),
+                string.Format(wordFormat, RenderWord(word2))
                 );
         }
 
-        public static String RenderWord(ushort word)
+        public static string RenderWord(ushort word)
         {
             if (word < 496) return WORDS_POKEMON[word];
             if (word < 964) return WORDS_MOVES[word - 496];
@@ -70,7 +70,7 @@ namespace PkmnFoundations.Support
         // for their string table dumps.
 
         // msg.narc/395 through /399
-        private static String[,] PHRASES = new String[,]
+        private static string[,] PHRASES = new string[,]
         {
             {   // Mood 0: Start of battle                      
                 "Please!\n{0}!",                                //  0
@@ -195,7 +195,7 @@ namespace PkmnFoundations.Support
         // 1393-1439: msg.narc/392 "Feelings"
         // 1440-1471: msg.narc/393 "Tough words"
         // 1472-1494: msg.narc/394 "Union"
-        private static String[] WORDS_POKEMON = new String[]
+        private static string[] WORDS_POKEMON = new string[]
         {
             "-----","BULBASAUR","IVYSAUR","VENUSAUR",           // 0
             "CHARMANDER","CHARMELEON","CHARIZARD","SQUIRTLE",
@@ -323,7 +323,7 @@ namespace PkmnFoundations.Support
             "SHAYMIN","ARCEUS","Egg","Bad Egg"
         };
 
-        private static String[] WORDS_MOVES = new String[]
+        private static string[] WORDS_MOVES = new string[]
         {
             "-","POUND","KARATE CHOP","DOUBLESLAP",             // 496
             "COMET PUNCH","MEGA PUNCH","PAY DAY","FIRE PUNCH",
@@ -444,7 +444,7 @@ namespace PkmnFoundations.Support
             "DARK VOID","SEED FLARE","OMINOUS WIND","SHADOW FORCE"
         };
 
-        private static String[] WORDS_TYPES = new String[]
+        private static string[] WORDS_TYPES = new string[]
         {
             "NORMAL","FIGHTING","FLYING","POISON",              // 964
             "GROUND","ROCK","BUG","GHOST",
@@ -453,7 +453,7 @@ namespace PkmnFoundations.Support
             "DRAGON","DARK"
         };
 
-        private static String[] WORDS_ABILITIES = new String[]
+        private static string[] WORDS_ABILITIES = new string[]
         {
             "-","STENCH","DRIZZLE","SPEED BOOST",               // 982
             "BATTLE ARMOR","STURDY","DAMP","LIMBER",
@@ -488,7 +488,7 @@ namespace PkmnFoundations.Support
             "RECKLESS","MULTITYPE","FLOWER GIFT","BAD DREAMS"
         };
 
-        private static String[] WORDS_TRAINER = new String[]
+        private static string[] WORDS_TRAINER = new string[]
         {
             "MATCH UP","NO. 1","PREPARATION","WINS",            // 1106
             "NO MATCH","SPIRIT","ACE CARD","COME ON",
@@ -502,7 +502,7 @@ namespace PkmnFoundations.Support
             "MOVE","TRAINER"
         };
 
-        private static String[] WORDS_PEOPLE = new String[]
+        private static string[] WORDS_PEOPLE = new string[]
         {
             "OPPONENT","I","YOU","MOTHER",                      // 1144
             "GRANDFATHER","UNCLE","FATHER","BOY",
@@ -516,7 +516,7 @@ namespace PkmnFoundations.Support
             "I","BABY"
         };
 
-        private static String[] WORDS_GREETINGS = new String[]
+        private static string[] WORDS_GREETINGS = new string[]
         {
             "KONNICHIWA","HELLO","BONJOUR","CIAO",              // 1182
             "HALLO","HOLA","OH WELL","AAH",
@@ -547,7 +547,7 @@ namespace PkmnFoundations.Support
             "BOO!","WAHAHA","..."
         };
 
-        private static String[] WORDS_LIFESTYLE = new String[]
+        private static string[] WORDS_LIFESTYLE = new string[]
         {
             "IDOL","TOMORROW","PLAYING","ANIME",                // 1289
             "JOB","SONG","HOME","MOVIE",
@@ -577,7 +577,7 @@ namespace PkmnFoundations.Support
             "VACATION","LOOKS","RENTAL","WORLD"
         };
 
-        private static String[] WORDS_FEELINGS = new String[]
+        private static string[] WORDS_FEELINGS = new string[]
         {
             "BEAUTY","DELIGHT","STRANGENESS","CLEVERNESS",      // 1393
             "DISAPPOINTED","COOLNESS","SADNESS","CUTENESS",
@@ -593,7 +593,7 @@ namespace PkmnFoundations.Support
             "SIMPLE","NICE","DIFFICULT"
         };
 
-        private static String[] WORDS_TOUGH = new String[]
+        private static string[] WORDS_TOUGH = new string[]
         {
             "EARTH TONES","IMPLANT","GOLDEN RATIO","OMNIBUS",   // 1440
             "STARBOARD","MONEY RATE","RESOLUTION","CADENZA",
@@ -605,7 +605,7 @@ namespace PkmnFoundations.Support
             "VECTOR","POLYPHENOL","UBIQUITOUS","REM SLEEP"
         };
 
-        private static String[] WORDS_UNION = new String[]
+        private static string[] WORDS_UNION = new string[]
         {
             "SINGLE","DOUBLE","MIX BATTLE","MULTI BATTLE",      // 1472
             "LEVEL 50","LEVEL 100","COLOSSEUM","POKéMON",
