@@ -69,6 +69,7 @@ namespace PkmnFoundations.Support
             if (word < 1732) return WORDS_CONNECTION[word - 1706];
             if (word < 1742) return WORDS_ANIMATED[word - 1732];
             if (word < 1803) return WORDS_VOICE[word - 1742];
+            if (word == 65535) return ""; // special case for unfilled in word = blank
             return "POKÉMON";
         }
 
