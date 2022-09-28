@@ -16,16 +16,6 @@ namespace PkmnFoundations.Support
         {
         }
 
-        private static byte[] Pack(ushort mood, ushort index, ushort word1, ushort word2)
-        {
-            byte[] result = new byte[8];
-            Array.Copy(BitConverter.GetBytes(mood), 0, result, 0, 2);
-            Array.Copy(BitConverter.GetBytes(index), 0, result, 2, 2);
-            Array.Copy(BitConverter.GetBytes(word1), 0, result, 4, 2);
-            Array.Copy(BitConverter.GetBytes(word2), 0, result, 6, 2);
-            return result;
-        }
-
         public override string Render(string wordFormat)
         {
             return RenderPhrase(Data, wordFormat);
@@ -63,6 +53,11 @@ namespace PkmnFoundations.Support
             if (word < 1472) return WORDS_TOUGH[word - 1440];
             if (word < 1495) return WORDS_UNION[word - 1472];
             return "";
+        }
+
+        public TrendyPhrase4 Clone()
+        {
+            return new TrendyPhrase4(Data);
         }
 
         #region String tables

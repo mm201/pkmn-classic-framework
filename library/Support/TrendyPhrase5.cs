@@ -17,14 +17,11 @@ namespace PkmnFoundations.Support
         {
         }
 
-        private static byte[] Pack(ushort mood, ushort index, ushort word1, ushort word2)
+        public TrendyPhrase5(TrendyPhrase4 phrase) : base(null)
         {
-            byte[] result = new byte[8];
-            Array.Copy(BitConverter.GetBytes(mood), 0, result, 0, 2);
-            Array.Copy(BitConverter.GetBytes(index), 0, result, 2, 2);
-            Array.Copy(BitConverter.GetBytes(word1), 0, result, 4, 2);
-            Array.Copy(BitConverter.GetBytes(word2), 0, result, 6, 2);
-            return result;
+            // Upgrade a TrendyPhrase4
+            // fixme: These 4 values are all wrong and need offsets applied, if not bigger changes
+            Data = Pack(phrase.Mood, phrase.Index, phrase.Word1, phrase.Word2);
         }
 
         public override string Render(string wordFormat)
@@ -71,6 +68,11 @@ namespace PkmnFoundations.Support
             if (word < 1803) return WORDS_VOICE[word - 1742];
             if (word == 65535) return ""; // special case for unfilled in word = blank
             return "POKÉMON";
+        }
+
+        public TrendyPhrase5 Clone()
+        {
+            return new TrendyPhrase5(Data);
         }
 
         #region String tables

@@ -105,13 +105,13 @@ namespace PkmnFoundations.GTS
                         "Splnter",
                         Versions.Platinum, Languages.English,
                         0, 0, 0x01020304,
-                        factory.CreateTrendyPhrase(0, 16, 291, 7), // Ninjask! Squirtle power!
+                        factory.CreateTrendyPhrase(new TrendyPhrase4(0, 16, 291, 7)), // Ninjask! Squirtle power!
                         0, 14 // Black belt
                         );
 
-                    record.PhraseChallenged = factory.CreateTrendyPhrase(0, 16, 291, 7);
-                    record.PhraseWon = factory.CreateTrendyPhrase(1, 11, 766, 65535); // I might have won with HELPING HAND!
-                    record.PhraseLost = factory.CreateTrendyPhrase(2, 8, 1406, 65535); // You're INCREDIBLE, aren't you?
+                    record.PhraseChallenged = factory.CreateTrendyPhrase(new TrendyPhrase4(0, 16, 291, 7));
+                    record.PhraseWon = factory.CreateTrendyPhrase(new TrendyPhrase4(1, 11, 766, 65535)); // I might have won with HELPING HAND!
+                    record.PhraseLost = factory.CreateTrendyPhrase(new TrendyPhrase4(2, 8, 1406, 65535)); // You're INCREDIBLE, aren't you?
                     break;
 
                 case 1:
@@ -168,13 +168,13 @@ namespace PkmnFoundations.GTS
                         "Megan",
                         Versions.Platinum, Languages.English,
                         0, 0, 0x02030405,
-                        factory.CreateTrendyPhrase(3, 8, 1487, 65535), // There's only WI-FI left!
+                        factory.CreateTrendyPhrase(new TrendyPhrase4(3, 8, 1487, 65535)), // There's only WI-FI left!
                         2, 33 // Lady
                         );
 
-                    record.PhraseChallenged = factory.CreateTrendyPhrase(3, 8, 1487, 65535);
-                    record.PhraseWon = factory.CreateTrendyPhrase(3, 3, 1492, 1439); // This BATTLE TOWER is DIFFICULT, isn't it?
-                    record.PhraseLost = factory.CreateTrendyPhrase(3, 2, 1493, 1492); // I love GTS! I love BATTLE TOWER too!
+                    record.PhraseChallenged = factory.CreateTrendyPhrase(new TrendyPhrase4(3, 8, 1487, 65535));
+                    record.PhraseWon = factory.CreateTrendyPhrase(new TrendyPhrase4(3, 3, 1492, 1439)); // This BATTLE TOWER is DIFFICULT, isn't it?
+                    record.PhraseLost = factory.CreateTrendyPhrase(new TrendyPhrase4(3, 2, 1493, 1492)); // I love GTS! I love BATTLE TOWER too!
                     break;
 
                 case 2:
@@ -230,13 +230,13 @@ namespace PkmnFoundations.GTS
                         "Dennis",
                         Versions.Platinum, Languages.English,
                         0, 0, 0x02030405,
-                        factory.CreateTrendyPhrase(1, 12, 1147, 65535), // I get the happiest with MOTHER
+                        factory.CreateTrendyPhrase(new TrendyPhrase4(1, 12, 1147, 65535)), // I get the happiest with MOTHER
                         0, 32 // Rich boy
                         );
 
-                    record.PhraseChallenged = factory.CreateTrendyPhrase(1, 12, 1147, 65535);
-                    record.PhraseWon = factory.CreateTrendyPhrase(2, 8, 1140, 65535); // You're WEAK, aren't you?
-                    record.PhraseLost = factory.CreateTrendyPhrase(2, 6, 1421, 65535); // ROFL! How awful!
+                    record.PhraseChallenged = factory.CreateTrendyPhrase(new TrendyPhrase4(1, 12, 1147, 65535));
+                    record.PhraseWon = factory.CreateTrendyPhrase(new TrendyPhrase4(2, 8, 1140, 65535)); // You're WEAK, aren't you?
+                    record.PhraseLost = factory.CreateTrendyPhrase(new TrendyPhrase4(2, 6, 1421, 65535)); // ROFL! How awful!
                     break;
 
                 case 3:
@@ -293,13 +293,13 @@ namespace PkmnFoundations.GTS
                         "Dusty",
                         Versions.Platinum, Languages.English,
                         0, 0, 0x03040506,
-                        factory.CreateTrendyPhrase(3, 4, 1342, 65535), // I can do anything for TREASURE
+                        factory.CreateTrendyPhrase(new TrendyPhrase4(3, 4, 1342, 65535)), // I can do anything for TREASURE
                         0, 48 // Ruin Maniac
                         );
 
-                    record.PhraseChallenged = factory.CreateTrendyPhrase(3, 4, 1342, 65535);
-                    record.PhraseWon = factory.CreateTrendyPhrase(3, 6, 1148, 1107); // GRANDFATHER is the real NO.1
-                    record.PhraseLost = factory.CreateTrendyPhrase(3, 10, 1389, 65535); // I prefer VACATION after all
+                    record.PhraseChallenged = factory.CreateTrendyPhrase(new TrendyPhrase4(3, 4, 1342, 65535));
+                    record.PhraseWon = factory.CreateTrendyPhrase(new TrendyPhrase4(3, 6, 1148, 1107)); // GRANDFATHER is the real NO.1
+                    record.PhraseLost = factory.CreateTrendyPhrase(new TrendyPhrase4(3, 10, 1389, 65535)); // I prefer VACATION after all
                     break;
 
                 case 4:
@@ -357,13 +357,13 @@ namespace PkmnFoundations.GTS
                         "Frosty",
                         Versions.Platinum, Languages.English,
                         0, 0, 0x04050607,
-                        factory.CreateTrendyPhrase(3, 3, 677, 1438), // This POWDER SNOW is NICE, isn't it?
+                        factory.CreateTrendyPhrase(new TrendyPhrase4(3, 3, 677, 1438)), // This POWDER SNOW is NICE, isn't it?
                         2, 35 // Socialite
                         );
 
-                    record.PhraseChallenged = factory.CreateTrendyPhrase(3, 3, 677, 1438);
-                    record.PhraseWon = factory.CreateTrendyPhrase(1, 14, 797, 65535); // This ICE BALL was really good
-                    record.PhraseLost = factory.CreateTrendyPhrase(2, 5, 752, 65535); // Could it be? HEAT WAVE
+                    record.PhraseChallenged = factory.CreateTrendyPhrase(new TrendyPhrase4(3, 3, 677, 1438));
+                    record.PhraseWon = factory.CreateTrendyPhrase(new TrendyPhrase4(1, 14, 797, 65535)); // This ICE BALL was really good
+                    record.PhraseLost = factory.CreateTrendyPhrase(new TrendyPhrase4(2, 5, 752, 65535)); // Could it be? HEAT WAVE
                     break;
 
                 case 5:
@@ -419,13 +419,13 @@ namespace PkmnFoundations.GTS
                         "Cassie",
                         Versions.Platinum, Languages.English,
                         0, 0, 0x05060708,
-                        factory.CreateTrendyPhrase(2, 3, 1146, 65535), // I want to go home with YOU...
+                        factory.CreateTrendyPhrase(new TrendyPhrase4(2, 3, 1146, 65535)), // I want to go home with YOU...
                         2, 85 // Idol
                         );
 
-                    record.PhraseChallenged = factory.CreateTrendyPhrase(2, 3, 1146, 65535);
-                    record.PhraseWon = factory.CreateTrendyPhrase(4, 10, 1245, 65535); // Let's GO AHEAD!
-                    record.PhraseLost = factory.CreateTrendyPhrase(4, 11, 1348, 65535); // Want to DATE?
+                    record.PhraseChallenged = factory.CreateTrendyPhrase(new TrendyPhrase4(2, 3, 1146, 65535));
+                    record.PhraseWon = factory.CreateTrendyPhrase(new TrendyPhrase4(4, 10, 1245, 65535)); // Let's GO AHEAD!
+                    record.PhraseLost = factory.CreateTrendyPhrase(new TrendyPhrase4(4, 11, 1348, 65535)); // Want to DATE?
                     break;
 
                 case 6:
@@ -481,13 +481,13 @@ namespace PkmnFoundations.GTS
                         "Evan",
                         Versions.Platinum, Languages.English,
                         0, 0, 0x06070809,
-                        factory.CreateTrendyPhrase(0, 2, 566, 65535), // I'll battle with STRENGTH!
+                        factory.CreateTrendyPhrase(new TrendyPhrase4(0, 2, 566, 65535)), // I'll battle with STRENGTH!
                         0, 24 // Ace trainer M
                         );
 
-                    record.PhraseChallenged = factory.CreateTrendyPhrase(0, 2, 566, 65535);
-                    record.PhraseWon = factory.CreateTrendyPhrase(1, 1, 1418, 65535); // I won! I won with SKILLFUL!
-                    record.PhraseLost = factory.CreateTrendyPhrase(2, 17, 1428, 65535); // The way I lost... It's like RARE...
+                    record.PhraseChallenged = factory.CreateTrendyPhrase(new TrendyPhrase4(0, 2, 566, 65535));
+                    record.PhraseWon = factory.CreateTrendyPhrase(new TrendyPhrase4(1, 1, 1418, 65535)); // I won! I won with SKILLFUL!
+                    record.PhraseLost = factory.CreateTrendyPhrase(new TrendyPhrase4(2, 17, 1428, 65535)); // The way I lost... It's like RARE...
                     break;
             }
 
@@ -508,6 +508,10 @@ namespace PkmnFoundations.GTS
             TrendyPhraseBase phrase_leader, byte gender, byte unknown);
 
         public abstract TrendyPhraseBase CreateTrendyPhrase(ushort mood, ushort index, ushort word1, ushort word2);
+
+        public abstract TrendyPhraseBase CreateTrendyPhrase(TrendyPhrase4 phrase);
+
+        public abstract TrendyPhraseBase CreateTrendyPhrase(TrendyPhrase5 phrase);
 
         public abstract Generations Generation { get; }
     }
@@ -557,6 +561,17 @@ namespace PkmnFoundations.GTS
             ushort index, ushort word1, ushort word2)
         {
             return new TrendyPhrase4(mood, index, word1, word2);
+        }
+
+        public override TrendyPhraseBase CreateTrendyPhrase(TrendyPhrase4 phrase)
+        {
+            return phrase.Clone();
+        }
+
+        public override TrendyPhraseBase CreateTrendyPhrase(TrendyPhrase5 phrase)
+        {
+            // todo: Maybe implement trendy phrase downgrades some time
+            throw new NotSupportedException();
         }
 
         public override Generations Generation
@@ -612,6 +627,16 @@ namespace PkmnFoundations.GTS
         public override TrendyPhraseBase CreateTrendyPhrase(ushort mood, ushort index, ushort word1, ushort word2)
         {
             return new TrendyPhrase5(mood, index, word1, word2);
+        }
+
+        public override TrendyPhraseBase CreateTrendyPhrase(TrendyPhrase4 phrase)
+        {
+            return new TrendyPhrase5(phrase);
+        }
+
+        public override TrendyPhraseBase CreateTrendyPhrase(TrendyPhrase5 phrase)
+        {
+            return phrase.Clone();
         }
 
         public override Generations Generation
