@@ -46,6 +46,7 @@ namespace PkmnFoundations.GTS
         public static BattleTowerRecordBase GenerateFakeOpponent(FakeOpponentFactory factory, Pokedex.Pokedex pokedex, int index)
         {
             BattleTowerRecordBase record = factory.CreateRecord(pokedex);
+            bool gen4 = factory.Generation <= Generations.Generation4;
 
             switch (index)
             {
@@ -56,7 +57,7 @@ namespace PkmnFoundations.GTS
                     record.Party[0] = factory.CreatePokemon(pokedex,
                         9, // Blastoise
                         234, // Leftovers
-                        new ushort[] { 
+                        new ushort[] {
                             57, // Surf
                             58, // Ice beam
                             252, // Fake out
@@ -72,7 +73,7 @@ namespace PkmnFoundations.GTS
                     record.Party[1] = factory.CreatePokemon(pokedex,
                         389, // Torterra
                         287, // Choice scarf
-                        new ushort[] { 
+                        new ushort[] {
                             452, // Wood hammer
                             89, // Earthquake
                             276, // Superpower
@@ -88,7 +89,7 @@ namespace PkmnFoundations.GTS
                     record.Party[2] = factory.CreatePokemon(pokedex,
                         324, // Torkoal
                         217, // Quick claw
-                        new ushort[] { 
+                        new ushort[] {
                             133, // Amnesia
                             156, // Rest
                             261, // Will-o-wisp
@@ -105,20 +106,30 @@ namespace PkmnFoundations.GTS
                         "Splnter",
                         Versions.Platinum, Languages.English,
                         0, 0, 0x01020304,
-                        factory.CreateTrendyPhrase(new TrendyPhrase4(0, 16, 291, 7)), // Ninjask! Squirtle power!
+                        gen4 ? factory.CreateTrendyPhrase(0, 16, 291, 7) // Ninjask! Squirtle power!
+                             : factory.CreateTrendyPhrase(1, 6, 7, 884), // Watch my Squirtle power take care of Metal Claw!
                         0, 14 // Black belt
                         );
 
-                    record.PhraseChallenged = factory.CreateTrendyPhrase(new TrendyPhrase4(0, 16, 291, 7));
-                    record.PhraseWon = factory.CreateTrendyPhrase(new TrendyPhrase4(1, 11, 766, 65535)); // I might have won with HELPING HAND!
-                    record.PhraseLost = factory.CreateTrendyPhrase(new TrendyPhrase4(2, 8, 1406, 65535)); // You're INCREDIBLE, aren't you?
+                    if (gen4)
+                    {
+                        record.PhraseChallenged = factory.CreateTrendyPhrase(0, 16, 291, 7);
+                        record.PhraseWon = factory.CreateTrendyPhrase(1, 11, 766, 65535); // I might have won with HELPING HAND!
+                        record.PhraseLost = factory.CreateTrendyPhrase(2, 8, 1406, 65535); // You're INCREDIBLE, aren't you?
+                    }
+                    else
+                    {
+                        record.PhraseChallenged = factory.CreateTrendyPhrase(5, 0, 1611, 65535); // Glad to meet you! I am MACHINE!
+                        record.PhraseWon = factory.CreateTrendyPhrase(5, 0, 1611, 65535);
+                        record.PhraseLost = factory.CreateTrendyPhrase(5, 0, 1611, 65535);
+                    }
                     break;
 
                 case 1:
                     record.Party[0] = factory.CreatePokemon(pokedex,
                         376, // Metagross
                         268, // Expert belt
-                        new ushort[] { 
+                        new ushort[] {
                             89, // EQ
                             309, // Meteor mash
                             9, // Thunderpunch
@@ -134,7 +145,7 @@ namespace PkmnFoundations.GTS
                     record.Party[1] = factory.CreatePokemon(pokedex,
                         282, // Gardevoir
                         297, // Choice specs
-                        new ushort[] { 
+                        new ushort[] {
                             94, // Psychic
                             85, // Thunderbolt
                             247, // Shadow ball
@@ -150,7 +161,7 @@ namespace PkmnFoundations.GTS
                     record.Party[2] = factory.CreatePokemon(pokedex,
                         134, // Vaporeon
                         234, // Leftovers
-                        new ushort[] { 
+                        new ushort[] {
                             57, // Surf
                             164, // Substitute
                             273, // Wish
@@ -163,25 +174,34 @@ namespace PkmnFoundations.GTS
                         255, "Seabiscuit"
                     );
 
-                    // fixme: Trendy phrases and trainer classes are nonsense on Gen5 because the magic numbers are only valid for Gen4.
                     record.Profile = factory.CreateProfile(
                         "Megan",
                         Versions.Platinum, Languages.English,
                         0, 0, 0x02030405,
-                        factory.CreateTrendyPhrase(new TrendyPhrase4(3, 8, 1487, 65535)), // There's only WI-FI left!
+                        gen4 ? factory.CreateTrendyPhrase(3, 8, 1487, 65535)  // There's only WI-FI left!
+                             : factory.CreateTrendyPhrase(5, 0, 1611, 65535), // fixme
                         2, 33 // Lady
                         );
 
-                    record.PhraseChallenged = factory.CreateTrendyPhrase(new TrendyPhrase4(3, 8, 1487, 65535));
-                    record.PhraseWon = factory.CreateTrendyPhrase(new TrendyPhrase4(3, 3, 1492, 1439)); // This BATTLE TOWER is DIFFICULT, isn't it?
-                    record.PhraseLost = factory.CreateTrendyPhrase(new TrendyPhrase4(3, 2, 1493, 1492)); // I love GTS! I love BATTLE TOWER too!
+                    if (gen4)
+                    {
+                        record.PhraseChallenged = factory.CreateTrendyPhrase(3, 8, 1487, 65535);
+                        record.PhraseWon = factory.CreateTrendyPhrase(3, 3, 1492, 1439); // This BATTLE TOWER is DIFFICULT, isn't it?
+                        record.PhraseLost = factory.CreateTrendyPhrase(3, 2, 1493, 1492); // I love GTS! I love BATTLE TOWER too!
+                    }
+                    else
+                    {
+                        record.PhraseChallenged = factory.CreateTrendyPhrase(5, 0, 1611, 65535); // Glad to meet you! I am MACHINE!
+                        record.PhraseWon = factory.CreateTrendyPhrase(5, 0, 1611, 65535);
+                        record.PhraseLost = factory.CreateTrendyPhrase(5, 0, 1611, 65535);
+                    }
                     break;
 
                 case 2:
                     record.Party[0] = factory.CreatePokemon(pokedex,
                         392, // Infernape
                         275, // Focus sash
-                        new ushort[] { 
+                        new ushort[] {
                             252, // Fake out
                             283, // Endeavour
                             183, // Mach punch
@@ -197,7 +217,7 @@ namespace PkmnFoundations.GTS
                     record.Party[1] = factory.CreatePokemon(pokedex,
                         235, // Smeargle
                         210, // Custap
-                        new ushort[] { 
+                        new ushort[] {
                             147, // Spore
                             169, // Spider web
                             286, // Imprison
@@ -213,7 +233,7 @@ namespace PkmnFoundations.GTS
                     record.Party[2] = factory.CreatePokemon(pokedex,
                         365, // Walrein
                         217, // Quick claw
-                        new ushort[] { 
+                        new ushort[] {
                             156, // Rest
                             214, // Sleep talk
                             104, // Double team
@@ -230,20 +250,30 @@ namespace PkmnFoundations.GTS
                         "Dennis",
                         Versions.Platinum, Languages.English,
                         0, 0, 0x02030405,
-                        factory.CreateTrendyPhrase(new TrendyPhrase4(1, 12, 1147, 65535)), // I get the happiest with MOTHER
+                        gen4 ? factory.CreateTrendyPhrase(1, 12, 1147, 65535) // I get the happiest with MOTHER
+                             : factory.CreateTrendyPhrase(5, 0, 1611, 65535), // fixme
                         0, 32 // Rich boy
                         );
 
-                    record.PhraseChallenged = factory.CreateTrendyPhrase(new TrendyPhrase4(1, 12, 1147, 65535));
-                    record.PhraseWon = factory.CreateTrendyPhrase(new TrendyPhrase4(2, 8, 1140, 65535)); // You're WEAK, aren't you?
-                    record.PhraseLost = factory.CreateTrendyPhrase(new TrendyPhrase4(2, 6, 1421, 65535)); // ROFL! How awful!
+                    if (gen4)
+                    {
+                        record.PhraseChallenged = factory.CreateTrendyPhrase(1, 12, 1147, 65535);
+                        record.PhraseWon = factory.CreateTrendyPhrase(2, 8, 1140, 65535); // You're WEAK, aren't you?
+                        record.PhraseLost = factory.CreateTrendyPhrase(2, 6, 1421, 65535); // ROFL! How awful!
+                    }
+                    else
+                    {
+                        record.PhraseChallenged = factory.CreateTrendyPhrase(5, 0, 1611, 65535); // Glad to meet you! I am MACHINE!
+                        record.PhraseWon = factory.CreateTrendyPhrase(5, 0, 1611, 65535);
+                        record.PhraseLost = factory.CreateTrendyPhrase(5, 0, 1611, 65535);
+                    }
                     break;
 
                 case 3:
                     record.Party[0] = factory.CreatePokemon(pokedex,
                         248, // Tyranitar
                         189, // Chople
-                        new ushort[] { 
+                        new ushort[] {
                             446, // Stealth rock
                             349, // Dragon dance
                             89, // EQ
@@ -259,7 +289,7 @@ namespace PkmnFoundations.GTS
                     record.Party[1] = factory.CreatePokemon(pokedex,
                         212, // Scizor
                         270, // Life orb
-                        new ushort[] { 
+                        new ushort[] {
                             418, // Bullet punch
                             450, // Bug bite
                             14, // Swords dance
@@ -275,14 +305,14 @@ namespace PkmnFoundations.GTS
                     record.Party[2] = factory.CreatePokemon(pokedex,
                         485, // Heatran
                         234, // Leftovers
-                        new ushort[] { 
+                        new ushort[] {
                             436, // Lava plume
                             414, // Earth power
                             156, // Rest
                             214 // Sleep talk
                         },
                         0x03040506, 3, // Modest
-                        // fixme: these IVs are unreasonably high for Soft Resetting.
+                                       // fixme: these IVs are unreasonably high for Soft Resetting.
                         IvStatValues.PackIVs(31, 10, 20, 20, 31, 31),
                         new byte[] { 250, 0, 0, 0, 56, 204 },
                         0, Languages.English, 18, // Flash fire
@@ -293,20 +323,30 @@ namespace PkmnFoundations.GTS
                         "Dusty",
                         Versions.Platinum, Languages.English,
                         0, 0, 0x03040506,
-                        factory.CreateTrendyPhrase(new TrendyPhrase4(3, 4, 1342, 65535)), // I can do anything for TREASURE
+                        gen4 ? factory.CreateTrendyPhrase(3, 4, 1342, 65535)  // I can do anything for TREASURE
+                             : factory.CreateTrendyPhrase(5, 0, 1611, 65535), // fixme
                         0, 48 // Ruin Maniac
                         );
 
-                    record.PhraseChallenged = factory.CreateTrendyPhrase(new TrendyPhrase4(3, 4, 1342, 65535));
-                    record.PhraseWon = factory.CreateTrendyPhrase(new TrendyPhrase4(3, 6, 1148, 1107)); // GRANDFATHER is the real NO.1
-                    record.PhraseLost = factory.CreateTrendyPhrase(new TrendyPhrase4(3, 10, 1389, 65535)); // I prefer VACATION after all
+                    if (gen4)
+                    {
+                        record.PhraseChallenged = factory.CreateTrendyPhrase(3, 4, 1342, 65535);
+                        record.PhraseWon = factory.CreateTrendyPhrase(3, 6, 1148, 1107); // GRANDFATHER is the real NO.1
+                        record.PhraseLost = factory.CreateTrendyPhrase(3, 10, 1389, 65535); // I prefer VACATION after all
+                    }
+                    else
+                    {
+                        record.PhraseChallenged = factory.CreateTrendyPhrase(5, 0, 1611, 65535); // Glad to meet you! I am MACHINE!
+                        record.PhraseWon = factory.CreateTrendyPhrase(5, 0, 1611, 65535);
+                        record.PhraseLost = factory.CreateTrendyPhrase(5, 0, 1611, 65535);
+                    }
                     break;
 
                 case 4:
                     record.Party[0] = factory.CreatePokemon(pokedex,
                         460, // Abomasnow
                         287, // Scarf
-                        new ushort[] { 
+                        new ushort[] {
                             59, // Blizzard
                             452, // Wood hammer
                             237, // Hidden power
@@ -314,8 +354,8 @@ namespace PkmnFoundations.GTS
                         },
                         0x04050607, 11, // Hasty
                         IvStatValues.PackIVs(19, 31, 18, 30, 28, 19), // HP:fire base 59
-                        // Original EVs: 228Spe/164Atk/116SAtk
-                        // Adjusted for Hidden Power IVs, sacrificing some Attack
+                                                                      // Original EVs: 228Spe/164Atk/116SAtk
+                                                                      // Adjusted for Hidden Power IVs, sacrificing some Attack
                         new byte[] { 0, 148, 0, 234, 128, 0 },
                         0, Languages.English, 117, // Snow warning
                         255, "Abomasnow"
@@ -324,7 +364,7 @@ namespace PkmnFoundations.GTS
                     record.Party[1] = factory.CreatePokemon(pokedex,
                         471, // Glaceon
                         246, // Nevermeltice
-                        new ushort[] { 
+                        new ushort[] {
                             59, // Blizzard
                             247, // Shadow ball
                             273, // Wish
@@ -340,7 +380,7 @@ namespace PkmnFoundations.GTS
                     record.Party[2] = factory.CreatePokemon(pokedex,
                         461, // Weavile
                         275, // Focus sash
-                        new ushort[] { 
+                        new ushort[] {
                             14, // Swords dance
                             400, // Night slash
                             8, // Ice punch
@@ -357,20 +397,30 @@ namespace PkmnFoundations.GTS
                         "Frosty",
                         Versions.Platinum, Languages.English,
                         0, 0, 0x04050607,
-                        factory.CreateTrendyPhrase(new TrendyPhrase4(3, 3, 677, 1438)), // This POWDER SNOW is NICE, isn't it?
+                        gen4 ? factory.CreateTrendyPhrase(3, 3, 677, 1438)    // This POWDER SNOW is NICE, isn't it?
+                             : factory.CreateTrendyPhrase(5, 0, 1611, 65535), // fixme
                         2, 35 // Socialite
                         );
 
-                    record.PhraseChallenged = factory.CreateTrendyPhrase(new TrendyPhrase4(3, 3, 677, 1438));
-                    record.PhraseWon = factory.CreateTrendyPhrase(new TrendyPhrase4(1, 14, 797, 65535)); // This ICE BALL was really good
-                    record.PhraseLost = factory.CreateTrendyPhrase(new TrendyPhrase4(2, 5, 752, 65535)); // Could it be? HEAT WAVE
+                    if (gen4)
+                    {
+                        record.PhraseChallenged = factory.CreateTrendyPhrase(3, 3, 677, 1438);
+                        record.PhraseWon = factory.CreateTrendyPhrase(1, 14, 797, 65535); // This ICE BALL was really good
+                        record.PhraseLost = factory.CreateTrendyPhrase(2, 5, 752, 65535); // Could it be? HEAT WAVE
+                    }
+                    else
+                    {
+                        record.PhraseChallenged = factory.CreateTrendyPhrase(5, 0, 1611, 65535); // Glad to meet you! I am MACHINE!
+                        record.PhraseWon = factory.CreateTrendyPhrase(5, 0, 1611, 65535);
+                        record.PhraseLost = factory.CreateTrendyPhrase(5, 0, 1611, 65535);
+                    }
                     break;
 
                 case 5:
                     record.Party[0] = factory.CreatePokemon(pokedex,
                         437, // Bronzong
                         234, // Leftovers
-                        new ushort[] { 
+                        new ushort[] {
                             433, // Trick room
                             360, // Gyro ball
                             95, // Hypnosis
@@ -386,7 +436,7 @@ namespace PkmnFoundations.GTS
                     record.Party[1] = factory.CreatePokemon(pokedex,
                         464, // Rhyperior
                         270, // Life orb
-                        new ushort[] { 
+                        new ushort[] {
                             89, // EQ
                             444, // Stone edge
                             401, // Aqua tail
@@ -402,7 +452,7 @@ namespace PkmnFoundations.GTS
                     record.Party[2] = factory.CreatePokemon(pokedex,
                         462, // Magnezone
                         268, // Expert belt
-                        new ushort[] { 
+                        new ushort[] {
                             237, // Hidden power
                             430, // Flash cannon
                             85, // Thunderbolt
@@ -419,20 +469,30 @@ namespace PkmnFoundations.GTS
                         "Cassie",
                         Versions.Platinum, Languages.English,
                         0, 0, 0x05060708,
-                        factory.CreateTrendyPhrase(new TrendyPhrase4(2, 3, 1146, 65535)), // I want to go home with YOU...
+                        gen4 ? factory.CreateTrendyPhrase(2, 3, 1146, 65535)  // I want to go home with YOU...
+                             : factory.CreateTrendyPhrase(5, 0, 1611, 65535), // fixme
                         2, 85 // Idol
                         );
 
-                    record.PhraseChallenged = factory.CreateTrendyPhrase(new TrendyPhrase4(2, 3, 1146, 65535));
-                    record.PhraseWon = factory.CreateTrendyPhrase(new TrendyPhrase4(4, 10, 1245, 65535)); // Let's GO AHEAD!
-                    record.PhraseLost = factory.CreateTrendyPhrase(new TrendyPhrase4(4, 11, 1348, 65535)); // Want to DATE?
+                    if (gen4)
+                    {
+                        record.PhraseChallenged = factory.CreateTrendyPhrase(2, 3, 1146, 65535);
+                        record.PhraseWon = factory.CreateTrendyPhrase(4, 10, 1245, 65535); // Let's GO AHEAD!
+                        record.PhraseLost = factory.CreateTrendyPhrase(4, 11, 1348, 65535); // Want to DATE?
+                    }
+                    else
+                    {
+                        record.PhraseChallenged = factory.CreateTrendyPhrase(5, 0, 1611, 65535); // Glad to meet you! I am MACHINE!
+                        record.PhraseWon = factory.CreateTrendyPhrase(5, 0, 1611, 65535);
+                        record.PhraseLost = factory.CreateTrendyPhrase(5, 0, 1611, 65535);
+                    }
                     break;
 
                 case 6:
                     record.Party[0] = factory.CreatePokemon(pokedex,
                         65, // Alakazam
                         275, // Focus sash
-                        new ushort[] { 
+                        new ushort[] {
                             269, // Taunt
                             94, // Psychic
                             411, // Focus blast
@@ -448,7 +508,7 @@ namespace PkmnFoundations.GTS
                     record.Party[1] = factory.CreatePokemon(pokedex,
                         445, // Garchomp
                         270, // Life orb
-                        new ushort[] { 
+                        new ushort[] {
                             14, // Swords dance
                             89, // EQ
                             200, // Outrage
@@ -464,7 +524,7 @@ namespace PkmnFoundations.GTS
                     record.Party[2] = factory.CreatePokemon(pokedex,
                         242, // Blissey
                         234, // Leftovers
-                        new ushort[] { 
+                        new ushort[] {
                             135, // Softboiled
                             104, // Double team
                             92, // Toxic
@@ -481,13 +541,23 @@ namespace PkmnFoundations.GTS
                         "Evan",
                         Versions.Platinum, Languages.English,
                         0, 0, 0x06070809,
-                        factory.CreateTrendyPhrase(new TrendyPhrase4(0, 2, 566, 65535)), // I'll battle with STRENGTH!
+                        gen4 ? factory.CreateTrendyPhrase(0, 2, 566, 65535)   // I'll battle with STRENGTH!
+                             : factory.CreateTrendyPhrase(5, 0, 1611, 65535), // fixme
                         0, 24 // Ace trainer M
                         );
 
-                    record.PhraseChallenged = factory.CreateTrendyPhrase(new TrendyPhrase4(0, 2, 566, 65535));
-                    record.PhraseWon = factory.CreateTrendyPhrase(new TrendyPhrase4(1, 1, 1418, 65535)); // I won! I won with SKILLFUL!
-                    record.PhraseLost = factory.CreateTrendyPhrase(new TrendyPhrase4(2, 17, 1428, 65535)); // The way I lost... It's like RARE...
+                    if (gen4)
+                    {
+                        record.PhraseChallenged = factory.CreateTrendyPhrase(0, 2, 566, 65535);
+                        record.PhraseWon = factory.CreateTrendyPhrase(1, 1, 1418, 65535); // I won! I won with SKILLFUL!
+                        record.PhraseLost = factory.CreateTrendyPhrase(2, 17, 1428, 65535); // The way I lost... It's like RARE...
+                    }
+                    else
+                    {
+                        record.PhraseChallenged = factory.CreateTrendyPhrase(5, 0, 1611, 65535); // Glad to meet you! I am MACHINE!
+                        record.PhraseWon = factory.CreateTrendyPhrase(5, 0, 1611, 65535);
+                        record.PhraseLost = factory.CreateTrendyPhrase(5, 0, 1611, 65535);
+                    }
                     break;
             }
 
@@ -508,10 +578,6 @@ namespace PkmnFoundations.GTS
             TrendyPhraseBase phrase_leader, byte gender, byte unknown);
 
         public abstract TrendyPhraseBase CreateTrendyPhrase(ushort mood, ushort index, ushort word1, ushort word2);
-
-        public abstract TrendyPhraseBase CreateTrendyPhrase(TrendyPhrase4 phrase);
-
-        public abstract TrendyPhraseBase CreateTrendyPhrase(TrendyPhrase5 phrase);
 
         public abstract Generations Generation { get; }
     }
@@ -561,17 +627,6 @@ namespace PkmnFoundations.GTS
             ushort index, ushort word1, ushort word2)
         {
             return new TrendyPhrase4(mood, index, word1, word2);
-        }
-
-        public override TrendyPhraseBase CreateTrendyPhrase(TrendyPhrase4 phrase)
-        {
-            return phrase.Clone();
-        }
-
-        public override TrendyPhraseBase CreateTrendyPhrase(TrendyPhrase5 phrase)
-        {
-            // todo: Maybe implement trendy phrase downgrades some time
-            throw new NotSupportedException();
         }
 
         public override Generations Generation
@@ -627,16 +682,6 @@ namespace PkmnFoundations.GTS
         public override TrendyPhraseBase CreateTrendyPhrase(ushort mood, ushort index, ushort word1, ushort word2)
         {
             return new TrendyPhrase5(mood, index, word1, word2);
-        }
-
-        public override TrendyPhraseBase CreateTrendyPhrase(TrendyPhrase4 phrase)
-        {
-            return new TrendyPhrase5(phrase);
-        }
-
-        public override TrendyPhraseBase CreateTrendyPhrase(TrendyPhrase5 phrase)
-        {
-            return phrase.Clone();
         }
 
         public override Generations Generation

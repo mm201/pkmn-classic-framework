@@ -17,13 +17,6 @@ namespace PkmnFoundations.Support
         {
         }
 
-        public TrendyPhrase5(TrendyPhrase4 phrase) : base(null)
-        {
-            // Upgrade a TrendyPhrase4
-            // fixme: These 4 values are all wrong and need offsets applied, if not bigger changes
-            Data = Pack(phrase.Mood, phrase.Index, phrase.Word1, phrase.Word2);
-        }
-
         public override string Render(string wordFormat)
         {
             return RenderPhrase(Data, wordFormat);
