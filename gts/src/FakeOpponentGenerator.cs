@@ -113,13 +113,13 @@ namespace PkmnFoundations.GTS
 
                     if (gen4)
                     {
-                        record.PhraseChallenged = factory.CreateTrendyPhrase(0, 16, 291, 7);
+                        record.PhraseChallenged = factory.CreateTrendyPhrase(0, 16, 291, 7); // Ninjask! Squirtle power!
                         record.PhraseWon = factory.CreateTrendyPhrase(1, 11, 766, 65535); // I might have won with HELPING HAND!
                         record.PhraseLost = factory.CreateTrendyPhrase(2, 8, 1406, 65535); // You're INCREDIBLE, aren't you?
                     }
                     else
                     {
-                        record.PhraseChallenged = factory.CreateTrendyPhrase(5, 0, 1611, 65535); // Glad to meet you! I am MACHINE!
+                        record.PhraseChallenged = factory.CreateTrendyPhrase(1, 6, 7, 884); // Watch my Squirtle power take care of Metal Claw!
                         record.PhraseWon = factory.CreateTrendyPhrase(5, 0, 1611, 65535);
                         record.PhraseLost = factory.CreateTrendyPhrase(5, 0, 1611, 65535);
                     }
@@ -185,7 +185,7 @@ namespace PkmnFoundations.GTS
 
                     if (gen4)
                     {
-                        record.PhraseChallenged = factory.CreateTrendyPhrase(3, 8, 1487, 65535);
+                        record.PhraseChallenged = factory.CreateTrendyPhrase(3, 8, 1487, 65535);  // There's only WI-FI left!
                         record.PhraseWon = factory.CreateTrendyPhrase(3, 3, 1492, 1439); // This BATTLE TOWER is DIFFICULT, isn't it?
                         record.PhraseLost = factory.CreateTrendyPhrase(3, 2, 1493, 1492); // I love GTS! I love BATTLE TOWER too!
                     }
@@ -257,7 +257,7 @@ namespace PkmnFoundations.GTS
 
                     if (gen4)
                     {
-                        record.PhraseChallenged = factory.CreateTrendyPhrase(1, 12, 1147, 65535);
+                        record.PhraseChallenged = factory.CreateTrendyPhrase(1, 12, 1147, 65535); // I get the happiest with MOTHER
                         record.PhraseWon = factory.CreateTrendyPhrase(2, 8, 1140, 65535); // You're WEAK, aren't you?
                         record.PhraseLost = factory.CreateTrendyPhrase(2, 6, 1421, 65535); // ROFL! How awful!
                     }
@@ -330,7 +330,7 @@ namespace PkmnFoundations.GTS
 
                     if (gen4)
                     {
-                        record.PhraseChallenged = factory.CreateTrendyPhrase(3, 4, 1342, 65535);
+                        record.PhraseChallenged = factory.CreateTrendyPhrase(3, 4, 1342, 65535); // I can do anything for TREASURE
                         record.PhraseWon = factory.CreateTrendyPhrase(3, 6, 1148, 1107); // GRANDFATHER is the real NO.1
                         record.PhraseLost = factory.CreateTrendyPhrase(3, 10, 1389, 65535); // I prefer VACATION after all
                     }
@@ -404,7 +404,7 @@ namespace PkmnFoundations.GTS
 
                     if (gen4)
                     {
-                        record.PhraseChallenged = factory.CreateTrendyPhrase(3, 3, 677, 1438);
+                        record.PhraseChallenged = factory.CreateTrendyPhrase(3, 3, 677, 1438); // This POWDER SNOW is NICE, isn't it?
                         record.PhraseWon = factory.CreateTrendyPhrase(1, 14, 797, 65535); // This ICE BALL was really good
                         record.PhraseLost = factory.CreateTrendyPhrase(2, 5, 752, 65535); // Could it be? HEAT WAVE
                     }
@@ -476,7 +476,7 @@ namespace PkmnFoundations.GTS
 
                     if (gen4)
                     {
-                        record.PhraseChallenged = factory.CreateTrendyPhrase(2, 3, 1146, 65535);
+                        record.PhraseChallenged = factory.CreateTrendyPhrase(2, 3, 1146, 65535); // I want to go home with YOU...
                         record.PhraseWon = factory.CreateTrendyPhrase(4, 10, 1245, 65535); // Let's GO AHEAD!
                         record.PhraseLost = factory.CreateTrendyPhrase(4, 11, 1348, 65535); // Want to DATE?
                     }
@@ -548,7 +548,7 @@ namespace PkmnFoundations.GTS
 
                     if (gen4)
                     {
-                        record.PhraseChallenged = factory.CreateTrendyPhrase(0, 2, 566, 65535);
+                        record.PhraseChallenged = factory.CreateTrendyPhrase(0, 2, 566, 65535); // I'll battle with STRENGTH!
                         record.PhraseWon = factory.CreateTrendyPhrase(1, 1, 1418, 65535); // I won! I won with SKILLFUL!
                         record.PhraseLost = factory.CreateTrendyPhrase(2, 17, 1428, 65535); // The way I lost... It's like RARE...
                     }

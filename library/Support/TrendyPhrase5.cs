@@ -77,142 +77,142 @@ namespace PkmnFoundations.Support
         private static string[,] PHRASES = new string[,]
         {
             {   // Mood 0: Other /171                
-                "Hello!\n{0}!",
-                "I am {0}!\nI'm pleased to meet you.",
-                "I love {0}!\nI love {1}, too!",
-                "My favorite {0} is\n{1}!",
-                "What's your favorite\n{0}?",
-                "I can do anything for\n{0}!",
-                "Is {0}\n{1}?",
-                "What do you think of\n{0}?",
-                "Do you think {0}\ncan {1}?",
-                "{0} is so\n{1}!",
-                "{0} bothers me.",
-                "After all, it's {0},\nisn't it?",
-                "{0} is the real\n{1}!",
-                "Did you know that {0}\nis {1}?",
-                "{0} is the reason\nfor {1}.",
-                "Have you heard of\n{0}?",
-                "{0} is actually\n{1}.",
-                "Recently, {0}\nseems {1}.",
-                "I wonder if\n{0} is yummy...",
-                "I never miss {0}.\nIt's part of what I do every day.",
+                "Hello!\n{0}!",                                         //  0
+                "I am {0}!\nI'm pleased to meet you.",                  //  1
+                "I love {0}!\nI love {1}, too!",                        //  2
+                "My favorite {0} is\n{1}!",                             //  3
+                "What's your favorite\n{0}?",                           //  4
+                "I can do anything for\n{0}!",                          //  5
+                "Is {0}\n{1}?",                                         //  6
+                "What do you think of\n{0}?",                           //  7
+                "Do you think {0}\ncan {1}?",                           //  8
+                "{0} is so\n{1}!",                                      //  9
+                "{0} bothers me.",                                      // 10
+                "After all, it's {0},\nisn't it?",                      // 11
+                "{0} is the real\n{1}!",                                // 12
+                "Did you know that {0}\nis {1}?",                       // 13
+                "{0} is the reason\nfor {1}.",                          // 14
+                "Have you heard of\n{0}?",                              // 15
+                "{0} is actually\n{1}.",                                // 16
+                "Recently, {0}\nseems {1}.",                            // 17
+                "I wonder if\n{0} is yummy...",                         // 18
+                "I never miss {0}.\nIt's part of what I do every day.", // 19
                 "",
             },
             {   // Mood 1: Start of battle /173          
-                "Please!\n{0}",
-                "Go! {0}!",
-                "I'll battle with\n{0}!",
-                "{0} is\n{1}, right?",
-                "{0}, I'm going\nwith {1}!",
-                "In comes {0}.",
-                "Watch my {0} power\ntake care of {1}!",
-                "Now {0}\nbegins!",
-                "I'll show you my\n{0} strategy!",
-                "I'll shock you with\n{0}!",
-                "{0}, I see...\nGo, {1}!",
-                "Ta-da!\nHere comes {0}!",
-                "I don't think I'll\never lose to {0}!",
-                "{0}!\n{1} is here!",
-                "Good luck,\n{0}!",
-                "Behold my {0}\n{1}!",
-                "The power of {0}!\nLet me show you!",
-                "You'll choose {0}\nif I choose {1}, right?",
-                "I beg you, {0}.\nPlease go with {1}!",
-                "May {0} safely\nland on {0}!",
+                "Please!\n{0}",                                         //  0
+                "Go! {0}!",                                             //  1
+                "I'll battle with\n{0}!",                               //  2
+                "{0} is\n{1}, right?",                                  //  3
+                "{0}, I'm going\nwith {1}!",                            //  4
+                "In comes {0}.",                                        //  5
+                "Watch my {0} power\ntake care of {1}!",                //  6
+                "Now {0}\nbegins!",                                     //  7
+                "I'll show you my\n{0} strategy!",                      //  8
+                "I'll shock you with\n{0}!",                            //  9
+                "{0}, I see...\nGo, {1}!",                              // 10
+                "Ta-da!\nHere comes {0}!",                              // 11
+                "I don't think I'll\never lose to {0}!",                // 12
+                "{0}!\n{1} is here!",                                   // 13
+                "Good luck,\n{0}!",                                     // 14
+                "Behold my {0}\n{1}!",                                  // 15
+                "The power of {0}!\nLet me show you!",                  // 16
+                "You'll choose {0}\nif I choose {1}, right?",           // 17
+                "I beg you, {0}.\nPlease go with {1}!",                 // 18
+                "May {0} safely\nland on {0}!",                         // 19
                 "",
             },
             {   // Mood 2: Victory /176
-                "I win!\n{0}!",
-                "I owe my victory\nto {0}!",
-                "{0} is strong,\nisn't it?",
-                "It's {0}\n{1} after all!",
-                "When it comes to {0},\nmy choice is always {1}!",
-                "Victory in a\n{0} battle!",
-                "Yay, {0}!\n{1}!",
-                "Sorry, it's {0}\n{1}.",
-                "{0}!\nThank you!",
-                "The way I feel now is\n{0}!",
-                "{0} sure is\n{1}!",
-                "It's all thanks to\n{0}.",
-                "{0} is the toughest!",
-                "{0}?\nWow, I'm so glad!",
-                "{0}?\nThat sounds good!",
-                "I have no trouble\ndealing with {0}.",
-                "{0} is so much fun.",
-                "Huh?\n{0}?!",
-                "The power of {0}\nis awesome!",
-                "Everyone!\n{0}!",
+                "I win!\n{0}!",                                         //  0
+                "I owe my victory\nto {0}!",                            //  1
+                "{0} is strong,\nisn't it?",                            //  2
+                "It's {0}\n{1} after all!",                             //  3
+                "When it comes to {0},\nmy choice is always {1}!",      //  4
+                "Victory in a\n{0} battle!",                            //  5
+                "Yay, {0}!\n{1}!",                                      //  6
+                "Sorry, it's {0}\n{1}.",                                //  7
+                "{0}!\nThank you!",                                     //  8
+                "The way I feel now is\n{0}!",                          //  9
+                "{0} sure is\n{1}!",                                    // 10
+                "It's all thanks to\n{0}.",                             // 11
+                "{0} is the toughest!",                                 // 12
+                "{0}?\nWow, I'm so glad!",                              // 13
+                "{0}?\nThat sounds good!",                              // 14
+                "I have no trouble\ndealing with {0}.",                 // 15
+                "{0} is so much fun.",                                  // 16
+                "Huh?\n{0}?!",                                          // 17
+                "The power of {0}\nis awesome!",                        // 18
+                "Everyone!\n{0}!",                                      // 19
                 "",
             },
             {   // Mood 3: Defeat /170
-                "You win...\n{0}!",
-                "{0} is\nreally impressive.",
-                "Waaah! {0}!",
-                "I want to go home with\n{0}...",
-                "{0}!\n{1}!",
-                "I see {0}\nright in front of me!",
-                "{0}?\nI didn't see that coming!",
-                "I was confident about\n{0}, too.",
-                "You're {0},\naren't you?",
-                "{0}!\nCan't be anything else but.",
-                "I want to be like {0}!",
-                "It might be\n{0} already...",
-                "I think {0}\nshould do.",
-                "The way I feel now is\n{0}...",
-                "{0} won't work!",
-                "Nothing beats {0}!",
-                "My head's filled with only\n{0} now!",
-                "Is it because {0}\nwas lacking?",
-                "Isn't {0}\n{1}?",
-                "Aww... That's really\n{0}...",
+                "You win...\n{0}!",                                     //  0
+                "{0} is\nreally impressive.",                           //  1
+                "Waaah! {0}!",                                          //  2
+                "I want to go home with\n{0}...",                       //  3
+                "{0}!\n{1}!",                                           //  4
+                "I see {0}\nright in front of me!",                     //  5
+                "{0}?\nI didn't see that coming!",                      //  6
+                "I was confident about\n{0}, too.",                     //  7
+                "You're {0},\naren't you?",                             //  8
+                "{0}!\nCan't be anything else but.",                    //  9
+                "I want to be like {0}!",                               // 10
+                "It might be\n{0} already...",                          // 11
+                "I think {0}\nshould do.",                              // 12
+                "The way I feel now is\n{0}...",                        // 13
+                "{0} won't work!",                                      // 14
+                "Nothing beats {0}!",                                   // 15
+                "My head's filled with only\n{0} now!",                 // 16
+                "Is it because {0}\nwas lacking?",                      // 17
+                "Isn't {0}\n{1}?",                                      // 18
+                "Aww... That's really\n{0}...",                         // 19
                 "",
             },
             {   // Mood 4: Other /175
-                "Yo!\nI'm {1}.",
-                "Glad to meet you!\nI love {0}!",
-                "Do you like {0}?",
-                "Let's draw! I want to draw\n{0}!",
-                "Let's battle!\nI say {0}!",
-                "I'm a {0} Trainer!\nPlease battle me!",
-                "Let's have a chat!\nHow about {0}?",
-                "Please trade!\nI want a {0}!",
-                "Please trade!\nI'm offering {0}!",
-                "Want to trade {0}?\nHere's a hint: {1}!",
-                "Will you join me\nfor {0}?",
-                "Anyone want to\n{0}?",
-                "I want to {0}\nwith {1}!",
-                "Let's go to {0}\nby {1}!",
-                "OK!",
-                "{0}?\nI got it!",
-                "{0}?\nHold on!",
-                "I don't want to\n{0}...",
-                "That was fun! I hope we can\n{0} again sometime.",
-                "See ya!\n{0}!",
+                "Yo!\nI'm {1}.",                                        //  0
+                "Glad to meet you!\nI love {0}!",                       //  1
+                "Do you like {0}?",                                     //  2
+                "Let's draw! I want to draw\n{0}!",                     //  3
+                "Let's battle!\nI say {0}!",                            //  4
+                "I'm a {0} Trainer!\nPlease battle me!",                //  5
+                "Let's have a chat!\nHow about {0}?",                   //  6
+                "Please trade!\nI want a {0}!",                         //  7
+                "Please trade!\nI'm offering {0}!",                     //  8
+                "Want to trade {0}?\nHere's a hint: {1}!",              //  9
+                "Will you join me\nfor {0}?",                           // 10
+                "Anyone want to\n{0}?",                                 // 11
+                "I want to {0}\nwith {1}!",                             // 12
+                "Let's go to {0}\nby {1}!",                             // 13
+                "OK!",                                                  // 14
+                "{0}?\nI got it!",                                      // 15
+                "{0}?\nHold on!",                                       // 16
+                "I don't want to\n{0}...",                              // 17
+                "That was fun! I hope we can\n{0} again sometime.",     // 18
+                "See ya!\n{0}!",                                        // 19
                 "",
             },
             {   // Mood 5: Greetings /172 New to GenV. Seems to be locked by default?
-                "Glad to meet you!\nI am {0}!",
-                "I'm a {0}-loving\n{1} Trainer.",
-                "Let's {0} sometime.\nKeep in touch!",
-                "{0} is the best!\nI love it!",
-                "It's great because it's\n{0}. Don't you agree?",
-                "Tell me your favorite\n{0}.",
-                "Hi!\nDo you know {0}?",
-                "It's very {0}\nand {1}!",
-                "Let's {0} soon!",
-                "Thank you for taking your time\nwith {0}.",
-                "It was so {0}.\nI was moved!",
-                "What do you think of\n{0}?",
-                "It's {0},\nif you ask me.",
-                "It bothers us, doesn't it?\nI'm talking about {0}.",
-                "Do you know what\nthey call {0}?",
-                "This {0} is\nsurprisingly {1}!",
-                "{0} sure is something.\nYou should try it!",
-                "Thank you for taking your time\nwith {0}.",
-                "{0} is\n{1}, don't you think?",
-                "That means {0}.\nThanks!",
-                "We should {0} together\nagain. {1}!",
+                "Glad to meet you!\nI am {0}!",                         //  0
+                "I'm a {0}-loving\n{1} Trainer.",                       //  1
+                "Let's {0} sometime.\nKeep in touch!",                  //  2
+                "{0} is the best!\nI love it!",                         //  3
+                "It's great because it's\n{0}. Don't you agree?",       //  4
+                "Tell me your favorite\n{0}.",                          //  5
+                "Hi!\nDo you know {0}?",                                //  6
+                "It's very {0}\nand {1}!",                              //  7
+                "Let's {0} soon!",                                      //  8
+                "Thank you for taking your time\nwith {0}.",            //  9
+                "It was so {0}.\nI was moved!",                         // 10
+                "What do you think of\n{0}?",                           // 11
+                "It's {0},\nif you ask me.",                            // 12
+                "It bothers us, doesn't it?\nI'm talking about {0}.",   // 13
+                "Do you know what\nthey call {0}?",                     // 14
+                "This {0} is\nsurprisingly {1}!",                       // 15
+                "{0} sure is something.\nYou should try it!",           // 16
+                "Thank you for taking your time\nwith {0}.",            // 17
+                "{0} is\n{1}, don't you think?",                        // 18
+                "That means {0}.\nThanks!",                             // 19
+                "We should {0} together\nagain. {1}!",                  // 20
             },
             { // Mood 6: Placeholder to hold a single trendy word
                 "{0}",

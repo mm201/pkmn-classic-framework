@@ -235,9 +235,9 @@ namespace PkmnFoundations.Structures
             BirthMonth = birth_month;
             TrainerClass = trainer_class;
             FavouritePokemon = favourite_pokemon;
-            Unknown1 = unknown1;
-            Unknown2 = unknown2;
-            Unknown3 = unknown3;
+            Unknown1 = unknown1; // appears to always be 0. Could mean unknown1 and unknown2 are a single int field
+            Unknown2 = unknown2; // seems to max at 999. Probably play time in hours
+            Unknown3 = unknown3; // seems to max around 15163.
             Entries = entries;
         }
 
