@@ -13,7 +13,7 @@ namespace PkmnFoundations.Structures
         {
         }
 
-        public BattleSubwayPokemon5(Pokedex.Pokedex pokedex, ushort species, ushort held_item, ushort[] moveset,
+        public BattleSubwayPokemon5(Pokedex.Pokedex pokedex, ushort species_form, ushort held_item, ushort[] moveset,
             uint ot, uint personality, uint ivs, byte[] evs, byte pp_ups,
             Languages language, byte ability, byte happiness, EncodedString5 nickname, uint unknown2) : base(pokedex)
         {
@@ -24,7 +24,7 @@ namespace PkmnFoundations.Structures
             if (nickname == null) throw new ArgumentNullException("nickname");
             if (nickname.Size != 22) throw new ArgumentException("nickname");
 
-            SpeciesID = species;
+            SpeciesFormValue = species_form;
             HeldItemID = held_item;
             GetMovesFromArray(Moves, pokedex, moveset, pp_ups);
             TrainerID = ot;
@@ -39,11 +39,11 @@ namespace PkmnFoundations.Structures
             Unknown2 = unknown2;
         }
 
-        public BattleSubwayPokemon5(Pokedex.Pokedex pokedex, ushort species, ushort held_item,
+        public BattleSubwayPokemon5(Pokedex.Pokedex pokedex, ushort species_form, ushort held_item,
             ushort move1, ushort move2, ushort move3, ushort move4, uint ot, uint personality,
             uint ivs, byte[] evs, byte pp_ups, Languages language, byte ability, byte happiness,
             EncodedString5 nickname, uint unknown2) :
-            this(pokedex, species, held_item, new ushort[] { move1, move2, move3, move4 },
+            this(pokedex, species_form, held_item, new ushort[] { move1, move2, move3, move4 },
                 ot, personality, ivs, evs, pp_ups, language, ability, happiness, nickname, unknown2)
         {
         }
@@ -83,7 +83,7 @@ namespace PkmnFoundations.Structures
 
         protected override void Save(BinaryWriter writer)
         {
-            writer.Write((ushort)SpeciesID);
+            writer.Write(SpeciesFormValue);
             writer.Write((ushort)HeldItemID);
 
             ushort[] moveset = GetArrayFromMoves(Moves);
@@ -108,7 +108,7 @@ namespace PkmnFoundations.Structures
 
         protected override void Load(BinaryReader reader)
         {
-            SpeciesID = reader.ReadUInt16();
+            SpeciesFormValue = reader.ReadUInt16();
             HeldItemID = reader.ReadUInt16();
 
             ushort[] moveset = new ushort[4];
@@ -141,7 +141,7 @@ namespace PkmnFoundations.Structures
             byte ppUps = GetPpUpsFromMoves(Moves);
 
             BattleSubwayPokemon5 result = new BattleSubwayPokemon5(m_pokedex,
-                (ushort)SpeciesID, (ushort)HeldItemID, moveset,
+                SpeciesFormValue, (ushort)HeldItemID, moveset,
                 TrainerID, Personality, ivsField, EVs.ToArray(), ppUps,
                 Language, (byte)AbilityID, Happiness, NicknameEncoded, Unknown2);
 

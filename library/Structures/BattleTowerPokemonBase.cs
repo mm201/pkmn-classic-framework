@@ -34,6 +34,19 @@ namespace PkmnFoundations.Structures
             }
         }
 
+        public ushort SpeciesFormValue
+        {
+            get
+            {
+                return (ushort)(SpeciesID & 0x7ff | FormID << 11);
+            }
+            set
+            {
+                SpeciesID = value & 0x7ff;
+                FormID = (byte)(value >> 11);
+            }
+        }
+
         internal static void GetMovesFromArray(IList<MoveSlot> result, Pokedex.Pokedex pokedex, ushort[] moves, byte ppUps)
         {
             if (moves.Length != 4) throw new ArgumentException("moves");

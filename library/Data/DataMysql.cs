@@ -782,7 +782,7 @@ namespace PkmnFoundations.Data
         private List<MySqlParameter> ParamsFromBattleTowerPokemon4(BattleTowerPokemon4 pokemon)
         {
             List<MySqlParameter> result = new List<MySqlParameter>(15);
-            result.Add(new MySqlParameter("@species", pokemon.SpeciesID));
+            result.Add(new MySqlParameter("@species", pokemon.SpeciesFormValue));
             result.Add(new MySqlParameter("@held_item", pokemon.HeldItemID));
             result.Add(new MySqlParameter("@move1", (ushort)pokemon.Moves[0].MoveID));
             result.Add(new MySqlParameter("@move2", (ushort)pokemon.Moves[1].MoveID));
@@ -2010,7 +2010,7 @@ namespace PkmnFoundations.Data
         private List<MySqlParameter> ParamsFromBattleSubwayPokemon5(BattleSubwayPokemon5 pokemon)
         {
             List<MySqlParameter> result = new List<MySqlParameter>(15);
-            result.Add(new MySqlParameter("@species", pokemon.SpeciesID));
+            result.Add(new MySqlParameter("@species", pokemon.SpeciesFormValue));
             result.Add(new MySqlParameter("@held_item", pokemon.HeldItemID));
             result.Add(new MySqlParameter("@move1", pokemon.Moves[0].MoveID));
             result.Add(new MySqlParameter("@move2", pokemon.Moves[1].MoveID));
