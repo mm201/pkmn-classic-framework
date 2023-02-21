@@ -674,6 +674,9 @@ namespace PkmnFoundations.GTS
 
                     foreach (var p in record.Party)
                     {
+                        // todo: add battle tower specific checks:
+                        // item clause, species clause, banned species, banned items
+                        // https://bulbapedia.bulbagarden.net/wiki/Battle_Tower_(Sinnoh)#Restrictions
                         if (!p.Validate().IsValid)
                         {
                             // Tell the client it was successful so they don't keep retrying.

@@ -39,6 +39,8 @@ namespace PkmnFoundations.Structures
         public int PID { get; set; }
         public ulong SerialNumber { get; set; }
 
+        // todo: Document this data structure.
+        // List of decorations: https://projectpokemon.org/rawdb/diamond/msg/338.php
         private byte[] m_data;
         public byte[] Data
         {

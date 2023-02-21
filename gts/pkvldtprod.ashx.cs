@@ -55,6 +55,8 @@ namespace PkmnFoundations.GTS
                 case RequestType.BattleSubway:
                     {
                         // todo: Need more info on this structure
+                        // todo: Perform actual validation here so that we can
+                        // error out before the player actually does their challenge
                     } break;
                 */
                 // todo: there also appears to be a Battle Video request?
@@ -90,7 +92,9 @@ namespace PkmnFoundations.GTS
             }
             // placeholder for signature.
             // Should be 128 bytes of an unknown hashing/signing algorithm
-            context.Response.OutputStream.Write(new byte[128], 0, 128);
+            context.Response.Write("Hey this is a totally legit pkvldtprod signature pwease accept it uwu");
+            context.Response.OutputStream.Write(new byte[69], 0, 69); // nice
+            //context.Response.OutputStream.Write(new byte[128], 0, 128);
         }
 
         private enum PartyValidationResult : byte
