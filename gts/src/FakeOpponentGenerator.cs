@@ -22,25 +22,25 @@ namespace PkmnFoundations.GTS
         /// <returns></returns>
         public static BattleTowerRecordBase[] GenerateFakeOpponents(FakeOpponentFactory factory, int count)
         {
+            if (count == 0) return new BattleTowerRecordBase[0];
             int fakeOpponentsCount = (factory.Generation < Generations.Generation5) ? FAKE_OPPONENTS_COUNT_4 : FAKE_OPPONENTS_COUNT_5;
 
-            // todo: allow more with repeats
-            if (count > fakeOpponentsCount) throw new ArgumentOutOfRangeException("count");
-            List<int> values = Enumerable.Range(0, fakeOpponentsCount).ToList();
-            BattleTowerRecordBase[] result = new BattleTowerRecordBase[count];
+            int residualCount = count % fakeOpponentsCount;
+            int repeatCount = count / fakeOpponentsCount;
 
+            List<int> values = new List<int>(count);
             Random rand = new Random();
-            var pokedex = AppStateHelper.Pokedex(HttpContext.Current.Application);
 
-            for (int x = 0; x < count; x++)
+            for (int x = 0; x < repeatCount; x++)
             {
-                int index = rand.Next(values.Count);
-                int index2 = values[index];
-                values.RemoveAt(index);
-                result[x] = GenerateFakeOpponent(factory, pokedex, index2);
+                values.AddRange(Enumerable.Range(0, fakeOpponentsCount));
             }
+            values.AddRange(Enumerable.Range(0, fakeOpponentsCount).DrawWithoutReplacement(rand).Take(residualCount));
 
-            return result;
+            var pokedex = AppStateHelper.Pokedex(HttpContext.Current.Application);
+            var results = values.DrawWithoutReplacement(rand).Select(i => GenerateFakeOpponent(factory, pokedex, i));
+
+            return results.ToArray();
         }
 
         public static BattleTowerRecordBase GenerateFakeOpponent(FakeOpponentFactory factory, Pokedex.Pokedex pokedex, int index)
