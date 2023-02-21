@@ -12,8 +12,8 @@ namespace PkmnFoundations.GTS
     /// </summary>
     public static class FakeOpponentGenerator
     {
-        const int FAKE_OPPONENTS_COUNT_4 = 7;
-        const int FAKE_OPPONENTS_COUNT_5 = 7;
+        const int FAKE_OPPONENTS_COUNT_4 = 8;
+        const int FAKE_OPPONENTS_COUNT_5 = 8;
 
         /// <summary>
         /// Randomly selects some fake opponents without repeats (if possible)
@@ -48,6 +48,8 @@ namespace PkmnFoundations.GTS
             BattleTowerRecordBase record = factory.CreateRecord(pokedex);
             bool gen4 = factory.Generation <= Generations.Generation4;
 
+            // Trainer classes in gen4: https://projectpokemon.org/rawdb/diamond/msg/560.php
+            // Trainer classes in gen5: https://projectpokemon.org/rawdb/black/msg/191.php
             switch (index)
             {
                 default:
@@ -55,67 +57,67 @@ namespace PkmnFoundations.GTS
 
                 case 0:
                     record.Party[0] = factory.CreatePokemon(pokedex,
-                        9, // Blastoise
-                        234, // Leftovers
+                        129, // Magikarp
+                        3133, // Cheri
                         new ushort[] {
-                            57, // Surf
-                            58, // Ice beam
-                            252, // Fake out
-                            156 // Rest
+                            150, // Splash
+                            33, // Tackle
+                            175, // Flail
+                            340 // Bounce
                         },
-                        0x01020304, 15, // Modest
-                        IvStatValues.PackIVs(31, 10, 20, 31, 31, 20),
-                        new byte[] { 6, 0, 0, 252, 252, 0 },
-                        0, Languages.English, 67, // Torrent
-                        255, "Leonardo"
+                        0x01020304, 3, // Adamant
+                        IvStatValues.PackIVs(31, 31, 21, 31, 21, 21),
+                        new byte[] { 6, 252, 0, 252, 0, 0 },
+                        0, Languages.English, 33, // Swift swim
+                        255, "Carp"
                     );
 
                     record.Party[1] = factory.CreatePokemon(pokedex,
-                        389, // Torterra
-                        287, // Choice scarf
+                        223, // Remoraid
+                        3134, // Chesto
                         new ushort[] {
-                            452, // Wood hammer
-                            89, // Earthquake
-                            276, // Superpower
-                            242 // Crunch
+                            60, // Psybeam
+                            61, // Bubblebeam
+                            62, // Aurora beam
+                            324 // Signal beam
                         },
-                        0x01020304, 13, // Jolly
-                        IvStatValues.PackIVs(31, 31, 20, 31, 10, 20),
+                        0x01020304, 10, // Timid
+                        IvStatValues.PackIVs(31, 21, 21, 31, 31, 21),
                         new byte[] { 6, 252, 0, 252, 0, 0 },
-                        0, Languages.English, 65, // Overgrow
-                        255, "Donatello"
+                        0, Languages.English, 97, // Sniper
+                        255, "Gunter"
                     );
 
                     record.Party[2] = factory.CreatePokemon(pokedex,
-                        324, // Torkoal
-                        217, // Quick claw
+                        349, // Feebas
+                        3134, // Chesto
                         new ushort[] {
-                            133, // Amnesia
-                            156, // Rest
-                            261, // Will-o-wisp
-                            90 // Fissure
+                            150, // Splash
+                            33, // Tackle
+                            175, // Flail
+                            240 // Rain Dance
                         },
-                        0x01020304, 23, // Careful
-                        IvStatValues.PackIVs(31, 10, 31, 20, 10, 31),
+                        0x01020304, 13, // Jolly
+                        IvStatValues.PackIVs(31, 21, 21, 31, 31, 21),
                         new byte[] { 252, 0, 6, 0, 0, 252 },
-                        0, Languages.English, 73, // White smoke
-                        255, "Raphael"
+                        0, Languages.English, 33, // Swift swim
+                        255, "Meryl"
                     );
 
                     record.Profile = factory.CreateProfile(
-                        "Splnter",
+                        "Steve",
                         Versions.Platinum, Languages.English,
                         0, 0, 0x01020304,
                         gen4 ? factory.CreateTrendyPhrase(0, 16, 291, 7) // Ninjask! Squirtle power!
                              : factory.CreateTrendyPhrase(1, 6, 7, 884), // Watch my Squirtle power take care of Metal Claw!
-                        0, 14 // Black belt
+                        0, 11 // Fisherman
                         );
 
                     if (gen4)
                     {
-                        record.PhraseChallenged = factory.CreateTrendyPhrase(0, 16, 291, 7); // Ninjask! Squirtle power!
+                        record.PhraseChallenged = factory.CreateTrendyPhrase(1, 14, 1347, 65535); // This FISHING was really good!
                         record.PhraseWon = factory.CreateTrendyPhrase(1, 11, 766, 65535); // I might have won with HELPING HAND!
-                        record.PhraseLost = factory.CreateTrendyPhrase(2, 8, 1406, 65535); // You're INCREDIBLE, aren't you?
+                        record.PhraseLost = factory.CreateTrendyPhrase(2, 15, 1347, 65535); // I would’ve won if this\nwere FISHING...
                     }
                     else
                     {
@@ -555,6 +557,78 @@ namespace PkmnFoundations.GTS
                     else
                     {
                         record.PhraseChallenged = factory.CreateTrendyPhrase(5, 0, 1611, 65535); // Glad to meet you! I am MACHINE!
+                        record.PhraseWon = factory.CreateTrendyPhrase(5, 0, 1611, 65535);
+                        record.PhraseLost = factory.CreateTrendyPhrase(5, 0, 1611, 65535);
+                    }
+                    break;
+
+                case 7:
+                    record.Party[0] = factory.CreatePokemon(pokedex,
+                        9, // Blastoise
+                        234, // Leftovers
+                        new ushort[] {
+                            57, // Surf
+                            58, // Ice beam
+                            252, // Fake out
+                            156 // Rest
+                        },
+                        0x01020304, 15, // Modest
+                        IvStatValues.PackIVs(31, 10, 20, 31, 31, 20),
+                        new byte[] { 6, 0, 0, 252, 252, 0 },
+                        0, Languages.English, 67, // Torrent
+                        255, "Leonardo"
+                    );
+
+                    record.Party[1] = factory.CreatePokemon(pokedex,
+                        389, // Torterra
+                        287, // Choice scarf
+                        new ushort[] {
+                            452, // Wood hammer
+                            89, // Earthquake
+                            276, // Superpower
+                            242 // Crunch
+                        },
+                        0x01020304, 13, // Jolly
+                        IvStatValues.PackIVs(31, 31, 20, 31, 10, 20),
+                        new byte[] { 6, 252, 0, 252, 0, 0 },
+                        0, Languages.English, 65, // Overgrow
+                        255, "Donatello"
+                    );
+
+                    record.Party[2] = factory.CreatePokemon(pokedex,
+                        324, // Torkoal
+                        217, // Quick claw
+                        new ushort[] {
+                            133, // Amnesia
+                            156, // Rest
+                            261, // Will-o-wisp
+                            90 // Fissure
+                        },
+                        0x01020304, 23, // Careful
+                        IvStatValues.PackIVs(31, 10, 31, 20, 10, 31),
+                        new byte[] { 252, 0, 6, 0, 0, 252 },
+                        0, Languages.English, 73, // White smoke
+                        255, "Raphael"
+                    );
+
+                    record.Profile = factory.CreateProfile(
+                        "Splnter",
+                        Versions.Platinum, Languages.English,
+                        0, 0, 0x01020304,
+                        gen4 ? factory.CreateTrendyPhrase(0, 16, 291, 7) // Ninjask! Squirtle power!
+                             : factory.CreateTrendyPhrase(1, 6, 7, 884), // Watch my Squirtle power take care of Metal Claw!
+                        0, 14 // Black belt
+                        );
+
+                    if (gen4)
+                    {
+                        record.PhraseChallenged = factory.CreateTrendyPhrase(0, 16, 291, 7); // Ninjask! Squirtle power!
+                        record.PhraseWon = factory.CreateTrendyPhrase(1, 11, 766, 65535); // I might have won with HELPING HAND!
+                        record.PhraseLost = factory.CreateTrendyPhrase(2, 8, 1406, 65535); // You're INCREDIBLE, aren't you?
+                    }
+                    else
+                    {
+                        record.PhraseChallenged = factory.CreateTrendyPhrase(1, 6, 7, 884); // Watch my Squirtle power take care of Metal Claw!
                         record.PhraseWon = factory.CreateTrendyPhrase(5, 0, 1611, 65535);
                         record.PhraseLost = factory.CreateTrendyPhrase(5, 0, 1611, 65535);
                     }
