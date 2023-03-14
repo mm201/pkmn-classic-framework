@@ -2,7 +2,7 @@
 -- Host:                         127.0.0.1
 -- Server version:               10.5.16-MariaDB - mariadb.org binary distribution
 -- Server OS:                    Win64
--- HeidiSQL Version:             12.0.0.6518
+-- HeidiSQL Version:             12.1.0.6537
 -- --------------------------------------------------------
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -124,6 +124,7 @@ CREATE TABLE IF NOT EXISTS `GtsBattleSubwayPokemon5` (
   `party_id` bigint(20) unsigned NOT NULL,
   `Slot` tinyint(3) unsigned NOT NULL,
   `Species` smallint(5) unsigned DEFAULT NULL,
+  `Form` smallint(5) unsigned DEFAULT NULL,
   `HeldItem` smallint(5) unsigned DEFAULT NULL,
   `Move1` smallint(5) unsigned DEFAULT NULL,
   `Move2` smallint(5) unsigned DEFAULT NULL,
@@ -206,6 +207,7 @@ CREATE TABLE IF NOT EXISTS `GtsBattleTowerPokemon4` (
   `party_id` bigint(20) unsigned NOT NULL,
   `Slot` tinyint(3) unsigned NOT NULL,
   `Species` smallint(5) unsigned DEFAULT NULL,
+  `Form` smallint(5) unsigned DEFAULT NULL,
   `HeldItem` smallint(5) unsigned DEFAULT NULL,
   `Move1` smallint(5) unsigned DEFAULT NULL,
   `Move2` smallint(5) unsigned DEFAULT NULL,
