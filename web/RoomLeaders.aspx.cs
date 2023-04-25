@@ -9,6 +9,7 @@ using PkmnFoundations.Data;
 using PkmnFoundations.Structures;
 using PkmnFoundations.Support;
 using PkmnFoundations.Web;
+using PkmnFoundations.Wfc;
 
 namespace PkmnFoundations.GTS
 {

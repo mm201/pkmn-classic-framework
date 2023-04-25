@@ -5,7 +5,7 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
 
-namespace PkmnFoundations.Structures
+namespace PkmnFoundations.Support
 {
     /// <summary>
     /// Base class for objects which serialize using BinaryReader and BinaryWriter

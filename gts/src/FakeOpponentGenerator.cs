@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using PkmnFoundations.Structures;
 using PkmnFoundations.Support;
+using PkmnFoundations.Wfc;
 
 namespace PkmnFoundations.GTS
 {

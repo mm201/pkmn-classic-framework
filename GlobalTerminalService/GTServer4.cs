@@ -8,6 +8,7 @@ using PkmnFoundations.Structures;
 using PkmnFoundations.Data;
 using System.Net.Sockets;
 using System.Diagnostics;
+using PkmnFoundations.Wfc;
 
 namespace PkmnFoundations.GlobalTerminalService
 {

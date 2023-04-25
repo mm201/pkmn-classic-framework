@@ -6,6 +6,7 @@ using System.Text;
 using PkmnFoundations.Data;
 using PkmnFoundations.Structures;
 using PkmnFoundations.Support;
+using PkmnFoundations.Wfc;
 
 namespace bvRestorer5
 {

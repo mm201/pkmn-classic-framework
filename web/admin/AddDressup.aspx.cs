@@ -8,6 +8,7 @@ using System.IO;
 using PkmnFoundations.Structures;
 using PkmnFoundations.Data;
 using PkmnFoundations.Web;
+using PkmnFoundations.Wfc;
 
 namespace PkmnFoundations.GTS.test
 {

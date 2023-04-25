@@ -9,6 +9,7 @@ using PkmnFoundations.Data;
 using PkmnFoundations.Pokedex;
 using PkmnFoundations.Structures;
 using PkmnFoundations.Support;
+using PkmnFoundations.Wfc;
 
 namespace PkmnFoundations.Web.gts
 {

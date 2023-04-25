@@ -5,22 +5,22 @@ using System.Linq;
 using System.Text;
 using PkmnFoundations.Support;
 
-namespace PkmnFoundations.Structures
+namespace PkmnFoundations.Wfc
 {
-    public class BattleSubwayRecord5 : BattleTowerRecordBase
+    public class BattleTowerRecord4 : BattleTowerRecordBase
     {
-        public BattleSubwayRecord5(Pokedex.Pokedex pokedex)
+        public BattleTowerRecord4(Pokedex.Pokedex pokedex)
         {
             Pokedex = pokedex;
         }
 
-        public BattleSubwayRecord5(Pokedex.Pokedex pokedex, byte[] data)
+        public BattleTowerRecord4(Pokedex.Pokedex pokedex, byte[] data)
         {
             Pokedex = pokedex;
             Load(data, 0);
         }
 
-        public BattleSubwayRecord5(Pokedex.Pokedex pokedex, byte[] data, int start)
+        public BattleTowerRecord4(Pokedex.Pokedex pokedex, byte[] data, int start)
         {
             Pokedex = pokedex;
             Load(data, start);
@@ -28,11 +28,11 @@ namespace PkmnFoundations.Structures
 
         public Pokedex.Pokedex Pokedex { get; set; }
 
-        private BattleSubwayPokemon5[] m_party;
-        private BattleSubwayProfile5 m_profile;
-        private TrendyPhrase5 m_phrase_challenged;
-        private TrendyPhrase5 m_phrase_won;
-        private TrendyPhrase5 m_phrase_lost;
+        private BattleTowerPokemon4[] m_party;
+        private BattleTowerProfile4 m_profile;
+        private TrendyPhrase4 m_phrase_challenged;
+        private TrendyPhrase4 m_phrase_won;
+        private TrendyPhrase4 m_phrase_lost;
 
         public override IList<BattleTowerPokemonBase> Party
         {
@@ -42,13 +42,12 @@ namespace PkmnFoundations.Structures
             }
             set
             {
-                if (!(value is BattleSubwayPokemon5[])) throw new ArgumentException("value must be BattleSubwayPokemon5[]");
-                BattleSubwayPokemon5[] party = (BattleSubwayPokemon5[])value;
+                if (!(value is BattleTowerPokemon4[])) throw new ArgumentException("value must be BattleTowerPokemon4[]");
+                BattleTowerPokemon4[] party = (BattleTowerPokemon4[])value;
                 if (party.Length != 3) throw new ArgumentException("value must have length 3");
                 m_party = party;
             }
         }
-
 
         public override BattleTowerProfileBase Profile
         {
@@ -59,7 +58,7 @@ namespace PkmnFoundations.Structures
 
             set
             {
-                m_profile = (BattleSubwayProfile5)value;
+                m_profile = (BattleTowerProfile4)value;
             }
         }
 
@@ -72,7 +71,7 @@ namespace PkmnFoundations.Structures
 
             set
             {
-                m_phrase_challenged = (TrendyPhrase5)value;
+                m_phrase_challenged = (TrendyPhrase4)value;
             }
         }
 
@@ -85,7 +84,7 @@ namespace PkmnFoundations.Structures
 
             set
             {
-                m_phrase_won = (TrendyPhrase5)value;
+                m_phrase_won = (TrendyPhrase4)value;
             }
         }
 
@@ -98,22 +97,22 @@ namespace PkmnFoundations.Structures
 
             set
             {
-                m_phrase_lost = (TrendyPhrase5)value;
+                m_phrase_lost = (TrendyPhrase4)value;
             }
         }
 
-        public ushort Unknown3;
+
+        public ushort Unknown3; // Seems to be some sort of Elo rating. Goes up to about 8000.
 
         public byte Rank;
         public byte RoomNum;
         public byte BattlesWon;
-        public byte[] Unknown4; // 5 bytes, appears to always be 00 00 00 00 00?
         public ulong Unknown5; // Appears to be zero on AdmiralCurtiss's scraped data, but is very big ints on data being uploaded.
         public int PID;
 
         public byte[] Save()
         {
-            byte[] data = new byte[0xf0];
+            byte[] data = new byte[0xe4];
             MemoryStream ms = new MemoryStream(data);
             BinaryWriter writer = new BinaryWriter(ms);
 
@@ -121,7 +120,7 @@ namespace PkmnFoundations.Structures
             {
                 writer.Write(Party[x].Save());
             }
-            writer.Write(((BattleSubwayProfile5)Profile).Save());
+            writer.Write(((BattleTowerProfile4)Profile).Save());
             writer.Write(PhraseChallenged.Data);
             writer.Write(PhraseWon.Data);
             writer.Write(PhraseLost.Data);
@@ -134,26 +133,26 @@ namespace PkmnFoundations.Structures
 
         public void Load(byte[] data, int start)
         {
-            if (start + 0xf0 > data.Length) throw new ArgumentOutOfRangeException("start");
+            if (start + 0xe4 > data.Length) throw new ArgumentOutOfRangeException("start");
 
-            Party = new BattleSubwayPokemon5[3];
+            m_party = new BattleTowerPokemon4[3];
             for (int x = 0; x < 3; x++)
             {
-                Party[x] = new BattleSubwayPokemon5(Pokedex, data, start + x * 0x3c);
+                Party[x] = new BattleTowerPokemon4(Pokedex, data, start + x * 0x38);
             }
-            Profile = new BattleSubwayProfile5(data, 0xb4 + start);
+            Profile = new BattleTowerProfile4(data, 0xa8 + start);
 
             byte[] trendyPhrase = new byte[8];
-            Array.Copy(data, 0xd6 + start, trendyPhrase, 0, 8);
-            PhraseChallenged = new TrendyPhrase5(trendyPhrase);
+            Array.Copy(data, 0xca + start, trendyPhrase, 0, 8);
+            PhraseChallenged = new TrendyPhrase4(trendyPhrase);
             trendyPhrase = new byte[8];
-            Array.Copy(data, 0xde + start, trendyPhrase, 0, 8);
-            PhraseWon = new TrendyPhrase5(trendyPhrase);
+            Array.Copy(data, 0xd2 + start, trendyPhrase, 0, 8);
+            PhraseWon = new TrendyPhrase4(trendyPhrase);
             trendyPhrase = new byte[8];
-            Array.Copy(data, 0xe6 + start, trendyPhrase, 0, 8);
-            PhraseLost = new TrendyPhrase5(trendyPhrase);
+            Array.Copy(data, 0xda + start, trendyPhrase, 0, 8);
+            PhraseLost = new TrendyPhrase4(trendyPhrase);
 
-            Unknown3 = BitConverter.ToUInt16(data, 0xee + start);
+            Unknown3 = BitConverter.ToUInt16(data, 0xe2 + start);
         }
     }
 }

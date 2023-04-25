@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using PkmnFoundations.Structures;
 using PkmnFoundations.Support;
 
-namespace PkmnFoundations.Structures
+namespace PkmnFoundations.Wfc
 {
     public class TrainerProfilePlaza
     {

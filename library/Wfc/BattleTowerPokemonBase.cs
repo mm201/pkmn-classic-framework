@@ -4,9 +4,10 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using PkmnFoundations.Pokedex;
+using PkmnFoundations.Structures;
 using PkmnFoundations.Support;
 
-namespace PkmnFoundations.Structures
+namespace PkmnFoundations.Wfc
 {
     public abstract class BattleTowerPokemonBase : PokemonBase
     {

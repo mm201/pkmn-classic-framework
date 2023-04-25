@@ -6,6 +6,7 @@ using System.Web;
 using GamestatsBase;
 using PkmnFoundations.Data;
 using PkmnFoundations.Structures;
+using PkmnFoundations.Wfc;
 
 namespace PkmnFoundations.GTS
 {

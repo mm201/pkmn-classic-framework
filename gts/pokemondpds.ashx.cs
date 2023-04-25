@@ -9,6 +9,7 @@ using PkmnFoundations.Support;
 using System.IO;
 using System.Threading;
 using GamestatsBase;
+using PkmnFoundations.Wfc;
 
 namespace PkmnFoundations.GTS
 {

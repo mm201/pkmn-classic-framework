@@ -8,6 +8,7 @@ using PkmnFoundations.Structures;
 using PkmnFoundations.Support;
 using System.Security.Cryptography;
 using PkmnFoundations.Pokedex;
+using PkmnFoundations.Wfc;
 
 namespace PkmnFoundations.Data
 {

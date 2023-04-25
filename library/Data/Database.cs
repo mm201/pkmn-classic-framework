@@ -6,6 +6,7 @@ using System.Data;
 using PkmnFoundations.Structures;
 using System.Configuration;
 using PkmnFoundations.Pokedex;
+using PkmnFoundations.Wfc;
 
 namespace PkmnFoundations.Data
 {

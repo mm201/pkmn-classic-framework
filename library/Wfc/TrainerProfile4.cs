@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using PkmnFoundations.Support;
 
-namespace PkmnFoundations.Structures
+namespace PkmnFoundations.Wfc
 {
     public class TrainerProfile4 : TrainerProfileBase
     {

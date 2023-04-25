@@ -1,11 +1,12 @@
-﻿using PkmnFoundations.Support;
+﻿using PkmnFoundations.Structures;
+using PkmnFoundations.Support;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
 
-namespace PkmnFoundations.Structures
+namespace PkmnFoundations.Wfc
 {
     public class TrainerRankingsReport
     {

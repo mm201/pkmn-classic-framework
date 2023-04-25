@@ -1,10 +1,11 @@
-﻿using System;
+﻿using PkmnFoundations.Structures;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
 
-namespace PkmnFoundations.Structures
+namespace PkmnFoundations.Wfc
 {
     public abstract class TrainerProfileBase
     {

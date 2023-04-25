@@ -3,24 +3,36 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using PkmnFoundations.Structures;
 using PkmnFoundations.Support;
 
-namespace PkmnFoundations.Structures
+namespace PkmnFoundations.Wfc
 {
-    public class BattleTowerProfile4 : BattleTowerProfileBase
+    public class BattleSubwayProfile5 : BattleTowerProfileBase
     {
-        public BattleTowerProfile4()
+        public BattleSubwayProfile5()
         {
+
         }
 
-        public BattleTowerProfile4(EncodedString4 name, Versions version, 
+        public BattleSubwayProfile5(byte[] data)
+        {
+            Load(data, 0);
+        }
+
+        public BattleSubwayProfile5(byte[] data, int start)
+        {
+            Load(data, start);
+        }
+
+        public BattleSubwayProfile5(EncodedString5 name, Versions version,
             Languages language, byte country, byte region, uint ot,
-            TrendyPhrase4 phrase_leader, byte gender, byte unknown)
+            TrendyPhrase5 phrase_leader, byte gender, byte unknown)
         {
             if (name == null) throw new ArgumentNullException("name");
             if (name.Size != 16) throw new ArgumentException("name");
             if (phrase_leader == null) throw new ArgumentNullException("phrase_leader");
-            
+
             Name = name; // todo: clone
             Version = version;
             Language = language;
@@ -32,42 +44,15 @@ namespace PkmnFoundations.Structures
             Unknown = unknown;
         }
 
-        public BattleTowerProfile4(byte[] data)
-        {
-            Load(data, 0);
-        }
-
-        public BattleTowerProfile4(byte[] data, int start)
-        {
-            Load(data, start);
-        }
-
-        public EncodedString4 Name;
+        public EncodedString5 Name;
         public Versions Version;
         public Languages Language;
         public byte Country;
         public byte Region;
         public uint OT;
-        public TrendyPhrase4 PhraseLeader;
+        public TrendyPhrase5 PhraseLeader;
         // Different from GTS, 0 = male, 2 = female, 1 = Plato???? 
         public byte Gender;
-
-        // 3: Lass
-        // 6: Bug Catcher
-        // 10: Battle Girl
-        // 14: Black Belt
-        // 18: Cowgirl
-        // 24: Ace Trainer M
-        // 25: Ace Trainer F
-        // 32: Rich Boy
-        // 33: Lady
-        // 35: Socialite F
-        // 36: Beauty
-        // 48: Ruin Maniac
-        // 49: Psychic M
-        // 57: Roughneck
-        // 60: School Kid M
-        // 85: Idol
         public byte Unknown; // Probably trainer class.
 
         public byte[] Save()
@@ -95,7 +80,7 @@ namespace PkmnFoundations.Structures
         {
             if (start + 0x22 > data.Length) throw new ArgumentOutOfRangeException("start");
 
-            Name = new EncodedString4(data, start, 0x10);
+            Name = new EncodedString5(data, start, 0x10);
             Version = (Versions)data[0x10 + start];
             Language = (Languages)data[0x11 + start];
             Country = data[0x12 + start];
@@ -103,7 +88,7 @@ namespace PkmnFoundations.Structures
             OT = BitConverter.ToUInt32(data, 0x14 + start);
             byte[] trendyPhrase = new byte[8];
             Array.Copy(data, 0x18 + start, trendyPhrase, 0, 8);
-            PhraseLeader = new TrendyPhrase4(trendyPhrase);
+            PhraseLeader = new TrendyPhrase5(trendyPhrase);
             Gender = data[0x20 + start];
             Unknown = data[0x21 + start];
         }

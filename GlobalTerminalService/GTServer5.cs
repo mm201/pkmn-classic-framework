@@ -9,6 +9,7 @@ using PkmnFoundations.Data;
 using System.Security.Cryptography.X509Certificates;
 using System.Net.Sockets;
 using System.Diagnostics;
+using PkmnFoundations.Wfc;
 
 namespace PkmnFoundations.GlobalTerminalService
 {
