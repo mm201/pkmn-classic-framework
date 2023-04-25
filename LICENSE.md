@@ -1,4 +1,4 @@
-Copyright © 2014-2021 Greg Edwards (mm201), all rights reserved
+Copyright © 2014-2023 Megan Edwards (mm201), all rights reserved
 
 You may:
 * Run a private instance for development purposes.
