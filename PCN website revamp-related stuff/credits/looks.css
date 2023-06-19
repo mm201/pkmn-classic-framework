@@ -1,0 +1,24 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP&display=swap');
+
+body {
+    margin: 0;
+    width: 100vw; height: 100vh;
+    font-family: "Hiragino Sans", "Hiragino Sans GB", "Noto Sans JP", sans-serif;
+}
+body * { box-sizing: border-box; }
+
+.heading {
+    height: 77px;
+    padding: 8px;
+    background-color: black;
+    background-image: url("../Graphics/topbg-concept.png");
+    color: white;
+    font-weight: bold; font-size: small;
+}
+
+.credits {
+    padding: 8px;
+    height: calc(100% - 77px); /*make a JS polyfill*/
+    font-size: x-small;
+    overflow: scroll;
+}

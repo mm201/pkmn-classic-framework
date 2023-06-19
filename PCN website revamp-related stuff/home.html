@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+
+<!-- Hopefully I haven't done too much of this by myself! I've spent too much time making it look like my drafts... :sweats_nervously: -->
+<html>
+
+<head>
+
+<title>Pok&eacute; Classic Network</title>
+<meta name="theme-color" content="rgb(0,0,0)">
+
+<link rel="stylesheet" href="looks.css">
+<script src="//unpkg.com/globe.gl"></script> <!--NOTE: The globe will only work if this page is loaded from a web server!-->
+<script src="functions.js"></script>
+
+</head>
+
+<body onload="tabChanges(66,34); adjustSize();" onresize="adjustSize();">
+
+
+<div class="globeContainer"><!--Add a message for older browsers that can't load Globe.GL: "You need a newer browser to load the globe. Check out this webpage on the latest version of Safari, Edge, Firefox, or Chrome." Or something like that, that disappears when the Globe() is created.--></div>
+<script src="globe.js"></script>
+
+
+
+<table class="top">
+<tr>
+    <td class="mbar nav">
+        <table>
+        <tr>
+            <!--
+            These text menu entries can be replaced with images. Colorful menu items would look more appealing, making the site more lively.
+            The idea is that the website goes beyond just being a utility.
+            -->
+            <td><a href="/gts/">GTS</a></td>
+            <td><a>Global Link</a></td>
+            <td><a>Events</a></td>
+        </tr>
+        </table>
+    </td>
+    <td class="logo" rowspan="2"><img alt="[Pok&eacute; Classic Network logo]" width="228px" height="51px"></td>
+    <td class="mbar info">
+        <a href="https://github.com/mm201/pkmn-classic-framework" target="_blank" rel="noopener noreferrer"><img src="Graphics/github-mark-white.png" alt="Github" height="26px"></a>
+        <a href="https://twitter.com/pcnstatus" target="_blank" rel="noopener noreferrer"><img src="Graphics/Twitter social icons - circle - white.png" alt="Twitter" height="26px"></a>
+        <a href="https://discord.com/invite/sDQVKFxvMM" target="_blank" rel="noopener noreferrer"><img src="Graphics/discord-mark-white.png" alt="Discord" height="26px"></a>
+        <a href="https://wiimmfi.de/" target="_blank" rel="noopener noreferrer"><img src="Graphics/wiimmfi-dark.png" alt="Wiimmfi" height="26px"></a>
+        <a href="http://wfc.kaeru.world/" target="_blank" rel="noopener noreferrer"><img alt="Kaeru WFC" width="26px" height="26px"></a>
+        <img onclick="infoPopup();" src="Graphics/info.png" alt="Full Credits" width="26px" height="26px">
+    </td>
+</tr>
+<tr><td><td></tr>
+</table>
+
+
+
+<!--The left and right sidebars aren't quite pretty yet, but they're being worked on!-->
+<div class="left">
+
+<table class="about"><!--"About" section-->
+<tr><td class="secttop" colspan="2"><span class="heading">ABOUT</span></td></tr>
+<tr>
+    <td class="content"><div class="container">
+        Pok&eacute; Classic Network is an unofficial replacement for the original Generation IV and V online services, re-enabling the GTS, Battle Videos, and more. It works with Wiimmfi for general-purpose NWFC emulation, and Kaeru WFC for SSL offloading. (Compatibility with AltWFC servers is not guaranteed.)<br><br>
+        <span class="heading">HOW TO CONNECT:</span><br>
+        To properly connect to this service, you need to change the DNS addresses for your connection to the ones below.<br><br>
+        Primary DNS:<br><span class="dns">178.&emsp;62.&emsp;43.212</span><br>
+        Secondary DNS:<br><span class="dns">&emsp;&emsp;0.&emsp;&emsp;0.&emsp;&emsp;0.&emsp;&emsp;0</span><br><br>
+        You can access these settings by going to the "Nintendo WFC Settings" in your game's main menu, tapping the big blue "Nintendo Wi-Fi Connection Settings" button, then tapping on the connection you're using, and scrolling to the bottom.<br><br>
+        Set "Auto-obtain DNS" to "No", then edit the "Primary DNS" and "Secondary DNS", and tap "Save Settings".
+    </div></td>
+    <td class="vborder"></td>
+</tr>
+<tr><td class="sectbtm" colspan="2"></td></tr>
+</table>
+
+<div class="pad"></div>
+
+<table class="services"><!--"Services" section-->
+<tr>
+    <td class="hborder"></td>
+    <td class="sectside" rowspan="3">
+    </td>
+</tr>
+<tr>
+    <td class="content"><div class="container">
+        <span class="blurb">Learn what services you can use with your Pok&eacute;mon version:</span><br>
+        
+        <!--The "list of features" box is in progress!!!-->
+        <table class="genselect">
+        <tr>
+            <td class="gen4" onclick="tabChanges(66,34);">IV</td>
+            <td class="gen5" onclick="tabChanges(33,67);">V</td>
+        </tr>
+        </table>
+        <div class="features">
+            <ul>
+                <li>GTS</li>
+                <li>Battle Videos</li>
+                <li>Dressup</li>
+                <li>Box Uploads</li>
+                <li>Wi-Fi Battle Tower</li>
+                <li>Trainer Rankings [X]</li>
+                <li>Wi-Fi Plaza</li>
+            </ul>
+            <!--
+            Concept for the feature list box:
+            Visitors can select the generation they're using to find out which services can be used in their game's generation. This can serve multiple purposes:
+            - Lets visitors know the full extent of their games' online capabilities (since the games don't lay this information out in one place)
+            - Can be used to indicate feature progress; in other words, letting users know whether the feature is working or not
+            - Can be used to provide links to information pages on how to use the service (since the games only offer vague text explanations)
+            - It's also nice as just a cool decoration
+            -->
+        </div>
+    </div></td>
+</tr>
+<tr><td class="hborder"></td></tr>
+</table>
+
+</div>
+
+
+
+<div class="right">
+
+<table class="online"><!--"Online" section-->
+<tr>
+    <td class="sectside" rowspan="3"></td>
+    <td class="hborder"></td>
+</tr>
+<tr>
+    <td class="content"><div class="container">
+        <span class="heading">ONLINE:</span><br>
+        <img src="Graphics/status/online.png" alt="Server is operating," height="12px" width="12px">
+        <!--
+        Concept for the status indicator:
+        - Green (online.png) = Indicates the server is online, and players can join. Alt: "Server is operating,". Text: display current online player count, which is updated every minute using AJAX.
+        - Yellow (maintenance.png) = Indicates the server is offline, but not for any unusual reason (i.e. during the maintenance period every Thursday). Alt: "Server is not operating,". Text: "Maintenance".
+        - Red (offline.png) = Indicates the server is offline for an unusual reason (e.g. unplanned maintenance, crash, etc.). Alt: "Server is not operating,". Text: "Offline".
+        -->
+        <span class="playerct">32</span> players<br><br><!--Is it possible for the player count to be tracked every minute? Or would that be too much?-->
+        136 GTS listings<br>
+        14424 Battle Videos<br>
+    </div></td>
+</tr>
+<tr><td class="hborder"></td></tr>
+</table>
+
+<div class="pad"></div>
+
+<!-- Are there any plans to make an RSS feed? Considering how Twitter has degenerated into a cesspool and all? (NOTE: Need to include another thing in adjustSize(); to adjust the size of this embed!) -->
+<a class="twitter-timeline" data-width="205" data-height="480" data-dnt="true" href="https://twitter.com/pcnstatus?ref_src=twsrc%5Etfw">Tweets by pcnstatus</a> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+</div>
+
+
+
+<table class="tradeticker">
+<tr>
+    <td class="ttleft" rowspan="3"></td>
+    <td class="ttborder"></td>
+    <td class="ttright" rowspan="3"></td>
+</tr>
+<tr>
+    <td class="tradelist">
+        <table class="tradeitem"><!--Represents a single trade; on load, the ticker should be populated with 5-10 of the most recent trades-->
+        <tr>
+            <td><img alt="Pok&eacute;mon #1" width="32px" height="32px"></td>
+            <td>&lt;&gt;</td>
+            <td><img alt="Pok&eacute;mon #1" width="32px" height="32px"></td>
+        </tr>
+        </table>
+    </td>
+</tr>
+<tr><td class="ttborder"></td></tr>
+</table>
+
+<table class="battleticker">
+<tr>
+    <td class="btlleft"></td>
+    <td class="battlect">999</td>
+    <td class="btllabel">ongoing<br>battles</td>
+    <!--
+    The service supports battles over WFC, but is there easily-accessible data for how many battles are taking place at once?
+    The reason why I'm asking: In an image I found here (https://bulbapedia.bulbagarden.net/wiki/Pokémon_Global_Link), the 2012 Global Link screenshot, I noticed a "VS". I figured that it would be good to have something aside from trades to fill the globe.
+    -->
+</tr>
+</table>
+
+
+
+<table class="bottom">
+<tr>
+    <td class="pad"></td>
+    <td class="cred">
+    Pok&eacute;mon is &copy; 1995-2022 Nintendo / Creatures / GAME FREAK. This service is not affiliated with Nintendo or GAME FREAK in any way.<br><br>
+    View more credits by clicking the <img src="Graphics/info.png" alt="Full Credits" height="13px"> button in the top-right corner.
+    </td>
+    <td class="pad"></td>
+</tr>
+</table>
+
+</body>
+
+</html>
