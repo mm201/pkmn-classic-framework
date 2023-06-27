@@ -37,7 +37,7 @@
         </tr>
         </table>
     </td>
-    <td class="logo" rowspan="2"><img alt="[Pok&eacute; Classic Network logo]" width="228px" height="51px"></td>
+    <td class="logo" rowspan="2"><img alt="[Pok&eacute; Classic Network logo]" width="228px" height="51px"></td><!--Making this will require the vector for the new Poké Classic Network logo-->
     <td class="mbar info">
         <a href="https://github.com/mm201/pkmn-classic-framework" target="_blank" rel="noopener noreferrer"><img src="Graphics/github-mark-white.png" alt="Github" height="26px"></a>
         <a href="https://twitter.com/pcnstatus" target="_blank" rel="noopener noreferrer"><img src="Graphics/Twitter social icons - circle - white.png" alt="Twitter" height="26px"></a>
@@ -161,13 +161,19 @@
 </tr>
 <tr>
     <td class="tradelist">
-        <table class="tradeitem"><!--Represents a single trade; on load, the ticker should be populated with 5-10 of the most recent trades-->
+        <div class="tlcontainer">
+        <div><!--div inside of .tlcontainer is to prevent trade entries from wrapping around.-->
+        
+        <table class="tradeitem"><!--Represents a single trade; on load, the ticker should be populated with 5-10 of the most recent trades, newest-to-oldest. Using AJAX and JavaScript, this table "template" can be repeated to produce these recent trade entries.-->
         <tr>
-            <td><img alt="Pok&eacute;mon #1" width="32px" height="32px"></td>
-            <td>&lt;&gt;</td>
-            <td><img alt="Pok&eacute;mon #1" width="32px" height="32px"></td>
+            <td class="pkmn1"><img src="" alt="[Pok&eacute;mon #1]" width="30px" height="30px"></td>
+            <td><img alt="was traded with" width="30px" height="30px"></td>
+            <td class="pkmn2"><img src="" alt="[Pok&eacute;mon #2]" width="30px" height="30px"></td>
         </tr>
         </table>
+        
+        </div>
+        </div>
     </td>
 </tr>
 <tr><td class="ttborder"></td></tr>

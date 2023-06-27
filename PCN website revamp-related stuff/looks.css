@@ -24,7 +24,7 @@
     to { background-position: 0 -4px; }
 }
 
-/* No vendor prefix*/
+/* No vendor prefix */
 @keyframes movebg {
     from { background-position: 0 0; }
     to { background-position: 0 -32px; }
@@ -213,12 +213,12 @@ img { font-size: xx-small; }
 .genselect .gen4 {
     width: 50%;
     background-color: rgb(246,194,152);
-    /*background-image: linear-gradient(rgb(255,255,216),rgb(236,132,87));*/
+    background-image: url("Graphics/gen4selbg.png");
 }
 .genselect .gen5 {
     width: 50%;
     background-color: rgb(128,128,128);
-    background-image: ;
+    background-image: url("Graphics/gen5selbg.png");
 }
 .services .features {
     height: 76px;
@@ -256,34 +256,60 @@ img { font-size: xx-small; }
     bottom: 97px; height: 40px;
 }
 
+
+
 .tradeticker {
     left: 225px;
     width: calc(100% - (450px + 180px)); /* Note: 450px for the sidebars and 20px gaps, 180px for 170px battleticker and 10px gap. Again, JS polyfill in adjustSize(), but only after settling on a fixed width for the battleticker. */
 }
-.ttleft, .ttright { background: rgb(128,0,255); /*temporary styling, replace with background image*/ }
+.ttleft, .ttright { background: rgb(140,0,224); /*temporary styling, replace with background image*/ }
 .ttleft { width: 24px; }
 .ttright { width: 12px; }
-.ttborder { height: 1px; background-color: rgb(128,0,255);}
+.ttborder { height: 1px; background-color: rgb(140,0,224);}
+
 .tradelist {
-    padding: 3px;
-    background: rgba(192,128,255,1);
+    position: relative;
+    background-color: rgb(208,128,255);
+    background-image: linear-gradient(rgb(202,112,255)50%,rgb(214,144,255)50%); /*replace with a PNG*/
+    background-size: 4px 4px; /*temporary*/
+    -moz-animation: movecontentbg 0.5s infinite linear;
+    -webkit-animation: movecontentbg 0.5s infinite linear;
+    animation: movecontentbg 0.5s infinite linear;
+    /*^^^ see the animation for "body" at the top of this file, for the explanation of the animation. */
 }
+.tradelist .tlcontainer {
+    position: absolute; width: 100%; height: 100%;
+    margin-top: -19px; /*Why is it "falling out" of the table cell?*/
+    overflow: hidden;
+}
+.tlcontainer div { width: 200%; height: 100%; padding: 2px; }
+
 .tradelist .tradeitem {
+    display: inline-block; 
     height: 100%;
-    background: rgb(128,0,255);
+    background: rgb(140,0,224);
 }
-.tradeitem img { display: block; margin: 0 8px; background:gray;/*temp BG color*/}
+.tradeitem img { display: block; }
+.pkmn1, .pkmn2 { padding: 2px; }
+.pkmn1 img, .pkmn2 img { background: white; }
+/* The line below is an example of coloration - this can signify which games the traded Pokémon came from. The line below is temporary, just for demonstration. */
+.pkmn1 { background: blue; } .pkmn2 { background: darkred; }
+
+
 
 .battleticker {
     right: 225px;
     wid-th: 154px;
-    background: rgb(0,255,128); color: black; /*temporary styling*/
+    color: black;
     overflow: hidden;
 }
-.btlleft { width: 12px; }
+.btlleft {
+    width: 12px;
+    background: rgb(0,255,128); /*temporary styling*/
+}
 .battleticker .battlect {
     width: 80px; padding: 0 4px;
-    background: yellow;
+    background: rgba(192,192,0,1);
     text-align: center;
     line-height: 1; font-size: 40px;
     font-family: "Courier", "Courier New", monospace;
@@ -291,6 +317,7 @@ img { font-size: xx-small; }
 }
 .battleticker .btllabel {
     padding-left: 4px; padding-right: 8px;
+    background: rgb(0,255,128); /*temporary styling*/
     color: teal;
     line-height: 20px; font-size: medium;
 }
