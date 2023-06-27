@@ -1,12 +1,15 @@
 // Globe tasks!!! These are run after the entire page loads, so this script is located after the end of the <body> element
-globeContainer = document.getElementsByClassName("globeContainer")[0];
 
-//~ Something that will be helpful: For the arcs representing real-time trades, there could be a variable containing the list of arcs, and that variable can be periodically updated (every few seconds) to prune already-finished trades and start arcs for new ones. The Globe.GL website has examples that can be referenced in creating this functionality.
+globeContainer = document.getElementsByClassName("globeContainer")[0];
+currentDay = new Date(); // for choosing the globe image
+
+
+
 const wxGlobe = Globe()(globeContainer)
     // To prepare the globe view
     .width(width).height(height+60)
     .backgroundColor("rgba(0,0,0,0)")
-    .globeImageUrl("Graphics/globetexture.jpg")
+    .globeImageUrl("Graphics/globe/"+currentDay.getMonth()+".jpg")
     .atmosphereColor("rgb(0,0,0)")
     .pointOfView({lat:0,lng:-75,altitude:2.6})
     
@@ -55,6 +58,8 @@ const wxGlobe = Globe()(globeContainer)
 // Auto-rotating looks cool, but it makes it harder to control the globe and examine trades at different angles. There can probably be a toggle for starting or stopping auto-rotate.
 //wxGlobe.controls().autoRotate = true;
 //wxGlobe.controls().autoRotateSpeed = 1;
+
+//~ Something that could be helpful: For the arcs representing real-time trades, there could be a variable containing the list of arcs, and that variable can be periodically updated (every few seconds) to prune already-finished trades and start arcs for new ones. The Globe.GL website has examples that can be referenced in creating this functionality.
 
 // End of globe tasks
 

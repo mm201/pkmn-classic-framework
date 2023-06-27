@@ -29,7 +29,7 @@ function updateWHVars () {
 function infoPopup () {
     updateWHVars();
 
-    window.open("credits/home.html","credits","width=240px,height="+(height - 115)+"px,left="+(fromleft+width-205)+"px,top="+(fromtop+windowheight-height+38)+"px,toolbar=no");
+    window.open("credits/home.html","credits","width=240px,height=480px,left="+(fromleft+width-240)+"px,top="+(fromtop+windowheight-height+38)+"px,toolbar=no");
 }
 
 

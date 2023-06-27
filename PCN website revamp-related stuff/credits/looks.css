@@ -20,5 +20,5 @@ body * { box-sizing: border-box; }
     padding: 8px;
     height: calc(100% - 77px); /*make a JS polyfill*/
     font-size: x-small;
-    overflow: scroll;
+    overflow: auto;
 }
