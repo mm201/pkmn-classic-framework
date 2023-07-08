@@ -112,6 +112,7 @@
     <Compile Include="Structures\StatValues.cs" />
     <Compile Include="Structures\StatValuesBase.cs" />
     <Compile Include="Structures\TrainerMemo.cs" />
+    <Compile Include="Wfc\PlazaSchedule.cs" />
     <Compile Include="Wfc\TrainerProfile4.cs" />
     <Compile Include="Wfc\TrainerProfile5.cs" />
     <Compile Include="Wfc\TrainerProfileBase.cs" />
