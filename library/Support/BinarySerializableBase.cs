@@ -18,6 +18,12 @@ namespace PkmnFoundations.Support
         {
         }
 
+        public BinarySerializableBase(SerializationInfo info, StreamingContext context)
+        {
+            byte[] data = (byte[])info.GetValue("data", typeof(byte[]));
+            Load(data, 0);
+        }
+
         public void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             info.AddValue("data", Save());
