@@ -1,6 +1,8 @@
 // Get the viewport width and height, window height, and the coordinates of the window (will be important for later functions!)
 var width, height, windowheight, fromleft, fromtop; // They need to be global
 
+
+
 function updateWHVars () {
     //~ Viewport width and height
     if(window.innerWidth != undefined && window.innerHeight != undefined) {
@@ -20,7 +22,7 @@ function updateWHVars () {
     } else {
         fromleft = window.screenLeft;
         fromtop = window.screenTop;
-        // Hopefully this failsafe works? I'll have to double-check with IE6-8 in an emulator...
+        // Hopefully this failsafe works? I'll have to double-check with IE on a different machine...
     }
 }
 
@@ -82,18 +84,20 @@ function adjustSize () {
         
         //~ "About" section
         aboutSection = document.getElementsByClassName("about")[0];
+        //aboutContent = aboutSection.getElementsByClassName("content")[0];
         
         aboutSection.style.height = (height - 316) + "px";
+        //aboutContent.style.height = (height - 352) + "px"; //<-- failed attempt to mak this look right in DSi Browser
         
-        //~ Trades ticker
+        //~ Trades ticker (todo)
         
-        //~ globeContainer
+        //~ globeContainer (todo)
         
     }
     
     // Below are the ones that need to be resized regardless
 
-    //~ Twitter embed (this code doesn't work — Twitter embed is being quite finicky! This section will be commented out for the time being.)
+    //~ Twitter embed (todo: the below code doesn't work — Twitter embed is being quite finicky! This section will be commented out for the time being.)
     //~ Oh! Maybe...I could make something where the Twitter embed gets removed, then gets re-added with a different height value?? Or would that break some sort of terms-of-use?...
     //twitterEmbed = document.getElementsByClassName("twitter-timeline")[0];
     

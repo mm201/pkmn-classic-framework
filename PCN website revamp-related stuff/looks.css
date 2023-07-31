@@ -1,4 +1,4 @@
-/* My backwards-compatibility goal: This should work in at least Safari 4, maybe IE 6-8, and of course the Wii Internet Channel and DS/DSi Browsers. */
+/* My backwards-compatibility goal: This should work in at least Safari 4, maybe IE5:Mac or IE8, and of course the Wii Internet Channel and DS/DSi Browsers. */
 
 /* Animation keyframes */
 
@@ -117,6 +117,7 @@ img { font-size: xx-small; }
 /*~ First, styling for the sidebars themselves*/
 .left { left: 0; } .right { right: 0; }
 .left, .right {
+    display: block;
     top: 58px; z-index: 1;
     width: 205px; height: calc(100% - 155px);
     back-ground: rgba(0,0,0,0.1);
@@ -167,7 +168,7 @@ img { font-size: xx-small; }
     vertical-align: top;
 }
 .content .container {
-    position: absolute;
+    display: block; position: absolute;
     width: 100%; height: 100%;
     overflow: auto;
 }
@@ -184,6 +185,7 @@ img { font-size: xx-small; }
 
 /*~ Finally, styling for specific sections, like "About" or "Online" */
 .about { height: calc(100% - 161px); }
+.about .content { width: 204px; } /*<-- necessary to make this look somewhat less broken in DSi Browser*/
 .about .container { padding: 12px; }
 .about .dns {
     display: inline-block;
@@ -221,6 +223,7 @@ img { font-size: xx-small; }
     background-image: url("Graphics/gen5selbg.png");
 }
 .services .features {
+    display: block;
     height: 76px;
     background-color: rgba(0,0,0,0.25);
     overflow: auto;
@@ -245,6 +248,16 @@ img { font-size: xx-small; }
     margin-top: -60px; /* This likely won't translate well to other viewport heights, so I'll need to find something that's more universal. The goal is to keep the globe centered between the top bar and the tickers, and the Globe.GL globe only resizes by height. */
     width: 100%; height: calc(100% + 60px); /*make JS polyfill*/
     z-index: -1;
+}
+
+.globeMsg { /*Styling for this needs to be adjusted for older browser support*/
+    position: absolute;
+    width: 50%; max-width: 512px; /*needs JS polyfill. Max width should be either 512px, or the width of the viewport minus 410px.*/
+    top: calc(50% - 40px); left: 25%; /*include JS for calc polyfill. Yes, this includes "left", because its value was originally intended to be a calc(). Note: these distances are relative to the viewport, not the globeContainer.*/
+    text-align: center;
+    font-size: small;
+    color: rgb(224,224,224);
+    text-shadow: 0 0 4px rgb(224,224,224);
 }
 
 

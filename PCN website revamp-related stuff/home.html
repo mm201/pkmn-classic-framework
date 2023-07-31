@@ -17,7 +17,10 @@
 <body onload="tabChanges(66,34); adjustSize();" onresize="adjustSize();">
 
 
-<div class="globeContainer"><!--Add a message for older browsers that can't load Globe.GL: "You need a newer browser to load the globe. Check out this webpage on the latest version of Safari, Edge, Firefox, or Chrome." Or something like that, that disappears when the Globe() is created.--></div>
+<div class="globeContainer">
+    <div class="globeMsg">The browser you're using isn't able to load the interactive globe. You can view the globe on a different device that has the latest browser.</div>
+    <!--The above message automatically disappears when the globe is created.-->
+</div>
 <script src="globe.js"></script>
 
 
@@ -39,11 +42,6 @@
     </td>
     <td class="logo" rowspan="2"><img alt="[Pok&eacute; Classic Network logo]" width="228px" height="51px"></td><!--Making this will require the vector for the new Poké Classic Network logo-->
     <td class="mbar info">
-        <a href="https://github.com/mm201/pkmn-classic-framework" target="_blank" rel="noopener noreferrer"><img src="Graphics/github-mark-white.png" alt="Github" height="26px"></a>
-        <a href="https://twitter.com/pcnstatus" target="_blank" rel="noopener noreferrer"><img src="Graphics/Twitter social icons - circle - white.png" alt="Twitter" height="26px"></a>
-        <a href="https://discord.com/invite/sDQVKFxvMM" target="_blank" rel="noopener noreferrer"><img src="Graphics/discord-mark-white.png" alt="Discord" height="26px"></a>
-        <a href="https://wiimmfi.de/" target="_blank" rel="noopener noreferrer"><img src="Graphics/wiimmfi-dark.png" alt="Wiimmfi" height="26px"></a>
-        <a href="http://wfc.kaeru.world/" target="_blank" rel="noopener noreferrer"><img alt="Kaeru WFC" width="26px" height="26px"></a>
         <img onclick="infoPopup();" src="Graphics/info.png" alt="Full Credits" width="26px" height="26px">
     </td>
 </tr>
@@ -64,8 +62,9 @@
         To properly connect to this service, you need to change the DNS addresses for your connection to the ones below.<br><br>
         Primary DNS:<br><span class="dns">178.&emsp;62.&emsp;43.212</span><br>
         Secondary DNS:<br><span class="dns">&emsp;&emsp;0.&emsp;&emsp;0.&emsp;&emsp;0.&emsp;&emsp;0</span><br><br>
-        You can access these settings by going to the "Nintendo WFC Settings" in your game's main menu, tapping the big blue "Nintendo Wi-Fi Connection Settings" button, then tapping on the connection you're using, and scrolling to the bottom.<br><br>
-        Set "Auto-obtain DNS" to "No", then edit the "Primary DNS" and "Secondary DNS", and tap "Save Settings".
+        You can access these settings by going to the "Nintendo WFC Settings" option in your game's main menu, tapping the big blue "Nintendo Wi-Fi Connection Settings" button, then tapping on the connection you're using. You'll arrive at the "Connection Settings" panel.<br><br>
+        Scroll to the bottom of the settings using the scrollbar, set "Auto-obtain DNS" to "No", then edit the "Primary DNS" and "Secondary DNS". Once you're done, tap "Save Settings". Tap the "Back" button twice, and you'll be back at the game's introductory sequence.<br><br>
+        After completing these steps, you can start playing as normal, and you'll automatically be able to use the Wi-Fi features of your game.
     </div></td>
     <td class="vborder"></td>
 </tr>
