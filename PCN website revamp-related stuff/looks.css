@@ -52,7 +52,7 @@ body {
     animation: movebg 5s infinite linear;
     /* ^^^ The idea is that this background imitates the grid background of Geonet, but with different colors. The animation is meant to be subtle, barely noticeable so as not to distract, while still bringing the page to life. GIFs are too limited in color to replace this background-image and animation combo; but even without animation, the page should still look nice in older browsers. */
     width: 100vw; height: 100vh;
-    font-family: "Hiragino Sans", "Hiragino Sans GB", "Noto Sans JP", sans-serif; /*what fonts would you like to use?*/
+    font-family: "Hiragino Sans", "Hiragino Kaku Gothic Pro", "Noto Sans JP", sans-serif; /*what fonts would you like to use?*/
     overflow: hidden;
 }
 body * {
