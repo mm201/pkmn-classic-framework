@@ -333,6 +333,11 @@ namespace PkmnFoundations.Structures
             {
                 return new ValidationSummary() { IsValid = false }; // form not in pokedex
             }
+            // todo: Hardcoded checks don't belong here, but in the database.
+            // We need a Form.Generation and Form.CompatibleGeneration field
+            // to denote which generation a form was introduced in, and which
+            // generation it's broadly compatible with for trading.
+            //if (thePokemon.Form.CompatibleGeneration > Generations.Generation4) return new ValidationSummary() { IsValid = false };
             if (thePokemon.SpeciesID == 479 && thePokemon.FormID != 0) return new ValidationSummary() { IsValid = false }; // rotoms
             if (thePokemon.SpeciesID == 487 && thePokemon.FormID != 0) return new ValidationSummary() { IsValid = false }; // origin giratina
             if (thePokemon.SpeciesID == 492 && thePokemon.FormID != 0) return new ValidationSummary() { IsValid = false }; // sky shaymin

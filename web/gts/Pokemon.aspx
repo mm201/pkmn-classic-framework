@@ -119,6 +119,11 @@
                         <td class="pfFormValue"><asp:Literal ID="litVersion" runat="server" />
                         </td>
                     </tr>
+                    <tr class="pfFormPair">
+                        <th class="pfFormKey">Hax check</th>
+                        <td class="pfFormValue"><asp:Literal ID="litHaxCheck" runat="server" />
+                        </td>
+                    </tr>
                 </table>
             </div>
         

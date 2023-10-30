@@ -110,6 +110,13 @@ namespace PkmnFoundations.Wfc
             ValidationSummary summary = Pokemon.Validate();
             if (!summary.IsValid) return false;
 
+            // pkhex check:
+            // https://github.com/mm201/pkmn-classic-framework/pull/71
+            //var decrypted = PKX.DecryptArray45(DataActual);
+            //var la = new LegalityAnalysis(decrypted);
+            //report = la.Report();
+            //if (report != "Legal!") return false;
+
             return true;
         }
 

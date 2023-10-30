@@ -1,0 +1,31 @@
+NatDex	Name	No ribbon including Wiimmfi events	No ribbon full legal	Any including ribbons
+251	Celebi  	7	7	7
+493	Arceus  	4	8	6
+494	Victini 	x	x	x
+643	Reshiram	6	6	6
+644	Zekrom  	6	6	6
+647	Keldeo  	x	x	x
+648	Meloetta	x	x	x
+649	Genesect	x	x	5
+716	Xerneas 	7	7	6
+717	Yveltal 	7	7	6
+718	Zygarde 	8	8	7
+719	Diancie 	x	x	6
+720	Hoopa   	x	x	x
+721	Volcanion	x	x	x
+785	Tapu Koko	8	8	7
+786	Tapu Lele	8	8	7
+787	Tapu Bulu	8	8	7
+788	Tapu Fini	8	8	7
+789	Cosmog  	x	x	x
+790	Cosmoem  	x	x	x
+791	Solgaleo	8	8	7
+792	Lunala  	8	8	7
+800	Necrozma	8	8	7
+801	Magearna	x	x	8
+802	Marshadow	x	x	x
+807	Zeraora 	x	x	8
+
+Cap pikas other than Partner Cap are shiny locked.
+Ash Greninja is shiny locked.
+Event Vivillons are shiny locked until Fancy in SV.

@@ -139,6 +139,7 @@ namespace PkmnFoundations.Web.gts
             litNature.Text = pkmn.Nature.ToString(); // todo: i18n
             litAbility.Text = pkmn.Ability == null ? "" : pkmn.Ability.Name.ToString();
             litVersion.Text = pkmn.Version.ToString();
+            litHaxCheck.Text = pkmn.Validate().IsValid ? "Pass" : "Fail";
 
             // xxx: loop
             litHpCurr.Text = pkmn.HP.ToString();

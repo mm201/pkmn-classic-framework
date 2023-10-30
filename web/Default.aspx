@@ -1,4 +1,4 @@
-﻿<%@ Page Title="Poké Classic Network" Language="C#" MasterPageFile="~/masters/ThreeColumn.master" AutoEventWireup="true" CodeBehind="Default.aspx.cs" Inherits="PkmnFoundations.GTS.Default" %>
+﻿<%@ Page Title="Poké Classic Network" Language="C#" MasterPageFile="~/masters/MasterPage.master" AutoEventWireup="true" CodeBehind="Default.aspx.cs" Inherits="PkmnFoundations.GTS.Default" %>
 <%@ Register TagPrefix="pf" Namespace="PkmnFoundations.Web" Assembly="PkmnFoundations.Web" %>
 <%@ Register TagPrefix="pf" TagName="LabelTextBox" Src="~/controls/LabelTextBox.ascx" %>
 <%@ Register TagPrefix="pf" TagName="DnsAddress" Src="~/controls/DnsAddress.ascx" %>
@@ -7,9 +7,7 @@
     <pf:HeaderColour ID="HeaderColour1" CssClass="home" runat="server" />
 </asp:Content>
 
-<asp:Content ID="conHeadingArea" ContentPlaceHolderID="cpHeadingArea" runat="server">
-</asp:Content>
-
+<%--
 <asp:Content ID="conLeft" ContentPlaceHolderID="cpLeft" runat="server">
     &nbsp;
     <pf:RequireCss Key="login" CssUrl="~/css/login.css" After="main" runat="server" />
@@ -26,15 +24,7 @@
     </asp:PlaceHolder>
 
 </asp:Content>
-
-<asp:Content ID="conRight" ContentPlaceHolderID="cpRight" runat="server">
-
-    <div class="gtsSection gtsTwitter">
-        <a class="twitter-timeline" data-width="236" data-height="600" href="https://twitter.com/pcnstatus?ref_src=twsrc%5Etfw">Tweets by pcnstatus</a> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script> 
-        <script>!function (d, s, id) { var js, fjs = d.getElementsByTagName(s)[0], p = /^http:/.test(d.location) ? 'http' : 'https'; if (!d.getElementById(id)) { js = d.createElement(s); js.id = id; js.src = p + "://platform.twitter.com/widgets.js"; fjs.parentNode.insertBefore(js, fjs); } }(document, "script", "twitter-wjs");</script>
-    </div>
-
-</asp:Content>
+    %--%>
 
 <asp:Content ID="conMain" ContentPlaceHolderID="cpMain" runat="server">
 
