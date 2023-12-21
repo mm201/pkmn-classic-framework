@@ -730,9 +730,9 @@ namespace PkmnFoundations.Data
             _params.Add(new MySqlParameter("@slot", slot));
 
             tran.ExecuteNonQuery("INSERT INTO GtsBattleTowerPokemon4 " +
-                "(party_id, Slot, Species, HeldItem, Move1, Move2, Move3, Move4, TrainerID, " +
+                "(party_id, Slot, Species, Form, HeldItem, Move1, Move2, Move3, Move4, TrainerID, " +
                 "Personality, IVs, EVs, Unknown1, Language, Ability, Happiness, Nickname) VALUES " +
-                "(@id, @slot, @species, @held_item, @move1, @move2, @move3, @move4, @trainer_id, " +
+                "(@id, @slot, @species, @form, @held_item, @move1, @move2, @move3, @move4, @trainer_id, " +
                 "@personality, @ivs, @evs, @unknown1, @language, @ability, @happiness, @nickname)",
                 _params.ToArray());
         }
@@ -744,10 +744,11 @@ namespace PkmnFoundations.Data
             _params.Add(new MySqlParameter("@slot", slot));
 
             tran.ExecuteNonQuery("UPDATE GtsBattleTowerPokemon4 SET Species = @species, " +
-                "HeldItem = @held_item, Move1 = @move1, Move2 = @move2, Move3 = @move3, " +
-                "Move4 = @move4, TrainerID = @trainer_id, Personality = @personality, " +
-                "IVs = @ivs, EVs = @evs, Unknown1 = @unknown1, Language = @language, " +
-                "Ability = @ability, Happiness = @happiness, Nickname = @nickname " +
+                "Form = @form, HeldItem = @held_item, Move1 = @move1, Move2 = @move2, " +
+                "Move3 = @move3, Move4 = @move4, TrainerID = @trainer_id, " +
+                "Personality = @personality, IVs = @ivs, EVs = @evs, Unknown1 = @unknown1, " +
+                "Language = @language, Ability = @ability, Happiness = @happiness, " +
+                "Nickname = @nickname " +
                 "WHERE party_id = @id AND Slot = @slot",
                 _params.ToArray());
         }
@@ -783,7 +784,8 @@ namespace PkmnFoundations.Data
         private List<MySqlParameter> ParamsFromBattleTowerPokemon4(BattleTowerPokemon4 pokemon)
         {
             List<MySqlParameter> result = new List<MySqlParameter>(15);
-            result.Add(new MySqlParameter("@species", pokemon.SpeciesFormValue));
+            result.Add(new MySqlParameter("@species", pokemon.SpeciesID));
+            result.Add(new MySqlParameter("@form", pokemon.FormID));
             result.Add(new MySqlParameter("@held_item", pokemon.HeldItemID));
             result.Add(new MySqlParameter("@move1", (ushort)pokemon.Moves[0].MoveID));
             result.Add(new MySqlParameter("@move2", (ushort)pokemon.Moves[1].MoveID));
@@ -921,7 +923,7 @@ namespace PkmnFoundations.Data
 
             string inClause = String.Join(", ", keys.Select(i => i.ToString()).ToArray());
             using (MySqlDataReader reader = (MySqlDataReader)tran.ExecuteReader("SELECT party_id, " +
-                "Slot, Species, HeldItem, Move1, Move2, Move3, Move4, " +
+                "Slot, Species, Form, HeldItem, Move1, Move2, Move3, Move4, " +
                 "TrainerID, Personality, IVs, EVs, Unknown1, Language, " +
                 "Ability, Happiness, Nickname FROM GtsBattleTowerPokemon4 " +
                 "WHERE party_id IN (" + inClause + ")"))
@@ -971,8 +973,12 @@ namespace PkmnFoundations.Data
 
         private BattleTowerPokemon4 BattleTowerPokemon4FromReader(MySqlDataReader reader, Pokedex.Pokedex pokedex)
         {
+            ushort? speciesId = DatabaseExtender.Cast<ushort?>(reader["Species"]);
+            ushort? formId = DatabaseExtender.Cast<ushort?>(reader["Form"]);
+
             return new BattleTowerPokemon4(pokedex,
-                DatabaseExtender.Cast<ushort>(reader["Species"]),
+                (int)speciesId,
+                (byte)formId,
                 DatabaseExtender.Cast<ushort>(reader["HeldItem"]),
                 DatabaseExtender.Cast<ushort>(reader["Move1"]),
                 DatabaseExtender.Cast<ushort>(reader["Move2"]),
@@ -1954,10 +1960,10 @@ namespace PkmnFoundations.Data
             _params.Add(new MySqlParameter("@slot", slot));
 
             tran.ExecuteNonQuery("INSERT INTO GtsBattleSubwayPokemon5 " +
-                "(party_id, Slot, Species, HeldItem, Move1, Move2, Move3, Move4, TrainerID, " +
+                "(party_id, Slot, Species, Form, HeldItem, Move1, Move2, Move3, Move4, TrainerID, " +
                 "Personality, IVs, EVs, Unknown1, Language, Ability, Happiness, " +
                 "Nickname, Unknown2) VALUES " +
-                "(@id, @slot, @species, @held_item, @move1, @move2, @move3, @move4, @trainer_id, " +
+                "(@id, @slot, @species, @form, @held_item, @move1, @move2, @move3, @move4, @trainer_id, " +
                 "@personality, @ivs, @evs, @unknown1, @language, @ability, @happiness, " +
                 "@nickname, @unknown2)",
                 _params.ToArray());
@@ -1970,11 +1976,11 @@ namespace PkmnFoundations.Data
             _params.Add(new MySqlParameter("@slot", slot));
 
             tran.ExecuteNonQuery("UPDATE GtsBattleSubwayPokemon5 SET Species = @species, " +
-                "HeldItem = @held_item, Move1 = @move1, Move2 = @move2, Move3 = @move3, " +
-                "Move4 = @move4, TrainerID = @trainer_id, Personality = @personality, " +
-                "IVs = @ivs, EVs = @evs, Unknown1 = @unknown1, Language = @language, " +
-                "Ability = @ability, Happiness = @happiness, Nickname = @nickname, " +
-                "Unknown2 = @unknown2 " +
+                "Form = @form, HeldItem = @held_item, Move1 = @move1, Move2 = @move2, " +
+                "Move3 = @move3, Move4 = @move4, TrainerID = @trainer_id, " +
+                "Personality = @personality, IVs = @ivs, EVs = @evs, Unknown1 = @unknown1, " +
+                "Language = @language, Ability = @ability, Happiness = @happiness, " +
+                "Nickname = @nickname, Unknown2 = @unknown2 " +
                 "WHERE party_id = @id AND Slot = @slot",
                 _params.ToArray());
         }
@@ -2011,7 +2017,8 @@ namespace PkmnFoundations.Data
         private List<MySqlParameter> ParamsFromBattleSubwayPokemon5(BattleSubwayPokemon5 pokemon)
         {
             List<MySqlParameter> result = new List<MySqlParameter>(15);
-            result.Add(new MySqlParameter("@species", pokemon.SpeciesFormValue));
+            result.Add(new MySqlParameter("@species", pokemon.SpeciesID));
+            result.Add(new MySqlParameter("@form", pokemon.FormID));
             result.Add(new MySqlParameter("@held_item", pokemon.HeldItemID));
             result.Add(new MySqlParameter("@move1", pokemon.Moves[0].MoveID));
             result.Add(new MySqlParameter("@move2", pokemon.Moves[1].MoveID));
@@ -2156,7 +2163,7 @@ namespace PkmnFoundations.Data
 
             string inClause = String.Join(", ", keys.Select(i => i.ToString()).ToArray());
             using (MySqlDataReader reader = (MySqlDataReader)tran.ExecuteReader("SELECT party_id, " +
-                "Slot, Species, HeldItem, Move1, Move2, Move3, Move4, " +
+                "Slot, Species, Form, HeldItem, Move1, Move2, Move3, Move4, " +
                 "TrainerID, Personality, IVs, EVs, Unknown1, Language, " +
                 "Ability, Happiness, Nickname, Unknown2 FROM GtsBattleSubwayPokemon5 " +
                 "WHERE party_id IN (" + inClause + ")"))
@@ -2202,8 +2209,12 @@ namespace PkmnFoundations.Data
 
         private BattleSubwayPokemon5 BattleSubwayPokemon5FromReader(MySqlDataReader reader, Pokedex.Pokedex pokedex)
         {
+            ushort? speciesId = DatabaseExtender.Cast<ushort?>(reader["Species"]);
+            ushort? formId = DatabaseExtender.Cast<ushort?>(reader["Form"]);
+
             return new BattleSubwayPokemon5(pokedex,
-                DatabaseExtender.Cast<ushort>(reader["Species"]),
+                (int)speciesId,
+                (byte)formId,
                 DatabaseExtender.Cast<ushort>(reader["HeldItem"]),
                 DatabaseExtender.Cast<ushort>(reader["Move1"]),
                 DatabaseExtender.Cast<ushort>(reader["Move2"]),

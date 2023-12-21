@@ -35,17 +35,21 @@ namespace PkmnFoundations.Wfc
             }
         }
 
-        public ushort SpeciesFormValue
+        protected static ushort CombineSpeciesForm(int species, byte form)
         {
-            get
-            {
-                return (ushort)(SpeciesID & 0x7ff | FormID << 11);
-            }
-            set
-            {
-                SpeciesID = value & 0x7ff;
-                FormID = (byte)(value >> 11);
-            }
+            if (species > 0x7ff || species < 0) throw new ArgumentOutOfRangeException("species");
+            if (form > 0x1f) throw new ArgumentOutOfRangeException("form");
+            return (ushort)(species & 0x7ff | form << 11);
+        }
+
+        protected static int GetSpeciesFromCombined(ushort combined)
+        {
+            return combined & 0x7ff;
+        }
+
+        protected static byte GetFormFromCombined(ushort combined)
+        {
+            return (byte)(combined >> 11);
         }
 
         internal static void GetMovesFromArray(IList<MoveSlot> result, Pokedex.Pokedex pokedex, ushort[] moves, byte ppUps)

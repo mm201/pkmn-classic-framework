@@ -14,7 +14,7 @@ namespace PkmnFoundations.Wfc
         {
         }
 
-        public BattleTowerPokemon4(Pokedex.Pokedex pokedex, ushort species_form, ushort held_item, ushort[] moveset,
+        public BattleTowerPokemon4(Pokedex.Pokedex pokedex, int species, byte form, ushort held_item, ushort[] moveset,
             uint ot, uint personality, uint ivs, byte[] evs, byte pp_ups,
             Languages language, byte ability, byte happiness, EncodedString4 nickname) : base(pokedex)
         {
@@ -25,7 +25,8 @@ namespace PkmnFoundations.Wfc
             if (nickname == null) throw new ArgumentNullException("nickname");
             if (nickname.Size != 22) throw new ArgumentException("nickname");
 
-            SpeciesFormValue = species_form;
+            SpeciesID = species;
+            FormID = form;
             HeldItemID = held_item;
             GetMovesFromArray(Moves, pokedex, moveset, pp_ups);
             TrainerID = ot;
@@ -39,11 +40,11 @@ namespace PkmnFoundations.Wfc
             NicknameEncoded = nickname; // todo: clone
         }
 
-        public BattleTowerPokemon4(Pokedex.Pokedex pokedex, ushort species_form, ushort held_item,
+        public BattleTowerPokemon4(Pokedex.Pokedex pokedex, int species, byte form, ushort held_item,
             ushort move1, ushort move2, ushort move3, ushort move4, uint ot, uint personality, 
             uint ivs, byte[] evs, byte pp_ups, Languages language, byte ability, byte happiness,
             EncodedString4 nickname) : 
-            this(pokedex, species_form, held_item, new ushort[] { move1, move2, move3, move4 },
+            this(pokedex, species, form, held_item, new ushort[] { move1, move2, move3, move4 },
                 ot, personality, ivs, evs, pp_ups, language, ability, happiness, nickname)
         {
         }
@@ -81,7 +82,7 @@ namespace PkmnFoundations.Wfc
 
         protected override void Save(BinaryWriter writer)
         {
-            writer.Write(SpeciesFormValue);
+            writer.Write(CombineSpeciesForm(SpeciesID, FormID));
             writer.Write((ushort)HeldItemID);
 
             ushort[] moveset = GetArrayFromMoves(Moves);
@@ -105,7 +106,9 @@ namespace PkmnFoundations.Wfc
 
         protected override void Load(BinaryReader reader)
         {
-            SpeciesFormValue = reader.ReadUInt16();
+            ushort species_form = reader.ReadUInt16();
+            SpeciesID = GetSpeciesFromCombined(species_form);
+            FormID = GetFormFromCombined(species_form);
             HeldItemID = reader.ReadUInt16();
 
             ushort[] moveset = new ushort[4];
@@ -137,7 +140,7 @@ namespace PkmnFoundations.Wfc
             byte ppUps = GetPpUpsFromMoves(Moves);
 
             BattleTowerPokemon4 result = new BattleTowerPokemon4(m_pokedex,
-                SpeciesFormValue, (ushort)HeldItemID, moveset,
+                SpeciesID, FormID, (ushort)HeldItemID, moveset,
                 TrainerID, Personality, ivsField, EVs.ToArray(), ppUps,
                 Language, (byte)AbilityID, Happiness, NicknameEncoded);
 
