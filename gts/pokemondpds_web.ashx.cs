@@ -44,17 +44,15 @@ namespace PkmnFoundations.GTS
                     // I am going to guess that the PID provided second is the
                     // one whose data should appear in the response.
                     int requestedPid = BitConverter.ToInt32(request, 0);
-                    byte[] requestDataPrefix = new byte[12];
-                    byte[] requestData = new byte[152];
+                    byte[] requestData = new byte[164];
 
-                    Array.Copy(request, 4, requestDataPrefix, 0, 12);
-                    Array.Copy(request, 16, requestData, 0, 152);
+                    Array.Copy(request, 4, requestData, 0, 164);
 
-                    TrainerProfilePlaza requestProfile = new TrainerProfilePlaza(pid, requestDataPrefix, requestData);
+                    TrainerProfilePlaza requestProfile = new TrainerProfilePlaza(pid, requestData);
                     Database.Instance.PlazaSetProfile(requestProfile);
 
                     TrainerProfilePlaza responseProfile = Database.Instance.PlazaGetProfile(requestedPid);
-                    response.Write(responseProfile.Data, 0, 152);
+                    response.Write(responseProfile.Data, 12, 152); // skip first 12 bytes of profile data on response
 
                 } break;
 

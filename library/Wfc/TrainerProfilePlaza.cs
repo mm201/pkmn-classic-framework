@@ -14,19 +14,17 @@ namespace PkmnFoundations.Wfc
 
         }
 
-        public TrainerProfilePlaza(int pid, byte[] data_prefix, byte[] data)
+        public TrainerProfilePlaza(int pid, byte[] data)
         {
-            if (data.Length != 152) throw new ArgumentException("Profile data must be 152 bytes.");
+            if (data.Length != 164) throw new ArgumentException("Profile data must be 164 bytes.");
 
             PID = pid;
-            DataPrefix = data_prefix;
             Data = data;
         }
 
         // todo: encapsulate these so calculated fields are always correct
         public int PID;
-        public byte[] DataPrefix; // 12 bytes
-        public byte[] Data; // 152 bytes
+        public byte[] Data; // 164 bytes
 
         // todo: These 4 values are basically big guesses. Fact check.
         // todo: Add more fields
@@ -34,7 +32,7 @@ namespace PkmnFoundations.Wfc
         {
             get
             {
-                return (Versions)DataPrefix[0x02];
+                return (Versions)Data[0x02];
             }
         }
 
@@ -42,7 +40,7 @@ namespace PkmnFoundations.Wfc
         {
             get
             {
-                return (Languages)DataPrefix[0x03];
+                return (Languages)Data[0x03];
             }
         }
 
@@ -50,7 +48,7 @@ namespace PkmnFoundations.Wfc
         {
             get
             {
-                return Data[0x40];
+                return Data[0x4c];
             }
         }
 
@@ -58,7 +56,7 @@ namespace PkmnFoundations.Wfc
         {
             get
             {
-                return Data[0x42];
+                return Data[0x4e];
             }
         }
 
@@ -66,7 +64,7 @@ namespace PkmnFoundations.Wfc
         {
             get
             {
-                return BitConverter.ToUInt32(Data, 8);
+                return BitConverter.ToUInt32(Data, 0x14);
             }
         }
 
@@ -74,13 +72,13 @@ namespace PkmnFoundations.Wfc
         {
             get
             {
-                return new EncodedString4(Data, 12, 16);
+                return new EncodedString4(Data, 0x18, 0x10);
             }
         }
 
         public TrainerProfilePlaza Clone()
         {
-            return new TrainerProfilePlaza(PID, DataPrefix.ToArray(), Data.ToArray());
+            return new TrainerProfilePlaza(PID, Data.ToArray());
         }
     }
 }

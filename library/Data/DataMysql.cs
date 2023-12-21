@@ -1026,14 +1026,15 @@ namespace PkmnFoundations.Data
 
         public TrainerProfilePlaza PlazaGetProfile(MySqlTransaction tran, int pid)
         {
+            // todo next maintenance: remove this CONCAT after the database is updated.
             using (MySqlDataReader reader = (MySqlDataReader)tran.ExecuteReader("SELECT " +
-                "DataPrefix, Data FROM pkmncf_plaza_profiles " +
+                "Data FROM pkmncf_plaza_profiles " +
                 "WHERE pid = @pid",
                 new MySqlParameter("@pid", pid)))
             {
                 if (reader.Read())
                 {
-                    TrainerProfilePlaza result = new TrainerProfilePlaza(pid, reader.GetByteArray(0, 12), reader.GetByteArray(1, 152));
+                    TrainerProfilePlaza result = new TrainerProfilePlaza(pid, reader.GetByteArray(0, 164));
                     reader.Close();
                     return result;
                 }
@@ -1048,15 +1049,14 @@ namespace PkmnFoundations.Data
 
         public bool PlazaSetProfile(MySqlTransaction tran, TrainerProfilePlaza profile)
         {
-            if (profile.DataPrefix.Length != 12) throw new FormatException("Profile data prefix must be 12 bytes.");
-            if (profile.Data.Length != 152) throw new FormatException("Profile data must be 152 bytes.");
+            if (profile.Data.Length != 164) throw new FormatException("Profile data must be 164 bytes.");
 
             bool exists = Convert.ToSByte(tran.ExecuteScalar("SELECT EXISTS(SELECT * FROM pkmncf_plaza_profiles WHERE pid = @pid)", 
                 new MySqlParameter("@pid", profile.PID))) != 0;
 
+            // todo next maintenance: Remove this @data_prefix parameter once all data is corrected
             MySqlParameter[] _params = new MySqlParameter[]{
                 new MySqlParameter("@pid", profile.PID),
-                new MySqlParameter("@data_prefix", profile.DataPrefix),
                 new MySqlParameter("@data", profile.Data),
                 new MySqlParameter("@version", (byte)profile.Version),
                 new MySqlParameter("@language", (byte)profile.Language),
@@ -1069,7 +1069,7 @@ namespace PkmnFoundations.Data
             if (exists)
             {
                 return tran.ExecuteNonQuery("UPDATE pkmncf_plaza_profiles " +
-                    "SET DataPrefix = @data_prefix, Data = @data, " +
+                    "SET Data = @data, " +
                     "Version = @version, Language = @language, Country = @country, " +
                     "Region = @region, OT = @ot, Name = @name, ParseVersion = 1, " +
                     "TimeUpdated = UTC_TIMESTAMP() " +
@@ -1078,9 +1078,9 @@ namespace PkmnFoundations.Data
             else
             {
                 return tran.ExecuteNonQuery("INSERT INTO pkmncf_plaza_profiles " +
-                    "(pid, DataPrefix, Data, Version, Language, Country, Region, OT, Name, " +
+                    "(pid, Data, Version, Language, Country, Region, OT, Name, " +
                     "ParseVersion, TimeAdded, TimeUpdated) VALUES " +
-                    "(@pid, @data_prefix, @data, @version, @language, @country, @region, @ot, " +
+                    "(@pid, @data, @version, @language, @country, @region, @ot, " +
                     "@name, 1, UTC_TIMESTAMP(), UTC_TIMESTAMP())", _params) > 0;
             }
         }

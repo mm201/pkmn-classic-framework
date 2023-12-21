@@ -494,7 +494,6 @@ CREATE TABLE IF NOT EXISTS `pkmncf_gamestats_bans_savefile` (
 -- Dumping structure for table gts.pkmncf_plaza_profiles
 CREATE TABLE IF NOT EXISTS `pkmncf_plaza_profiles` (
   `pid` int(11) NOT NULL,
-  `DataPrefix` blob DEFAULT NULL,
   `Data` blob DEFAULT NULL,
   `Version` tinyint(3) unsigned DEFAULT NULL,
   `Language` tinyint(3) unsigned DEFAULT NULL,
