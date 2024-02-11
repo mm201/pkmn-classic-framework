@@ -26,7 +26,6 @@ namespace PkmnFoundations.Wfc
         public int PID;
         public byte[] Data; // 164 bytes
 
-        // todo: These 4 values are basically big guesses. Fact check.
         // todo: Add more fields
         public Versions Version
         {
@@ -44,19 +43,13 @@ namespace PkmnFoundations.Wfc
             }
         }
 
-        public byte Country
+        public byte[] MacAddress
         {
             get
             {
-                return Data[0x4c];
-            }
-        }
-
-        public byte Region
-        {
-            get
-            {
-                return Data[0x4e];
+                byte[] result = new byte[6];
+                Array.Copy(Data, 0x04, result, 0, 0x06);
+                return result;
             }
         }
 
@@ -73,6 +66,32 @@ namespace PkmnFoundations.Wfc
             get
             {
                 return new EncodedString4(Data, 0x18, 0x10);
+            }
+        }
+
+        // todo: favourite pokemon
+
+        public TrainerGenders Gender
+        {
+            get
+            {
+                return (TrainerGenders)Data[0x48];
+            }
+        }
+
+        public byte Country
+        {
+            get
+            {
+                return Data[0x4c];
+            }
+        }
+
+        public byte Region
+        {
+            get
+            {
+                return Data[0x4e];
             }
         }
 
