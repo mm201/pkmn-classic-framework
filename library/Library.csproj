@@ -75,6 +75,7 @@
     <Compile Include="Pokedex\Form.cs" />
     <Compile Include="Pokedex\Type.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Support\AliasTable.cs" />
     <Compile Include="Wfc\BanStatus.cs" />
     <Compile Include="Wfc\BattleSubwayPokemon5.cs" />
     <Compile Include="Wfc\BattleSubwayProfile5.cs" />
@@ -112,6 +113,7 @@
     <Compile Include="Structures\StatValues.cs" />
     <Compile Include="Structures\StatValuesBase.cs" />
     <Compile Include="Structures\TrainerMemo.cs" />
+    <Compile Include="Wfc\PlazaQuestionnaire.cs" />
     <Compile Include="Wfc\PlazaSchedule.cs" />
     <Compile Include="Wfc\TrainerProfile4.cs" />
     <Compile Include="Wfc\TrainerProfile5.cs" />
