@@ -365,6 +365,10 @@ namespace PkmnFoundations.Structures
                 if (move.MoveID > 467) return new ValidationSummary() { IsValid = false };
             }
 
+            var thePokemon4 = (Pokemon4)thePokemon;
+            if (!thePokemon4.NicknameEncoded.IsValid) return new ValidationSummary() { IsValid = false };
+            if (!thePokemon4.TrainerNameEncoded.IsValid) return new ValidationSummary() { IsValid = false };
+
             return new ValidationSummary() { IsValid = true };
         }
     }

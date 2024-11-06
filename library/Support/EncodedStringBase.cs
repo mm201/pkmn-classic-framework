@@ -113,5 +113,12 @@ namespace PkmnFoundations.Support
 
         public virtual int Size { get; protected set; }
 
+        public virtual bool IsValid
+        {
+            get
+            {
+                return true;
+            }
+        }
     }
 }

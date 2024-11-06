@@ -90,6 +90,20 @@ namespace PkmnFoundations.Support
             return EncodeString_impl(str, size);
         }
 
+        public override bool IsValid
+        {
+            get
+            {
+                for (int i = 0; i < RawData.Length; i += 2)
+                {
+                    ushort gamecode = BitConverter.ToUInt16(RawData, i);
+                    if (gamecode == 0xffff) break;
+                    if (gamecode == 0x0000) return false;
+                }
+                return true;
+            }
+        }
+
         public EncodedString4 Clone()
         {
             return new EncodedString4(RawData);

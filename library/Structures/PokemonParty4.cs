@@ -64,8 +64,8 @@ namespace PkmnFoundations.Structures
                     BitConverter.ToUInt16(block, 16),
                     BitConverter.ToUInt16(block, 18));
 
-                Unknown7 = new byte[56];
-                Array.Copy(block, 20, Unknown7, 0, 56);
+                HeldItemTrash = new byte[56];
+                Array.Copy(block, 20, HeldItemTrash, 0, 56);
                 Seals = new byte[24];
                 Array.Copy(block, 76, Seals, 0, 24);
             }
@@ -79,7 +79,7 @@ namespace PkmnFoundations.Structures
         public byte CapsuleIndex { get; set; }
         public override ushort HP { get { return _HP; } } // remaining hp
         public ushort _HP { get; set; }
-        public byte[] Unknown7 { get; set; } // 56 bytes
+        public byte[] HeldItemTrash { get; set; } // 56 bytes
         public byte[] Seals { get; set; } // 24 bytes
 
         // cached stats on the party structure. This gives rise to the
