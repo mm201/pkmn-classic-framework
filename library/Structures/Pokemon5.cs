@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using PkmnFoundations.Pokedex;
 using PkmnFoundations.Support;
+using PkmnFoundations.Wfc;
 
 namespace PkmnFoundations.Structures
 {
@@ -352,6 +353,18 @@ namespace PkmnFoundations.Structures
                 if (move.MoveID < 0) return new ValidationSummary() { IsValid = false };
                 if (move.MoveID == 165) return new ValidationSummary() { IsValid = false }; // struggle
                 if (move.MoveID > 559) return new ValidationSummary() { IsValid = false };
+            }
+
+            if (thePokemon is Pokemon5)
+            {
+                var thePokemon5 = (Pokemon5)thePokemon;
+                if (!thePokemon5.NicknameEncoded.IsValid) return new ValidationSummary() { IsValid = false };
+                if (!thePokemon5.TrainerNameEncoded.IsValid) return new ValidationSummary() { IsValid = false };
+            }
+            else if (thePokemon is BattleSubwayPokemon5)
+            {
+                var theBattleSubwayPokemon5 = (BattleSubwayPokemon5)thePokemon;
+                if (!theBattleSubwayPokemon5.NicknameEncoded.IsValid) return new ValidationSummary() { IsValid = false };
             }
 
             return new ValidationSummary() { IsValid = true };
