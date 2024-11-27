@@ -1,0 +1,353 @@
+/* My backwards-compatibility goal: This should work in at least Safari 4, maybe IE5:Mac or IE8, and of course the Wii Internet Channel and DS/DSi Browsers. */
+
+/* Animation keyframes */
+
+/* For Firefox */
+@-moz-keyframes movebg {
+    from { background-position: 0 0; }
+    to { background-position: 0 -32px; }
+}
+
+@-moz-keyframes movecontentbg {
+    from { background-position: 0 0; }
+    to { background-position: 0 -4px; }
+}
+
+/* For Safari */
+@-webkit-keyframes movebg {
+    from { background-position: 0 0; }
+    to { background-position: 0 -32px; }
+}
+
+@-webkit-keyframes movecontentbg {
+    from { background-position: 0 0; }
+    to { background-position: 0 -4px; }
+}
+
+/* No vendor prefix */
+@keyframes movebg {
+    from { background-position: 0 0; }
+    to { background-position: 0 -32px; }
+}
+
+@keyframes movecontentbg {
+    from { background-position: 0 0; }
+    to { background-position: 0 -4px; }
+}
+
+/* What fonts would you like for the website? */
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP&display=swap');
+
+
+
+
+
+/* Overall body styling */
+body {
+    margin: 0;
+    background-color: rgb(0,128,255);
+    background-image: url("Graphics/background.png");
+    -moz-animation: movebg 5s infinite linear;
+    -webkit-animation: movebg 5s infinite linear;
+    animation: movebg 5s infinite linear;
+    /* ^^^ The idea is that this background imitates the grid background of Geonet, but with different colors. The animation is meant to be subtle, barely noticeable so as not to distract, while still bringing the page to life. GIFs are too limited in color to replace this background-image and animation combo; but even without animation, the page should still look nice in older browsers. */
+    width: 100vw; height: 100vh;
+    font-family: "Hiragino Sans", "Hiragino Kaku Gothic Pro", "Noto Sans JP", sans-serif; /*what fonts would you like to use?*/
+    overflow: hidden;
+}
+body * {
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+table {
+    border-collapse: collapse;
+    table-layout: fixed;
+}
+table td { padding: 0; }
+
+img { font-size: xx-small; }
+
+
+
+
+
+.top, .left, .tradeticker, .battleticker, .right, .bottom { position: absolute; }
+
+/* Style the bar at the top */
+.top {
+    top: 0; width: 100%; height: 77px;
+    background-image: url("Graphics/topbg.png");
+    color: white;
+}
+
+.top .mbar {
+    background-image: url("Graphics/mbarbg.png");
+    height: 38px;
+}
+
+.top .logo {
+    width: 341px;
+    background-image: url("Graphics/logobg.png");
+    text-align: center;
+}
+.logo img {
+    display: block;
+    margin: auto; /*will margin: auto work in older browsers?*/
+}
+
+.top .info {
+    padding: 0 8px;
+    text-align: right;
+}
+
+.nav table { height: 100%; }
+.nav table td {
+    padding: 0 8px;
+    border-right: 2px solid rgb(128,128,128);
+}
+.nav a { color: white; text-decoration: none; }
+
+
+
+
+
+/* Style the sidebars (this part was complicated!) */
+/*~ First, styling for the sidebars themselves*/
+.left { left: 0; } .right { right: 0; }
+.left, .right {
+    display: block;
+    top: 58px; z-index: 1;
+    width: 205px; height: calc(100% - 155px);
+    back-ground: rgba(0,0,0,0.1);
+    font-size: x-small; color: white;
+    overflow: auto;
+    scrollbar-color: rgb(4,161,231) rgb(167,228,250);
+}
+
+
+
+/*~ Next, styling for common elements of the sidebars, like sections, heading labels, and borders */
+/*~~ The tables themselves... */
+.left table, .right table {
+    width: 100%;
+    table-layout: auto;
+}
+
+/*~~ The parts of the tables, like the borders and the "handles"... */
+.secttop {
+    height: 24px;
+    padding-left: 4px;
+    background-image: url("Graphics/secttopbg.png");
+    color: rgb(128,112,0);
+}
+.secttop .heading {
+    display: inline-block;
+    padding-top: 2px;
+}
+
+.sectbtm {
+    height: 12px;
+    background-image: url("Graphics/sectbtmbg.png");
+}
+
+.sectside { width: 12px; }
+
+.hborder { height: 1px; background-color: rgb(255,224,0); }
+.vborder { width: 1px; background-color: rgb(255,224,0); }
+
+/*~~ The table contents (the most important part!)... */
+.left .content, .right .content {
+    position: relative;
+    background-image: url("Graphics/contentbg.png");
+    -moz-animation: movecontentbg 0.5s infinite linear;
+    -webkit-animation: movecontentbg 0.5s infinite linear;
+    animation: movecontentbg 0.5s infinite linear;
+    /*^^^ see the animation for "body" at the top of this file, for the explanation of the animation. */
+    vertical-align: top;
+}
+.content .container {
+    display: block; position: absolute;
+    width: 100%; height: 100%;
+    overflow: auto;
+}
+.container a { color: rgb(192,224,255); }
+
+/*~~ ...And last, general elements that are used across all sidebars and tables. */
+.heading { font-weight: bold; font-size: small; }
+
+.left .pad, .right .pad {
+    height: 15px; width: 100%;
+}
+
+
+
+/*~ Finally, styling for specific sections, like "About" or "Online" */
+.about { height: calc(100% - 161px); }
+.about .content { width: 204px; } /*<-- necessary to make this look somewhat less broken in DSi Browser*/
+.about .container { padding: 12px; }
+.about .dns {
+    display: inline-block;
+    margin-bottom: 6px;
+    background-color: black;
+    background-image: url("Graphics/dnsbg.png");
+    font-family: "Courier", "Courier New", monospace;
+    font-size: 18px; line-height: 22px;
+}
+
+.services { height: 146px; }
+.services .sectside { background-image: url("Graphics/servicesside.png"); }
+.services .container, .online .container { padding: 8px; }
+.services .blurb { display: inline-block; }
+.services .genselect {
+    margin-top: 3px;
+    height: 16px;
+}
+.genselect td {
+    text-align: center;
+    font-weight: bold;
+    color: black;
+    cursor: pointer;
+    -webkit-transition: width 0.2s;
+    transition: width 0.2s;
+}
+.genselect .gen4 {
+    width: 50%;
+    background-color: rgb(246,194,152);
+    background-image: url("Graphics/gen4selbg.png");
+}
+.genselect .gen5 {
+    width: 50%;
+    background-color: rgb(128,128,128);
+    background-image: url("Graphics/gen5selbg.png");
+}
+.services .features {
+    display: block;
+    height: 76px;
+    background-color: rgba(0,0,0,0.25);
+    overflow: auto;
+}
+.features ul {
+    margin: 0; padding: 8px;
+    list-style-position: inside;
+}
+
+
+.online { height: 118px; }
+.online .sectside { background-image: url("Graphics/onlineside.png"); }
+.online .container { font-size: small; }
+.online .content img { margin-bottom: -1px; }
+
+
+
+
+
+/* Style the globeContainer div */
+.globeContainer {
+    margin-top: -60px; /* This likely won't translate well to other viewport heights, so I'll need to find something that's more universal. The goal is to keep the globe centered between the top bar and the tickers, and the Globe.GL globe only resizes by height. */
+    width: 100%; height: calc(100% + 60px); /*make JS polyfill*/
+    z-index: -1;
+}
+
+.globeMsg { /*Styling for this needs to be adjusted for older browser support*/
+    position: absolute;
+    width: 50%; max-width: 512px; /*needs JS polyfill. Max width should be either 512px, or the width of the viewport minus 410px.*/
+    top: calc(50% - 40px); left: 25%; /*include JS for calc polyfill. Yes, this includes "left", because its value was originally intended to be a calc(). Note: these distances are relative to the viewport, not the globeContainer.*/
+    text-align: center;
+    font-size: small;
+    color: rgb(224,224,224);
+    text-shadow: 0 0 4px rgb(224,224,224);
+}
+
+
+
+
+
+/* Style the real-time trades and battles tickers */
+.tradeticker, .battleticker {
+    bottom: 97px; height: 40px;
+}
+
+
+
+.tradeticker {
+    left: 225px;
+    width: calc(100% - (450px + 180px)); /* Note: 450px for the sidebars and 20px gaps, 180px for 170px battleticker and 10px gap. Again, JS polyfill in adjustSize(), but only after settling on a fixed width for the battleticker. */
+}
+.ttleft, .ttright { background: rgb(140,0,224); /*temporary styling, replace with background image*/ }
+.ttleft { width: 24px; }
+.ttright { width: 12px; }
+.ttborder { height: 1px; background-color: rgb(140,0,224);}
+
+.tradelist {
+    position: relative;
+    background-color: rgb(208,128,255);
+    background-image: linear-gradient(rgb(202,112,255)50%,rgb(214,144,255)50%); /*replace with a PNG*/
+    background-size: 4px 4px; /*temporary*/
+    -moz-animation: movecontentbg 0.5s infinite linear;
+    -webkit-animation: movecontentbg 0.5s infinite linear;
+    animation: movecontentbg 0.5s infinite linear;
+    /*^^^ see the animation for "body" at the top of this file, for the explanation of the animation. */
+}
+.tradelist .tlcontainer {
+    position: absolute; width: 100%; height: 100%;
+    margin-top: -19px; /*Why is it "falling out" of the table cell?*/
+    overflow: hidden;
+}
+.tlcontainer div { width: 200%; height: 100%; padding: 2px; }
+
+.tradelist .tradeitem {
+    display: inline-block; 
+    height: 100%;
+    background: rgb(140,0,224);
+}
+.tradeitem img { display: block; }
+.pkmn1, .pkmn2 { padding: 2px; }
+.pkmn1 img, .pkmn2 img { background: white; }
+/* The line below is an example of coloration - this can signify which games the traded Pokémon came from. The line below is temporary, just for demonstration. */
+.pkmn1 { background: blue; } .pkmn2 { background: darkred; }
+
+
+
+.battleticker {
+    right: 225px;
+    wid-th: 154px;
+    color: black;
+    overflow: hidden;
+}
+.btlleft {
+    width: 12px;
+    background: rgb(0,255,128); /*temporary styling*/
+}
+.battleticker .battlect {
+    width: 80px; padding: 0 4px;
+    background: rgba(192,192,0,1);
+    text-align: center;
+    line-height: 1; font-size: 40px;
+    font-family: "Courier", "Courier New", monospace;
+    font-weight: bold;
+}
+.battleticker .btllabel {
+    padding-left: 4px; padding-right: 8px;
+    background: rgb(0,255,128); /*temporary styling*/
+    color: teal;
+    line-height: 20px; font-size: medium;
+}
+
+
+
+
+
+/* Style the credits at the bottom */
+.bottom {
+    bottom: 0; width: 100%; height: 77px;
+    background-image: url("Graphics/bottombg.png");
+}
+.bottom .cred {
+    width: 512px;
+    text-align: center;
+    font-size: x-small;
+    color: white;
+}
+.cred img { margin-bottom: -2px; }
