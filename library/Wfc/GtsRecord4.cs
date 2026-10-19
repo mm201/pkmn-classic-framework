@@ -196,6 +196,7 @@ namespace PkmnFoundations.Wfc
         {
             if (!base.Validate()) return false;
 
+            if (RequestedSpecies > 493) return false;
             // Forbid ball capsules. Credit: Gannio
             if (((PokemonParty4)Pokemon).CapsuleIndex != 0) return false;
             if (!TrainerNameEncoded.IsValid) return false;

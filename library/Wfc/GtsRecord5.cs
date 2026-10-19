@@ -203,6 +203,7 @@ namespace PkmnFoundations.Wfc
         {
             if (!base.Validate()) return false;
 
+            if (RequestedSpecies > 649) return false;
             if (!TrainerNameEncoded.IsValid) return false;
 
             return true;

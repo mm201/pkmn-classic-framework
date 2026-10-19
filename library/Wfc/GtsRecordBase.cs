@@ -96,6 +96,14 @@ namespace PkmnFoundations.Wfc
             byte minLevel = isExchanged ? RequestedMinLevel : Level;
             byte maxLevel = isExchanged ? RequestedMaxLevel : Level;
 
+            // fail early before parsing pkm if possible
+            if (RequestedMinLevel < 0) return false;
+            if (RequestedMinLevel > 100) return false;
+            if (RequestedMaxLevel < 0) return false;
+            if (RequestedMaxLevel > 100) return false;
+            if (RequestedSpecies < 1) return false;
+            // todo: Verify requested gender against what the species allows
+
             PokemonPartyBase thePokemon = Pokemon;
             if (thePokemon.IsEgg) return false;
             if (thePokemon.SpeciesID != species) return false;
