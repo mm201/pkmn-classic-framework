@@ -226,16 +226,23 @@ namespace PkmnFoundations.GTS
 
         protected string CreateWantedSpecies(object DataItem)
         {
-            Pokedex.Pokedex pokedex = AppStateHelper.Pokedex(Application);
-            GtsRecordBase record = (GtsRecordBase)DataItem;
-            Species species = pokedex.Species[record.RequestedSpecies];
+            try
+            {
+                Pokedex.Pokedex pokedex = AppStateHelper.Pokedex(Application);
+                GtsRecordBase record = (GtsRecordBase)DataItem;
+                Species species = pokedex.Species[record.RequestedSpecies];
 
-            return "<img src=\"" + ResolveUrl(WebFormat.SpeciesImageSmall(species)) +
-                "\" alt=\"" + Common.HtmlEncode(species.Name.ToString()) + 
-                "\" class=\"sprite speciesSmall\" width=\"40px\" height=\"30px\" />" +
-                String.Format("{0} (#{1})",
-                Common.HtmlEncode(species.Name.ToString()),
-                record.RequestedSpecies);
+                return "<img src=\"" + ResolveUrl(WebFormat.SpeciesImageSmall(species)) +
+                    "\" alt=\"" + Common.HtmlEncode(species.Name.ToString()) +
+                    "\" class=\"sprite speciesSmall\" width=\"40px\" height=\"30px\" />" +
+                    String.Format("{0} (#{1})",
+                    Common.HtmlEncode(species.Name.ToString()),
+                    record.RequestedSpecies);
+            }
+            catch
+            {
+                return "???";
+            }
         }
 
         protected string CreateWantedGender(object DataItem)
